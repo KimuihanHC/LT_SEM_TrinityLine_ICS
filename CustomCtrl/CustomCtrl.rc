@@ -1,0 +1,74 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean (Korea) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BOTTOM_LEFT         BITMAP                  "..\\CustomCtrl\\res\\BottomLeft.bmp"
+IDB_BOTTOM_MIDDLE       BITMAP                  "..\\CustomCtrl\\res\\BottomMiddle.bmp"
+IDB_BOTTOM_RIGHT        BITMAP                  "..\\CustomCtrl\\res\\BottomRight.bmp"
+IDB_MIDDLE_LEFT         BITMAP                  "..\\CustomCtrl\\res\\MiddleLeft.bmp"
+IDB_MIDDLE_RIGHT        BITMAP                  "..\\CustomCtrl\\res\\MiddleRight.bmp"
+IDB_TOP_LEFT            BITMAP                  "..\\CustomCtrl\\res\\TopLeft.bmp"
+IDB_TOP_MIDDLE          BITMAP                  "..\\CustomCtrl\\res\\TopMiddle.bmp"
+IDB_TOP_RIGHT           BITMAP                  "..\\CustomCtrl\\res\\TopRight.bmp"
+#endif    // Korean (Korea) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

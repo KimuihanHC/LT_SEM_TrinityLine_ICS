@@ -1,0 +1,7 @@
+
+
+********* 기본 세팅용 *********
+
+Main - Recipe - Device(Config, Diagnosis) - Worklist - Log
+
+********* namespace 규칙 *********

@@ -1,0 +1,466 @@
+
+
+===============================================================================
+#define ASSERT(f)						DEBUG_ONLY((void) ((f) || !::AfxAssertFailedLine(THIS_FILE, __LINE__) || (AfxDebugBreak(), 0)))
+#define ASSERT_VALID(pOb)				DEBUG_ONLY((::AfxAssertValidObject(pOb, THIS_FILE, __LINE__)))
+#define ASSERT_POINTER(p, type)			ASSERT(((p) != NULL) && AfxIsValidAddress((p), sizeof(type), FALSE))
+#define ASSERT_NULL_OR_POINTER(p, type) ASSERT(((p) == NULL) || AfxIsValidAddress((p), sizeof(type), FALSE))
+
+
+-------------------------------------------------------------------------------
+### 메모리 릭 체크
+-------------------------------------------------------------------------------
+_CrtDumpMemoryLeaks ()
+
+아래 코드를 작성해 놓고 해당 code 값을 설정해 놓으면 debug실행시 
+할당하는 시점에 user break가 걸린다.
+어떤 할당을 한것이 해제가 안되었는지 찾는데 도움이 된다.
+
+#include <crtdbg.h>
+_CrtSetBreakAlloc(1189591);
+_CrtMemDumpAllObjectsSince(0);
+
+
+-------------------------------------------------------------------------------
+### 메모리 사용량 줄이기
+-------------------------------------------------------------------------------
+SetProcessWorkingSetSize (GetCurrentProcess(), -1, -1);
+EmptyWorkingSet ();
+SetProcessWorkingSetSize ()
+
+-------------------------------------------------------------------------------
+### 프로세스의 모든 힙에 LFH ( Low fragmentation Heap ) 적용
+-------------------------------------------------------------------------------
+HANDLE Heaps[1025];
+DWORD Count = GetProcessHeaps( 1024, Heaps );
+for( DWORD i = 0; i < Count; ++i )
+{
+	ULONG  HeapFragValue = 2;
+
+	if( HeapSetInformation( Heaps[i], HeapCompatibilityInformation, &HeapFragValue, sizeof(HeapFragValue) ) )
+    {
+          .............
+    }
+    else 
+    {
+         ...................
+    }
+}
+
+-------------------------------------------------------------------------------
+### 성능 체크용 함수
+-------------------------------------------------------------------------------
+timeBeginPeriod ();
+timeGetTime ();
+QueryPerformanceCounter ();
+
+-------------------------------------------------------------------------------
+### GetDC나 CDC::FromHandle 사용시 메모리 누수 방지
+-------------------------------------------------------------------------------
+HDC hdc = ::GetDC(0);				//HDC클래스의 멤버함수 GetDC에 0을 넘겨 전체 DC를 가져옴. 
+CDC *pDC = CDC::FromHandle(hdc);	//HDC를 CDC로 변환 
+
+CDC::DeleteTempMap(); 
+::ReleaseDC(this->m_hWnd, hdc); 
+
+
+/*
+-------------------------------------------------------------------------------
+http://msdn.microsoft.com/en-us/library/ms235631(VS.80).aspx
+-------------------------------------------------------------------------------
+CString orig("Hello, World!");
+// Convert to a wchar_t*
+// You must first convert to a char * for this to work.
+const size_t newsize = 100;
+size_t origsize = strlen(orig) + 1;
+size_t convertedChars = 0;
+wchar_t wcstring[newsize];
+mbstowcs_s(&convertedChars, wcstring, origsize, orig, _TRUNCATE);
+wcscat_s(wcstring, L" (wchar_t *)");
+*/
+
+-------------------------------------------------------------------------------
+Visual Assist - VA Snippet
+-------------------------------------------------------------------------------
+
+//=============================================================================
+// Method		: $SymbolName$
+// Access		: $SymbolVirtual$$SymbolPrivileges$$SymbolStatic$ 
+// Returns		: $SymbolType$
+// Parameter	: $MethodArg$
+// Qualifier	: $MethodQualifier$
+// Last Update	: $YEAR$/$MONTH$/$DAY$ - $HOUR$:$MINUTE$
+// Desc.		:
+//=============================================================================
+
+//*****************************************************************************
+// Filename	: 	$FILE_BASE$.$FILE_EXT$
+// Created	:	$YEAR$/$MONTH$/$DAY$ - $HOUR$:$MINUTE$
+// Modified	:	$YEAR$/$MONTH$/$DAY$ - $HOUR$:$MINUTE$
+//
+// Author	:	$Author$
+//	
+// Purpose	:	$end$
+//*****************************************************************************
+
+-------------------------------------------------------------------------------
+ShellExecute 는 윈도우의 '실행' 창에서 내리는 명령과 비슷한 작업을 한다.
+-------------------------------------------------------------------------------
+ ShellExecute(NULL, _T("open"), sPath, NULL, NULL, SW_SHOW);
+ 
+폴더가 열림
+sPath 에는 폴더 경로가 들어감
+  
+ ShellExecute(NULL, _T("open"), _T("explorer"), _T("/select,") + sFilePath, NULL, SW_SHOW);
+ 
+폴더가 열리고, 파일이 선택됨
+sFilePath 에는 파일 경로가 들어감
+
+ex) m_strLocation 경로의 폴더 열기
+
+ShellExecute(NULL, _T("open"), _T("explorer"), _T("/select,") + m_strLogLocation, NULL, SW_SHOW);
+
+ShellExecute(NULL, _T("open"), sPath, NULL, NULL, SW_SHOW);
+WinExec(_T(""), SW_HIDE);
+system("cls");
+
+//DOS 명령어를 실행하고 화면을 닫습니다
+ShellExecute(Handle, 'open', PChar('command.com'), PChar('/c copy file1.txt file2.txt'), nil, SW_SHOW);
+
+-------------------------------------------------------------------------------
+** sqlite 기본 쿼리문 **
+-------------------------------------------------------------------------------
+1. Select
+- Select는 찾기 명령어
+- select 테이블명.필드명 from 테이블명 where 조건
+- 조건문을 여러개 입력 가능. and나 or로 연결
+- where 조건문 이후에 oreder by 필드명 asc를 입력하면 오름차순
+- where 조건문 이후에 oreder by 필드명 dsc를 입력하면 내림차순
+- select * from creature_template where name = '일리단 스톰레이지';
+- select creature_template.name, creature_template.entry from creature_template where name like '%일리단%;
+- select item_template.entry, item_template.name from item_template, npc_vendor where npc_vendor.entry = 300100 and npc_vendor.item = item_template.entry;
+
+2. Update
+- Update는 수정 명령어
+- update 테이블명 set 조건(변경할 내용) where 조건(수정할 데이터 선택)
+- 데이터 선택시 조건문을 여러개 입력가능. and나 or로 연결
+- 변경할 내용은 콤마로 연결
+- update creature_template set creature_template.name = 'Test' where creature_template.entry = 3;
+
+3. Insert
+- Insert는 추가 명령어
+- insert into 테이블명(필드1, 필드2, ·······) values (값1, 값2, ·······)
+- 혹은 insert into 테이블명 values (값1, 값2, ·······)
+- 테이블명만 쓸 경우는 모든 필드값을 다 입력 한 경우에만 사용가능
+- 모든 필드값을 다 입력하지 않은 경우 나머지 필드에는 기본값 혹은 null값이 입력됨
+- insert into creature_template (entry, name, subname) values (99999, 'Test', 'GM');
+
+4. Delete
+- Delete는 삭제 명령어
+- delete from 테이블명 where 조건
+- 조건문을 여러개 입력 가능. and나 or로 연결
+- delete from creature_template where entry = 99999;
+
+
+// 날짜 저장
+//	db.execSQL("update TABLE_NAME set COLUMN_NAME = datetime('now') where ...");
+//	결과는 UTC(GMT) 에서 현재 시간을 ISO8601 date / time 형식으로 저장합니다.즉 YYYY-MM-DD HH:MM:SS 형태의 문자열로 저장합니다.
+//	insert into homeworks (id,rev,title,body,created,due) values (1,1,'chapter9','ex3 ex4 ex5',DATETIME('NOW'),DATETIME('2009-03-30 12:00:00','utc'));
+
+// 날짜 검색
+// 	SELECT
+// 		item_id, book_ac
+// 	FROM
+// 		boo_dmg_lost
+// 	WHERE
+// 		boo_date BETWEEN @startDate AND @endDate
+//	SELECT itm_id, book_acc FROM boo_dmg_lost WHERE strftime('%Y-%m-%d', boo_date) BETWEEN '2012-09-14' AND '2012-09-15' 
+//	SELECT itm_id, book_acc FROM boo_dmg_lost WHERE (boo_date > '20120923') AND (boo_date < '20120913')
+
+
+// 날짜 검색
+// 	SELECT item_id, book_ac FROM DeviceThickness WHERE Time BETWEEN @startDate AND @endDate
+//	SELECT itm_id, book_acc FROM DeviceThickness WHERE strftime('%Y-%m-%d', Time) BETWEEN '2012-09-14' AND '2012-09-15' 
+//	SELECT * FROM DeviceThickness WHERE (Time > '2014-05-05 09:00:00') AND (Time < '2014-06-05 09:00:00')
+
+
+
+#####################테스트를 위한 테이블 생성################################
+SQL> create table test (2  name varchar(10) 3  );
+
+############### test table에 osy란 number(10)타입의 컬럼 추가 ######################
+SQL> alter table test add(osy number(10));
+
+##############test table에 osy컬럼명을 osy79로 컬럼명 변경 #########################
+SQL> alter table test rename column osy to osy79;
+
+#################test table에 osy79로 컬럼 데이터 타입 변경 ##########################
+SQL> alter table test modify(osy79 varchar(10));
+
+######################test table에 osy79로 컬럼 삭제 ###############################
+SQL> alter table test drop(osy79);
+
+
+-------------------------------------------------------------------------------
+ 시리얼 통신 끊김 체크
+-------------------------------------------------------------------------------
+디바이스와 통신이 안되는 경우가 여러 가지가 있을 수 있는데요..
+1. Port가 사라졌을 경우
+2. Device의 전원이 꺼진 경우
+3. Device의 통신상 에러
+4. 케이블 또는 관련 카드 / usb to serial 등의 에러
+뭐 대충 이렇게 있지 않나 싶습니다.
+먼저 통신이 되었으니까 4번은 제외하겠습니다.
+저도 command를 보냈는데, 응답이 없으면 일단 error 처리하고 다시 보냅니다.
+그런데도 지속적인 error 가 발생하면, 결국 port를 닫아버립니다.
+ 
+그리고 다시 port를 열었을 때 열리지 않으면, 1번의 경우,
+열리면 2/3번의 경우라고 판단합니다.
+
+USB to Serial 디바이스라는 특성상, USB 장치 연결/해제 메시지로 처리하니 되네요.
+ 
+우선 아래 코드로 GUID를 등록 해 주고,
+    HDEVNOTIFY hDevNotify;
+    DEV_BROADCAST_DEVICEINTERFACE NotificationFilter;
+    ZeroMemory( &NotificationFilter, sizeof(NotificationFilter) );
+    NotificationFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
+    NotificationFilter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+    for(int i=0; i<sizeof(GUID_DEVINTERFACE_LIST)/sizeof(GUID); i++)
+    {
+        NotificationFilter.dbcc_classguid = GUID_DEVINTERFACE_LIST[i];
+        hDevNotify = RegisterDeviceNotification(this->GetSafeHwnd(), &NotificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE);
+        if( !hDevNotify )
+            return FALSE;
+    }
+ 
+WM_DEVICECHANGE 메시지 맵을 추가하여
+BEGIN_MESSAGE_MAP()
+    ON_MESSAGE(WM_DEVICECHANGE, OnMyDeviceChange)
+
+END_MESSAGE_MAP()
+ 
+그리고 PDEV_BROADCAST_HDR의 dbcc_name에서 VID와 PID를 확인하여 처리했습니다.
+LRESULT CSTrakDlg::OnMyDeviceChange(WPARAM wParam, LPARAM lParam)
+{
+    if ( DBT_DEVICEARRIVAL == wParam || DBT_DEVICEREMOVECOMPLETE == wParam ) {
+
+        PDEV_BROADCAST_HDR pHdr = (PDEV_BROADCAST_HDR)lParam;
+        PDEV_BROADCAST_DEVICEINTERFACE pDevInf;
+        PDEV_BROADCAST_HANDLE pDevHnd;
+        PDEV_BROADCAST_OEM pDevOem;
+        PDEV_BROADCAST_PORT pDevPort;
+        PDEV_BROADCAST_VOLUME pDevVolume;
+        CString szDevId;
+
+        switch( pHdr->dbch_devicetype ) {
+            case DBT_DEVTYP_DEVICEINTERFACE:
+                pDevInf = (PDEV_BROADCAST_DEVICEINTERFACE)pHdr;
+                szDevId = pDevInf->dbcc_name+4;
+                if(wParam == DBT_DEVICEARRIVAL)
+                    //Device 연결됨
+                else if(wParam == DBT_DEVICEREMOVECOMPLETE)    
+                    //Device 연결 끊김
+                break;
+
+            case DBT_DEVTYP_HANDLE:
+                pDevHnd = (PDEV_BROADCAST_HANDLE)pHdr;
+                break;
+}
+
+
+
+-------------------------------------------------------------------------------
+Using Timer Queues
+-------------------------------------------------------------------------------
+#include <windows.h>
+#include <stdio.h>
+
+HANDLE gDoneEvent;
+
+VOID CALLBACK TimerRoutine(PVOID lpParam, BOOLEAN TimerOrWaitFired)
+{
+    if (lpParam == NULL)
+    {
+        printf("TimerRoutine lpParam is NULL\n");
+    }
+    else
+    {
+        // lpParam points to the argument; in this case it is an int
+
+        printf("Timer routine called. Parameter is %d.\n", 
+                *(int*)lpParam);
+        if(TimerOrWaitFired)
+        {
+            printf("The wait timed out.\n");
+        }
+        else
+        {
+            printf("The wait event was signaled.\n");
+        }
+    }
+
+    SetEvent(gDoneEvent);
+}
+
+int main()
+{
+    HANDLE hTimer = NULL;
+    HANDLE hTimerQueue = NULL;
+    int arg = 123;
+
+    // Use an event object to track the TimerRoutine execution
+    gDoneEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    if (NULL == gDoneEvent)
+    {
+        printf("CreateEvent failed (%d)\n", GetLastError());
+        return 1;
+    }
+
+    // Create the timer queue.
+    hTimerQueue = CreateTimerQueue();
+    if (NULL == hTimerQueue)
+    {
+        printf("CreateTimerQueue failed (%d)\n", GetLastError());
+        return 2;
+    }
+
+    // Set a timer to call the timer routine in 10 seconds.
+    if (!CreateTimerQueueTimer( &hTimer, hTimerQueue, 
+            (WAITORTIMERCALLBACK)TimerRoutine, &arg , 10000, 0, 0))
+    {
+        printf("CreateTimerQueueTimer failed (%d)\n", GetLastError());
+        return 3;
+    }
+
+    // TODO: Do other useful work here 
+
+    printf("Call timer routine in 10 seconds...\n");
+
+    // Wait for the timer-queue thread to complete using an event 
+    // object. The thread will signal the event at that time.
+
+    if (WaitForSingleObject(gDoneEvent, INFINITE) != WAIT_OBJECT_0)
+        printf("WaitForSingleObject failed (%d)\n", GetLastError());
+
+    CloseHandle(gDoneEvent);
+
+    // Delete all timers in the timer queue.
+    if (!DeleteTimerQueue(hTimerQueue))
+        printf("DeleteTimerQueue failed (%d)\n", GetLastError());
+
+    return 0;
+}
+
+
+
+#ifdef _DEBUG	
+	double current_sec = (double)clock() / CLOCKS_PER_SEC;
+	//TRACE(_T("-- OnPaint : Start -- : %f 초\n"), current_sec);	
+#endif
+#ifdef _DEBUG	
+	double end_sec = (double)clock() / CLOCKS_PER_SEC;
+	//TRACE(_T("-- OnPaint : End -- : %f 초\n"), end_sec);
+	TRACE(_T("-- OnPaint : Duration -- : %f 초\n"), end_sec - current_sec);
+#endif
+
+
+//-----------------------------------------------------------------------------
+// Performance Counter
+//-----------------------------------------------------------------------------
+LARGE_INTEGER Frequency;
+
+if(!QueryPerformanceFrequency(&Frequency))
+{
+  // Installed hardware does not support high-resolution counter
+}
+else
+{
+ LARGE_INTEGER liStart;
+ LARGE_INTEGER liStop;
+
+ // Start time measurement
+ ::QueryPerformanceCounter(&liStart);
+
+
+
+ // Do your processing
+ // 코드 작성
+
+
+
+ // Stop time measurement
+ QueryPerformanceCounter(&liStop);
+
+ LONGLONG llTimeDiff = liStop.QuadPart - liStart.QuadPart;
+
+ // To get duration in milliseconds
+ double dftDuration = (double) llTimeDiff * 1000.0 / (double) Frequency.QuadPart;
+}
+//-----------------------------------------------------------------------------
+
+
+net use lpt1: \\localhost\ZDesigner GT800 (ZPL)
+NET USE LPT1: \\SHIMJAEWON-PC\GT800_ZPL /PERSISTENT:YES
+
+NET USE LPT1: \\[Computer Name]\Printer /PERSISTENT:YES
+
+NET USE LPT1: \\SHIMJAEWON-PC\GT800_ZPL /PERSISTENT:YES
+COPY /B [ZPL] LPT1
+
+char szComputerName[100];
+unsigned long dwLength=100;
+GetComputerName(szComputerName, &dwLength);
+
+	char input;
+    unsigned int i = 0;
+    DWORD bufferSize=0;
+    BOOL result = FALSE;
+    result = GetDefaultPrinter(NULL,&bufferSize); // get size of buffer
+    char* printerName = (char*)malloc(sizeof(char)*bufferSize);
+    result = GetDefaultPrinter(printerName,&bufferSize); //set size of buffer and get Printer Name
+
+//-----------------------------------------------------------------------------
+// Sleep의 해상도를 높임 (1ms Sleep을 해도 실제로는 10ms ~ 15ms 정도의 시간이 걸림)
+//-----------------------------------------------------------------------------
+timeBeginPeriod(1);
+Sleep(1);
+
+//-----------------------------------------------------------------------------
+// error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. 
+//-----------------------------------------------------------------------------
+Project -> Properties(Alt+F7) -> Configuration Properties -> C/C++ -> Preprocessor -> 
+Preprocessor Definitions. 
+
+Add
+
+USE_STANDARD_FILE_FUNCTIONS
+_CRT_SECURE_NO_WARNINGS
+
+
+// 키보드
+ShellExecute(NULL, TEXT("open"), TEXT("osk.exe"), NULL, NULL, SWP_SHOWWINDOW);   // 키보드
+
+
+
+
+wchar_t strUni[256] =L"유니코드";
+char strUtf8[256] ={0,};
+int nLen = WideCharToMultiByte(CP_UTF8, 0, strUni, lstrlenW(strUni), NULL, 0, NULL, NULL);
+WideCharToMultiByte (CP_UTF8, 0, strUni, lstrlenW(strUni), strUtf8, nLen, NULL, NULL);
+
+wchar_t strUnicode[256] = {0,};
+char    strUTF8[256] = {0,};
+strcpy_s(strUTF8,256,"utf-8글자..");// 이건 사실 멀티바이트지만 UTF8이라고 생각해주세요 -_-;;
+int nLen = MultiByteToWideChar(CP_UTF8, 0, strUTF8, strlen(strUTF8), NULL, NULL);
+MultiByteToWideChar(CP_UTF8, 0, strUTF8, strlen(strUTF8), strUnicode, nLen);
+
+
+
+
+영어(미국) : 0x409
+영어(영국) : 0x809
+프랑스어(프랑스) : 0x40c
+독일어(독일) : 0x407
+일본어(일본) : 0x411
+중국어(간체, 중국) : 0x804
+한국어(대한민국) : 0x412

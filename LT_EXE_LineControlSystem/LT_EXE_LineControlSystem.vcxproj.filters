@@ -1,0 +1,926 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="ViewWnd">
+      <UniqueIdentifier>{6a099cc3-d2c7-4171-9cf4-d7dfcc1db30a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Define">
+      <UniqueIdentifier>{1fa579dd-56e0-48c0-aa9e-28c91bb857ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File &amp; Registry">
+      <UniqueIdentifier>{58d7d6bc-5e6c-414c-a750-2a3551ec9714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{ed331a4b-21c2-483f-876f-fc23d94fb5a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Main">
+      <UniqueIdentifier>{66f3ee0d-9cf3-4558-aa18-af9771c755a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo">
+      <UniqueIdentifier>{0ff2b41c-1f58-4163-a3cd-193139ac67fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\Equipment">
+      <UniqueIdentifier>{18eb48c8-81b1-4538-b4cd-eb61d6768b82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\Socket">
+      <UniqueIdentifier>{ea977d19-7fd2-46e6-a3d8-7e4b003e3af1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Socket">
+      <UniqueIdentifier>{0c2fede5-7ff9-4b4c-8504-12cf8bf6f36e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\In-Line">
+      <UniqueIdentifier>{2770769b-e6d9-4bd0-8115-978be66d9436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Main\Equipment">
+      <UniqueIdentifier>{b82299bd-6fd5-4670-8a1f-0f016c115d0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\NG Code">
+      <UniqueIdentifier>{b4783582-c052-44e9-9da5-ee16ecfe78b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\User">
+      <UniqueIdentifier>{79ea1226-330a-4c95-a449-b59957fc4684}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\Alarm">
+      <UniqueIdentifier>{fc13bd00-655d-4d0a-89df-83070d21a37f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting">
+      <UniqueIdentifier>{184d953a-412f-443e-ac08-5fae1aaee7d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting\Cfg_Line">
+      <UniqueIdentifier>{4cf2a998-4851-42ca-8213-09e8b908def3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting\Cfg_Socket">
+      <UniqueIdentifier>{d6e170ca-83fb-4c21-996e-105f7ef455fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting\Cfg_User">
+      <UniqueIdentifier>{0f856270-018e-4f4b-a62f-a0d0437770a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting\Cfg_NGCode">
+      <UniqueIdentifier>{19eeb041-5dec-4ad8-8e7e-3933500ccfd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting\Cfg_Alarm">
+      <UniqueIdentifier>{24197ccb-1d24-4ea7-8efe-e695d3ae19be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Line Management">
+      <UniqueIdentifier>{73d8c586-d225-414f-80d4-c6c5f65dd320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IcsComm">
+      <UniqueIdentifier>{dcdafa11-c3c5-427d-bdd8-d4c221b127d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\Product">
+      <UniqueIdentifier>{ee03e78e-43d1-49fc-9be7-6c2013cbda42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewWnd_Sub">
+      <UniqueIdentifier>{4a8fa495-031c-45f4-b289-b9adfb5cde8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting\Cfg_Debug">
+      <UniqueIdentifier>{c11c8591-52d2-4937-a554-f2672ad52f97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\FailInfo">
+      <UniqueIdentifier>{37aa621f-35f7-4dab-ad0f-83e31fa5b64d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ViewWnd_Sub\FailInfo">
+      <UniqueIdentifier>{19cb3150-e932-4364-a747-e741ffd7cc41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Log">
+      <UniqueIdentifier>{cba26dd5-e30b-465c-97e2-b36618532ef9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LT MainExecution.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="View_MainCtrl.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_BaseView.cpp">
+      <Filter>ViewWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_LogView.cpp">
+      <Filter>ViewWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_MainView.cpp">
+      <Filter>ViewWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Pane_CommStatus.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Reg_InspInfo.cpp">
+      <Filter>File &amp; Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="TestManager_EQP.cpp">
+      <Filter>Line Management</Filter>
+    </ClCompile>
+    <ClCompile Include="TestManager_Device.cpp">
+      <Filter>Line Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Dummy.cpp">
+      <Filter>View_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_Base.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Recipe.cpp">
+      <Filter>File &amp; Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_ModifyEquipment.cpp">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClCompile>
+    <ClCompile Include="List_LineConfig.cpp">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_Socket.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_MaintenanceView.cpp">
+      <Filter>ViewWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_SocketView.cpp">
+      <Filter>ViewWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_Line.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="List_SocketRFID.cpp">
+      <Filter>View_Setting\Cfg_Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="BannerBar_SEM.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlSocket.cpp">
+      <Filter>LineInfo\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketMonitoring.cpp">
+      <Filter>LineInfo\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Equipment.cpp">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="EqpTester.cpp">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="LineControl.cpp">
+      <Filter>LineInfo\In-Line</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlLineConfig.cpp">
+      <Filter>LineInfo\In-Line</Filter>
+    </ClCompile>
+    <ClCompile Include="EqpLoader.cpp">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="EqpReturner.cpp">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="View_MainCtrl_ICS.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestManager_EQP_ICS.cpp">
+      <Filter>Line Management</Filter>
+    </ClCompile>
+    <ClCompile Include="LineInfo.cpp">
+      <Filter>LineInfo\In-Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_TesterSelection.cpp">
+      <Filter>View_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Status_Base.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Status_Equipment.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Status_Loader.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Status_Returner.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Status_Tester.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="List_SocketInfo.cpp">
+      <Filter>View_Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="RegSocket.cpp">
+      <Filter>LineInfo\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_NGCode.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_User.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_Alarm.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_PopupMenu.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="List_UserInfo.cpp">
+      <Filter>View_Setting\Cfg_User</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_UserLogin.cpp">
+      <Filter>View_Setting\Cfg_User</Filter>
+    </ClCompile>
+    <ClCompile Include="List_NGCode.cpp">
+      <Filter>View_Setting\Cfg_NGCode</Filter>
+    </ClCompile>
+    <ClCompile Include="List_Alarm.cpp">
+      <Filter>View_Setting\Cfg_Alarm</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_SettingView.cpp">
+      <Filter>ViewWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_ModifyUser.cpp">
+      <Filter>View_Setting\Cfg_User</Filter>
+    </ClCompile>
+    <ClCompile Include="IcsCommunicator.cpp">
+      <Filter>IcsComm</Filter>
+    </ClCompile>
+    <ClCompile Include="IcsRemoteEquipment.cpp">
+      <Filter>IcsComm</Filter>
+    </ClCompile>
+    <ClCompile Include="IcsRemoteEquipmentLoUnloader.cpp">
+      <Filter>IcsComm</Filter>
+    </ClCompile>
+    <ClCompile Include="IcsRemoteEquipmentReturner.cpp">
+      <Filter>IcsComm</Filter>
+    </ClCompile>
+    <ClCompile Include="IcsRemoteEquipmentTester.cpp">
+      <Filter>IcsComm</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Status_EquipmentEx.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="RegEquipment.cpp">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Yield_Eqp.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="View_SubMonitoring.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Judgment.cpp">
+      <Filter>ViewWnd_Sub</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_Debug.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Rework_Info.cpp">
+      <Filter>LineInfo\Product</Filter>
+    </ClCompile>
+    <ClCompile Include="RegRework.cpp">
+      <Filter>LineInfo\Product</Filter>
+    </ClCompile>
+    <ClCompile Include="List_ReworkInfo.cpp">
+      <Filter>View_Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_ReworkInfo.cpp">
+      <Filter>View_Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_ModifyNGcode.cpp">
+      <Filter>View_Setting\Cfg_NGCode</Filter>
+    </ClCompile>
+    <ClCompile Include="RegDebugInfo.cpp">
+      <Filter>View_Setting\Cfg_Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="List_UnloadInfo.cpp">
+      <Filter>ViewWnd_Sub</Filter>
+    </ClCompile>
+    <ClCompile Include="NGCode_Info.cpp">
+      <Filter>LineInfo\NG Code</Filter>
+    </ClCompile>
+    <ClCompile Include="FailInfo.cpp">
+      <Filter>LineInfo\FailInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="FailInfo_Eqp.cpp">
+      <Filter>LineInfo\FailInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="List_FailInfo.cpp">
+      <Filter>ViewWnd_Sub\FailInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_FailInfo.cpp">
+      <Filter>ViewWnd_Sub\FailInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="View_MonitoringData.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="List_NGCodeView.cpp">
+      <Filter>LineInfo\NG Code</Filter>
+    </ClCompile>
+    <ClCompile Include="File_UserInfo.cpp">
+      <Filter>LineInfo\User</Filter>
+    </ClCompile>
+    <ClCompile Include="EqpHandler.cpp">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Status_Handler.cpp">
+      <Filter>View_Main\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="IcsRemoteEquipmentHandler.cpp">
+      <Filter>IcsComm</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_InOutCount.cpp">
+      <Filter>View_Log</Filter>
+    </ClCompile>
+    <ClCompile Include="InOutCount.cpp">
+      <Filter>View_Log</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LT MainExecution.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="View_MainCtrl.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_BaseView.h">
+      <Filter>ViewWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_LogView.h">
+      <Filter>ViewWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_MainView.h">
+      <Filter>ViewWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Pane_CommStatus.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Reg_InspInfo.h">
+      <Filter>File &amp; Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="TestManager_EQP.h">
+      <Filter>Line Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Enum.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_DataStruct.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Test.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_TestDevice.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_WindowMessage.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_CompileOption.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="TestManager_Device.h">
+      <Filter>Line Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Dummy.h">
+      <Filter>View_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_Base.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="File_Recipe.h">
+      <Filter>File &amp; Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Equipment_Type.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_ModifyEquipment.h">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClInclude>
+    <ClInclude Include="List_LineConfig.h">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_ModelConfig.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_Socket.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_MaintenanceView.h">
+      <Filter>ViewWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_SocketView.h">
+      <Filter>ViewWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_Line.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="List_SocketRFID.h">
+      <Filter>View_Setting\Cfg_Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="BannerBar_SEM.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Socket_Info.h">
+      <Filter>LineInfo\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlSocket.h">
+      <Filter>LineInfo\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketMonitoring.h">
+      <Filter>LineInfo\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Equipment.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="EqpTester.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="LineControl.h">
+      <Filter>LineInfo\In-Line</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlLineConfig.h">
+      <Filter>LineInfo\In-Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_ConfigLine.h">
+      <Filter>LineInfo\In-Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_ConfigEquipment.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="EqpLoader.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="EqpReturner.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="View_MainCtrl_ICS.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TestManager_EQP_ICS.h">
+      <Filter>Line Management</Filter>
+    </ClInclude>
+    <ClInclude Include="LineInfo.h">
+      <Filter>LineInfo\In-Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Constant.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_TesterSelection.h">
+      <Filter>View_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Yield.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Status_Base.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Status_Equipment.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Status_Loader.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Status_Returner.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Status_Tester.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="List_SocketInfo.h">
+      <Filter>View_Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Socket_Config.h">
+      <Filter>LineInfo\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="RegSocket.h">
+      <Filter>LineInfo\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_NGCode.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_User.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_Alarm.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_PopupMenu.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_UserInfo.h">
+      <Filter>View_Setting\Cfg_User</Filter>
+    </ClInclude>
+    <ClInclude Include="List_UserInfo.h">
+      <Filter>View_Setting\Cfg_User</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_UserLogin.h">
+      <Filter>View_Setting\Cfg_User</Filter>
+    </ClInclude>
+    <ClInclude Include="List_NGCode.h">
+      <Filter>View_Setting\Cfg_NGCode</Filter>
+    </ClInclude>
+    <ClInclude Include="List_Alarm.h">
+      <Filter>View_Setting\Cfg_Alarm</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_SettingView.h">
+      <Filter>ViewWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_ModifyUser.h">
+      <Filter>View_Setting\Cfg_User</Filter>
+    </ClInclude>
+    <ClInclude Include="IcsCommunicator.h">
+      <Filter>IcsComm</Filter>
+    </ClInclude>
+    <ClInclude Include="IcsRemoteEquipment.h">
+      <Filter>IcsComm</Filter>
+    </ClInclude>
+    <ClInclude Include="IcsRemoteEquipmentLoUnloader.h">
+      <Filter>IcsComm</Filter>
+    </ClInclude>
+    <ClInclude Include="IcsRemoteEquipmentReturner.h">
+      <Filter>IcsComm</Filter>
+    </ClInclude>
+    <ClInclude Include="IcsRemoteEquipmentTester.h">
+      <Filter>IcsComm</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_ProductInfo.h">
+      <Filter>LineInfo\Product</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_NGCode.h">
+      <Filter>LineInfo\NG Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Alarm.h">
+      <Filter>LineInfo\Alarm</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Status_EquipmentEx.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="RegEquipment.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Yield_Eqp.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="View_SubMonitoring.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Judgment.h">
+      <Filter>ViewWnd_Sub</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_Debug.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_DebugInfo.h">
+      <Filter>View_Setting\Cfg_Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Rework_Info.h">
+      <Filter>LineInfo\Product</Filter>
+    </ClInclude>
+    <ClInclude Include="RegRework.h">
+      <Filter>LineInfo\Product</Filter>
+    </ClInclude>
+    <ClInclude Include="List_ReworkInfo.h">
+      <Filter>View_Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_ReworkInfo.h">
+      <Filter>View_Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_ModifyNGcode.h">
+      <Filter>View_Setting\Cfg_NGCode</Filter>
+    </ClInclude>
+    <ClInclude Include="RegDebugInfo.h">
+      <Filter>View_Setting\Cfg_Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="List_UnloadInfo.h">
+      <Filter>ViewWnd_Sub</Filter>
+    </ClInclude>
+    <ClInclude Include="NGCode_Info.h">
+      <Filter>LineInfo\NG Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_FailInfo.h">
+      <Filter>LineInfo\FailInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="FailInfo.h">
+      <Filter>LineInfo\FailInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="FailInfo_Eqp.h">
+      <Filter>LineInfo\FailInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="List_FailInfo.h">
+      <Filter>ViewWnd_Sub\FailInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_FailInfo.h">
+      <Filter>ViewWnd_Sub\FailInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="View_MonitoringData.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="List_NGCodeView.h">
+      <Filter>LineInfo\NG Code</Filter>
+    </ClInclude>
+    <ClInclude Include="File_UserInfo.h">
+      <Filter>LineInfo\User</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_PopupMenu.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Language.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Language_Message.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="EqpHandler.h">
+      <Filter>LineInfo\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Status_Handler.h">
+      <Filter>View_Main\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="IcsRemoteEquipmentHandler.h">
+      <Filter>IcsComm</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_InOutCount.h">
+      <Filter>View_Log</Filter>
+    </ClInclude>
+    <ClInclude Include="InOutCount.h">
+      <Filter>View_Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_InOutCount.h">
+      <Filter>View_Log</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\BannerLogo.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\LT MainExecution.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\check32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Checked.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Checked_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\checkno32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Connect.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Exit_048.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Option_048.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\OutputTabIcons24.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Select.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Select_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\SelectNo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\SelectNo_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Unchecked.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Unchecked_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="UserImages.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Luritech.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Luritech_logo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Devices-64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Magnifier_x64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\virtual_machine2-32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\virtual_machine2-32R.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\upload-24.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\upload-24G.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\upload-16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\upload-16G.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Start.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Stop.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Luritech_logo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\BottomLeft.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\BottomMiddle.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\BottomRight.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\MiddleLeft.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\MiddleRight.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\TopLeft.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\TopMiddle.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CustomCtrl\res\TopRight.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\LT_MainUI\res\CaptionBtns.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\LT_MainUI\res\FrameBkgnd.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Unchecked_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Unchecked.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\virtual_machine2-32R.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\virtual_machine2-32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Stop.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Start.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\SelectNo_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\SelectNo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Select_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Select.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\upload-16G.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\upload-16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Checked_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Checked.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Luritech_logo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\checkno32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\check32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\BannerLogo.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Magnifier_x64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Luritech.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Devices-64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Connect.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\LT_MainUI\res\FrameBkgnd_Blue.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Unchecked_8.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\Checked_8.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-up.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-right.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-left.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-down.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\arrow-up.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\arrow-right.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\arrow-left.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\arrow-down.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\BannerLogo_SEM.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\BannerLogo_SEM.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\CommonTest\res\keyboard_64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LT MainExecution.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Concept.txt" />
+    <Text Include="Project_History.txt" />
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\LT MainExecution.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+</Project>

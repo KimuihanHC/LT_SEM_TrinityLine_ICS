@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{7eb956b0-eaee-41ee-ab22-efc0bc66722e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{1de6a333-adad-41db-bcbc-30ff11fc72d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Define">
+      <UniqueIdentifier>{e0a10571-6357-4809-b0ba-8158f8425c08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{7b2504bd-7c17-462b-ae90-13e57b031fe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{287693b2-bf39-41c4-89f2-e0e89a1112f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File &amp; Registry">
+      <UniqueIdentifier>{1f2d0ef6-49e2-43eb-b51f-5a3858a93ff0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dlg_ChangePassword.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_ChkPassword.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_TransferProgress.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_DataStruct_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Enum_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Test_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_WindowMessage_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="TestManager_Base.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="List_Error.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_ErrorView.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="List_Barcode.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_AcessMode.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_ErrView.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Popup.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Reg_Management.h">
+      <Filter>File &amp; Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="File_Config.h">
+      <Filter>File &amp; Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_ErrorCode.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_BaseView.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Tacttime_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_RecipeInfo_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Equipment_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Yield_Cm.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogMessage.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="TactTime.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_MessageBox.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\BannerLogo.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\check32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Checked.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Checked_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\checkno32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Connect.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Devices-64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Luritech.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Luritech_logo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Magnifier_x64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Select.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Select_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\SelectNo.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\SelectNo_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Start.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Stop.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Unchecked.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Unchecked_16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\upload-16.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\upload-16G.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\virtual_machine2-32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\virtual_machine2-32R.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-down.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-left.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-right.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\arrow-up.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Checked_8.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\BannerLogo_SEM.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Unchecked_8.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\keyboard_64.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CommonTest.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Dlg_ChangePassword.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_ChkPassword.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_TransferProgress.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="TestManager_Base.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="List_Error.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_ErrorView.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="List_Barcode.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_AcessMode.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_ErrView.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Popup.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Reg_Management.cpp">
+      <Filter>File &amp; Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Config.cpp">
+      <Filter>File &amp; Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_BaseView.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogMessage.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="TactTime.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_MessageBox.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Concept.txt" />
+    <Text Include="Program_Tip.txt" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,305 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어(대한민국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_UNCHECKED_16        BITMAP                  "..\\CommonTest\\res\\Unchecked_16.bmp"
+
+IDB_UNCHECKED           BITMAP                  "..\\CommonTest\\res\\Unchecked.bmp"
+
+IDB_TEST_START_R        BITMAP                  "..\\CommonTest\\res\\virtual_machine2-32R.bmp"
+
+IDB_TEST_START          BITMAP                  "..\\CommonTest\\res\\virtual_machine2-32.bmp"
+
+IDB_STOP                BITMAP                  "..\\CommonTest\\res\\Stop.bmp"
+
+IDB_START               BITMAP                  "..\\CommonTest\\res\\Start.bmp"
+
+IDB_SELECTNO_16         BITMAP                  "..\\CommonTest\\res\\SelectNo_16.bmp"
+
+IDB_SELECT_NO           BITMAP                  "..\\CommonTest\\res\\SelectNo.bmp"
+
+IDB_SELECT_16           BITMAP                  "..\\CommonTest\\res\\Select_16.bmp"
+
+IDB_SELECT              BITMAP                  "..\\CommonTest\\res\\Select.bmp"
+
+IDB_LOAD_FILE_G         BITMAP                  "..\\CommonTest\\res\\upload-16G.bmp"
+
+IDB_LOAD_FILE           BITMAP                  "..\\CommonTest\\res\\upload-16.bmp"
+
+IDB_CHECKED_16          BITMAP                  "..\\CommonTest\\res\\Checked_16.bmp"
+
+IDB_CHECKED             BITMAP                  "..\\CommonTest\\res\\Checked.bmp"
+
+IDB_BITMAP_Luritech     BITMAP                  "..\\CommonTest\\res\\Luritech_logo.bmp"
+
+IDB_BITMAP_CHECKNO      BITMAP                  "..\\CommonTest\\res\\checkno32.bmp"
+
+IDB_BITMAP_CHECK        BITMAP                  "..\\CommonTest\\res\\check32.bmp"
+
+IDB_ARROW_DOWN          BITMAP                  "res\\arrow-down.bmp"
+
+IDB_ARROW_LEFT          BITMAP                  "res\\arrow-left.bmp"
+
+IDB_ARROW_RIGHT         BITMAP                  "res\\arrow-right.bmp"
+
+IDB_ARROW_UP            BITMAP                  "res\\arrow-up.bmp"
+
+IDB_CHECKED_8           BITMAP                  "res\\Checked_8.bmp"
+
+IDB_UNCHECKED_8         BITMAP                  "res\\Unchecked_8.bmp"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_SEM            ICON                    "res\\BannerLogo_SEM.ico"
+
+IDI_ICON_LOGO           ICON                    "..\\CommonTest\\res\\BannerLogo.ico"
+
+IDI_ICON_TSP            ICON                    "..\\CommonTest\\res\\Magnifier_x64.ico"
+
+IDI_ICON_Luritech       ICON                    "..\\CommonTest\\res\\Luritech.ico"
+
+IDI_ICON_DEVICE         ICON                    "..\\CommonTest\\res\\Devices-64.ico"
+
+IDI_ICON_CONNECT        ICON                    "..\\CommonTest\\res\\Connect.ico"
+
+IDI_ICON_KEYBOARD       ICON                    "..\\CommonTest\\res\\keyboard_64.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DLG_CHK_PASSWORD DIALOGEX 0, 0, 320, 100
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Check Password"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CTEXT           "암호를 입력하십시오.",IDC_ST_PASSWORD,10,5,300,25,SS_CENTERIMAGE | WS_BORDER
+    EDITTEXT        IDC_ED_PASSWORD,10,35,300,25,ES_CENTER | ES_PASSWORD | ES_AUTOHSCROLL | ES_WANTRETURN
+    DEFPUSHBUTTON   "확인",IDOK,10,70,135,25
+    DEFPUSHBUTTON   "취소",IDCANCEL,175,70,135,25
+END
+
+IDD_DLG_MODULE_PROGRESS DIALOGEX 0, 0, 360, 360
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "검사 결과"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CTEXT           "검사 결과",IDC_ST_DLG_TRANS_STATE,5,5,350,20,SS_CENTERIMAGE | WS_BORDER
+    LISTBOX         IDC_LIST_DLG_TRANS_MSG,5,30,350,280,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "확인",IDOK,5,320,350,35
+END
+
+IDD_DLG_CHANGE_PASSWORD DIALOGEX 0, 0, 331, 175
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "사용자 암호 변경"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,10,140,150,25
+    PUSHBUTTON      "취소",IDCANCEL,170,140,150,25
+    CTEXT           "기존 암호",IDC_ST_OLD_PASSWORD,10,10,150,25,SS_CENTERIMAGE
+    CTEXT           "신규 암호",IDC_ST_NEW_PASSWORD,10,60,150,25,SS_CENTERIMAGE
+    CTEXT           "신규 암호 재확인",IDC_ST_CONFIRM_PW,10,95,150,25,SS_CENTERIMAGE
+    EDITTEXT        IDC_ED_OLD_PASSWORD,170,10,150,25,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_NEW_PASSWORD,170,60,150,25,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_CONFIRM_PW,170,95,150,25,ES_PASSWORD | ES_AUTOHSCROLL
+END
+
+IDD_DLG_BARCODE DIALOGEX 0, 0, 309, 176
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_TOPMOST
+CAPTION "Video"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_ACESS_MODE DIALOGEX 0, 0, 311, 162
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Acess Mode"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_ERR DIALOGEX 0, 0, 846, 219
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN | WS_BORDER
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_POPUP DIALOGEX 0, 0, 400, 210
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN | WS_BORDER
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_MODIFY_STEP DIALOGEX 0, 0, 375, 220
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Modify Step"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DIALOG_MESSAGE DIALOGEX 0, 0, 621, 240
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "title",IDC_MESSAGE_STATIC_TITLE,10,10,600,40,SS_CENTERIMAGE | WS_BORDER
+    LTEXT           "",IDC_MESSAGE_STATIC_LINE,10,40,600,8,SS_CENTERIMAGE | WS_BORDER
+    LTEXT           "sub title",IDC_MESSAGE_STATIC_SUBTITLE,10,48,600,122,SS_CENTERIMAGE | WS_BORDER
+    PUSHBUTTON      "Ok",IDOK,10,180,200,50
+    PUSHBUTTON      "Cancel",IDCANCEL,410,180,200,50
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DLG_CHK_PASSWORD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+    END
+
+    IDD_DLG_MODULE_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 355
+        TOPMARGIN, 5
+        BOTTOMMARGIN, 355
+    END
+
+    IDD_DLG_CHANGE_PASSWORD, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_BARCODE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 169
+    END
+
+    IDD_DLG_ACESS_MODE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 309
+    END
+
+    IDD_DLG_ERR, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_POPUP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 393
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 203
+    END
+
+    IDD_DLG_MODIFY_STEP, DIALOG
+    BEGIN
+    END
+
+    IDD_DIALOG_MESSAGE, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DLG_MODIFY_STEP AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_BARCODE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG_MESSAGE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // 한국어(대한민국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

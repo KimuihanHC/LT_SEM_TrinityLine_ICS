@@ -1,0 +1,684 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean (Korea) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\LT MainExecution.rc2""  // Microsoft Visual C++ AI￠?UAC ￠￥U￠￢¡I ￥i￥i¡¾￠￢￠?￠®¨u¡ⓒ ¨¡iAyCN ￠￢￠c¨uO¨o¨￢AO￠￥I￠￥U.\r\n"
+    "#include ""l.KOR\\afxres.rc""          // C¡IA¨ª ¡¾￠￢¨u¨￢ ￠?a¨uOAO￠￥I￠￥U.\r\n"
+    "#if !defined(_AFXDLL)\r\n"
+    "#include ""l.KOR\\afxprint.rc""                // AI¨ua ⓒoI￠￢￠c ¨￢￠￢¡¾a ￠￢￠c¨uO¨o¨￢\r\n"
+    "#include ""l.KOR\\afxribbon.rc""               // MFC ￠￢￠c¨￢¡i ⓒo¡¿ AA¨¡￠c¡¤N ￠￢¡¤￠￥e ￠￢￠c¨uO¨o¨￢\r\n"
+    "#endif\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_UNCHECKED_16        BITMAP                  "..\\CommonTest\\res\\Unchecked_16.bmp"
+
+IDB_UNCHECKED_8         BITMAP                  "..\\CommonTest\\res\\Unchecked_8.bmp"
+
+IDB_UNCHECKED           BITMAP                  "..\\CommonTest\\res\\Unchecked.bmp"
+
+IDB_TEST_START_R        BITMAP                  "..\\CommonTest\\res\\virtual_machine2-32R.bmp"
+
+IDB_TEST_START          BITMAP                  "..\\CommonTest\\res\\virtual_machine2-32.bmp"
+
+IDB_STOP                BITMAP                  "..\\CommonTest\\res\\Stop.bmp"
+
+IDB_START               BITMAP                  "..\\CommonTest\\res\\Start.bmp"
+
+IDB_SELECTNO_16         BITMAP                  "..\\CommonTest\\res\\SelectNo_16.bmp"
+
+IDB_SELECT_NO           BITMAP                  "..\\CommonTest\\res\\SelectNo.bmp"
+
+IDB_SELECT_16           BITMAP                  "..\\CommonTest\\res\\Select_16.bmp"
+
+IDB_SELECT              BITMAP                  "..\\CommonTest\\res\\Select.bmp"
+
+IDB_LOAD_FILE_G         BITMAP                  "..\\CommonTest\\res\\upload-16G.bmp"
+
+IDB_LOAD_FILE           BITMAP                  "..\\CommonTest\\res\\upload-16.bmp"
+
+IDB_CHECKED_16          BITMAP                  "..\\CommonTest\\res\\Checked_16.bmp"
+
+IDB_CHECKED_8           BITMAP                  "..\\CommonTest\\res\\Checked_8.bmp"
+
+IDB_CHECKED             BITMAP                  "..\\CommonTest\\res\\Checked.bmp"
+
+IDB_BITMAP_Luritech     BITMAP                  "..\\CommonTest\\res\\Luritech_logo.bmp"
+
+IDB_BITMAP_CHECKNO      BITMAP                  "..\\CommonTest\\res\\checkno32.bmp"
+
+IDB_BITMAP_CHECK        BITMAP                  "..\\CommonTest\\res\\check32.bmp"
+
+IDB_BOTTOM_LEFT         BITMAP                  "..\\CustomCtrl\\res\\BottomLeft.bmp"
+
+IDB_BOTTOM_MIDDLE       BITMAP                  "..\\CustomCtrl\\res\\BottomMiddle.bmp"
+
+IDB_BOTTOM_RIGHT        BITMAP                  "..\\CustomCtrl\\res\\BottomRight.bmp"
+
+IDB_MIDDLE_LEFT         BITMAP                  "..\\CustomCtrl\\res\\MiddleLeft.bmp"
+
+IDB_MIDDLE_RIGHT        BITMAP                  "..\\CustomCtrl\\res\\MiddleRight.bmp"
+
+IDB_TOP_LEFT            BITMAP                  "..\\CustomCtrl\\res\\TopLeft.bmp"
+
+IDB_TOP_MIDDLE          BITMAP                  "..\\CustomCtrl\\res\\TopMiddle.bmp"
+
+IDB_TOP_RIGHT           BITMAP                  "..\\CustomCtrl\\res\\TopRight.bmp"
+
+IDB_NT_CAPTION_BTNS     BITMAP                  "..\\LT_MainUI\\res\\CaptionBtns.bmp"
+
+IDB_NT_FRAME_BKGND      BITMAP                  "..\\LT_MainUI\\res\\FrameBkgnd.bmp"
+
+IDB_NT_FRAME_BKGND_B    BITMAP                  "..\\LT_MainUI\\res\\FrameBkgnd_Blue.bmp"
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
+IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
+IDB_OUTPUT_TAB_ICONS    BITMAP                  "res\\OutputTabIcons24.bmp"
+
+IDB_ARROW_UP            BITMAP                  "..\\CommonTest\\res\\arrow-up.bmp"
+
+IDB_ARROW_RIGHT         BITMAP                  "..\\CommonTest\\res\\arrow-right.bmp"
+
+IDB_ARROW_LEFT          BITMAP                  "..\\CommonTest\\res\\arrow-left.bmp"
+
+IDB_ARROW_DOWN          BITMAP                  "..\\CommonTest\\res\\arrow-down.bmp"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\LT MainExecution.ico"
+
+IDI_ICON_SEM            ICON                    "..\\CommonTest\\res\\BannerLogo_SEM.ico"
+
+IDI_ICON_LOGO           ICON                    "..\\CommonTest\\res\\BannerLogo.ico"
+
+IDI_ICON_TSP            ICON                    "..\\CommonTest\\res\\Magnifier_x64.ico"
+
+IDI_ICON_Luritech       ICON                    "..\\CommonTest\\res\\Luritech.ico"
+
+IDI_ICON_DEVICE         ICON                    "..\\CommonTest\\res\\Devices-64.ico"
+
+IDI_ICON_CONNECT        ICON                    "..\\CommonTest\\res\\Connect.ico"
+
+IDI_ICON_KEYBOARD       ICON                    "..\\CommonTest\\res\\keyboard_64.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DLG_CHK_PASSWORD DIALOGEX 0, 0, 320, 100
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Check Password"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CTEXT           "Please enter the manager password.",IDC_ST_PASSWORD,10,5,300,25,SS_CENTERIMAGE | WS_BORDER
+    EDITTEXT        IDC_ED_PASSWORD,10,35,300,25,ES_CENTER | ES_PASSWORD | ES_AUTOHSCROLL | ES_WANTRETURN
+    DEFPUSHBUTTON   "OK",IDOK,10,70,135,25
+    DEFPUSHBUTTON   "Cancel",IDCANCEL,175,70,135,25
+END
+
+IDD_DLG_MODULE_PROGRESS DIALOGEX 0, 0, 360, 360
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "검사 결과"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CTEXT           "검사 결과",IDC_ST_DLG_TRANS_STATE,5,5,350,20,SS_CENTERIMAGE | WS_BORDER
+    LISTBOX         IDC_LIST_DLG_TRANS_MSG,5,30,350,280,LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "확인",IDOK,5,320,350,35
+END
+
+IDD_DLG_CHANGE_PASSWORD DIALOGEX 0, 0, 331, 175
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "사용자 암호 변경"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,10,140,150,25
+    PUSHBUTTON      "취소",IDCANCEL,170,140,150,25
+    CTEXT           "기존 암호",IDC_ST_OLD_PASSWORD,10,10,150,25,SS_CENTERIMAGE
+    CTEXT           "신규 암호",IDC_ST_NEW_PASSWORD,10,60,150,25,SS_CENTERIMAGE
+    CTEXT           "신규 암호 재확인",IDC_ST_CONFIRM_PW,10,95,150,25,SS_CENTERIMAGE
+    EDITTEXT        IDC_ED_OLD_PASSWORD,170,10,150,25,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_NEW_PASSWORD,170,60,150,25,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_CONFIRM_PW,170,95,150,25,ES_PASSWORD | ES_AUTOHSCROLL
+END
+
+IDD_DLG_BARCODE DIALOGEX 0, 0, 309, 176
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_TOPMOST
+CAPTION "Barcode"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "LT MainExecution 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
+    LTEXT           "LT MainExecution, 버전 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2010",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "확인",IDOK,113,41,50,14,WS_GROUP
+END
+
+IDD_PROPPAGE_OPTION DIALOGEX 0, 0, 300, 280
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
+CAPTION "Option"
+FONT 9, "굴림", 400, 0, 0x0
+BEGIN
+END
+
+IDD_DLG_ACESS_MODE DIALOGEX 0, 0, 380, 340
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Log In"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_FULLSCREEN DIALOGEX 0, 0, 322, 201
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+END
+
+IDD_DLG_MODIFY_STEP DIALOGEX 0, 0, 375, 220
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Modify Step"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_POPUP DIALOGEX 0, 0, 143, 231
+STYLE DS_ABSALIGN | DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DIALOG_MESSAGE DIALOGEX 0, 0, 621, 241
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "title",IDC_MESSAGE_STATIC_TITLE,10,10,600,40,SS_CENTERIMAGE | WS_BORDER
+    LTEXT           "",IDC_MESSAGE_STATIC_LINE,10,40,600,8,SS_CENTERIMAGE | WS_BORDER
+    LTEXT           "sub title",IDC_MESSAGE_STATIC_SUBTITLE,10,48,600,122,SS_CENTERIMAGE | WS_BORDER
+    PUSHBUTTON      "Ok",IDOK,10,180,200,50
+    PUSHBUTTON      "Cancel",IDCANCEL,410,180,200,50
+END
+
+IDD_DLG_MODIFY_NGCODE DIALOGEX 0, 0, 300, 300
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Modify NG Code"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_ERR DIALOGEX 0, 0, 620, 240
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN | WS_BORDER
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DLG_CHK_PASSWORD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+    END
+
+    IDD_DLG_MODULE_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 355
+        TOPMARGIN, 5
+        BOTTOMMARGIN, 355
+    END
+
+    IDD_DLG_CHANGE_PASSWORD, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_BARCODE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 169
+    END
+
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+    END
+
+    IDD_PROPPAGE_OPTION, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_ACESS_MODE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 371
+        BOTTOMMARGIN, 310
+    END
+
+    IDD_DLG_FULLSCREEN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 315
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 194
+    END
+
+    IDD_DLG_MODIFY_STEP, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_POPUP, DIALOG
+    BEGIN
+    END
+
+    IDD_DIALOG_MESSAGE, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_MODIFY_NGCODE, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_ERR, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR 16, 16
+BEGIN
+    BUTTON      ID_FILE_NEW
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+IDR_MAINFRAME_256 TOOLBAR 16, 16
+BEGIN
+    BUTTON      ID_FILE_NEW
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "파일(&F)"
+    BEGIN
+        MENUITEM "끝내기(&X)",                     ID_APP_EXIT
+    END
+    POPUP "편집(&E)"
+    BEGIN
+        MENUITEM "실행 취소(&U)\tCtrl+Z",           ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "잘라내기(&T)\tCtrl+X",            ID_EDIT_CUT
+        MENUITEM "복사(&C)\tCtrl+C",              ID_EDIT_COPY
+        MENUITEM "붙여넣기(&P)\tCtrl+V",            ID_EDIT_PASTE
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "LT MainExecution 정보(&A)...",  ID_APP_ABOUT
+    END
+END
+
+IDR_POPUP_EDIT MENU
+BEGIN
+    POPUP "편집"
+    BEGIN
+        MENUITEM "잘라내기(&T)\tCtrl+X",            ID_EDIT_CUT
+        MENUITEM "복사(&C)\tCtrl+C",              ID_EDIT_COPY
+        MENUITEM "붙여넣기(&P)\tCtrl+V",            ID_EDIT_PASTE
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2023,9,14,0
+ PRODUCTVERSION 1,5,26,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "Luritech"
+            VALUE "FileDescription", "In-Line Control System"
+            VALUE "FileVersion", "2023.9.14.0"
+            VALUE "InternalName", "LT EXE Inline Control System.exe"
+            VALUE "LegalCopyright", "(c) <Luritech>.  All rights reserved. (https://www.luritech.com/)"
+            VALUE "OriginalFilename", "LT EXE Inline Control System.exe"
+            VALUE "ProductName", "Inline Control System"
+            VALUE "ProductVersion", "1.5.26.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DLG_MODIFY_STEP AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_PROPPAGE_OPTION AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_POPUP AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_ACESS_MODE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG_MESSAGE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_MODIFY_NGCODE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDP_OLE_INIT_FAILED     "OLE를 초기화할 수 없습니다. OLE 라이브러리 버전이 올바른지 확인하십시오."
+    IDP_SOCKETS_INIT_FAILED "Windows 소켓을 초기화하지 못했습니다."
+END
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "Base Frame"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "Base Frame"
+    AFX_IDS_IDLEMESSAGE     "준비"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "프로그램 정보, 버전 번호, 저작권을 표시합니다.\n정보"
+    ID_APP_EXIT             "응용 프로그램을 끝냅니다.\n끝내기"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "다음 창으로 전환합니다.\n다음 창"
+    ID_PREV_PANE            "이전 창으로 전환합니다.\n이전 창"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_SPLIT         "활성 창을 여러 개의 창으로 분할합니다.\n분할"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "선택 영역을 지웁니다.\n지우기"
+    ID_EDIT_CLEAR_ALL       "모두 지웁니다.\n모두 지우기"
+    ID_EDIT_COPY            "선택 영역을 복사하여 클립보드에 넣습니다.\n복사"
+    ID_EDIT_CUT             "선택 영역을 잘라내어 클립보드에 넣습니다.\n잘라내기"
+    ID_EDIT_FIND            "지정한 텍스트를 찾습니다.\n찾기"
+    ID_EDIT_PASTE           "클립보드 내용을 삽입합니다.\n붙여넣기"
+    ID_EDIT_REPEAT          "마지막 작업을 반복합니다.\n반복"
+    ID_EDIT_REPLACE         "특정 텍스트를 다른 텍스트로 바꿉니다.\n바꾸기"
+    ID_EDIT_SELECT_ALL      "전체 문서를 선택합니다.\n모두 선택"
+    ID_EDIT_UNDO            "마지막 작업 실행을 취소합니다.\n실행 취소"
+    ID_EDIT_REDO            "이전에 실행 취소된 작업을 다시 실행합니다.\n다시 실행"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "창 크기를 변경합니다."
+    AFX_IDS_SCMOVE          "창 위치를 변경합니다."
+    AFX_IDS_SCMINIMIZE      "창을 아이콘으로 축소합니다."
+    AFX_IDS_SCMAXIMIZE      "창을 전체 화면 크기로 확대합니다."
+    AFX_IDS_SCNEXTWINDOW    "다음 문서 창으로 전환합니다."
+    AFX_IDS_SCPREVWINDOW    "이전 문서 창으로 전환합니다."
+    AFX_IDS_SCCLOSE         "프로그램을 종료합니다."
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "창을 보통 크기로 복원합니다."
+    AFX_IDS_SCTASKLIST      "작업 목록을 활성화합니다."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_STATUS_PANE1        "창 1"
+    IDS_STATUS_PANE2        "창 2"
+    IDS_TOOLBAR_STANDARD    "표준"
+    IDS_TOOLBAR_CUSTOMIZE   "사용자 지정..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_EDIT_MENU           "편집"
+END
+
+STRINGTABLE
+BEGIN
+    ID_TABVIEW_1            "Main"
+    ID_TABVIEW_2            "Socket"
+    ID_TABVIEW_3            "Recipe"
+    ID_TABVIEW_4            "Maintenance"
+    ID_TABVIEW_5            "Log"
+    ID_TABVIEW_6            "Log"
+    ID_TABVIEW_7            "Reserv_02"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_STR_OPTION          "Option"
+    IDS_STR_OPT_PAGE_01     "System"
+    IDS_STR_OPT_PAGE_02     "Server"
+    IDS_STR_OPT_PAGE_03     "MES"
+    IDS_STR_OPT_PAGE_04     "PCB"
+    IDS_STR_OPT_PAGE_05     "Misc"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_STR_OPT_PAGE_06     "기타 설정"
+    IDS_STR_OPT_PAGE_07     "기타 설정"
+    IDS_STR_OPT_PAGE_08     "기타 설정"
+    IDS_STR_OPT_PAGE_09     "예약"
+END
+
+STRINGTABLE
+BEGIN
+    ID_TABVIEW_8            "Reserv_03"
+    ID_TABVIEW_9            "Reserv_04"
+END
+
+#endif    // Korean (Korea) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\LT MainExecution.rc2"  // Microsoft Visual C++ AI￠?UAC ￠￥U￠￢¡I ￥i￥i¡¾￠￢￠?￠®¨u¡ⓒ ¨¡iAyCN ￠￢￠c¨uO¨o¨￢AO￠￥I￠￥U.
+#include "l.KOR\afxres.rc"          // C¡IA¨ª ¡¾￠￢¨u¨￢ ￠?a¨uOAO￠￥I￠￥U.
+#if !defined(_AFXDLL)
+#include "l.KOR\afxprint.rc"                // AI¨ua ⓒoI￠￢￠c ¨￢￠￢¡¾a ￠￢￠c¨uO¨o¨￢
+#include "l.KOR\afxribbon.rc"               // MFC ￠￢￠c¨￢¡i ⓒo¡¿ AA¨¡￠c¡¤N ￠￢¡¤￠￥e ￠￢￠c¨uO¨o¨￢
+#endif
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,151 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1231
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LT EXE In-Line Control System", "LT_EXE_LineControlSystem\LT_EXE_LineControlSystem.vcxproj", "{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{797E6A46-2B33-47EF-A37F-6093E845C7D8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CustomCtrl", "CustomCtrl\CustomCtrl.vcxproj", "{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LT_MainUI", "LT_MainUI\LT_MainUI.vcxproj", "{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LT_Option", "LT_Option\LT_Option.vcxproj", "{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextDesigner", "TextDesigner\TextDesigner.vcxproj", "{F21CE92F-240D-48FE-8B73-56A63D4536B0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonTest", "CommonTest\CommonTest.vcxproj", "{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		(Rivian) Debug - Debug Mode|x64 = (Rivian) Debug - Debug Mode|x64
+		(Rivian) Debug|x64 = (Rivian) Debug|x64
+		(Rivian) Release - Debug Mode|x64 = (Rivian) Release - Debug Mode|x64
+		(Rivian) Release|x64 = (Rivian) Release|x64
+		(Trinity) Debug - Debug Mode|x64 = (Trinity) Debug - Debug Mode|x64
+		(Trinity) Debug|x64 = (Trinity) Debug|x64
+		(Trinity) Release - Debug Mode|x64 = (Trinity) Release - Debug Mode|x64
+		(Trinity) Release|x64 = (Trinity) Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Debug - Debug Mode|x64.ActiveCfg = (Rivian) Unicode Debug - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Debug - Debug Mode|x64.Build.0 = (Rivian) Unicode Debug - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Debug|x64.ActiveCfg = (Rivian) Unicode Debug|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Debug|x64.Build.0 = (Rivian) Unicode Debug|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Release - Debug Mode|x64.ActiveCfg = (Rivian) Unicode Release - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Release - Debug Mode|x64.Build.0 = (Rivian) Unicode Release - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Release|x64.ActiveCfg = (Rivian) Unicode Release|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Rivian) Release|x64.Build.0 = (Rivian) Unicode Release|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Debug - Debug Mode|x64.ActiveCfg = (Trinity) Unicode Debug - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Debug - Debug Mode|x64.Build.0 = (Trinity) Unicode Debug - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Debug|x64.ActiveCfg = (Trinity) Unicode Debug|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Debug|x64.Build.0 = (Trinity) Unicode Debug|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Release - Debug Mode|x64.ActiveCfg = (Trinity) Unicode Release - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Release - Debug Mode|x64.Build.0 = (Trinity) Unicode Release - Debug Mode|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Release|x64.ActiveCfg = (Trinity) Unicode Release|x64
+		{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}.(Trinity) Release|x64.Build.0 = (Trinity) Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Debug|x64.Build.0 = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Release|x64.ActiveCfg = Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Rivian) Release|x64.Build.0 = Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Debug|x64.Build.0 = Unicode Debug|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Release|x64.ActiveCfg = Unicode Release|x64
+		{797E6A46-2B33-47EF-A37F-6093E845C7D8}.(Trinity) Release|x64.Build.0 = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Debug|x64.Build.0 = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Release|x64.ActiveCfg = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Rivian) Release|x64.Build.0 = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Debug|x64.Build.0 = Unicode Debug|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Release|x64.ActiveCfg = Unicode Release|x64
+		{E2BDC829-23A2-46E1-A4EB-F5506B6E0A75}.(Trinity) Release|x64.Build.0 = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Debug|x64.Build.0 = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Release|x64.ActiveCfg = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Rivian) Release|x64.Build.0 = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Debug|x64.Build.0 = Unicode Debug|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Release|x64.ActiveCfg = Unicode Release|x64
+		{9E39B67C-F450-4F1C-A5A6-1F72BFD378C4}.(Trinity) Release|x64.Build.0 = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Debug|x64.Build.0 = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Release|x64.ActiveCfg = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Rivian) Release|x64.Build.0 = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Debug|x64.Build.0 = Unicode Debug|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Release|x64.ActiveCfg = Unicode Release|x64
+		{AE616AAF-0BE2-4AF2-A7BF-DCD96FC4C195}.(Trinity) Release|x64.Build.0 = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Debug|x64.Build.0 = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Release|x64.ActiveCfg = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Rivian) Release|x64.Build.0 = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Debug|x64.Build.0 = Unicode Debug|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Release|x64.ActiveCfg = Unicode Release|x64
+		{F21CE92F-240D-48FE-8B73-56A63D4536B0}.(Trinity) Release|x64.Build.0 = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Debug|x64.Build.0 = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Release|x64.ActiveCfg = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Rivian) Release|x64.Build.0 = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Debug - Debug Mode|x64.ActiveCfg = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Debug - Debug Mode|x64.Build.0 = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Debug|x64.ActiveCfg = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Debug|x64.Build.0 = Unicode Debug|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Release - Debug Mode|x64.ActiveCfg = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Release - Debug Mode|x64.Build.0 = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Release|x64.ActiveCfg = Unicode Release|x64
+		{007D0278-0BDB-4E2F-83C0-CF0CE39B6933}.(Trinity) Release|x64.Build.0 = Unicode Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02DFCFA3-9CF6-4401-8554-DB86D4ABA0CD}
+	EndGlobalSection
+EndGlobal

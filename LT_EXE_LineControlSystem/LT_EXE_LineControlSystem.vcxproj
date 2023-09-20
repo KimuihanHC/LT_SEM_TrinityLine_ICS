@@ -1,0 +1,834 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="(Rivian) Unicode Debug - Debug Mode|x64">
+      <Configuration>(Rivian) Unicode Debug - Debug Mode</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="(Rivian) Unicode Debug|x64">
+      <Configuration>(Rivian) Unicode Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="(Trinity) Unicode Debug - Debug Mode|x64">
+      <Configuration>(Trinity) Unicode Debug - Debug Mode</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="(Trinity) Unicode Debug|x64">
+      <Configuration>(Trinity) Unicode Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="(Rivian) Unicode Release - Debug Mode|x64">
+      <Configuration>(Rivian) Unicode Release - Debug Mode</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="(Rivian) Unicode Release|x64">
+      <Configuration>(Rivian) Unicode Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="(Trinity) Unicode Release - Debug Mode|x64">
+      <Configuration>(Trinity) Unicode Release - Debug Mode</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="(Trinity) Unicode Release|x64">
+      <Configuration>(Trinity) Unicode Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2DB37DD2-2519-4E6B-AF5E-6E49AAE26E09}</ProjectGuid>
+    <RootNamespace>LT Base Frame</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <ProjectName>LT EXE In-Line Control System</ProjectName>
+    <SccProjectName>Svn</SccProjectName>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release - Debug Mode|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release - Debug Mode|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug - Debug Mode|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release - Debug Mode|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release - Debug Mode|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug - Debug Mode|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.61030.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_Debug</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_RLine_$(Platform)_Debug</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_DM_Debug</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug - Debug Mode|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)_RLine_$(Platform)_DM_Debug</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_RLine_$(Platform)</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release - Debug Mode|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_$(Platform)_DM</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release - Debug Mode|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)_RLine_$(Platform)_DM</TargetName>
+    <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#0 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_based.lib;ltics_commd.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_based.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#1 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_based.lib;ltics_commd.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_based.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#0 /D "USE_DEBUG_MODE" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_based.lib;ltics_commd.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_based.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug - Debug Mode|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#1 /D "USE_DEBUG_MODE" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_based.lib;ltics_commd.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_based.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#0 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_base.lib;ltics_comm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_base.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#1 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_base.lib;ltics_comm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_base.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release - Debug Mode|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#0 /D "USE_DEBUG_MODE" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_base.lib;ltics_comm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_base.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release - Debug Mode|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/DLT_EQP#1 /D "USE_DEBUG_MODE" %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ltics_base.lib;ltics_comm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>../Lib;../Lib/64bit;$(SolutionDir)$(Platform)/$(Configuration)/;../Lib_ICS/lib/$(PlatformTarget)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <StackReserveSize>10000000</StackReserveSize>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_base.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="BannerBar_SEM.cpp" />
+    <ClCompile Include="Dlg_ModifyNGcode.cpp" />
+    <ClCompile Include="Dlg_ModifyUser.cpp" />
+    <ClCompile Include="Dlg_PopupMenu.cpp" />
+    <ClCompile Include="Dlg_UserLogin.cpp" />
+    <ClCompile Include="EqpReturner.cpp" />
+    <ClCompile Include="EqpLoader.cpp" />
+    <ClCompile Include="EqpTester.cpp" />
+    <ClCompile Include="EqpHandler.cpp" />
+    <ClCompile Include="Equipment.cpp" />
+    <ClCompile Include="FailInfo.cpp" />
+    <ClCompile Include="FailInfo_Eqp.cpp" />
+    <ClCompile Include="File_UserInfo.cpp" />
+    <ClCompile Include="IcsRemoteEquipmentHandler.cpp" />
+    <ClCompile Include="InOutCount.cpp" />
+    <ClCompile Include="List_FailInfo.cpp" />
+    <ClCompile Include="List_NGCodeView.cpp" />
+    <ClCompile Include="List_ReworkInfo.cpp" />
+    <ClCompile Include="List_UnloadInfo.cpp" />
+    <ClCompile Include="NGCode_Info.cpp" />
+    <ClCompile Include="RegDebugInfo.cpp" />
+    <ClCompile Include="RegRework.cpp" />
+    <ClCompile Include="Rework_Info.cpp" />
+    <ClCompile Include="IcsCommunicator.cpp" />
+    <ClCompile Include="IcsRemoteEquipment.cpp" />
+    <ClCompile Include="IcsRemoteEquipmentLoUnloader.cpp" />
+    <ClCompile Include="IcsRemoteEquipmentReturner.cpp" />
+    <ClCompile Include="IcsRemoteEquipmentTester.cpp" />
+    <ClCompile Include="LineControl.cpp" />
+    <ClCompile Include="LineInfo.cpp" />
+    <ClCompile Include="List_Alarm.cpp" />
+    <ClCompile Include="List_NGCode.cpp" />
+    <ClCompile Include="List_SocketInfo.cpp" />
+    <ClCompile Include="List_UserInfo.cpp" />
+    <ClCompile Include="RegEquipment.cpp" />
+    <ClCompile Include="RegSocket.cpp" />
+    <ClCompile Include="SocketMonitoring.cpp" />
+    <ClCompile Include="View_MonitoringData.cpp" />
+    <ClCompile Include="View_SubMonitoring.cpp" />
+    <ClCompile Include="Wnd_Cfg_Alarm.cpp" />
+    <ClCompile Include="Wnd_Cfg_Debug.cpp" />
+    <ClCompile Include="Wnd_Cfg_NGCode.cpp" />
+    <ClCompile Include="Wnd_Cfg_User.cpp" />
+    <ClCompile Include="Wnd_FailInfo.cpp" />
+    <ClCompile Include="Wnd_InOutCount.cpp" />
+    <ClCompile Include="Wnd_Judgment.cpp" />
+    <ClCompile Include="Wnd_ReworkInfo.cpp" />
+    <ClCompile Include="Wnd_SettingView.cpp" />
+    <ClCompile Include="Wnd_Status_Base.cpp" />
+    <ClCompile Include="Wnd_Status_Equipment.cpp" />
+    <ClCompile Include="Wnd_Status_EquipmentEx.cpp" />
+    <ClCompile Include="Wnd_Status_Handler.cpp" />
+    <ClCompile Include="Wnd_Status_Loader.cpp" />
+    <ClCompile Include="Wnd_Status_Returner.cpp" />
+    <ClCompile Include="Wnd_TesterSelection.cpp" />
+    <ClCompile Include="Wnd_Yield_Eqp.cpp" />
+    <ClCompile Include="XmlLineConfig.cpp" />
+    <ClCompile Include="Dlg_ModifyEquipment.cpp" />
+    <ClCompile Include="List_LineConfig.cpp" />
+    <ClCompile Include="List_SocketRFID.cpp" />
+    <ClCompile Include="View_MainCtrl_ICS.cpp" />
+    <ClCompile Include="TestManager_EQP_ICS.cpp" />
+    <ClCompile Include="Wnd_Cfg_Line.cpp" />
+    <ClCompile Include="Wnd_Cfg_Socket.cpp" />
+    <ClCompile Include="Wnd_Dummy.cpp" />
+    <ClCompile Include="File_Recipe.cpp" />
+    <ClCompile Include="LT MainExecution.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Reg_InspInfo.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Debug - Debug Mode|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Release - Debug Mode|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Rivian) Unicode Release - Debug Mode|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TestManager_Device.cpp" />
+    <ClCompile Include="TestManager_EQP.cpp" />
+    <ClCompile Include="View_MainCtrl.cpp" />
+    <ClCompile Include="Wnd_BaseView.cpp" />
+    <ClCompile Include="Wnd_LogView.cpp" />
+    <ClCompile Include="Wnd_MainView.cpp" />
+    <ClCompile Include="Pane_CommStatus.cpp" />
+    <ClCompile Include="Wnd_Cfg_Base.cpp" />
+    <ClCompile Include="Wnd_SocketView.cpp" />
+    <ClCompile Include="Wnd_MaintenanceView.cpp" />
+    <ClCompile Include="Wnd_Status_Tester.cpp" />
+    <ClCompile Include="XmlSocket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BannerBar_SEM.h" />
+    <ClInclude Include="Def_Alarm.h" />
+    <ClInclude Include="Def_DebugInfo.h" />
+    <ClInclude Include="Def_FailInfo.h" />
+    <ClInclude Include="Def_InOutCount.h" />
+    <ClInclude Include="Def_Language.h" />
+    <ClInclude Include="Def_Language_Message.h" />
+    <ClInclude Include="Def_NGCode.h" />
+    <ClInclude Include="Def_PopupMenu.h" />
+    <ClInclude Include="Def_Socket_Config.h" />
+    <ClInclude Include="Def_UserInfo.h" />
+    <ClInclude Include="Def_Yield.h" />
+    <ClInclude Include="Dlg_ModifyNGcode.h" />
+    <ClInclude Include="Dlg_ModifyUser.h" />
+    <ClInclude Include="Dlg_PopupMenu.h" />
+    <ClInclude Include="Dlg_UserLogin.h" />
+    <ClInclude Include="EqpReturner.h" />
+    <ClInclude Include="Def_ConfigEquipment.h" />
+    <ClInclude Include="Def_ModelConfig.h" />
+    <ClInclude Include="EqpLoader.h" />
+    <ClInclude Include="EqpTester.h" />
+    <ClInclude Include="EqpHandler.h" />
+    <ClInclude Include="Equipment.h" />
+    <ClInclude Include="FailInfo.h" />
+    <ClInclude Include="FailInfo_Eqp.h" />
+    <ClInclude Include="File_UserInfo.h" />
+    <ClInclude Include="IcsRemoteEquipmentHandler.h" />
+    <ClInclude Include="InOutCount.h" />
+    <ClInclude Include="List_FailInfo.h" />
+    <ClInclude Include="List_NGCodeView.h" />
+    <ClInclude Include="List_ReworkInfo.h" />
+    <ClInclude Include="List_UnloadInfo.h" />
+    <ClInclude Include="NGCode_Info.h" />
+    <ClInclude Include="RegDebugInfo.h" />
+    <ClInclude Include="RegRework.h" />
+    <ClInclude Include="Rework_Info.h" />
+    <ClInclude Include="IcsCommunicator.h" />
+    <ClInclude Include="IcsRemoteEquipment.h" />
+    <ClInclude Include="IcsRemoteEquipmentLoUnloader.h" />
+    <ClInclude Include="IcsRemoteEquipmentReturner.h" />
+    <ClInclude Include="IcsRemoteEquipmentTester.h" />
+    <ClInclude Include="LineControl.h" />
+    <ClInclude Include="LineInfo.h" />
+    <ClInclude Include="List_Alarm.h" />
+    <ClInclude Include="List_NGCode.h" />
+    <ClInclude Include="List_SocketInfo.h" />
+    <ClInclude Include="List_UserInfo.h" />
+    <ClInclude Include="RegEquipment.h" />
+    <ClInclude Include="RegSocket.h" />
+    <ClInclude Include="SocketMonitoring.h" />
+    <ClInclude Include="View_MonitoringData.h" />
+    <ClInclude Include="View_SubMonitoring.h" />
+    <ClInclude Include="Wnd_Cfg_Alarm.h" />
+    <ClInclude Include="Wnd_Cfg_Debug.h" />
+    <ClInclude Include="Wnd_Cfg_NGCode.h" />
+    <ClInclude Include="Wnd_Cfg_User.h" />
+    <ClInclude Include="Wnd_FailInfo.h" />
+    <ClInclude Include="Wnd_InOutCount.h" />
+    <ClInclude Include="Wnd_Judgment.h" />
+    <ClInclude Include="Wnd_ReworkInfo.h" />
+    <ClInclude Include="Wnd_SettingView.h" />
+    <ClInclude Include="Wnd_Status_Base.h" />
+    <ClInclude Include="Wnd_Status_Equipment.h" />
+    <ClInclude Include="Wnd_Status_EquipmentEx.h" />
+    <ClInclude Include="Wnd_Status_Handler.h" />
+    <ClInclude Include="Wnd_Status_Loader.h" />
+    <ClInclude Include="Wnd_Status_Returner.h" />
+    <ClInclude Include="Wnd_TesterSelection.h" />
+    <ClInclude Include="Wnd_Yield_Eqp.h" />
+    <ClInclude Include="XmlLineConfig.h" />
+    <ClInclude Include="Def_Constant.h" />
+    <ClInclude Include="Def_Equipment_Type.h" />
+    <ClInclude Include="Def_ConfigLine.h" />
+    <ClInclude Include="Def_Socket_Info.h" />
+    <ClInclude Include="Dlg_ModifyEquipment.h" />
+    <ClInclude Include="List_LineConfig.h" />
+    <ClInclude Include="List_SocketRFID.h" />
+    <ClInclude Include="View_MainCtrl_ICS.h" />
+    <ClInclude Include="TestManager_EQP_ICS.h" />
+    <ClInclude Include="Wnd_Cfg_Line.h" />
+    <ClInclude Include="Wnd_Cfg_Socket.h" />
+    <ClInclude Include="Wnd_Dummy.h" />
+    <ClInclude Include="Def_ProductInfo.h" />
+    <ClInclude Include="Def_Test.h" />
+    <ClInclude Include="Def_TestDevice.h" />
+    <ClInclude Include="File_Recipe.h" />
+    <ClInclude Include="LT MainExecution.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Reg_InspInfo.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TestManager_Device.h" />
+    <ClInclude Include="TestManager_EQP.h" />
+    <ClInclude Include="View_MainCtrl.h" />
+    <ClInclude Include="Wnd_BaseView.h" />
+    <ClInclude Include="Wnd_LogView.h" />
+    <ClInclude Include="Wnd_MainView.h" />
+    <ClInclude Include="Def_CompileOption.h" />
+    <ClInclude Include="Def_DataStruct.h" />
+    <ClInclude Include="Def_Enum.h" />
+    <ClInclude Include="Def_WindowMessage.h" />
+    <ClInclude Include="Pane_CommStatus.h" />
+    <ClInclude Include="Wnd_Cfg_Base.h" />
+    <ClInclude Include="Wnd_SocketView.h" />
+    <ClInclude Include="Wnd_MaintenanceView.h" />
+    <ClInclude Include="Wnd_Status_Tester.h" />
+    <ClInclude Include="XmlSocket.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\CommonTest\res\arrow-down.bmp" />
+    <Image Include="..\CommonTest\res\arrow-left.bmp" />
+    <Image Include="..\CommonTest\res\arrow-right.bmp" />
+    <Image Include="..\CommonTest\res\arrow-up.bmp" />
+    <Image Include="..\CommonTest\res\BannerLogo.ico" />
+    <Image Include="..\CommonTest\res\BannerLogo_SEM.ico" />
+    <Image Include="..\CommonTest\res\check32.bmp" />
+    <Image Include="..\CommonTest\res\Checked.bmp" />
+    <Image Include="..\CommonTest\res\Checked_16.bmp" />
+    <Image Include="..\CommonTest\res\Checked_8.bmp" />
+    <Image Include="..\CommonTest\res\checkno32.bmp" />
+    <Image Include="..\CommonTest\res\Connect.ico" />
+    <Image Include="..\CommonTest\res\Devices-64.ico" />
+    <Image Include="..\CommonTest\res\keyboard_64.ico" />
+    <Image Include="..\CommonTest\res\Luritech.ico" />
+    <Image Include="..\CommonTest\res\Luritech_logo.bmp" />
+    <Image Include="..\CommonTest\res\Magnifier_x64.ico" />
+    <Image Include="..\CommonTest\res\Select.bmp" />
+    <Image Include="..\CommonTest\res\SelectNo.bmp" />
+    <Image Include="..\CommonTest\res\SelectNo_16.bmp" />
+    <Image Include="..\CommonTest\res\Select_16.bmp" />
+    <Image Include="..\CommonTest\res\Start.bmp" />
+    <Image Include="..\CommonTest\res\Stop.bmp" />
+    <Image Include="..\CommonTest\res\Unchecked.bmp" />
+    <Image Include="..\CommonTest\res\Unchecked_16.bmp" />
+    <Image Include="..\CommonTest\res\Unchecked_8.bmp" />
+    <Image Include="..\CommonTest\res\upload-16.bmp" />
+    <Image Include="..\CommonTest\res\upload-16G.bmp" />
+    <Image Include="..\CommonTest\res\virtual_machine2-32.bmp" />
+    <Image Include="..\CommonTest\res\virtual_machine2-32R.bmp" />
+    <Image Include="..\CustomCtrl\res\BottomLeft.bmp" />
+    <Image Include="..\CustomCtrl\res\BottomMiddle.bmp" />
+    <Image Include="..\CustomCtrl\res\BottomRight.bmp" />
+    <Image Include="..\CustomCtrl\res\MiddleLeft.bmp" />
+    <Image Include="..\CustomCtrl\res\MiddleRight.bmp" />
+    <Image Include="..\CustomCtrl\res\TopLeft.bmp" />
+    <Image Include="..\CustomCtrl\res\TopMiddle.bmp" />
+    <Image Include="..\CustomCtrl\res\TopRight.bmp" />
+    <Image Include="..\LT_MainUI\res\CaptionBtns.bmp" />
+    <Image Include="..\LT_MainUI\res\FrameBkgnd.bmp" />
+    <Image Include="..\LT_MainUI\res\FrameBkgnd_Blue.bmp" />
+    <Image Include="res\arrow-down.bmp" />
+    <Image Include="res\arrow-left.bmp" />
+    <Image Include="res\arrow-right.bmp" />
+    <Image Include="res\arrow-up.bmp" />
+    <Image Include="res\BannerLogo.ico" />
+    <Image Include="res\BannerLogo_SEM.ico" />
+    <Image Include="res\Devices-64.ico" />
+    <Image Include="res\Magnifier_x64.ico" />
+    <Image Include="res\Luritech.ico" />
+    <Image Include="res\Luritech_logo.bmp" />
+    <Image Include="res\LT MainExecution.ico" />
+    <Image Include="res\check32.bmp" />
+    <Image Include="res\Checked.bmp" />
+    <Image Include="res\Checked_16.bmp" />
+    <Image Include="res\checkno32.bmp" />
+    <Image Include="res\Connect.ico" />
+    <Image Include="res\Exit_048.png" />
+    <Image Include="res\Option_048.png" />
+    <Image Include="res\OutputTabIcons24.bmp" />
+    <Image Include="res\Select.bmp" />
+    <Image Include="res\Select_16.bmp" />
+    <Image Include="res\SelectNo.bmp" />
+    <Image Include="res\SelectNo_16.bmp" />
+    <Image Include="res\Start.bmp" />
+    <Image Include="res\Stop.bmp" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\Toolbar256.bmp" />
+    <Image Include="res\Unchecked.bmp" />
+    <Image Include="res\Unchecked_16.bmp" />
+    <Image Include="res\upload-16.bmp" />
+    <Image Include="res\upload-16G.bmp" />
+    <Image Include="res\upload-24.bmp" />
+    <Image Include="res\upload-24G.bmp" />
+    <Image Include="res\virtual_machine2-32.bmp" />
+    <Image Include="res\virtual_machine2-32R.bmp" />
+    <Image Include="UserImages.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LT MainExecution.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\LT MainExecution.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Concept.txt" />
+    <Text Include="Project_History.txt" />
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonTest\CommonTest.vcxproj">
+      <Project>{007d0278-0bdb-4e2f-83c0-cf0ce39b6933}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\LT_MainUI\LT_MainUI.vcxproj">
+      <Project>{9e39b67c-f450-4f1c-a5a6-1f72bfd378c4}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\LT_Option\LT_Option.vcxproj">
+      <Project>{ae616aaf-0be2-4af2-a7bf-dcd96fc4c195}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.vcxproj">
+      <Project>{797e6a46-2b33-47ef-a37f-6093e845c7d8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\CustomCtrl\CustomCtrl.vcxproj">
+      <Project>{e2bdc829-23a2-46e1-a4eb-f5506b6e0a75}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\TextDesigner\TextDesigner.vcxproj">
+      <Project>{f21ce92f-240d-48fe-8b73-56a63d4536b0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="LT MainExecution.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

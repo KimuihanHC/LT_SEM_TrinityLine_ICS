@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Page">
+      <UniqueIdentifier>{11eab1d4-9511-4794-8aaf-d33bb8f8590c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{e1e21f38-9693-4a76-b9e5-500cd61a126a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Custom">
+      <UniqueIdentifier>{c32e52ce-9925-4362-b2db-072c01adefd1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SheetOption.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PageOption.cpp">
+      <Filter>Page</Filter>
+    </ClCompile>
+    <ClCompile Include="LT_Option.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PageOpt_Insp.cpp">
+      <Filter>Page</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomProperties.cpp">
+      <Filter>Custom</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCPropertyGridProperties.cpp">
+      <Filter>Custom</Filter>
+    </ClCompile>
+    <ClCompile Include="PageOpt_Misc.cpp">
+      <Filter>Page</Filter>
+    </ClCompile>
+    <ClCompile Include="PageOpt_Server.cpp">
+      <Filter>Page</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Define_Option.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define_OptionDescription.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define_OptionItem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SheetOption.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PageOption.h">
+      <Filter>Page</Filter>
+    </ClInclude>
+    <ClInclude Include="LT_Option.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PageOpt_Insp.h">
+      <Filter>Page</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomProperties.h">
+      <Filter>Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCPropertyGridProperties.h">
+      <Filter>Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="PageOpt_Misc.h">
+      <Filter>Page</Filter>
+    </ClInclude>
+    <ClInclude Include="PageOpt_Server.h">
+      <Filter>Page</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LT_Option.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
