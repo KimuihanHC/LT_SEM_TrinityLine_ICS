@@ -20,7 +20,12 @@
 #include "Wnd_Status_Returner.h"
 #include "Wnd_Status_Handler.h"
 #include "Wnd_TesterSelection.h"
+#if (USE_XML)
+#include "Wnd_Status_Server.h"	//2023.03.21a uhkim
+#include "Wnd_Status_EES.h"		//2023.03.21a uhkim
 #include <vector>
+#endif
+
 
 
 //#define		USE_DYNAMIC_WND_CREATE		// 동적으로 CWnd 생성하는 방식
@@ -67,6 +72,7 @@ protected:
 	CWnd_TesterSelection					m_wndTestSelect;
 
 
+
 	// 설비 열 최대 개수
 	uint8_t				m_nMaxCol			= 14;	// 14 -> 15 (2022.11.04)
 	uint8_t				m_nMinCol			= 14;	// (2022.11.04)
@@ -80,11 +86,13 @@ protected:
 	// 핸들러 사용 여부
 	bool				m_bUseHandler		= false;
 
-	void	RemoveAll_EquipmentUI		();
-	void	Create_EquipmentUI			(__in CConfig_Eqp* IN_pEqpuipment, __in const RECT& IN_Rect);
+	void				RemoveAll_EquipmentUI		();
+	void				Create_EquipmentUI			(__in CConfig_Eqp* IN_pEqpuipment, __in const RECT& IN_Rect);
 
 	// 설비 리스트 UI 초기화
-	void	Init_EquipmentUI_List		();
+	void				Init_EquipmentUI_List		();
+
+
 
 public:
 
@@ -101,13 +109,30 @@ public:
 
 	// 설비 윈도우의 핸들 구하기
 	HWND	Get_EquipmentHWND			(__in uint8_t IN_nEqpOrder);
-	
+
+
 	// 레시피 정보 갱신
 	void	Update_LineInfo				();
 
 	// 설비를 사용 유/무 선택
 	void	UpdateUI_EnableEquipment	(__in uint8_t IN_nEqpNo, __in bool IN_bEnable);
 
+#if (USE_XML)
+protected:
+	std::vector<CWnd_Status_Server*>		m_pwndServerList;
+	bool									m_bUseEES = false;	
+	void									Init_ServerUI_List();
+public:
+	CWnd_Status_EES							m_wndSvrEES;
+	HWND									Get_ServerHWND(__in uint8_t IN_nSvrOrder);
+public:
+	void									Update_ServerInfo();
+#endif
+
 };
+
+#if (USE_XML)
+extern CWnd_MainView * mWnd_MainView;
+#endif
 
 #endif // Wnd_MainView_h__

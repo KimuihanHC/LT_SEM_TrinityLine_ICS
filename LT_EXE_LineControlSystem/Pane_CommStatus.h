@@ -15,6 +15,13 @@
 #include "VGStatic.h"
 #include <stdint.h>
 
+#if (USE_XML)
+#include "Wnd_Status_Server.h"
+#include "Wnd_Status_EES.h"
+
+#include <vector>
+#endif
+
 #define		TEST_BUTTON_CNT		4
 
 //=============================================================================
@@ -48,7 +55,10 @@ public:
 	enum enDeviceButtonIndex
 	{
 		DEV_BN_LogIn,
-
+#if (USE_XML)
+		DEV_BN_RMS,					
+		DEV_BN_SERVER,
+#endif
 		DEV_BN_Init,				// CC_Init,	
 		DEV_BN_Reset,				// CC_Reset,	
 		DEV_BN_Run,					// CC_Run,		
@@ -109,6 +119,20 @@ public:
 	void			SetStatus_Login				(__in enPermissionMode IN_nAuthority, __in LPCTSTR IN_szUserID);
 
 	void			SetStatus_Production		(__in bool bEnd);
-};
+#if (USE_XML)
+public:
+	void			SetStatus_EES				( __in uint8_t IN_EES);
 
+public:
+	std::vector<CWnd_Status_Server*>		m_pwndServerList;
+public:
+	CVGStatic		m_st_RMS;
+	CVGStatic		m_st_EES;
+	//TEST
+	void EES_Test();
+#endif
+};
+#if (USE_XML)
+extern CPane_CommStatus* mPane_CommStatus;
+#endif // 1
 #endif // Pane_CommStatus_h__

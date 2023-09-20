@@ -15,30 +15,39 @@
 #include "Def_ConfigEquipment.h"
 #include "Def_Constant.h"
 #include <vector>
-#include <queue>
 #include "SocketMonitoring.h"
 #include "FailInfo_Eqp.h"
+
 
 #ifdef USE_EQP_TACTTIME
 #include "TactTime.h"
 #endif
 
+#if (USE_XML)
+#include "CommonModule.h"
+#endif
 #pragma pack(push, 1)
 
-// 포트 상태 구조체
-// 컨베이어 상태 구조체
+// ?�트 ?�태 구조�?
+// 컨베?�어 ?�태 구조�?/
 typedef struct _PortStatus
 {
 	uint8_t nStatus = 0;
 	CString szRfid;
 	CString szBarcode;
 
+#if ADD_SOCKET_EES_XML
+	int8_t nEquipmentState = -1;
+#endif
 	_PortStatus& operator= (const _PortStatus& ref)
 	{
 		nStatus		= ref.nStatus;
 		szRfid		= ref.szRfid;
 		szBarcode	= ref.szBarcode;
 
+#if ADD_SOCKET_EES_XML
+		nEquipmentState = ref.nEquipmentState;
+#endif
 		return *this;
 	};
 }ST_PortStatus;
@@ -65,30 +74,39 @@ typedef struct _AlarmStatus
 {
 	uint32_t	m_nAlarmCode = 0;
 	CString		m_szAlarmInfo;
-
 	_AlarmStatus& operator= (const _AlarmStatus& ref)
 	{
-		m_nAlarmCode	= ref.m_nAlarmCode;
-		m_szAlarmInfo	= ref.m_szAlarmInfo;
-
+		m_nAlarmCode = ref.m_nAlarmCode;
+		m_szAlarmInfo = ref.m_szAlarmInfo;
 		return *this;
 	};
 }ST_AlarmStatus;
 
-typedef struct _ReservedSocket
-{
-	CString		szRfid;
-	SYSTEMTIME	time;
+#if ADD_SOCKET_EES_XML
 
-	_ReservedSocket& operator= (const _ReservedSocket& ref)
+//-----------------------------------------------------------------------------
+// Equipment State Display 
+//-----------------------------------------------------------------------------
+#if TEST
+typedef struct _EquipmentStateDisplay
+{
+	CConfig_EES * EES;
+	ST_xml_REQUEST_EQUIPMENT_STATE_DISPLAY * Dsp;
+
+	_EquipmentStateDisplay& operator= (const _EquipmentStateDisplay& ref)
 	{
-		szRfid = ref.szRfid;
-		memcpy(&time, &ref.time, sizeof(SYSTEMTIME));
+		EES = ref.EES;
+		Dsp = ref.Dsp;
 
 		return *this;
 	};
-}ST_ReservedSocket;
+}ST_EquipmentStateDisplay;
+#endif
+//-----------------------------------------------------------------------------
+// Equipment ID 
+//-----------------------------------------------------------------------------
 
+#endif	//ADD_SOCKET_EES_XML
 #pragma pack (pop)
 
 typedef enum 
@@ -100,21 +118,14 @@ typedef enum
 	CP_MaxCount,
 }enChkProduction;
 
-typedef enum
-{
-	OAS_Inactive,
-	OAS_Active,
-	OAS_InitStatus,
-
-	OAS_MaxCount,
-}enOperationActiveStatus;
-
-class CRegEquipment;
-
 //-----------------------------------------------------------------------------
-// 설비 모니터링 정보
+// ?�비 모니?�링 ?�보
 //-----------------------------------------------------------------------------
+#if (USE_XML)
+class CEquipment : public CConfig_Eqp , public CCommonModule
+#else
 class CEquipment : public CConfig_Eqp
+#endif
 {
 public:
 	CEquipment();
@@ -122,33 +133,34 @@ public:
 
 	CEquipment& operator= (const CConfig_Eqp& ref);
 	CEquipment& operator= (const CEquipment& ref);
-	
-
+#if (USE_XML)
+	CEquipment& operator= (const CCommonModule& ref);
+#endif	
 protected:
 
 	CRegEquipment*	m_pRegEqp		= nullptr;
 	
-	bool		m_bEnable			= false;	// 설비 사용 유/무 (검사항목 진행 여부)
-	bool		m_bSkip				= false;	// 설비 Skip 여부
+	bool		m_bEnable			= false;	// ?�비 ?�용 ??�?(검?�항�?진행 ?��?)
+	bool		m_bSkip				= false;	// ?�비 Skip ?��?
 	uint8_t		m_nConnection		= 0;		// tcp/ip connection
 	bool		m_bTimeSync			= false;	// time sync
-	bool		m_bVerifyID			= false;	// eqp id 인증 (ip address와 eqp id 매칭 검토)
+	bool		m_bVerifyID			= false;	// eqp id ?�증 (ip address?� eqp id 매칭 검??
 
 	// Show / Hide
 
-	uint8_t		m_nOperMode			= 0;		// 운영모드
-	uint8_t		m_nProcessStatus	= 0;		// 설비 가동 상태
-	uint8_t		m_bLED_Status		= 0;		// 경광등, 버저
-	uint8_t		m_nLanguage			= 0;		// 언어
+	uint8_t		m_nOperMode			= 0;		// ?�영모드
+	uint8_t		m_nProcessStatus	= 0;		// ?�비 가???�태
+	uint8_t		m_bLED_Status		= 0;		// 경광?? 버�?
+	uint8_t		m_nLanguage			= 0;		// ?�어
 	uint8_t		m_nModelType		= 0;		// 모델
 
-	// * 예약된 Port 갯수
-	//  - 포트 상태가 Empty -> 다른 상태로 변경 : 예약 Port 갯수 감소
+	// * ?�약??Port �?��
+	//  - ?�트 ?�태가 Empty -> ?�른 ?�태�?변�?: ?�약 Port �?�� 감소
 	uint8_t		m_nReservedPortCnt	= 0;
-	uint8_t		m_nReservedOvered	= 0; // 예약 최대치를 넘어서 예약하는 경우
-	uint8_t		m_nAvablePortCnt	= MAX_RESERVE_COUNT_TESTER; // 실제 사용 가능한 Port 개수 (Disable, Alarm 포트 제외)
+	uint8_t		m_nReservedOvered	= 0; // ?�약 최�?치�? ?�어???�약?�는 경우
+	uint8_t		m_nAvablePortCnt	= MAX_RESERVE_COUNT_TESTER; // ?�제 ?�용 가?�한 Port 개수 (Disable, Alarm ?�트 ?�외)
 
-	// 가장 최신 알람
+	// 가??최신 ?�람
 	//uint32_t	m_nAlarmCode		= 0;
 	//CString		m_szAlarmInfo;
 
@@ -156,28 +168,20 @@ protected:
 	std::vector<ST_ConveyorStatus>	m_nConveyorStatus;
 	std::vector<ST_AlarmStatus>		m_nAlarmStatus;
 
-	// 예약된 포트
-	//std::queue< ST_ReservedSocket>	m_qReservePort;
-	std::vector< ST_ReservedSocket>	m_vReservePort;
-	// 예약된 소켓의 시간 체크 
-	double							m_dReservedTimeoutSec = 3600.0f; // 1시간
-
-	// 생산량 수율
-	CYield_Equipment				m_Yield_Day;		// 하루치 수율 (Sifht 변경 시 자동 초기화)
-	CYield_Equipment				m_Yield_Cumulative;	// 누적 수율 (수동 초기화)
+	// ?�산???�율
+	CYield_Equipment				m_Yield_Day;		// ?�루�??�율 (Sifht 변�????�동 초기??
+	CYield_Equipment				m_Yield_Cumulative;	// ?�적 ?�율 (?�동 초기??
 	
-	// 검사 결과 통보 받으면 Shift 체크하여 Log 생성 및 수율 초기화 
+	// 검??결과 ?�보 받으�?Shift 체크?�여 Log ?�성 �??�율 초기??
 	bool							m_bAutoReset_Yield	= false;
-	SYSTEMTIME						m_tm_CheckShift;	// 오전 8시 체크
+	SYSTEMTIME						m_tm_CheckShift;	// ?�전 8??체크
 
-	// 소켓 정보
+	// ?�켓 ?�보
 	CSocketMonitoring*				m_pSocketInfo		= nullptr;
 
-	// 마지막으로 Track In 요청한 소켓 정보 : RFID, 요청 시간 (2023.08.07)
-	CString							m_szLastTrackIn_RFID;
-	SYSTEMTIME						m_tmLastTrackIn;
-	DWORD							m_nLastTrackIn_Time	= 0;
-
+#if TEST
+	ST_EquipmentStateDisplay*		m_pEES_EqpDsp;
+#endif
 #ifdef USE_EQP_TACTTIME
 	CTactTime		m_Tacttime;
 #endif
@@ -195,15 +199,14 @@ protected:
 	bool			Is_ChangeShift		(__in const SYSTEMTIME* IN_ptmCurrent);
 	bool			Is_ChangeShift		();
 
-	// Tester : 파라 L/R에 소켓이 투입된 시간
+	// Tester : ?�라 L/R???�켓???�입???�간
 	virtual void	Set_Time_InputPara	(__in uint8_t IN_nPara){};
 	
-	//  Port 상태가 PtS_Exist_Socket으로 바뀌면 소켓 정보를 갱신한다.
+	//  Port ?�태가 PtS_Exist_Socket?�로 바뀌면 ?�켓 ?�보�?갱신?�다.
 	void			Update_SocketLocation	(__in uint8_t IN_nPortIndex, __in ST_PortStatus* IN_pstPort);
 
 	void			Save_Equipment_Skip			();
 	void			Save_Equipment_Reserve		();
-	void			Save_Equipment_ReserveQueue	();
 	void			Save_Equipment_EndProduction();
 	void			Save_Equipment_Shift		();
 	void			Save_Equipment_Port			(__in uint8_t IN_nPortIndex);
@@ -212,60 +215,55 @@ protected:
 	void			Save_Equipment_Yield		();
 	void			Save_Equipment_Tacttime		();
 
-	// 사용 가능한 포트 체크
+	// ?�용 가?�한 ?�트 체크
 	virtual uint8_t	Check_AvablePortCnt			(__in uint8_t IN_OldStatus, __in uint8_t IN_NewStatus);
 
-	// enPortIndex_Tester => enEqpPara로 변환
+	// enPortIndex_Tester => enEqpPara�?변??/
 	uint8_t			PortIndex2TestPara			(__in uint8_t IN_nPortIndex);
-	uint8_t			TestPara2PortIndex			(__in uint8_t IN_nTestPara);
-
-	//void			Set_TrackInRequestSocket	(__in LPCTSTR IN_szRFID);
 
 public:
 
-	// 오너 윈도우 핸드
+	// ?�너 ?�도???�드
 	void			Set_OwnerHWND		(__in HWND IN_hWnd);
-	// Data를 GUI에 표시하기 위해 사용
+	// Data�?GUI???�시?�기 ?�해 ?�용
 	void			Set_GUI_HWND		(__in HWND IN_hWnd);
-	// Notify Windows Message 설정
+	// Notify Windows Message ?�정
 	void			Set_WinMsg_Notify	(__in UINT IN_nWM_Notify);
 
-	// 소켓 정보 클래스 포인터 설정
+	// ?�켓 ?�보 ?�래???�인???�정
 	void			SetPtr_SocketInfo	(__in CSocketMonitoring* IN_pSocketInfo);
 
 	// ---------------------------------------------------------------------------
-	// 설비 종류 판단
+	// ?�비 종류 ?�단
 	// ---------------------------------------------------------------------------
-	virtual bool	Is_Tester			() const;	// 설비가 검사 설비인가?
-	virtual bool	Is_Loader			() const;	// 설비가 로더인가?
-	virtual bool	Is_Returner			() const;	// 설비가 리터너인가?
-	virtual bool	Is_Handler			() const;	// 설비가 리터너인가?
+	virtual bool	Is_Tester			() const;	// ?�비가 검???�비?��??
+	virtual bool	Is_Loader			() const;	// ?�비가 로더?��??
+	virtual bool	Is_Returner			() const;	// ?�비가 리터?�인가?
+	virtual bool	Is_Handler			() const;	// ?�비가 리터?�인가?
 
 public:
 	// ---------------------------------------------------------------------------
-	// 설비 데이터 처리
+	// ?�비 ?�이??처리
 	// ---------------------------------------------------------------------------
-	// 설비 순서
+	// ?�비 ?�서
 	uint8_t			Get_EqpOrder		();
 	const uint8_t	Get_EqpOrder		() const;
 	void			Set_EqpOrder		(__in uint8_t IN_nEqpOrder);
 
-	// 포트 상태
+	// ?�트 ?�태
 	size_t			Get_PortCount		() const;
 	virtual void	Set_PortClear		(__in uint8_t IN_nPortIndex);	
 	std::vector<ST_PortStatus>&	Get_PortStatus	();
-	const ST_PortStatus&		Get_PortStatus	(__in uint8_t IN_nPortIndex) const;
-	const ST_PortStatus&		Get_PortStatus_byTestPara	(__in uint8_t IN_nTestPara);
+	const ST_PortStatus&		Get_PortStatus	(__in uint8_t IN_nPortIndex) const;	
 	virtual void	Set_PortStatus		(__in uint8_t IN_nPortIndex, __in uint8_t IN_nStatus, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in bool IN_bSave = true);
 
-	
-	// 컨베이어 상태
+	// 컨베?�어 ?�태
 	size_t			Get_ConveyorCount	() const;
 	std::vector<ST_ConveyorStatus>&	Get_ConveyorStatus	();
 	const ST_ConveyorStatus&		Get_ConveyorStatus	(__in uint8_t IN_nConveyorIndex) const;
 	virtual void	Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in uint8_t IN_nStatus, __in uint8_t IN_nExistSocket, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in bool IN_bSave = true);
 
-	// 수율
+	// ?�율
 	const CYield_Equipment& Get_Yield_Day		() const;
 	const CYield_Equipment& Get_Yield_Cumulative() const;
 	void	Set_Yield_Day				(__in CYield_Equipment* IN_pYield);
@@ -275,68 +273,58 @@ public:
 	void	Increase_Yield_Pass			(__in uint8_t IN_nPara);
 	void	Increase_Yield_Fail			(__in uint8_t IN_nPara);
 
-	// 설비 활성화/비활성화
+	// ?�비 ?�성??비활?�화
 	bool	Get_EnableEquipment			() const;
 	void	Set_EnableEquipment			(__in bool IN_bEnable);
 	
-	// 통신 상태
+	// ?�신 ?�태
 	uint8_t Get_ClientConnection		() const;
 	void	Set_ClientConnection		(__in uint8_t IN_nConStatus);
 	
-	// 설비 인증
+	// ?�비 ?�증
 	bool	Get_VerifyEqpConnection		() const;
 	void	Set_VerifyEqpConnection		(__in bool bVerified);
 
-	// 검사 운용 모드 (Equipment Operate Mode)
+	// 검???�용 모드 (Equipment Operate Mode)
 	uint8_t Get_OperatingMode			() const;
 	void	Set_OperatingMode			(__in uint8_t IN_nOperMode);
 
-	// 설비 가동 상태 (Equipment Process Status)
+	// ?�비 가???�태 (Equipment Process Status)
 	uint8_t Get_ProcessStatus			() const;
 	void	Set_ProcessStatus			(__in uint8_t IN_nStatus);
 	void	Set_ProcessStatus			(__in uint8_t IN_nStatus, __in uint32_t IN_nAlarmCode, __in LPCTSTR IN_szAlarmInfo);
-	
-	// 알람 갯수
+
+	// ?�람 �?��
 	size_t	Get_AlarmCount				() const;
 	const ST_AlarmStatus&			Get_AlarmStatus_Last() const;
 	std::vector<ST_AlarmStatus>&	Get_AlarmStatus		();
 	const ST_AlarmStatus&			Get_AlarmStatus		(__in uint32_t IN_nIndex) const;
 	//void	Set_AlarmStatus_Last		(__in uint32_t	IN_nAlarmCode, __in LPCTSTR IN_szAlarmInfo);
-	
-	// 경광등 상태 (LED Status)
+
+	// 경광???�태 (LED Status)
 	uint8_t Get_Status_LED				() const;
 	void	Set_Status_LED				(__in uint8_t IN_nLED_Status);
 
-	// 설비 미사용 설정
+	// ?�비 미사???�정
 	bool	Get_Skip					() const;
 	void	Set_Skip					(__in bool IN_bSkip, __in bool IN_bSave = true);
 
-	// 설비와 시간 동기화 설정 여부
+	// ?�비?� ?�간 ?�기???�정 ?��?
 	bool	Get_TimeSync				() const;
 	void	Set_TimeSync				(__in bool IN_bTimeSync);
 
-	// 포트 예약 갯수
-	void	Reset_ReservedPortInfo		();
+	// ?�트 ?�약 �?��
 	uint8_t	Get_ReservedPortCnt			() const;
-	void	Set_ReservedPortCnt			(__in uint8_t IN_nCount, __in bool IN_bSave = true);	
-
-	// 소켓 투입 예약 (테스터만 사용)
+	void	Set_ReservedPortCnt			(__in uint8_t IN_nCount, __in bool IN_bSave = true);
+	// ?�켓 ?�입 ?�약 (?�스?�만 ?�용)
 	bool	Increase_ReservedPort		();
-	bool	Increase_ReservedPort		(__in LPCTSTR IN_szRFID);
 	void	Decrease_ReservedPort		();
-	void	Decrease_ReservedPort		(__in LPCTSTR IN_szRFID);
 
 	uint8_t	Get_ReservedOverCnt			() const;
 	void	Set_ReservedOverCnt			(__in uint8_t IN_nCount);
 
-	// 예약된 소켓들의 시간 체크 (오래된 소켓은 수동으로 제거 되어있다 판단하여 예약에서 제거한다.)
-	// 예약된 시간, RFID 체크 
-	uint8_t	Check_ReservedSocket		();
 
-	// 예약된 소켓 정보 구하기
-	std::vector<ST_ReservedSocket>&	Get_ReservedInfo();
-
-	// Shift 변경 체크 시간
+	// Shift 변�?체크 ?�간
 	const SYSTEMTIME&	Get_CheckShiftTime	() const;
 	void Set_CheckShiftTime				(__in SYSTEMTIME* IN_ptmCheck, __in bool IN_bSave = true);
 
@@ -346,62 +334,59 @@ public:
 
 public:
 
-	// 알람 상태인가?
+	// ?�람 ?�태?��??
 	bool	IsAlarm						();
 
-	// 설비가 비어 있는가?
+	// ?�비가 비어 ?�는가?
 	bool	IsEmpty_Equipment			(__in bool bIgnore_EmptySocket = true);
-	bool	IsEmpty_Equipment_AnySocket	();
 	bool	IsLastSocket_onTestPort		();
 
-	// 비어 있는 포트 갯수
-	virtual uint8_t Get_EmptyPortCount	(__in bool bOnlyTestPort = false);
+	// 비어 ?�는 ?�트 �?��
+	virtual uint8_t Get_EmptyPortCount	(__in bool bCount_EmptySocket = true);
 
 	virtual uint8_t Get_EmptyConveyorCount	();
 
-	// 사용 중인 포트 갯수 (Buffer, Test L/R/C)
+	// ?�용 중인 ?�트 �?�� (Buffer, Test L/R/C)
 	virtual uint8_t Get_UsingPortCount	();
 
-	// 현재 설비에서 테스트 중인 소켓 갯수 (테스트 + 배출대기)
+	// ?�재 ?�비?�서 ?�스??중인 ?�켓 �?�� (?�스??+ 배출?��?
 	uint8_t	Get_TestingCount			();
 
-	// 검사 완료 후 배출 대기 중인 소켓 갯수
+	// 검???�료 ??배출 ?��?중인 ?�켓 �?��
 	virtual uint8_t	Get_WaitOutCount	();
 
-	// 설비내에 존재하는 소켓 갯수
+	// ?�비?�에 존재?�는 ?�켓 �?��
 	virtual uint8_t	Get_SocketCount		();
 	
-	// 설비내에 존재하는 제품이 실린 소켓 갯수
+	// ?�비?�에 존재?�는 ?�품???�린 ?�켓 �?��
 	virtual uint8_t Get_ProductCount	();
 
 	// check end production
 	bool	Check_EndProduction			();
 
-	// 검사 설비 : 이 설비로 소켓 투입이 가능한가?
+	// 검???�비 : ???�비�??�켓 ?�입??가?�한가?
 	virtual uint8_t	 Get_InputAvailabilityStatus	();
 
-	// Tester : 파라 L/R에 소켓이 투입되어 경과된 시간
+	// Tester : ?�라 L/R???�켓???�입?�어 경과???�간
 	virtual uint32_t Get_ElapsedTime_InputPara		(__in uint8_t IN_nPara);
 
 	// ---------------------------------------------------------------------------
-	// 이벤트 요청 처리
+	// ?�벤???�청 처리
 	// ---------------------------------------------------------------------------
-	// 소켓 등록 요청 (로딩) (로더 / 언로더)
+	// ?�켓 ?�록 ?�청 (로딩) (로더 / ?�로??
 	bool	Recv_RegisterSocket			(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode);
 	
-	// 소켓 투입 승인 요청 -> 소켓 투입 승인 (테스터)
+	// ?�켓 ?�입 ?�인 ?�청 -> ?�켓 ?�입 ?�인 (?�스??
 	bool	Recv_ReqAcceptSocket		(__in LPCTSTR IN_szRFID);
 
-	// 검사 결과 통지 (테스터) -> 배출 승인
+	// 검??결과 ?��? (?�스?? -> 배출 ?�인
 	bool	Recv_NotifyTestResult		(__in LPCTSTR IN_szRFID, __in int16_t IN_nNGCode, __in uint8_t IN_nPara);
 
-	// 검사 결과 요청 (로더 / 언로더)
+	// 검??결과 ?�청 (로더 / ?�로??
 	bool	Recv_ReqTestResult			(__in LPCTSTR IN_szRFID, __out ST_TestResult& OUT_stResult);
 	
-	// 소켓 등록 해제 (언로딩) (로더 / 언로더)
+	// ?�켓 ?�록 ?�제 (?�로?? (로더 / ?�로??
 	bool	Recv_UnregisterSocket		(__in LPCTSTR IN_szRFID);
-
-
 
 	// ---------------------------------------------------------------------------
 	// File Log
@@ -411,7 +396,7 @@ protected:
 	CString m_szPath_Report;
 public:
 	void	Set_Path					(__in LPCTSTR IN_szLog, __in LPCTSTR IN_szReport);
-	bool	Report_Yield_Day			(); // 년/월/eqpid_yield.csv
+	bool	Report_Yield_Day			(); // ????eqpid_yield.csv
 
 	// ---------------------------------------------------------------------------
 	// Fail Info
@@ -423,16 +408,108 @@ public:
 	void	SetPtr_FailInfo_Eqp			(__in CFailInfo_Eqp* IN_pFailInfo_Eqp);
 	void	IncreaseFailInfo			(__in int16_t IN_nNGCode, __in uint8_t IN_nPara);
 
+#if (USE_XML)
 
-	// 예약된 소켓이 오래되었을 경우 timeout 처리하면서 예약 정보에서 제거 할 때 비교 시간
-	void	Set_ReservedTimeout_Second	(__in double IN_dSecond);
+public:
+	void	Set_Notify_EquipmentState(__in lt::Report_Equipment_State_Args::Args * IN_DATA);	
+	/*20230906
+	void	Set_Notify_EquipmentStateDisplay(__in CCommonModule* IN_DATA);
+	void	Set_Notify_RGBDisplay(__in lt::Request_Equipment_State_Display_Args::Args & N_DATA);
+	void	Set_Notify_LOTID(LPCTSTR IN_DATA);
+*/
+public:
+	//bool	Recv_RegisterSocketLOT(__in LPCTSTR IN_szRFID, __in uint32_t IN_TYPE, __in LPCTSTR IN_szData);
+protected:
+	uint8_t		m_nEquipmentStatus = 0;
+//public:
+	//uint8_t Get_EquipmentStatus() const;
+	//void	Set_EquipmentStatus(__in uint8_t IN_nStatus);
+public:
+	void Set_DEFINEDATA(CEquipment & Data);
+#endif
+#if ADD_SOCKET_EES_XML
+// ---------------------------------------------------------------------------
+// add
+// ---------------------------------------------------------------------------
+		protected:
+	uint8_t		m_nOldEquipmentStatus	= -1;
+	uint8_t		m_nOldOperMode = -1;
+	uint8_t		m_nOldProcessStatus = -1;
+	uint8_t		m_nOldConnection = -1;
+	
 
+#if TESTTERMINAL
+	std::vector<ST_TerminalLog>		m_nTerminalLog;
+#endif	//TESTTERMINAL
+	CString							m_nSubEqpID;
+public:
 
-	void	Set_TrackInRequestSocket	(__in LPCTSTR IN_szRFID);
-	// 마지막으로 Track In 요청 처리된 소켓 비교
-	bool	IsTrackInRequest_Socket		(__in LPCTSTR IN_szRFID, __in uint32_t IN_nCheckTime = 900);
+	//2023.04.27a uhkim
+	virtual void	Set_OldPortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nStatus, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode);
+	virtual void	Set_PortStatusEquipmentStateEvent(__in uint8_t IN_nPortIndex, __in uint8_t IN_nData);
 
-};
+	uint8_t Get_OldProcessStatus() const;
+	void	Set_OldProcessStatus(__in uint8_t IN_nStatus);
 
+	uint8_t Get_OldOperatingMode() const;
+	void	Set_OldOperatingMode(__in uint8_t IN_nStatus);
+
+	// ?�비 ?�태 (Equipment Status)
+
+	uint8_t Get_OldEquipmentStatus() const;//2023.04.11;
+	void	Set_OldEquipmentStatus(__in uint8_t IN_nStatus);//2023.04.11;
+
+	//2023.04.11
+	std::vector<ST_PortStatus>&	 Get_OldPortStatus() ;
+	const ST_PortStatus&	Get_OldPortStatus(__in uint8_t IN_nStatus) const;
+	virtual void	Set_OldPortStatusEquipmentStateEvent(__in uint8_t IN_nPortIndex, __in uint8_t IN_nData);
+
+	//2023.04.28a uhkim
+	uint8_t Get_OldClientConnection() const;//2023.04.11;
+	void	Set_OldClientConnection(__in uint8_t IN_nStatus);//2023.04.11;
+
+	void	Set_Notify_EquipmentState(__in lt::Report_Equipment_State_Args::Args & IN_DATA);
+#if TEST
+	void	Set_Notify_EquipmentStateDisplay(ST_EquipmentStateDisplay * IN_DATA);
+#endif	//TEST
+	void	Set_Notify_RGBDisplay(__in lt::Request_Equipment_State_Display_Args::Args & N_DATA);
+	void	Set_Notify_LOTID(LPCTSTR IN_DATA);
+public:
+
+	CString GetDateTime();
+#if TEST
+	//UINTID_READ
+	void							Set_UINTID_READ(__in ST_xml_UNITID_READ * IN_Data);
+	//REPORT_START_LOT
+	void							Set_REPORT_START_LOT(__in ST_xml_REPORT_START_LOT * IN_Data);
+	//REPORT_END_EVENT
+	void							Set_REPORT_END_EVENT(__in ST_xml_REPORT_END_EVENT * IN_Data);
+	//REPORT_START_PROCESS
+	void							Set_REPORT_START_PROCESS(__in ST_xml_REPORT_START_PROCESS * IN_Data);
+	//REPORT_END_PROCESS
+	void							Set_REPORT_END_PROCESS(__in ST_xml_REPORT_END_PROCESS * IN_Data);
+#endif	//TEST
+public:
+#if TESTTERMINAL
+	size_t Get_TerminalCount() const;
+	const ST_TerminalLog& Get_TerminalStatus_Last() const;
+	std::vector<ST_TerminalLog>& Get_TerminalStatus();
+	const ST_TerminalLog & Get_TerminalStatus(uint32_t IN_nIndex) const;
+#endif	//TESTTERMINAL
+	//2023.05.24a uhkim
+	CString Get_FromPortToLOTID(__in uint8_t IN_nPortIndex);
+
+	//2023.05.25a uhkim
+	size_t Get_EquipmentIDCount() const;
+	std::vector<ST_EquipmentID>& Get_EquipmentIDStatus();
+	const ST_EquipmentID & Get_EquipmentIDStatus(uint8_t IN_nPortIndex) const;
+
+	CString Get_SubEqpID() const;
+	void	Set_SubEqpID(__in LPCTSTR IN_DATA);
+
+	virtual void	Set_PortStatusEquipmentIDEvent(__in uint8_t IN_nPortIndex, __in ST_EquipmentID * IN_nData);
+#endif // ADD_SOCKET_EES_XML
+
+};	
 #endif // Equipment_h__
 

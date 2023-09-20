@@ -14,16 +14,22 @@
 #include "Equipment.h"
 #include "Registry.h"
 
-//#define USE_VERIFY_KEY_ALWAYS	// 레지스트리에 데이터 기록 할 때마다 레지스트리 경로 체크 및 생성
+//#define USE_VERIFY_KEY_ALWAYS	// ?��??�트리에 ?�이??기록 ???�마???��??�트�?경로 체크 �??�성
 
 CRegEquipment::CRegEquipment()
 {
 	m_szRegPath.Format(_T("%s\\EquipmentInfo"), REG_PATH_APP_BASE);
+#if (USE_XML)
+	m_szRegModulePath = m_szRegPath;
+#endif
 }
 
 CRegEquipment::CRegEquipment(__in LPCTSTR lpszRegPath)
 {
 	m_szRegPath.Format(_T("%s\\EquipmentInfo"), lpszRegPath);
+#if (USE_XML)
+	m_szRegModulePath = m_szRegPath;
+#endif
 }
 
 CRegEquipment::~CRegEquipment()
@@ -108,7 +114,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 		//-------------------------------------------------------
 		// Base
 		//-------------------------------------------------------
-		// 	bool		m_bSkip				= false;	// 설비 Skip 여부
+		// 	bool		m_bSkip				= false;	// ?�비 Skip ?��?
 		m_pReg->WriteDWORD(_T("Skip"), IN_pEquipment->Get_Skip() ? 1 : 0);
 
 		// uint8_t		m_nReservedPortCnt	= 0;
@@ -129,6 +135,12 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 			szKey.Format(_T("Port_%02d_Barcode"), nIdx);
 			szValue = IN_pEquipment->Get_PortStatus(nIdx).szBarcode;
 			m_pReg->WriteString(szKey.GetBuffer(), szValue.GetBuffer());
+
+
+#if ADD_SOCKET_EES_XML
+			szKey.Format(_T("Port_%02d_EquipmentStatus"), nIdx);
+			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_PortStatus(nIdx).nEquipmentState);
+#endif
 		}
 
 		//-------------------------------------------------------
@@ -178,7 +190,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// 하루치 수율 (Sifht 변경 시 자동 초기화)
+		// CYield_Equipment		m_Yield_Day;		// ?�루�??�율 (Sifht 변�????�동 초기??
 		//IN_pEquipment->Get_Yield_Day().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Day_Total"), IN_pEquipment->Get_Yield_Day().dwTotal);
 
@@ -203,7 +215,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Day().m_Para[nPara].dwFail);
 		}
 
-		// CYield_Equipment		m_Yield_Cumulative;	// 누적 수율 (수동 초기화)
+		// CYield_Equipment		m_Yield_Cumulative;	// ?�적 ?�율 (?�동 초기??
 		//IN_pEquipment->Get_Yield_Cumulative().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Cumulative_Total"), IN_pEquipment->Get_Yield_Cumulative().dwTotal);
 
@@ -228,7 +240,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Cumulative().m_Para[nPara].dwFail);
 		}
 
-		// SYSTEMTIME		m_tm_CheckShift;	// 오전 8시 체크
+		// SYSTEMTIME		m_tm_CheckShift;	// ?�전 8??체크
 		szValue = SystemTimeToFormatString(IN_pEquipment->Get_CheckShiftTime());
 		m_pReg->WriteString(_T("Shift_CheckTime"), szValue.GetBuffer());
 		//FormatStringToSystemTime();
@@ -276,7 +288,7 @@ bool CRegEquipment::Set_Equipment_Skip(const CEquipment * IN_pEquipment)
 		//-------------------------------------------------------
 		// Base
 		//-------------------------------------------------------
-		// 	bool		m_bSkip				= false;	// 설비 Skip 여부
+		// 	bool		m_bSkip				= false;	// ?�비 Skip ?��?
 		m_pReg->WriteDWORD(_T("Skip"), IN_pEquipment->Get_Skip() ? 1 : 0);
 	}
 	else
@@ -338,56 +350,6 @@ bool CRegEquipment::Set_Equipment_Reserve(const CEquipment * IN_pEquipment)
 	return true;
 }
 
-bool CRegEquipment::Set_Equipment_ReserveQueue(__in const CEquipment* IN_pEquipment)
-{
-	// 설비별로 예약된 소켓 정보 저장
-	// 설비명. 예약 갯수. rfid, 예약 시간
-	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
-	CString		szRegPath;
-	CString		szValue;
-	szRegPath.Format(_T("%s\\%s"), m_szRegPath.GetBuffer(), IN_pEquipment->Get_EquipmentId());
-
-#ifdef USE_VERIFY_KEY_ALWAYS
-	if (!m_pReg->VerifyKey(szRegPath))
-	{
-		m_pReg->CreateKey(HKEY_CURRENT_USER, szRegPath);
-	}
-	m_pReg->Close();
-#endif
-
-	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
-	{
-		//-------------------------------------------------------
-		// Base
-		//-------------------------------------------------------
-		// uint8_t		m_nReservedPortCnt	= 0;
-		m_pReg->WriteDWORD(_T("ReservedPortCnt"), IN_pEquipment->Get_ReservedPortCnt());
-
-		// uint8_t		m_nReservedOvered	= 0;
-		m_pReg->WriteDWORD(_T("ReservedOvered"), IN_pEquipment->Get_ReservedOverCnt());
-
-
-		auto Socketz = ((CEquipment*)IN_pEquipment)->Get_ReservedInfo();
-		for (auto nIter = Socketz.begin(); nIter != Socketz.end(); ++nIter)
-		{
-			(*nIter).szRfid;
-			(*nIter).time;
-		}
-
-
-	}
-	else
-	{
-		delete m_pReg;
-		return false;
-	}
-
-	m_pReg->Close();
-
-	delete m_pReg;
-	return true;
-}
-
 //=============================================================================
 // Method		: Set_Equipment_EndProduction
 // Access		: public  
@@ -430,7 +392,7 @@ bool CRegEquipment::Set_Equipment_Shift(const CEquipment * IN_pEquipment)
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// SYSTEMTIME		m_tm_CheckShift;	// 오전 8시 체크
+		// SYSTEMTIME		m_tm_CheckShift;	// ?�전 8??체크
 		szValue = SystemTimeToFormatString(IN_pEquipment->Get_CheckShiftTime());
 		m_pReg->WriteString(_T("Shift_CheckTime"), szValue.GetBuffer());
 	}
@@ -488,6 +450,12 @@ bool CRegEquipment::Set_Equipment_Port(const CEquipment * IN_pEquipment)
 			szKey.Format(_T("Port_%02d_Barcode"), nIdx);
 			szValue = IN_pEquipment->Get_PortStatus(nIdx).szBarcode;
 			m_pReg->WriteString(szKey.GetBuffer(), szValue.GetBuffer());
+
+#if ADD_SOCKET_EES_XML
+			szKey.Format(_T("Port_%02d_EquipmentStatus"), nIdx);
+			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_PortStatus(nIdx).nEquipmentState);
+#endif
+
 		}
 	}
 	else
@@ -501,6 +469,7 @@ bool CRegEquipment::Set_Equipment_Port(const CEquipment * IN_pEquipment)
 	delete m_pReg;
 	return true;
 }
+
 
 //=============================================================================
 // Method		: Set_Equipment_Port
@@ -543,6 +512,11 @@ bool CRegEquipment::Set_Equipment_Port(const CEquipment * IN_pEquipment, uint8_t
 		szKey.Format(_T("Port_%02d_Barcode"), IN_nPortIndex);
 		szValue = IN_pEquipment->Get_PortStatus(IN_nPortIndex).szBarcode;
 		m_pReg->WriteString(szKey.GetBuffer(), szValue.GetBuffer());
+
+#if ADD_SOCKET_EES_XML
+		szKey.Format(_T("Port_%02d_EquipmentStatus"), IN_nPortIndex);
+		m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_PortStatus(IN_nPortIndex).nEquipmentState);
+#endif
 	}
 	else
 	{
@@ -555,6 +529,7 @@ bool CRegEquipment::Set_Equipment_Port(const CEquipment * IN_pEquipment, uint8_t
 	delete m_pReg;
 	return true;
 }
+
 
 //=============================================================================
 // Method		: Set_Equipment_Conveyor
@@ -765,7 +740,7 @@ bool CRegEquipment::Set_Equipment_Yield(const CEquipment * IN_pEquipment)
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// 하루치 수율 (Sifht 변경 시 자동 초기화)
+		// CYield_Equipment		m_Yield_Day;		// ?�루�??�율 (Sifht 변�????�동 초기??
 		//IN_pEquipment->Get_Yield_Day().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Day_Total"), IN_pEquipment->Get_Yield_Day().dwTotal);
 
@@ -790,7 +765,7 @@ bool CRegEquipment::Set_Equipment_Yield(const CEquipment * IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Day().m_Para[nPara].dwFail);
 		}
 
-		// CYield_Equipment		m_Yield_Cumulative;	// 누적 수율 (수동 초기화)
+		// CYield_Equipment		m_Yield_Cumulative;	// ?�적 ?�율 (?�동 초기??
 		//IN_pEquipment->Get_Yield_Cumulative().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Cumulative_Total"), IN_pEquipment->Get_Yield_Cumulative().dwTotal);
 
@@ -815,7 +790,7 @@ bool CRegEquipment::Set_Equipment_Yield(const CEquipment * IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Cumulative().m_Para[nPara].dwFail);
 		}
 
-		// SYSTEMTIME		m_tm_CheckShift;	// 오전 8시 체크
+		// SYSTEMTIME		m_tm_CheckShift;	// ?�전 8??체크
 		szValue = SystemTimeToFormatString(IN_pEquipment->Get_CheckShiftTime());
 		m_pReg->WriteString(_T("Shift_CheckTime"), szValue.GetBuffer());
 	}
@@ -855,7 +830,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		//-------------------------------------------------------
 		// Base
 		//-------------------------------------------------------
-		// 	bool		m_bSkip				= false;	// 설비 Skip 여부
+		// 	bool		m_bSkip				= false;	// ?�비 Skip ?��?
 		if (m_pReg->ReadDWORD(_T("Skip"), dwValue))
  			OUT_Equipment.Set_Skip(dwValue ? true : false, false);
  		else
@@ -876,6 +851,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		//-------------------------------------------------------
 		// 	std::vector<ST_PortStatus>		m_nPortStatus;
 		//-------------------------------------------------------
+
 		for (auto nIdx = 0; nIdx < OUT_Equipment.Get_PortCount(); ++nIdx)
 		{
 			ST_PortStatus newPort;
@@ -897,8 +873,18 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 				newPort.szBarcode = szValue.GetBuffer();
 			else
 				newPort.szBarcode.Empty();
-
 			OUT_Equipment.Set_PortStatus(nIdx, newPort.nStatus, newPort.szRfid.GetBuffer(), newPort.szBarcode.GetBuffer(), false);
+
+#if ADD_SOCKET_EES_XML
+			szKey.Format(_T("Port_%02d_EquipmentStatus"), nIdx);
+			if (m_pReg->ReadDWORD(szKey.GetBuffer(), dwValue))
+				newPort.nEquipmentState = static_cast<uint8_t>(dwValue);
+			else
+				newPort.nEquipmentState = 0;
+#endif //SOCKET
+#if SOCKET
+			OUT_Equipment.Set_PortStatusEquipmentStateEvent(nIdx, newPort.nEquipmentState);
+#endif //SOCKET
 		}
 
 		//-------------------------------------------------------
@@ -907,6 +893,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		for (auto nIdx = 0; nIdx < OUT_Equipment.Get_ConveyorCount(); ++nIdx)
 		{
 			ST_ConveyorStatus newConveyor;
+
 
 			szKey.Format(_T("Conveyor_%02d_Status"), nIdx);
 			if (m_pReg->ReadDWORD(szKey.GetBuffer(), dwValue))
@@ -931,7 +918,6 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 				newConveyor.szBarcode = szValue.GetBuffer();
 			else
 				newConveyor.szBarcode.Empty();
-
 			OUT_Equipment.Set_ConveyorStatus(nIdx, newConveyor.nStatus, newConveyor.nExistSocket, newConveyor.szRfid, newConveyor.szBarcode, false);
 		}
 
@@ -971,7 +957,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// 하루치 수율 (Sifht 변경 시 자동 초기화)
+		// CYield_Equipment		m_Yield_Day;		// ?�루�??�율 (Sifht 변�????�동 초기??
 		CYield_Equipment		Yield_Day;
 		//OUT_Equipment.Get_Yield_Day().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Day_Total"), dwValue))
@@ -1018,7 +1004,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		OUT_Equipment.Set_Yield_Day(&Yield_Day);
 
 
-		// CYield_Equipment		m_Yield_Cumulative;	// 누적 수율 (수동 초기화)
+		// CYield_Equipment		m_Yield_Cumulative;	// ?�적 ?�율 (?�동 초기??
 		CYield_Equipment		Yield_Cumulative;
 		//OUT_Equipment.Get_Yield_Cumulative().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Cumulative_Total"), dwValue))
@@ -1067,7 +1053,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		
 		OUT_Equipment.Set_Yield_Cumulative(&Yield_Cumulative);
 
-		// SYSTEMTIME		m_tm_CheckShift;	// 오전 8시 체크
+		// SYSTEMTIME		m_tm_CheckShift;	// ?�전 8??체크
 		if (m_pReg->ReadString(_T("Shift_CheckTime"), szValue))
 		{
 			SYSTEMTIME tmCheck;
@@ -1111,7 +1097,7 @@ bool CRegEquipment::Load_Yield(LPCTSTR IN_szEqpID, CEquipment & OUT_Equipment)
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// 하루치 수율 (Sifht 변경 시 자동 초기화)
+		// CYield_Equipment		m_Yield_Day;		// ?�루�??�율 (Sifht 변�????�동 초기??
 		CYield_Equipment		Yield_Day;
 		//OUT_Equipment.Get_Yield_Day().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Day_Total"), dwValue))
@@ -1158,7 +1144,7 @@ bool CRegEquipment::Load_Yield(LPCTSTR IN_szEqpID, CEquipment & OUT_Equipment)
 		OUT_Equipment.Set_Yield_Day(&Yield_Day);
 
 
-		// CYield_Equipment		m_Yield_Cumulative;	// 누적 수율 (수동 초기화)
+		// CYield_Equipment		m_Yield_Cumulative;	// ?�적 ?�율 (?�동 초기??
 		CYield_Equipment		Yield_Cumulative;
 		//OUT_Equipment.Get_Yield_Cumulative().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Cumulative_Total"), dwValue))
@@ -1207,7 +1193,7 @@ bool CRegEquipment::Load_Yield(LPCTSTR IN_szEqpID, CEquipment & OUT_Equipment)
 
 		OUT_Equipment.Set_Yield_Cumulative(&Yield_Cumulative);
 
-		// SYSTEMTIME		m_tm_CheckShift;	// 오전 8시 체크
+		// SYSTEMTIME		m_tm_CheckShift;	// ?�전 8??체크
 		if (m_pReg->ReadString(_T("Shift_CheckTime"), szValue))
 		{
 			SYSTEMTIME tmCheck;
@@ -1226,4 +1212,3 @@ bool CRegEquipment::Load_Yield(LPCTSTR IN_szEqpID, CEquipment & OUT_Equipment)
 	delete m_pReg;
 	return true;
 }
-

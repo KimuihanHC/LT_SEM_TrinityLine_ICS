@@ -88,6 +88,17 @@ using namespace Gdiplus;
 #include "Def_CompileOption.h"
 
 #include "Dlg_MessageBox.h"
+#include <afxext.h>
+#include <afxcontrolbars.h>
+#include <afxext.h>
+#include <afxext.h>
+#include <afxcontrolbars.h>
+#include <afxext.h>
+#include <afxext.h>
+#include <afxcontrolbars.h>
+#include <afxext.h>
+#include <afxcontrolbars.h>
+#include <afxcontrolbars.h>
 static INT_PTR LT_MessageBox(LPCTSTR IN_szText, UINT IN_nMB_Type = MB_OK, CWnd* pParent  = nullptr)
 {
 	CDlg_MessageBox dlgMsg(IN_szText, IN_nMB_Type, pParent);

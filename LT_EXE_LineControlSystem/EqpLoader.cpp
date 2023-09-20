@@ -18,6 +18,14 @@ CEqpLoader::CEqpLoader()
 	m_nPortStatus.assign(PtI_L_MaxCount, { 0, _T("") });
 	m_nConveyorStatus.assign(CvI_L_MaxCount, { 0, 0, _T("") });
 
+#if (USE_XML)
+	assign_mEES_PortSubStatus(PtI_T_MaxCount, {});
+	assign_EquipmentIDStatus(PtI_T_MaxCount, {});
+#endif
+#if SOCKET
+	m_nOldPortStatus.assign(PtI_L_MaxCount, { 0, _T("") });
+	m_nEquipmentID.assign(PtI_L_MaxCount, { _T("") , _T("") });
+#endif 
 }
 
 CEqpLoader::~CEqpLoader()
@@ -53,13 +61,41 @@ void CEqpLoader::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 
 		WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
 
-		
+		//2024.04.26a uhkim
+		CString szRFID(IN_szRFID);
+		if (m_pSocketInfo->Is_ExistSocket(szRFID)) 
+		{
+#if SOCKET
+			CString LOTID(m_pSocketInfo->GetAt(szRFID).m_LotID);
+			CString EQUIPMENTID(Get_EquipmentIDStatus(IN_nPortIndex).szEquipID);
+			CString SUBEQPID(Get_SubEqpID());
+#endif	//SOCKET
+#if TEST
+			if (IN_nStatus == PtS_Exist_Socket) {
+				Set_REPORT_START_PROCESS(
+					GetXmlEes().Set_ReportStartProcessParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						LOTID));
+			}
+			if (IN_nStatus == PtS_Wait_Out) {
+				Set_REPORT_END_PROCESS(
+					GetXmlEes().Set_ReportEndProcessParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						LOTID));
+			}
+#endif	//TEST
+		}
+
 		if (PtI_L_Buffer_3 == IN_nPortIndex)
 		{			
-			// 로더의 버퍼3의 상태가 없음->있음으로 바뀌면 배출 승인 이벤트 처리
+			// 로더??버퍼3???�태가 ?�음->?�음?�로 바뀌면 배출 ?�인 ?�벤??처리
 // 			if ((enPortStatus::PtS_Empty == nOld_PortStatus) &&
 // 				(enPortStatus::PtS_Exist_Socket == IN_nStatus))
-			// 로더에서 신호처리가 제대로 안되는 경우가 있어서 수정 (2022.10.17)
+			// 로더?�서 ?�호처리가 ?��?�??�되??경우가 ?�어???�정 (2022.10.17)
 			if (enPortStatus::PtS_Exist_Socket == IN_nStatus)
 			{
 				WM_Event_Equipment(WM_EVENT_LOADER_CHEKCK_TRACKOUT, IN_szRFID);
@@ -104,7 +140,7 @@ void CEqpLoader::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 						if ((0 == m_pSocketInfo->GetAt(IN_szRFID).m_stTestResult.m_nNG_Code) &&
 							(enSocketStatus::SoS_Ready != m_pSocketInfo->GetAt(IN_szRFID).m_nStatus))
 						{
-							// 양품인 경우에만 표시 (불량 제품도 지나가기 때문)
+							// ?�품??경우?�만 ?�시 (불량 ?�품??지?��?�??�문)
 							WM_Event_Equipment(WM_EVENT_UNLOAD_NG_INFO, IN_szRFID);
 						}
 					}
@@ -114,13 +150,13 @@ void CEqpLoader::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			{
 				if (enPortStatus::PtS_Empty == m_nPortStatus.at(PtI_L_Un_NG).nStatus)
 				{
-					// OK, NG 모두 소켓이 없다. READY로 표시
+					// OK, NG 모두 ?�켓???�다. READY�??�시
 					WM_Event_Equipment(WM_EVENT_UNLOAD_NG_INFO, nullptr);
 				}
 			}
 		}
 
-		// 소켓 정보 갱신
+		// ?�켓 ?�보 갱신
 		Update_SocketLocation(IN_nPortIndex, &m_nPortStatus.at(IN_nPortIndex));
 	}
 }

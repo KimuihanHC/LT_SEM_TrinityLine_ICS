@@ -44,8 +44,16 @@ protected:
 	virtual void Popup_SubMenu();
 
 public:
-
-
+#if (USE_XML)
+//=============================================================================
+// Add
+//=============================================================================
+protected:
+	CVGStatic		m_st_SubEqpID;
+	CVGStatic		m_st_EquipmentID[PtI_L_MaxCount];
+public:
+	virtual void	Set_EquipmentID(__in CEquipment* IN_Data);
+#endif // SOCKET
 };
 
 #endif // Wnd_Status_Handler_h__

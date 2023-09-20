@@ -84,7 +84,11 @@ protected:
 	uint16_t			m_nCtrl_Height		= 20;	// 경광등 Static 높이
 	uint16_t			m_nPort_Width		= 10;	// Port Static 너비
 	uint16_t			m_nLine_Depth		= 90;	// 리터너, 로더의 트랜스퍼 길이
-	uint16_t			m_nDefInfo_Height	= 320;
+#if (USE_XML)
+	uint16_t			m_nDefInfo_Height = 380;
+#else
+	uint16_t			m_nDefInfo_Height = 320;
+#endif	
 	uint16_t			m_nYield_Height		= 140;	// 수율 표시 높이
 
 	virtual void Popup_SubMenu();
@@ -93,6 +97,7 @@ protected:
 	void SetUI_PortStatus		(__in CVGStatic* IN_pwndPort, __in const ST_PortStatus* IN_nStatus);
 	void SetUI_ConveyorStatus	(__in CVGStatic* IN_pwndConveyor, __in uint8_t IN_nStatus, __in uint8_t IN_nExistSocket);
 	void SetUI_ConveyorStatus	(__in CVGStatic* IN_pwndConveyor, __in const ST_ConveyorStatus* IN_nStatus);
+
 
 public:
 
@@ -147,8 +152,23 @@ public:
 	virtual void Set_PortStatus		(__in uint8_t IN_nPortIndex, __in const ST_PortStatus* IN_nStatus);
 	virtual void Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in uint8_t IN_nStatus, __in uint8_t IN_nExistSocket);
 	virtual void Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in const ST_ConveyorStatus* IN_nStatus);
+
+#if (USE_XML)
+protected:
+	void	SetUI_EQUIPMENTSTATE(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA);
+	void	SetUI_EQUIPMENTSTATEDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA);
+	void	SetUI_RGBDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA);
+public:
+	virtual void	Set_EqpNotify_EQUIPMENTSTATE(__in lt::Report_Equipment_State_Args::Args *  IN_DATA);
+
+	COLORREF		Get_Color(__in CString lParam);
+	void	Set_EqpNotify_EQUIPMENTSTATEDISPLAY(CCommonModule *lParam);
+
 	
-	
+	virtual void	Set_EqpNotify_RGBDISPLAY(__in  lt::Request_Equipment_State_Display_Args::Args& IN_DATA);
+
+	virtual void	Set_EquipmentID(__in CEquipment* IN_Data);
+#endif //#if SOCKET	
 };
 
 #endif // Wnd_Status_Equipment_h__

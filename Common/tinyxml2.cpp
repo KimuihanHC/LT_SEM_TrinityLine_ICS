@@ -2102,7 +2102,7 @@ XMLText* XMLDocument::NewText( const char* str )
 
 XMLDeclaration* XMLDocument::NewDeclaration( const char* str )
 {
-    XMLDeclaration* dec = CreateUnlinkedNode<XMLDeclaration>( _commentPool );
+    XMLDeclaration* dec = CreateUnlinkedNode<XMLDeclaration>( _commentPool );	
     dec->SetValue( str ? str : "xml version=\"1.0\" encoding=\"UTF-8\"" );
     return dec;
 }

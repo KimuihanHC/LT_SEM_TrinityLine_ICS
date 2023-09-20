@@ -65,6 +65,17 @@ public:
 	virtual void Set_PortStatus		(__in uint8_t IN_nPortIndex, __in const ST_PortStatus* IN_nStatus);
 	virtual void Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in uint8_t IN_nStatus, __in uint8_t IN_nExistSocket);
 	virtual void Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in const ST_ConveyorStatus* IN_nStatus);
+#if (USE_XML)
+	//=============================================================================
+	// Add
+	//=============================================================================
+protected:
+	//2023.05.25a
+	CVGStatic		m_st_SubEqpID;
+	CVGStatic		m_st_EquipmentID[PtI_R_MaxCount];
+public:
+	virtual void	Set_EquipmentID(__in CEquipment* IN_Data);
+#endif//SOCKET
 };
 
 #endif // Wnd_Status_Returner_h__

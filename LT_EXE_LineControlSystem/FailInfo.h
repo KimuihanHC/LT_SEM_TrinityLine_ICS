@@ -60,7 +60,6 @@ public:
 	bool	Write_CSV_File			(__in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szPathFile);
 	bool	Write_CSV_File			(__in LPCTSTR IN_szPath);
 	bool	Write_CSV_File_Default	();
-	bool	Write_CSV_File_Default	(__out CString& OUT_szPath, __out SYSTEMTIME& OUT_tmLocal);
 
 };
 

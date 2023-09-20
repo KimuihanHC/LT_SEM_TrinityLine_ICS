@@ -82,15 +82,6 @@ const int	iHeaderWidth[] =
 	 44,	// TSH_Count_Right
 };
 
-const int	iHeaderWidth_Over10[] =
-{
-	 42,	// TSH_NG_Code,	
-	 42,	// TSH_Count_All,	
-	 42,	// TSH_Count_Left,
-	  0,	// TSH_Count_Center
-	 42,	// TSH_Count_Right
-};
-
 const int	iHeaderWidth_3Para[] =
 {
 	 38,	// TSH_NG_Code,	
@@ -98,25 +89,6 @@ const int	iHeaderWidth_3Para[] =
 	 36,	// TSH_Count_Left,
 	 36,	// TSH_Count_Center
 	 36,	// TSH_Count_Right
-};
-
-// 3 para에 전체 검사 설비 수가 10개 초과되는 경우
-const int	iHeaderWidth_3Para_Over10[] =
-{
-	 34,	// TSH_NG_Code,	
-	 35,	// TSH_Count_All,	
-	 33,	// TSH_Count_Left,
-	 33,	// TSH_Count_Center
-	 33,	// TSH_Count_Right
-};
-
-const int	iHeaderWidth_1Para[] =
-{
-	 55,	// TSH_NG_Code,	
-	 55,	// TSH_Count_All,	
-	 55,	// TSH_Count_Left,
-	 0,		// TSH_Count_Center
-	 0,		// TSH_Count_Right
 };
 
 IMPLEMENT_DYNAMIC(CList_FailInfo, CListCtrl)
@@ -598,42 +570,40 @@ void CList_FailInfo::Update_NGCount(int16_t IN_nNGCode)
 // Access		: public  
 // Returns		: void
 // Parameter	: uint8_t IN_nCount
-// Parameter	: __in bool IN_bOver10Eqp
 // Qualifier	:
-// Last Update	: 2023/5/31 - 10:11
+// Last Update	: 2022/7/27 - 18:05
 // Desc.		:
 //=============================================================================
-void CList_FailInfo::Set_ParaCount(uint8_t IN_nCount, __in bool IN_bOver10Eqp /*= false*/)
+void CList_FailInfo::Set_ParaCount(uint8_t IN_nCount)
 {
-	//if (m_nParaCount != IN_nCount)
+	if (2 == IN_nCount)
 	{
-		m_nParaCount = IN_nCount;
-
-		switch (IN_nCount)
+		if (2 != IN_nCount)
 		{
-		case 1:
-			m_pHeadWidth = iHeaderWidth_1Para;
-			break;
+			m_nParaCount = 2;
+			m_pHeadWidth = iHeaderWidth;
 
-		case 2:
-			m_pHeadWidth = IN_bOver10Eqp ? iHeaderWidth_Over10 : iHeaderWidth;
-			break;
-
-		case 3:
-			m_pHeadWidth = IN_bOver10Eqp ? iHeaderWidth_3Para_Over10 : iHeaderWidth_3Para;
-			break;
-
-		default:
-			m_pHeadWidth = IN_bOver10Eqp ? iHeaderWidth_Over10 : iHeaderWidth;
-			break;
-		}
-
-		if (GetSafeHwnd())
-		{
-			InitHeader();
+			if (GetSafeHwnd())
+			{
+				InitHeader();
+			}
 		}
 	}
-}
+	else
+	{
+		if (m_nParaCount != IN_nCount)
+		{
+			m_nParaCount = IN_nCount;
+			m_pHeadWidth = iHeaderWidth_3Para;
+
+			if (GetSafeHwnd())
+			{
+				InitHeader();
+			}
+		}
+	}
+}
+
 //=============================================================================
 // Method		: Adjust_ColumnWidth
 // Access		: public  
@@ -647,37 +617,20 @@ void CList_FailInfo::Adjust_ColumnWidth(int IN_nWidth)
 {
 	int iWidth = IN_nWidth - m_pHeadWidth[TSH_NG_Code] - m_pHeadWidth[TSH_Count_All];
 
-	SetColumnWidth(TSH_Count_Left, iWidth);
-
-	switch (m_nParaCount)
-	{
-	case 1:
-	{
-		SetColumnWidth(TSH_Count_Center, 0);
-		SetColumnWidth(TSH_Count_Right, 0);
-	}
-		break;
-
-	case 2:
+	if (2 == m_nParaCount)
 	{
 		iWidth = iWidth / 2;
 
 		SetColumnWidth(TSH_Count_Center, 0);
-		SetColumnWidth(TSH_Count_Right, iWidth);
 	}
-		break;
-
-	case 3:
+	else
 	{
 		iWidth = iWidth / 3;
 
 		SetColumnWidth(TSH_Count_Center, iWidth);
-		SetColumnWidth(TSH_Count_Right, iWidth);
 	}
-		break;
 
-	default:
-		break;
-	}
+	SetColumnWidth(TSH_Count_Left, iWidth);
+	SetColumnWidth(TSH_Count_Right, iWidth);
 }
 

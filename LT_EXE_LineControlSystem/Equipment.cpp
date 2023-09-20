@@ -12,6 +12,7 @@
 #include "Def_Equipment_Type.h"
 #include "CommonFunction.h"
 #include "RegEquipment.h"
+//#include "RegServer.h"
 
 CEquipment::CEquipment()
 {
@@ -52,11 +53,12 @@ CEquipment& CEquipment::operator=(const CEquipment& ref)
 
 	m_nPortStatus.clear();
 	m_nPortStatus		= ref.m_nPortStatus;
+
 	m_nConveyorStatus.clear();
 	m_nConveyorStatus	= ref.m_nConveyorStatus;
 	m_nAlarmStatus.clear();
 	m_nAlarmStatus		= ref.m_nAlarmStatus;
-	
+
 	m_Yield_Day			= ref.m_Yield_Day;
 	m_Yield_Cumulative	= ref.m_Yield_Cumulative;
 
@@ -64,8 +66,20 @@ CEquipment& CEquipment::operator=(const CEquipment& ref)
 
 	m_pSocketInfo		= ref.m_pSocketInfo;
 
+#if ADD_SOCKET_EES_XML
+	m_nOldPortStatus.clear();
+	m_nOldPortStatus = ref.m_nOldPortStatus;
+#endif
 	return *this;
 }
+
+#if (USE_XML)
+CEquipment& CEquipment::operator=(const CCommonModule& ref)
+{
+	CCommonModule::operator=(ref);
+	return *this;
+}
+#endif
 
 void CEquipment::Init_EquipmentType_UI()
 {
@@ -113,9 +127,6 @@ void CEquipment::WM_Event_Equipment(__in UINT IN_nWM_Event, __in LPCTSTR IN_szRF
 		if ((nullptr != IN_szRFID) && (0 != _tcsclen(IN_szRFID)) && (m_pSocketInfo->Is_ExistSocket(IN_szRFID)))
 		{
 			::SendNotifyMessage(m_hWndOwner, IN_nWM_Event, (WPARAM)m_nEqpOrder, (LPARAM)m_pSocketInfo->GetAt(IN_szRFID).szRFID.GetBuffer());
-
-			// 쓰레드로 처리하자.
-			//::SendMessage(m_hWndOwner, IN_nWM_Event, (WPARAM)m_nEqpOrder, (LPARAM)m_pSocketInfo->GetAt(IN_szRFID).szRFID.GetBuffer());
 		}
 		else
 		{
@@ -147,7 +158,7 @@ bool CEquipment::Is_ChangeShift(__in const SYSTEMTIME* IN_ptmCurrent)
 // 	SYSTEMTIME tmLocal;
 // 	GetLocalTime(&tmLocal);
 
-	// 오전 8시 SHIFT 변경 됨
+	// ?�전 8??SHIFT 변�???/
 	if ((m_tm_CheckShift.wHour < 8) && (8 <= IN_ptmCurrent->wHour))
 	{
 		bReturn = true;
@@ -163,14 +174,14 @@ bool CEquipment::Is_ChangeShift(__in const SYSTEMTIME* IN_ptmCurrent)
 	{
 		auto DiffTime = CompareSystemTime((SYSTEMTIME*)IN_ptmCurrent, &m_tm_CheckShift);
 
-		// 하루 이상 차이가 나는가??
+		// ?�루 ?�상 차이가 ?�는가??
 		if (86400.0f < DiffTime)
 		{
 			bReturn = true;
 		}
 	}
 
-	// 체크시간 변경
+	// 체크?�간 변�?
 	//memcpy(&m_tm_CheckShift, &tmLocal, sizeof(SYSTEMTIME));
 
 	return bReturn;
@@ -204,7 +215,7 @@ bool CEquipment::Is_ChangeShift()
 //=============================================================================
 void CEquipment::Update_SocketLocation(__in uint8_t IN_nPortIndex, __in ST_PortStatus* IN_pstPort)
 {
-	// Port 상태가 PtS_Exist_Socket으로 바뀌면 소켓 정보를 갱신한다.
+	// Port ?�태가 PtS_Exist_Socket?�로 바뀌면 ?�켓 ?�보�?갱신?�다.
 	if (enPortStatus::PtS_Exist_Socket == IN_pstPort->nStatus)
 	{
 		if (m_pSocketInfo)
@@ -226,11 +237,6 @@ void CEquipment::Save_Equipment_Skip()
 void CEquipment::Save_Equipment_Reserve()
 {
 	m_pRegEqp->Set_Equipment_Reserve(this);
-}
-
-void CEquipment::Save_Equipment_ReserveQueue()
-{
-	m_pRegEqp->Set_Equipment_ReserveQueue(this);
 }
 
 void CEquipment::Save_Equipment_EndProduction()
@@ -287,10 +293,10 @@ uint8_t CEquipment::Check_AvablePortCnt(__in uint8_t IN_OldStatus, __in uint8_t 
 {
 	bool bCheck = false;
 
-	// Tester만 사용
+	// Tester�??�용
 	if (Is_Tester())
 	{
-		// 포트 Disable, Alarm 체크
+		// ?�트 Disable, Alarm 체크
 		switch (IN_OldStatus)
 		{
 		case enPortStatus::PtS_Disable:
@@ -300,7 +306,7 @@ uint8_t CEquipment::Check_AvablePortCnt(__in uint8_t IN_OldStatus, __in uint8_t 
 			case enPortStatus::PtS_Empty:
 			case enPortStatus::PtS_Exist_Socket:
 			case enPortStatus::PtS_Wait_Out:
-				// 포트 사용 불가 -> 포트 사용 가능 상태로 변경됨
+				// ?�트 ?�용 불�? -> ?�트 ?�용 가???�태�?변경됨
 				bCheck = true;
 				break;
 			}
@@ -311,7 +317,7 @@ uint8_t CEquipment::Check_AvablePortCnt(__in uint8_t IN_OldStatus, __in uint8_t 
 			{
 			case enPortStatus::PtS_Disable:
 			case enPortStatus::PtS_Alarm:
-				// 포트 사용 가능 -> 포트 사용 불가 상태로 변경됨
+				// ?�트 ?�용 가??-> ?�트 ?�용 불�? ?�태�?변경됨
 				bCheck = true;
 				break;
 			}
@@ -371,27 +377,6 @@ uint8_t CEquipment::PortIndex2TestPara(uint8_t IN_nPortIndex)
 	}
 
 	return nPara;
-}
-
-uint8_t CEquipment::TestPara2PortIndex(__in uint8_t IN_nTestPara)
-{
-	uint8_t OUT_nPortIndex = PtI_T_Test_L;
-	switch (IN_nTestPara)
-	{
-	case Para_Left:
-		OUT_nPortIndex = PtI_T_Test_L;
-		break;
-
-	case Para_Right:
-		OUT_nPortIndex = PtI_T_Test_R;
-		break;
-
-	case Para_Center:
-		OUT_nPortIndex = PtI_T_Test_C;
-		break;
-	}
-
-	return OUT_nPortIndex;
 }
 
 //=============================================================================
@@ -507,16 +492,21 @@ void CEquipment::Set_PortClear(__in uint8_t IN_nPortIndex)
 	if (IN_nPortIndex < m_nPortStatus.size())
 	{
 		m_nPortStatus.at(IN_nPortIndex).nStatus = 0;
-
-		WM_Notify_Equipment(WM_EqpNotify_PortClear, (LPARAM)IN_nPortIndex);
+#if ADD_SOCKET_EES_XML
+		m_nPortStatus.at(IN_nPortIndex).nEquipmentState = 0;
+#endif
+		WM_Notify_Equipment(WM_EqpNotify_PortClear,
+			(LPARAM)IN_nPortIndex);
 	}
 	else if (PtI_L_All == IN_nPortIndex)
 	{
-		// 전체 Port 리셋
+		// ?�체 Port 리셋
 		for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			m_nPortStatus.at(nIdx).nStatus = 0;
-
+#if ADD_SOCKET_EES_XML
+			m_nPortStatus.at(nIdx).nEquipmentState = 0;
+#endif
 			WM_Notify_Equipment(WM_EqpNotify_PortClear, (LPARAM)nIdx);
 		}
 	}
@@ -532,16 +522,25 @@ const ST_PortStatus& CEquipment::Get_PortStatus(__in uint8_t IN_nPortIndex) cons
 	return m_nPortStatus.at(IN_nPortIndex);
 }
 
-const ST_PortStatus& CEquipment::Get_PortStatus_byTestPara(__in uint8_t IN_nTestPara)
-{
-	return m_nPortStatus.at(TestPara2PortIndex(IN_nTestPara));
-}
-
 void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nStatus, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in bool IN_bSave /*= true*/)
 {
+#if (USE_XML)
+	if (IN_nPortIndex < Get_mEES_PortSubStatusCount()){
+		//Get_mEES_PortSubStatus(IN_nPortIndex).Set_nOldPortStatus(Get_mEES_PortSubStatus(IN_nPortIndex).Get_nPortStatus());
+		Get_mEES_PortSubStatus(IN_nPortIndex).Set_nPortStatus(IN_nStatus);
+		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szRfid(IN_szRFID);
+		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szBarcode(IN_szBarcode);
+		WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL);
+		if ((IN_nStatus == PtS_RUN) ||
+			(IN_nStatus == PtS_STOP) ||
+			(IN_nStatus == PtS_IDLE)) {
+			return;
+		}
+	}
+#endif
 	if (IN_nPortIndex < m_nPortStatus.size())
 	{
-		// 로더의 버퍼3의 상태가 없음->있음으로 바뀌면 배출 승인 이벤트 처리
+		// 로더??버퍼3???�태가 ?�음->?�음?�로 바뀌면 배출 ?�인 ?�벤??처리
 		//WM_Event_Equipment(WM_EVENT_EQUIPMENT_PORT_STATUS, IN_szRFID);
 		if (Is_Loader())
 		{
@@ -556,14 +555,13 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			}
 
 			WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
-
-			// 로더의 버퍼3의 상태가 없음->있음으로 바뀌면 배출 승인 이벤트 처리
+			// 로더??버퍼3???�태가 ?�음->?�음?�로 바뀌면 배출 ?�인 ?�벤??처리
 			if (PtI_L_Buffer_3 == IN_nPortIndex)
 			{
 				if ((enPortStatus::PtS_Empty == nOld_PortStatus) &&
 					(enPortStatus::PtS_Exist_Socket == IN_nStatus))
 				{
-					// RFID 정보가 없으면 오류
+					// RFID ?�보가 ?�으�??�류
 					WM_Event_Equipment(WM_EVENT_LOADER_CHEKCK_TRACKOUT, IN_szRFID);
 				}
 			}
@@ -582,7 +580,7 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
 			WM_Event_Equipment(WM_EVENT_EQUIPMENT_PORT_STATUS, (LPARAM)IN_nPortIndex);
 
-			// Tester의 L/R 파라에 소켓이 투입되면 시간 체크한다.
+			// Tester??L/R ?�라???�켓???�입?�면 ?�간 체크?�다.
 			if ((PtS_Exist_Socket == IN_nStatus) && 
 				((PtI_T_Test_L == IN_nPortIndex) || (PtI_T_Test_R == IN_nPortIndex) || (PtI_T_Test_C == IN_nPortIndex)))
 			{
@@ -600,24 +598,29 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 
 			if (IN_bSave)
 			{
+				
 				Save_Equipment_Port(IN_nPortIndex);
 			}
 
-			WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
+			
+			//WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
 		}
 
-		// 소켓 정보 갱신 (RFID정보가 없으면, 오류)
+		//2023.04.25a
+		// ?�켓 ?�보 갱신 (RFID?�보가 ?�으�? ?�류)
 		Update_SocketLocation(IN_nPortIndex, &m_nPortStatus.at(IN_nPortIndex));
 	}
-	//else if (IN_nPortIndex == m_nPortStatus.size()) // 99로 변경
-	else if (PtI_T_All == IN_nPortIndex) // 99로 변경
+	//else if (IN_nPortIndex == m_nPortStatus.size()) // 99�?변�?
+	else if (PtI_T_All == IN_nPortIndex) // 99�?변�?/
 	{
-		// 전체 Port 설정
-
+		// ?�체 Port ?�정//
 		// 
-
 	}
 }
+
+
+
+//==========================================================================================================
 
 size_t CEquipment::Get_ConveyorCount() const
 {
@@ -715,7 +718,7 @@ void CEquipment::Set_Yield_Day(CYield_Equipment * IN_pYield)
 {
 	m_Yield_Day = *IN_pYield;
 
-	// GUI에 표시
+	// GUI???�시
 	WM_Notify_Equipment(WM_EqpNotify_Yield, (LPARAM)&m_Yield_Day);
 }
 
@@ -723,7 +726,7 @@ void CEquipment::Set_Yield_Cumulative(CYield_Equipment * IN_pYield)
 {
 	m_Yield_Cumulative = *IN_pYield;
 
-	// GUI에 표시
+	// GUI???�시
 
 }
 
@@ -749,8 +752,8 @@ void CEquipment::Reset_Yield_Cumulative()
 
 void CEquipment::Increase_Yield_Pass(__in uint8_t IN_nPara)
 {
-	// 시프트 체크
-	// 오전 8시 이전 -> 오전 8시 이후이면 수율 초기화
+	// ?�프??체크
+	// ?�전 8???�전 -> ?�전 8???�후?�면 ?�율 초기??
 
 	m_Yield_Day.IncreasePass(IN_nPara);
 	m_Yield_Cumulative.IncreasePass(IN_nPara);
@@ -762,8 +765,8 @@ void CEquipment::Increase_Yield_Pass(__in uint8_t IN_nPara)
 
 void CEquipment::Increase_Yield_Fail(__in uint8_t IN_nPara)
 {
-	// 시프트 체크
-	// 오전 8시 이전 -> 오전 8시 이후이면 수율 초기화
+	// ?�프??체크
+	// ?�전 8???�전 -> ?�전 8???�후?�면 ?�율 초기??
 
 	m_Yield_Day.IncreaseFail(IN_nPara);
 	m_Yield_Cumulative.IncreaseFail(IN_nPara);
@@ -803,14 +806,30 @@ uint8_t CEquipment::Get_ClientConnection() const
 {
 	return m_nConnection;
 }
-
 void CEquipment::Set_ClientConnection(__in uint8_t IN_nConStatus)
 {
 	m_nConnection = IN_nConStatus;
 
 	WM_Notify_Equipment(WM_EqpNotify_ClientConnection, (LPARAM)m_nConnection);
 	WM_Event_Equipment(WM_EVENT_EQUIPMENT_CONNECTION, (LPARAM)m_nConnection);
+
+#if (USE_XML) 
+	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL); // alarm on
+	if (!m_nConnection) {
+		//Set_OldOperatingMode(-1);
+		//Set_OldProcessStatus(-1);
+		//Set_OldEquipmentStatus(-1);
+		//Set_OldClientConnection(-1);
+		//2023.09.03
+		//for (int nPort = 0; nPort < Get_PortCount(); nPort++) {
+		//	Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(-1);
+		//	Get_mEES_PortSubStatus(nPort).Set_nConnection(-1);			
+		//}		  
+	}
+#endif	//ADD_SOCKET_EES_XML
 }
+
+
 
 //=============================================================================
 // Method		: Get_VerifyEqpConnection
@@ -819,7 +838,6 @@ void CEquipment::Set_ClientConnection(__in uint8_t IN_nConStatus)
 // Qualifier	: const
 // Last Update	: 2022/1/13 - 19:52
 // Desc.		:
-//=============================================================================
 bool CEquipment::Get_VerifyEqpConnection() const
 {
 	return m_bVerifyID;
@@ -836,6 +854,7 @@ void CEquipment::Set_VerifyEqpConnection(__in bool bVerified)
 // Method		: Get_OperatingMode
 // Access		: public  
 // Returns		: uint8_t
+//=============================================================================
 // Qualifier	: const
 // Last Update	: 2022/1/13 - 19:50
 // Desc.		:
@@ -859,6 +878,12 @@ void CEquipment::Set_OperatingMode(__in uint8_t IN_nOperMode)
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_AUTO_MODE);
 	}
 
+#if (USE_XML)
+	for (int i = 0; i < Get_mEES_PortSubStatusCount(); i++) {
+		Get_mEES_PortSubStatus(i).Set_nOperMode(IN_nOperMode);
+	}
+	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL); // alarm on
+#endif 
 }
 
 //=============================================================================
@@ -888,13 +913,13 @@ void CEquipment::Set_ProcessStatus(__in uint8_t IN_nStatus, __in uint32_t IN_nAl
 	uint8_t Old_Status	= m_nProcessStatus;
 	m_nProcessStatus	= IN_nStatus;
 
-	// 알람 누적(????)
+	// ?�람 ?�적(????)
 	//m_nAlarmCode	= IN_nAlarmCode;
 	//m_szAlarmInfo	= IN_szAlarmInfo;
 
 	WM_Notify_Equipment(WM_EqpNotify_ProcessStatus, (LPARAM)m_nProcessStatus);
 
-	// 정상 => Alarm
+	// ?�상 => Alarm
 	if (enEqpProcessStatus::EPC_Alarm == IN_nStatus)
 	{
 		ST_AlarmStatus stAlarm;
@@ -903,14 +928,33 @@ void CEquipment::Set_ProcessStatus(__in uint8_t IN_nStatus, __in uint32_t IN_nAl
 
 		m_nAlarmStatus.push_back(stAlarm);
 
+#if (USE_XML)
+		CAlarmStatus stEESAlarm;
+		stEESAlarm.Set_nAlarmCode(IN_nAlarmCode);
+		stEESAlarm.Set_szAlarmInfo(IN_szAlarmInfo);
+		stEESAlarm.Set_nAlarmSet(ALARMSET_SET);
+		Set_mAlarmStatus(stEESAlarm);
+#endif
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_ALARM, (LPARAM)m_nProcessStatus); // alarm on
+
 	}
-	// Alarm => 정상
+	// Alarm => ?�상
 	else if ((enEqpProcessStatus::EPC_Alarm == Old_Status) && (enEqpProcessStatus::EPC_Alarm != IN_nStatus))
 	{
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_ALARM, (LPARAM)m_nProcessStatus); // alarm off
 	}
+
+#if (USE_XML)
+	for (int i = 0; i < Get_mEES_PortSubStatusCount() ; i++) {
+		Get_mEES_PortSubStatus(i).Set_nProcessStatus(IN_nStatus);		
+	}	
+	if (0 < Get_mEES_PortSubStatusCount()) {
+		WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL);
+	}	
+#endif 
 }
+
+
 
 //=============================================================================
 // Method		: Get_AlarmCount
@@ -934,7 +978,6 @@ std::vector<ST_AlarmStatus>& CEquipment::Get_AlarmStatus()
 {
 	return m_nAlarmStatus;
 }
-
 const ST_AlarmStatus & CEquipment::Get_AlarmStatus(uint32_t IN_nIndex) const
 {
 	return m_nAlarmStatus.at(IN_nIndex);
@@ -945,7 +988,6 @@ const ST_AlarmStatus & CEquipment::Get_AlarmStatus(uint32_t IN_nIndex) const
 //	//m_nAlarmCode = IN_nAlarmCode;
 //	//m_szAlarmInfo = IN_szAlarmInfo;
 //}
-
 //=============================================================================
 // Method		: Get_Status_LED
 // Access		: public  
@@ -1012,21 +1054,6 @@ void CEquipment::Set_TimeSync(__in bool IN_bTimeSync)
 }
 
 //=============================================================================
-// Method		: Reset_ReservedPortInfo
-// Access		: public  
-// Returns		: void
-// Qualifier	:
-// Last Update	: 2023/2/27 - 19:51
-// Desc.		:
-//=============================================================================
-void CEquipment::Reset_ReservedPortInfo()
-{
-	m_vReservePort.clear();
-	Set_ReservedOverCnt(0);
-	Set_ReservedPortCnt(0);
-}
-
-//=============================================================================
 // Method		: Get_ReservedPortCnt
 // Access		: public  
 // Returns		: uint8_t
@@ -1043,7 +1070,7 @@ void CEquipment::Set_ReservedPortCnt(uint8_t IN_nCount, __in bool IN_bSave /*= t
 {
 	m_nReservedPortCnt = IN_nCount;
 
-	//레지스트리에 저장
+	//?��??�트리에 ?�??
 	if (IN_bSave)
 	{
 		Save_Equipment_Reserve();
@@ -1056,81 +1083,25 @@ void CEquipment::Set_ReservedPortCnt(uint8_t IN_nCount, __in bool IN_bSave /*= t
 // Returns		: bool
 // Qualifier	:
 // Last Update	: 2022/5/12 - 15:06
-// Desc.		: 소켓 투입 예약 (테스터 only)
+// Desc.		: ?�켓 ?�입 ?�약 (?�스??only)
 //=============================================================================
 bool CEquipment::Increase_ReservedPort()
 {
 	bool bReturn = false;
 	if (Is_Tester())
 	{
-		// 예약 가능하면 증가한다. (m_nAvablePortCnt - Get_UsingPortCount())
+		// ?�약 가?�하�?증�??�다. (m_nAvablePortCnt - Get_UsingPortCount())
 		if (m_nReservedPortCnt < m_nAvablePortCnt)
 		{
 			++m_nReservedPortCnt;
 
 			bReturn = true;
 		}
-		else // 예약 불가능 하면..
+		else // ?�약 불�????�면..
 		{
 			++m_nReservedOvered;
 		}
 
-		Save_Equipment_Reserve();
-	}
-
-	return bReturn;
-}
-
-bool CEquipment::Increase_ReservedPort(__in LPCTSTR IN_szRFID)
-{
-	bool bReturn = false;
-	if (Is_Tester())
-	{
-		// 예약된 소켓들 체크
-		uint8_t nRemovedCnt = Check_ReservedSocket();
-
-		// queue에서 rfid 검색..  있으면 기존거 제거하고 새로 추가
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			if (0 == (*nIter).szRfid.Compare(IN_szRFID))
-			{
-				CString szText;
-				szText.Format(_T("[eqp %02d] (%s) : Removing reserved sockets due to duplicate RFIDs. => rfid: %s"),
-							m_nEqpOrder,
-							_T(__FUNCTION__),
-							(*nIter).szRfid);
-				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-				// 제거
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				++nIter;
-			}
-		}
-
-		// 예약 정보 추가
-		ST_ReservedSocket socket;
-		socket.szRfid = IN_szRFID;
-		GetLocalTime(&socket.time);
-		m_vReservePort.push_back(socket);
-
-		// 예약 포트 갯수 구하기
-		m_nReservedPortCnt = static_cast<uint8_t>(m_vReservePort.size());
-		if (m_nAvablePortCnt < m_nReservedPortCnt)
-		{
-			m_nReservedOvered = m_nReservedPortCnt - m_nAvablePortCnt;
-			m_nReservedPortCnt = m_nAvablePortCnt;
-		}
-		else
-		{
-			bReturn = true;
-		}
-
-		//Save_Equipment_ReserveQueue();
 		Save_Equipment_Reserve();
 	}
 
@@ -1154,49 +1125,6 @@ void CEquipment::Decrease_ReservedPort()
 	}
 }
 
-void CEquipment::Decrease_ReservedPort(__in LPCTSTR IN_szRFID)
-{
-	if (Is_Tester())
-	{
-		// 예약된 소켓들 체크
-		uint8_t nRemovedCnt = Check_ReservedSocket();
-
-		// queue에서 rfid 검색..  있으면 기존거 제거
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			if (0 == (*nIter).szRfid.Compare(IN_szRFID))
-			{
-// 				CString szText;
-// 				szText.Format(_T("[eqp %02d] (%s) : Remove reserved sockets. => rfid: %s"),
-// 								m_nEqpOrder,
-// 								_T(__FUNCTION__),
-// 								(*nIter).szRfid);
-// 				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-				// 제거
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				++nIter;
-			}
-		}
-
-		// 예약 포트 갯수 구하기
-		m_nReservedPortCnt = static_cast<uint8_t>(m_vReservePort.size());
-		if (m_nAvablePortCnt < m_nReservedPortCnt)
-		{
-			m_nReservedOvered = m_nReservedPortCnt - m_nAvablePortCnt;
-			m_nReservedPortCnt = m_nAvablePortCnt;
-		}
-
-		//Save_Equipment_ReserveQueue();
-		Save_Equipment_Reserve();
-	}
-}
-
 //=============================================================================
 // Method		: Get_ReservedOverCnt
 // Access		: public  
@@ -1216,95 +1144,6 @@ void CEquipment::Set_ReservedOverCnt(__in uint8_t IN_nCount)
 }
 
 //=============================================================================
-// Method		: Check_ReservedSocket
-// Access		: public  
-// Returns		: uint8_t
-// Qualifier	:
-// Last Update	: 2023/2/27 - 19:58
-// Desc.		: 예약된 소켓 체크
-//=============================================================================
-uint8_t CEquipment::Check_ReservedSocket()
-{
-	uint8_t nRemovedCnt = 0;
-
-	if (Is_Tester())
-	{
-		// 1. 예약된 시간이 오래되었으면 제거 (중간에 라인 멈춘거 고려 해야함. 오래된것은 중간에 소켓 제거로 판단)
-		SYSTEMTIME tmLocal;
-		GetLocalTime(&tmLocal);
-
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			// 시간 비교 (설정된 시간 보다 차이가 크면 삭제)
-			auto tmDiffer = abs(CompareSystemTime(&tmLocal, &(*nIter).time));
-
-			if (m_dReservedTimeoutSec <= tmDiffer)
-			{
-				CString szText;
-				szText.Format(_T("[eqp %02d] (%s) : Removed sockets reserved to time out => rfid: %s, time: %02d:%02d:%02d"), 
-									m_nEqpOrder,
-									_T(__FUNCTION__), 
-									(*nIter).szRfid, 
-									(*nIter).time.wHour, 
-									(*nIter).time.wMinute, 
-									(*nIter).time.wSecond);
-				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-				// 제거			
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				//++nIter;
-				break;
-			}
-		}
-
-		// 2. 예약된 RFID의 "타겟"이 현재 설비가 아니면 제거 (중간에 빠졌다 재투입으로 판단)
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			auto socket = m_pSocketInfo->GetAt((*nIter).szRfid);
-			if (Get_EqpOrder() != socket.m_nTargetEqpOrder)
-			{
-				CString szText;
-				szText.Format(_T("[eqp %02d] (%s) : Remove the reserved socket because the socket's destination has changed. => rfid: %s, target eqp: %02d"), 
-									m_nEqpOrder,
-									_T(__FUNCTION__),
-									(*nIter).szRfid, 
-									socket.m_nTargetEqpOrder);
-				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-				// 제거
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				++nIter;
-			}
-		}
-	}
-
-	return nRemovedCnt;
-}
-
-//=============================================================================
-// Method		: Get_ReservedInfo
-// Access		: public  
-// Returns		: std::vector<ST_ReservedSocket>&
-// Qualifier	:
-// Last Update	: 2023/2/27 - 19:58
-// Desc.		:
-//=============================================================================
-std::vector<ST_ReservedSocket>& CEquipment::Get_ReservedInfo()
-{
-	return m_vReservePort;
-}
-
-//=============================================================================
 // Method		: Get_CheckShiftTime
 // Access		: public  
 // Returns		: const SYSTEMTIME &
@@ -1321,7 +1160,7 @@ void CEquipment::Set_CheckShiftTime(SYSTEMTIME* IN_ptmCheck, bool IN_bSave /*= t
 {
 	memcpy(&m_tm_CheckShift, IN_ptmCheck, sizeof(SYSTEMTIME));
 
-	//레지스트리에 저장
+	//?��??�트리에 ?�??
 	if (IN_bSave)
 	{
 		Save_Equipment_Shift();
@@ -1355,7 +1194,7 @@ bool CEquipment::IsAlarm()
 // Parameter	: __in bool bIgnore_EmptySocket
 // Qualifier	:
 // Last Update	: 2022/2/19 - 16:50
-// Desc.		: 설비에 소켓의 존재 유/무 판단
+// Desc.		: ?�비???�켓??존재 ??�??�단
 //=============================================================================
 bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 {
@@ -1368,13 +1207,13 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		nEndIdx		= enPortIndex_Loader::PtI_L_Buffer_3 + 1;
 	}
 
-	// 포트가 비어 있나?
+	// ?�트가 비어 ?�나?
 	for (auto nIdx = nStartIdx; nIdx < nEndIdx; ++nIdx)
 	{
-		// PtS_Exist_Socket,	// 1 : 제품 있음	
-		// PtS_Wait_Out,		// 2 : 배출대기
+		// PtS_Exist_Socket,	// 1 : ?�품 ?�음	
+		// PtS_Wait_Out,		// 2 : 배출?��?
 
-		// 포트에 소켓 유/무 판단
+		// ?�트???�켓 ??�??�단
 		switch (m_nPortStatus.at(nIdx).nStatus)
 		{
 		case PtS_Empty:
@@ -1386,7 +1225,7 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		{
 			if (bIgnore_EmptySocket)
 			{
-				// 소켓이 제품이 없는 빈 소켓인가?
+				// ?�켓???�품???�는 �??�켓?��??
 				if (false == m_nPortStatus.at(nIdx).szBarcode.IsEmpty())
 				{
 					return false;
@@ -1407,7 +1246,7 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		break;
 
 		case PtS_Alarm:
-			// 알람 상태에서는 소켓 유/무 판단을 어떻게 해야 하는가??????
+			// ?�람 ?�태?�서???�켓 ??�??�단???�떻�??�야 ?�는가??????
 			break;
 
 		default:
@@ -1415,10 +1254,10 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		}
 	}
 
-	// 컨베이어가 비어 있나?
+	// 컨베?�어가 비어 ?�나?
 	for (auto nIdx = 0; nIdx < m_nConveyorStatus.size(); ++nIdx)
 	{
-		// 컨베이어위에 소켓 유/무 판단
+		// 컨베?�어?�에 ?�켓 ??�??�단
 		if (enConveyorStatus_Exist::CoSE_Exist == m_nConveyorStatus.at(nIdx).nExistSocket)
 		{
 			if (bIgnore_EmptySocket)
@@ -1445,56 +1284,6 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 	return true;
 }
 
-bool CEquipment::IsEmpty_Equipment_AnySocket()
-{
-	auto nStartIdx = 0;
-	auto nEndIdx = m_nPortStatus.size();
-
-// 	if (Is_Loader())
-// 	{
-// 		nStartIdx = enPortIndex_Loader::PtI_L_RFID;
-// 		nEndIdx = enPortIndex_Loader::PtI_L_Buffer_3 + 1;
-// 	}
-
-	// 포트가 비어 있나?
-	for (auto nIdx = nStartIdx; nIdx < nEndIdx; ++nIdx)
-	{
-		// 포트에 소켓 유/무 판단
-		switch (m_nPortStatus.at(nIdx).nStatus)
-		{
-		case PtS_Empty:
-		case PtS_Disable:
-			break;
-
-		case PtS_Exist_Socket:
-		case PtS_Wait_Out:
-		{
-			return false;
-		}
-		break;
-
-		case PtS_Alarm:
-			// 알람 상태에서는 소켓 유/무 판단을 어떻게 해야 하는가??????
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	// 컨베이어가 비어 있나?
-	for (auto nIdx = 0; nIdx < m_nConveyorStatus.size(); ++nIdx)
-	{
-		// 컨베이어위에 소켓 유/무 판단
-		if (enConveyorStatus_Exist::CoSE_Exist == m_nConveyorStatus.at(nIdx).nExistSocket)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
 //=============================================================================
 // Method		: IsLastSocket_onTestPort
 // Access		: public  
@@ -1509,7 +1298,7 @@ bool CEquipment::IsLastSocket_onTestPort()
 
 	if (Is_Tester())
 	{
-		// 검사 중이거나 대기 중인 제품 카운트
+		// 검??중이거나 ?��?중인 ?�품 카운??/
 		uint8_t nTestCount = 0;
 
 		if ((PtS_Exist_Socket == m_nPortStatus.at(enPortIndex_Tester::PtI_T_RFID).nStatus) ||
@@ -1518,11 +1307,11 @@ bool CEquipment::IsLastSocket_onTestPort()
 			return false;
 		}
 
-		// 포트가 비어 있나?
+		// ?�트가 비어 ?�나?
 		//for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx <= enPortIndex_Tester::PtI_T_Test_R; ++nIdx)
 		for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
-			// 포트에 소켓 유/무 판단
+			// ?�트???�켓 ??�??�단
 			switch (m_nPortStatus.at(nIdx).nStatus)
 			{
 			case PtS_Exist_Socket:
@@ -1548,21 +1337,19 @@ bool CEquipment::IsLastSocket_onTestPort()
 // Method		: Get_EmptyPortCount
 // Access		: virtual public  
 // Returns		: uint8_t
-// Parameter	: __in bool bOnlyTestPort
+// Parameter	: __in bool bCount_EmptySocket
 // Qualifier	:
 // Last Update	: 2022/2/19 - 14:22
 // Desc.		:
 //=============================================================================
-uint8_t CEquipment::Get_EmptyPortCount(__in bool bOnlyTestPort /*= false*/)
+uint8_t CEquipment::Get_EmptyPortCount(__in bool bCount_EmptySocket /*= true*/)
 {
 	uint8_t nCount = 0;
 
 	if (Is_Tester())
 	{
-		uint8_t nStartPort = bOnlyTestPort ? enPortIndex_Tester::PtI_T_Test_L : enPortIndex_Tester::PtI_T_Buffer;
-
-		//for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
-		for (uint8_t nIdx = nStartPort; nIdx < m_nPortStatus.size(); ++nIdx)
+		//for (uint8_t nIdx = PtI_T_Buffer; nIdx <= PtI_T_Test_R; ++nIdx)
+		for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			if (enPortStatus::PtS_Empty == m_nPortStatus.at(nIdx).nStatus)
 			{
@@ -1570,18 +1357,18 @@ uint8_t CEquipment::Get_EmptyPortCount(__in bool bOnlyTestPort /*= false*/)
 			}
 		}
 
-		// PtI_T_RFID : 카운트 하지 않음 (검사와 관련된 Port만 체크)
+		// PtI_T_RFID : 카운???��? ?�음 (검?��? 관?�된 Port�?체크)
 
-		// 사용 예약 중인가?
+		// ?�용 ?�약 중인가?
 		if (0 < m_nReservedPortCnt)
 		{
-			// 실제 비어있는 포트에서 예약된 포트 갯수를 제외한다.
+			// ?�제 비어?�는 ?�트?�서 ?�약???�트 �?���??�외?�다.
 			nCount = (m_nReservedPortCnt < nCount) ? (nCount - m_nReservedPortCnt) : 0;
 		}
 	}
-	else if (Is_Returner()) // 예약 없음
+	else if (Is_Returner()) // ?�약 ?�음
 	{
-		// 버퍼1, 환승, 버퍼2
+		// 버퍼1, ?�승, 버퍼2
 		for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			if (enPortStatus::PtS_Empty == m_nPortStatus.at(nIdx).nStatus)
@@ -1590,7 +1377,7 @@ uint8_t CEquipment::Get_EmptyPortCount(__in bool bOnlyTestPort /*= false*/)
 			}
 		}
 	}
-	else // 예약 없음, 체크 필요 없음
+	else // ?�약 ?�음, 체크 ?�요 ?�음
 	{
 
 	}
@@ -1620,7 +1407,7 @@ uint8_t CEquipment::Get_EmptyConveyorCount()
 			}
 		}
 	}
-	else if (Is_Returner()) // 예약 없음
+	else if (Is_Returner()) // ?�약 ?�음
 	{
 		for (auto nIdx = 0; nIdx < m_nConveyorStatus.size(); ++nIdx)
 		{
@@ -1648,9 +1435,9 @@ uint8_t CEquipment::Get_UsingPortCount()
 			}
 		}
 	}
-	else if (Is_Returner()) // 예약 없음
+	else if (Is_Returner()) // ?�약 ?�음
 	{
-		// 버퍼1, 환승, 버퍼2
+		// 버퍼1, ?�승, 버퍼2
 		for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			if (enPortStatus::PtS_Exist_Socket == m_nPortStatus.at(nIdx).nStatus)
@@ -1659,7 +1446,7 @@ uint8_t CEquipment::Get_UsingPortCount()
 			}
 		}
 	}
-	else // 예약 없음, 체크 필요 없음
+	else // ?�약 ?�음, 체크 ?�요 ?�음
 	{
 
 	}
@@ -1760,7 +1547,7 @@ uint8_t CEquipment::Get_WaitOutCount()
 //=============================================================================
 uint8_t CEquipment::Get_SocketCount()
 {
-	// 설비 내에 존재하는 소켓 갯수
+	// ?�비 ?�에 존재?�는 ?�켓 �?��
 	uint8_t nCount = 0;
 
 	for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
@@ -1784,7 +1571,7 @@ uint8_t CEquipment::Get_SocketCount()
 
 uint8_t CEquipment::Get_ProductCount()
 {
-	// 설비 내에 존재하는 제품이 실린 소켓 갯수
+	// ?�비 ?�에 존재?�는 ?�품???�린 ?�켓 �?��
 	uint8_t nRetCount = 0;
 
 	auto nStartIdx	= 0;
@@ -1843,20 +1630,20 @@ bool CEquipment::Check_EndProduction()
 // Method		: Get_InputAvailabilityStatus
 // Access		: virtual public  
 // Returns		: uint8_t
-// 					-> IAS_NoInput,		// 전체 사용 불가	
-// 					-> IAS_Bypass,		// Bypass 가능
-// 					-> IAS_Test,		// 검사 가능	
+// 					-> IAS_NoInput,		// ?�체 ?�용 불�?	
+// 					-> IAS_Bypass,		// Bypass 가??
+// 					-> IAS_Test,		// 검??가??
 // Qualifier	:
 // Last Update	: 2022/2/14 - 16:00
 // Desc.		:
 //=============================================================================
 uint8_t CEquipment::Get_InputAvailabilityStatus()
 {
-	// 검사 설비 ?
+	// 검???�비 ?
 	if (Is_Tester())
 	{
 		//-----------------------------------------------------------
-		// 설비 알람 ?
+		// ?�비 ?�람 ?
 		if (IsAlarm())
 		{
 			TRACE(_T("[eqp %02d] Get_InputAvailabilityStatus() => Alarm \n"), m_nEqpOrder);
@@ -1864,7 +1651,7 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 		}
 
 		//-----------------------------------------------------------
-		// 컨베이어 상태 체크??
+		// 컨베?�어 ?�태 체크??
 		if ((enConveyorStatus::CoS_Stop == m_nConveyorStatus.at(CvI_T_Test).nStatus) &&
 			(enConveyorStatus_Exist::CoSE_Exist == m_nConveyorStatus.at(CvI_T_Test).nExistSocket)) // 0: Empty, 1: Exist
 		{
@@ -1873,15 +1660,15 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 		}
 
 		//-----------------------------------------------------------
-		// 설비 Skip ?
+		// ?�비 Skip ?//
 		if (Get_Skip())
 		{
 			return enInputAvailabilityStatus::IAS_Bypass;
 		}
 
 		//-----------------------------------------------------------
-		// 포트 체크 (PtI_T_RFID, PtI_T_Buffer, PtI_T_Test_L, PtI_T_Test_R)
-		// 검사 파라 및 버퍼 투입 가능
+		// ?�트 체크 (PtI_T_RFID, PtI_T_Buffer, PtI_T_Test_L, PtI_T_Test_R)
+		// 검???�라 �?버퍼 ?�입 가??/
 		bool bEmpty = false;
 		for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
@@ -1897,7 +1684,7 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 			(enPortStatus::PtS_Empty == m_nPortStatus.at(PtI_T_Buffer).nStatus))*/
 		if (bEmpty)
 		{
-			// 사용 예약 중인가?
+			// ?�용 ?�약 중인가?
 			if (0 < Get_EmptyPortCount())
 			{
 				TRACE(_T("[eqp %02d] Get_InputAvailabilityStatus() => testable \n"), m_nEqpOrder);
@@ -1916,14 +1703,14 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 	}
 	else if (Is_Returner())
 	{
-		// 버퍼1, 환승, 버퍼2 (버퍼 1이 비어 있으면 투입 가능)
+		// 버퍼1, ?�승, 버퍼2 (버퍼 1??비어 ?�으�??�입 가??
 		if (0 < Get_EmptyPortCount())
 		{
 			TRACE(_T("[returner] Get_InputAvailabilityStatus() => bypass \n"), m_nEqpOrder);
 			return enInputAvailabilityStatus::IAS_Test;
 		}
 	}
-	else // 로더 : 체크 필요 없음
+	else // 로더 : 체크 ?�요 ?�음
 	{		
 		return enInputAvailabilityStatus::IAS_Test;
 	}
@@ -1958,19 +1745,20 @@ uint32_t CEquipment::Get_ElapsedTime_InputPara(__in uint8_t IN_nPara)
 //=============================================================================
 bool CEquipment::Recv_RegisterSocket(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode)
 {
-	// 로더에서 소켓에 제품을 장착하여, RFID 읽어서 서버에 전송함
+	// 로더?�서 ?�켓???�품???�착?�여, RFID ?�어???�버???�송??
 
 	if (Is_Loader())
 	{
 		if (m_pSocketInfo)
 		{
-			// 제품 있음 / 제품 없음 ?
+			// ?�품 ?�음 / ?�품 ?�음 ?
 			if (0 < _tcslen(IN_szBarcode))
 			{
 
 			}
 
-			// 바코드에서 \r \n 제거
+
+			// 바코?�에??\r \n ?�거
 			/*CString szBarcode = IN_szBarcode;
 			szBarcode.Remove(_T('\r'));
 			szBarcode.Remove(_T('\n'));*/
@@ -1980,8 +1768,27 @@ bool CEquipment::Recv_RegisterSocket(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szB
 				bool bReturn = m_pSocketInfo->Register_Socket(m_szEquipmentId, IN_szRFID, IN_szBarcode);
 
 				WM_Event_Equipment(WM_EVENT_LOADER_RESISTER_SOCKET, IN_szRFID);
-
+#if ADD_SOCKET_EES_XML
+				CString EQUIPMENTID(Get_EquipmentIDStatus(PtI_L_Load).szEquipID);
+				CString PORTID(Get_EquipmentIDStatus(PtI_L_Load).szPortID);
+				CString SWMODULETYPE("MODULE1");
+				CString MODULETYPE("MODULE1");
+				CString MODULEID(IN_szBarcode);
+				CString MODULEMAINYN("Y");
+#if TEST
+				Set_UINTID_READ(
+					GetXmlEes().Set_UnitReadParameter(
+						EQUIPMENTID,
+						PORTID,
+						SWMODULETYPE,
+						MODULETYPE,
+						MODULEID,
+						MODULEMAINYN));
+				//WM_Event_Equipment(WM_EVENT_EQUIPMENT_UNITID_READ, IN_szRFID); // alarm on
+#endif	//TEST
+#endif	//ADD_SOCKET_EES_XML
 				return bReturn;
+
 			}
 		}
 	}
@@ -2003,20 +1810,18 @@ bool CEquipment::Recv_ReqAcceptSocket(__in LPCTSTR IN_szRFID)
 {
 	if (m_hWndOwner)
 	{
-		// 설비에 소켓 도착하여 투입 가능하지 판단
+		// ?�비???�켓 ?�착?�여 ?�입 가?�하지 ?�단
 
-		// 설비가 알람?
+		// ?�비가 ?�람?
 
-		// 설비가 Skip?
+		// ?�비가 Skip?
 
 		if (m_pSocketInfo)
 		{
-			// 현재 모델 설정에 맞는 RFID인가?
+			// ?�재 모델 ?�정??맞는 RFID?��??
 			//if (m_pSocketInfo->Is_ExistSocket(IN_szRFID))
 			if (m_pSocketInfo->Verify_Socket(IN_szRFID))
 			{
-				//Set_TrackInRequestSocket(IN_szRFID); // 2023.08.07
-
 				WM_Event_Equipment(WM_EVENT_TESTER_TRACKIN, IN_szRFID);
 
 				return true;
@@ -2042,7 +1847,7 @@ bool CEquipment::Recv_NotifyTestResult(__in LPCTSTR IN_szRFID, __in int16_t IN_n
 {
 	if (Is_Tester())
 	{
-		// Shift 변경 체크 & Tacttime 체크
+		// Shift 변�?체크 & Tacttime 체크
 		if (Is_ChangeShift())
 		{
 			Report_Yield_Day();
@@ -2053,36 +1858,31 @@ bool CEquipment::Recv_NotifyTestResult(__in LPCTSTR IN_szRFID, __in int16_t IN_n
 			}
 		}
 
-		// 양/불 체크
-		if (0 == IN_nNGCode) // MES Rework NG Code 이면...???
+		// ??�?체크
+		if (0 == IN_nNGCode) // MES Rework NG Code ?�면...???
 		{
-#ifndef USE_EQP_YIELD_UPDATE_AT_UNLOAD
 			Increase_Yield_Pass(IN_nPara);
-#endif //USE_EQP_YIELD_UPDATE_AT_UNLOAD
 		}
-		else if (m_pSocketInfo->Get_MES_ReworkCode() == IN_nNGCode)// MES Rework NG Code 이면...???
+		else if (m_pSocketInfo->Get_MES_ReworkCode() == IN_nNGCode)// MES Rework NG Code ?�면...???
 		{
 			;
 		}
 		else
 		{
-#ifndef USE_EQP_YIELD_UPDATE_AT_UNLOAD
 			Increase_Yield_Fail(IN_nPara);
-#endif //USE_EQP_YIELD_UPDATE_AT_UNLOAD
 
-#ifndef USE_NG_CODE_UPDATE_AT_UNLOAD
-			// Log : 불량이 발생한 제품 정보 기록 (제품 바코드, NG 발생 검사: Pass된 검사)
+			// Log : 불량??발생???�품 ?�보 기록 (?�품 바코?? NG 발생 검?? Pass??검??
 			IncreaseFailInfo(IN_nNGCode, IN_nPara);
-#endif // USE_NG_CODE_UPDATE_AT_UNLOAD
 		}
 
 		if (m_pSocketInfo)
 		{
+			//if (m_pSocketInfo->Set_TestResult(m_szEquipmentId, IN_szRFID, IN_nNGCode, IN_nPara, m_nEqpOrder, m_nEquipmentType, (m_pSocketInfo->Get_MES_ReworkCode() == IN_nNGCode)))
 			if (m_pSocketInfo->Set_TestResult(m_szEquipmentId, IN_szRFID, IN_nNGCode, IN_nPara, m_nEqpOrder, Get_EquipmentType(), (m_pSocketInfo->Get_MES_ReworkCode() == IN_nNGCode)))
 			{
 				if (m_pSocketInfo->Is_ExistSocket(IN_szRFID))
 				{
-					// 검사 결과를 받으면 배출 승인 여부를 판단해서 서버->설비로 알려줘야 한다.
+					// 검??결과�?받으�?배출 ?�인 ?��?�??�단?�서 ?�버->?�비�??�려줘야 ?�다.
 					WM_Event_Equipment(WM_EVENT_TESTER_END_INSPECTION, IN_szRFID);
 
 					return true;
@@ -2119,13 +1919,13 @@ bool CEquipment::Recv_ReqTestResult(__in LPCTSTR IN_szRFID, __out ST_TestResult&
 #endif
 		WM_Event_Equipment(WM_EVENT_UNLOAD_REQ_TEST_RESULT, IN_szRFID);
 
-		// 검사 결과를 전송한다.
+		// 검??결과�??�송?�다.
 		if (m_pSocketInfo)
 		{
-			// 제품 있음 : 양품
-			// 제품 있음 : 불량
-			// 제품 없음 : 양품
-			// 배출 시간 설정
+			// ?�품 ?�음 : ?�품
+			// ?�품 ?�음 : 불량
+			// ?�품 ?�음 : ?�품
+			// 배출 ?�간 ?�정
 			m_pSocketInfo->Check_UnloadTime(IN_szRFID);
 
 			return m_pSocketInfo->Get_TestResult(IN_szRFID, OUT_stResult);
@@ -2150,7 +1950,7 @@ bool CEquipment::Recv_UnregisterSocket(__in LPCTSTR IN_szRFID)
 
 	if (Is_Loader())
 	{
-		// 제품이 있는가?
+		// ?�품???�는가?
 		if (m_pSocketInfo->GetAt(IN_szRFID).IsEmpty_Barcode())
 		{
 			;
@@ -2158,34 +1958,47 @@ bool CEquipment::Recv_UnregisterSocket(__in LPCTSTR IN_szRFID)
 
 		if (m_pSocketInfo->Is_ExistSocket(IN_szRFID))
 		{
-			// 최종 수율 업데이트
+			// 최종 ?�율 ?�데?�트
 			ST_TestResult stResult;
 			m_pSocketInfo->Get_TestResult(IN_szRFID, stResult);
 			if (0 == stResult.m_nNG_Code)
 			{
-				Increase_Yield_Pass(0); // 양품은 Para 구분 불가 (양품 판정 검사 설비가 여러대)
+				Increase_Yield_Pass(0); // ?�품?� Para 구분 불�? (?�품 ?�정 검???�비가 ?�러?�)
 			}
-			else if (m_pSocketInfo->Get_MES_ReworkCode() == stResult.m_nNG_Code)// MES Rework NG Code 이면...???
+			else if (m_pSocketInfo->Get_MES_ReworkCode() == stResult.m_nNG_Code)// MES Rework NG Code ?�면...???
 			{
-				// 오류 상황......
+				// ?�류 ?�황......
 				Increase_Yield_Fail(stResult.m_nNG_Para);
-			}
-			else if (-2 == stResult.m_nNG_Code)
-			{
-				; // -2 (빈 소켓)은 카운트 처리 안함 (2023.06.08)
 			}
 			else
 			{
 				Increase_Yield_Fail(stResult.m_nNG_Para);
 			}
 
-			// 소켓 등록 해제
+#if ADD_SOCKET_EES_XML
+			CString EQUIPMENTID(Get_EquipmentIDStatus(PtI_L_Load).szEquipID);
+			CString SUBEQPID(Get_SubEqpID());
+			CString PORTID(Get_EquipmentIDStatus(PtI_L_Load).szPortID);
+			CString SUBEQPID(Get_EquipmentId());
+			//CString PORTID = _T("");
+			CString LOTID(m_pSocketInfo->GetAt(IN_szRFID).m_LotID);
+#if TEST
+			Set_REPORT_END_EVENT(
+				GetXmlEes().Set_ReportEndEventParameter(
+				EQUIPMENTID,
+				SUBEQPID,
+				PORTID,
+				LOTID));
+#endif	//TEST
+#endif	//ADD_SOCKET_EES_XML
+			// ?�켓 ?�록 ?�제
 			if (m_pSocketInfo)
 			{
 				bReturn = m_pSocketInfo->Unregister_Socket(m_szEquipmentId, IN_szRFID);
 			}
 
 			WM_Event_Equipment(WM_EVENT_UNLOAD_UNREGISTER_SOCKET, IN_szRFID);
+
 		}
 	}
 
@@ -2224,7 +2037,7 @@ bool CEquipment::Report_Yield_Day()
 		return false;
 	}
 
-	// 년/월/eqpid_yield.csv
+	// ????eqpid_yield.csv
 
 	CString szPath;
 	CString szFullPath;
@@ -2237,7 +2050,7 @@ bool CEquipment::Report_Yield_Day()
 	MakeDirectory(szPath);
 	szFullPath.Format(_T("%sYield_%s_%04d_%02d.csv"), szPath, m_szEquipmentId, tmLocal.wYear, tmLocal.wMonth);
 
-	// 년/월/일, equipment no, equpment id, T, P, F, L(T, P, F), R(T, P, F)
+	// ?????? equipment no, equpment id, T, P, F, L(T, P, F), R(T, P, F)
 	CString szUnicode, szTime;
 	CStringA szANSI;
 	szTime.Format(_T("%04d/%02d/%02d %02d:%02d:%02d"), tmLocal.wYear, tmLocal.wMonth, tmLocal.wDay, tmLocal.wHour, tmLocal.wMinute, tmLocal.wSecond);
@@ -2281,8 +2094,8 @@ bool CEquipment::Report_Yield_Day()
 		if (!File.Open(szFullPath.GetBuffer(), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite, &e))
 			return false;
 
-		// 헤더 추가
-		// 년/월/일, equipment no, equpment id, T, P, F, L(T, P, F), R(T, P, F)
+		// ?�더 추�?
+		// ?????? equipment no, equpment id, T, P, F, L(T, P, F), R(T, P, F)
 		//CString szHeader = _T(",Time,Eqp No,Eqp ID,Total,Pass,NG,Left_Total,Left_Pass,Left_NG,Right_Total,Right_Pass,Right_NG\r\n");
 		CString szHeader = _T(",Time,Eqp No,Eqp ID,Total,Pass,NG,Left_Total,Left_Pass,Left_NG,Right_Total,Right_Pass,Right_NG,Center_Total,Center_Pass,Center_NG\r\n");
 
@@ -2328,76 +2141,242 @@ void CEquipment::IncreaseFailInfo(int16_t IN_nNGCode, uint8_t IN_nPara)
 	}
 }
 
-//=============================================================================
-// Method		: Set_ReservedTimeout_Second
-// Access		: public  
-// Returns		: void
-// Parameter	: __in double IN_dSecond
-// Qualifier	:
-// Last Update	: 2023/2/27 - 20:11
-// Desc.		:
-//=============================================================================
-void CEquipment::Set_ReservedTimeout_Second(__in double IN_dSecond)
-{
-	m_dReservedTimeoutSec = IN_dSecond;
+#if (USE_XML)
+void CEquipment::Set_Notify_EquipmentState(__in lt::Report_Equipment_State_Args::Args *IN_DATA) {
+	LPARAM IN_PARA = (LPARAM)IN_DATA;
+	WM_Notify_Equipment(WM_EqpNotify_EQUIPMENTSTATE, IN_PARA);
+}
+/*20230906
+void CEquipment::Set_Notify_EquipmentStateDisplay(__in CCommonModule* IN_DATA) {
+	LPARAM IN_PARA2 = (LPARAM)IN_DATA;
+	WM_Notify_Equipment(WM_EqpNotify_EQUIPMENTSTATEDISPLAY, IN_PARA2);
 }
 
-//=============================================================================
-// Method		: Set_TrackInRequestSocket
-// Access		: protected  
-// Returns		: void
-// Parameter	: __in LPCTSTR IN_szRFID
-// Qualifier	:
-// Last Update	: 2023/8/7 - 11:33
-// Desc.		:
-//=============================================================================
-void CEquipment::Set_TrackInRequestSocket(__in LPCTSTR IN_szRFID)
-{
-	m_szLastTrackIn_RFID = IN_szRFID;
-	m_nLastTrackIn_Time = timeGetTime();
-	GetLocalTime(&m_tmLastTrackIn);
+void CEquipment::Set_Notify_RGBDisplay(__in lt::Request_Equipment_State_Display_Args::Args & IN_DATA) {
+	LPARAM IN_PARA = (LPARAM)&IN_DATA;
+	WM_Notify_Equipment(WM_EqpNotify_RGBDISPLAY, IN_PARA);
 }
-
-//=============================================================================
-// Method		: IsTrackInRequest_Socket
-// Access		: public  
-// Returns		: bool
-// Parameter	: __in LPCTSTR IN_szRFID
-// Parameter	: __in uint32_t IN_nCheckTime
-// Qualifier	:
-// Last Update	: 2023/8/7 - 11:35
-// Desc.		:
-//=============================================================================
-bool CEquipment::IsTrackInRequest_Socket(__in LPCTSTR IN_szRFID, __in uint32_t IN_nCheckTime /*= 900*/)
+void CEquipment::Set_Notify_LOTID(LPCTSTR IN_DATA) {
+	LPARAM IN_PARA = (LPARAM)IN_DATA;
+}
+bool CEquipment::Recv_RegisterSocketLOT(__in LPCTSTR IN_szRFID, __in uint32_t IN_TYPE, __in LPCTSTR IN_szData)
 {
-	if (0 == m_szLastTrackIn_RFID.Compare(IN_szRFID))
+	if (Is_Loader())
 	{
-// 		SYSTEMTIME tmLc;
-// 		GetLocalTime(&tmLc);
-// 
-// 		if (CompareSystemTime(&tmLc, &m_tmLastTrackIn) < IN_nCheckTime)
-// 		{
-// 			return true;
-// 		}
-
-		if (0 < m_nLastTrackIn_Time)
+		if (m_pSocketInfo)
 		{
-			DWORD dwElapsedTime = 0;
-			DWORD dwCurrentTime = timeGetTime();
-
-			if (dwCurrentTime < m_nLastTrackIn_Time)
+			if (0 < _tcslen(IN_szData))
 			{
-				dwElapsedTime = 0xFFFFFFFF - m_nLastTrackIn_Time + dwCurrentTime;
 			}
-			else
+			switch (IN_TYPE)
 			{
-				dwElapsedTime = dwCurrentTime - m_nLastTrackIn_Time;
-			}
+			case  0:
+				if (m_pSocketInfo->Is_ExistSocket(IN_szRFID))
+				{
+					bool bReturn = m_pSocketInfo->Register_SocketLotID(IN_szRFID, IN_TYPE, IN_szData);
 
-			return (dwElapsedTime < IN_nCheckTime);
+					return bReturn;
+				}
+				break;
+			case 1:
+				if (m_pSocketInfo->Is_ExistBarcode(IN_szRFID))
+				{
+					bool bReturn = m_pSocketInfo->Register_SocketLotID(IN_szRFID, IN_TYPE, IN_szData);
+
+					return bReturn;
+				}
+				break;
+			}
 		}
 	}
-
-
 	return false;
+}*/
+/*
+uint8_t CEquipment::Get_EquipmentStatus() const {
+	return m_nEquipmentStatus;
 }
+void CEquipment::Set_EquipmentStatus(__in uint8_t IN_nStatus) {
+	m_nEquipmentStatus = IN_nStatus;
+}*/
+void CEquipment::Set_DEFINEDATA(CEquipment & Data) {
+	CString			szTemp;
+	Get_DEFINEDATA().Set_EQUIPMENTID(lt::ToMultiByte(Data.Get_EquipmentId()));
+	DWORD dwAddress = ntohl(Data.Get_IP_Address());
+	szTemp.Format(_T("%d.%d.%d.%d"), FOURTH_IPADDRESS(dwAddress), THIRD_IPADDRESS(dwAddress), SECOND_IPADDRESS(dwAddress), FIRST_IPADDRESS(dwAddress));
+	Get_DEFINEDATA().Set_IPADDRESS(lt::ToMultiByte(szTemp));
+	Get_DEFINEDATA().Set_SUBEQPID(lt::ToMultiByte(Data.Get_SubEqpID()));
+}
+#endif
+#if ADD_SOCKET_EES_XML
+void CEquipment::Set_OldPortStatus(
+	__in uint8_t IN_nPortIndex,
+	__in uint8_t IN_nStatus,
+	__in LPCTSTR IN_szRFID,
+	__in LPCTSTR IN_szBarcode)
+{
+	if (IN_nPortIndex < m_nOldPortStatus.size()){
+		if (Is_Loader())	{
+			m_nOldPortStatus.at(IN_nPortIndex).nStatus = IN_nStatus;
+			m_nOldPortStatus.at(IN_nPortIndex).szRfid = IN_szRFID;
+			m_nOldPortStatus.at(IN_nPortIndex).szBarcode = IN_szBarcode;
+		}	else if (Is_Tester())	{
+			m_nOldPortStatus.at(IN_nPortIndex).nStatus = IN_nStatus;
+			m_nOldPortStatus.at(IN_nPortIndex).szRfid = IN_szRFID;
+			m_nOldPortStatus.at(IN_nPortIndex).szBarcode = IN_szBarcode;
+		}	else	{
+			m_nOldPortStatus.at(IN_nPortIndex).nStatus = IN_nStatus;
+			m_nOldPortStatus.at(IN_nPortIndex).szRfid = IN_szRFID;
+			m_nOldPortStatus.at(IN_nPortIndex).szBarcode = IN_szBarcode;
+		}
+	}else if (PtI_T_All == IN_nPortIndex) {
+	}
+}
+void CEquipment::Set_PortStatusEquipmentStateEvent(__in uint8_t IN_nPortIndex, __in uint8_t IN_nData){
+	if (IN_nPortIndex < m_nPortStatus.size())
+	{
+		if (Is_Loader())	{
+			m_nPortStatus.at(IN_nPortIndex).nEquipmentState = IN_nData;
+		}	else if (Is_Tester())	{
+			m_nPortStatus.at(IN_nPortIndex).nEquipmentState = IN_nData;
+		}	else 	{
+			m_nPortStatus.at(IN_nPortIndex).nEquipmentState = IN_nData;
+		}
+	}else if (PtI_T_All == IN_nPortIndex) {
+	}
+}
+uint8_t CEquipment::Get_OldProcessStatus() const{
+	return m_nOldProcessStatus;}
+void CEquipment::Set_OldProcessStatus(__in uint8_t IN_nStatus){
+	m_nOldProcessStatus = IN_nStatus;}
+
+uint8_t CEquipment::Get_OldOperatingMode() const{
+	return m_nOldOperMode;}
+void CEquipment::Set_OldOperatingMode(__in uint8_t IN_nStatus){
+	m_nOldOperMode = IN_nStatus;}
+
+
+
+uint8_t CEquipment::Get_OldEquipmentStatus() const{
+	return m_nOldEquipmentStatus;}
+void CEquipment::Set_OldEquipmentStatus(__in uint8_t IN_nStatus){
+	m_nOldEquipmentStatus = IN_nStatus;}
+
+std::vector<ST_PortStatus>&	 CEquipment::Get_OldPortStatus(){
+	return m_nOldPortStatus;}
+const ST_PortStatus& CEquipment::Get_OldPortStatus(__in uint8_t IN_nStatus) const{
+	return m_nOldPortStatus.at(IN_nStatus);}
+void CEquipment::Set_OldPortStatusEquipmentStateEvent(__in uint8_t IN_nPortIndex, __in uint8_t IN_nData)
+{
+	if (IN_nPortIndex < m_nOldPortStatus.size())
+	{
+		if (Is_Loader())
+		{
+			m_nOldPortStatus.at(IN_nPortIndex).nEquipmentState = IN_nData;
+		}	else if (Is_Tester())	{
+			m_nOldPortStatus.at(IN_nPortIndex).nEquipmentState = IN_nData;
+		}	else	{
+			m_nOldPortStatus.at(IN_nPortIndex).nEquipmentState = IN_nData;
+		}
+	}else if (PtI_T_All == IN_nPortIndex) {
+	}
+}
+
+
+uint8_t CEquipment::Get_OldClientConnection() const{
+	return m_nOldConnection;}
+void CEquipment::Set_OldClientConnection(__in uint8_t IN_nStatus){
+	m_nOldConnection = IN_nStatus;}
+
+
+
+CString CEquipment::GetDateTime()
+{
+	SYSTEMTIME stime = {};
+	::GetLocalTime(&stime);
+	CString cstTimeStamp;
+	cstTimeStamp.Format(_T("%04d%02d%02d%02d%02d%03d"), stime.wYear,
+		stime.wMonth,
+		stime.wDay,
+		stime.wHour,
+		stime.wMinute,
+		stime.wSecond);
+	return cstTimeStamp;
+}
+
+#if TEST
+void CEquipment::Set_UINTID_READ(__in ST_xml_UNITID_READ * IN_Data){
+	LPARAM IN_LPARAM = (LPARAM)IN_Data;
+	WM_Event_Equipment(WM_EVENT_EQUIPMENT_UNITID_READ, (LPARAM)IN_LPARAM);
+}
+void CEquipment::Set_REPORT_START_LOT(__in ST_xml_REPORT_START_LOT * IN_Data){
+	LPARAM IN_LPARAM = (LPARAM)IN_Data;
+	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_START_LOT, (LPARAM)IN_LPARAM);
+}
+void CEquipment::Set_REPORT_END_EVENT(__in ST_xml_REPORT_END_EVENT * IN_Data){
+	LPARAM IN_LPARAM = (LPARAM)IN_Data;
+	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_END_EVENT, (LPARAM)IN_LPARAM);
+}
+void CEquipment::Set_REPORT_START_PROCESS(__in ST_xml_REPORT_START_PROCESS * IN_Data){
+	LPARAM IN_LPARAM = (LPARAM)IN_Data;
+	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_START_PROCESS, (LPARAM)IN_LPARAM);
+}
+void CEquipment::Set_REPORT_END_PROCESS(__in ST_xml_REPORT_END_PROCESS * IN_Data){
+	LPARAM IN_LPARAM = (LPARAM)IN_Data;
+	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_END_PROCESS, (LPARAM)IN_LPARAM);
+}
+#endif	//TEST
+
+#if TESTTERMINAL
+size_t CEquipment::Get_TerminalCount() const{
+	return m_nTerminalLog.size();}
+const ST_TerminalLog& CEquipment::Get_TerminalStatus_Last() const{
+	return m_nTerminalLog.back();}
+std::vector<ST_TerminalLog>& CEquipment::Get_TerminalStatus(){
+	return m_nTerminalLog;}
+const ST_TerminalLog & CEquipment::Get_TerminalStatus(uint32_t IN_nIndex) const{
+	return m_nTerminalLog.at(IN_nIndex);}
+#endif	//TESTTERMINAL
+CString CEquipment::Get_FromPortToLOTID(__in uint8_t IN_nPortIndex) {
+	CString rslt;
+	CString szRFID(m_nPortStatus.at(IN_nPortIndex).szRfid);
+	CString szBarcode(m_nPortStatus.at(IN_nPortIndex).szBarcode);
+	if (m_pSocketInfo->Is_ExistSocket(szRFID))
+	{
+		rslt = m_pSocketInfo->GetAt(szRFID).m_LotID;
+	}
+	return rslt;
+}
+
+
+size_t CEquipment::Get_EquipmentIDCount() const{
+	return m_nEquipmentID.size();}
+std::vector<ST_EquipmentID>& CEquipment::Get_EquipmentIDStatus(){
+	return m_nEquipmentID;}
+const ST_EquipmentID& CEquipment::Get_EquipmentIDStatus(__in uint8_t IN_nPortIndex) const{
+	return m_nEquipmentID.at(IN_nPortIndex);}
+
+
+CString CEquipment::Get_SubEqpID() const{
+	return m_nSubEqpID;}
+void CEquipment::Set_SubEqpID(__in LPCTSTR IN_DATA){
+	m_nSubEqpID = IN_DATA;}
+
+
+void CEquipment::Set_PortStatusEquipmentIDEvent(__in uint8_t IN_nPortIndex, __in ST_EquipmentID * IN_nData){
+	if (IN_nPortIndex < m_nEquipmentID.size())	{
+		if (Is_Loader())		{
+			m_nEquipmentID.at(IN_nPortIndex).szEquipID = IN_nData->szEquipID;
+			m_nEquipmentID.at(IN_nPortIndex).szPortID = IN_nData->szPortID;
+		}	else if (Is_Tester())		{
+			m_nEquipmentID.at(IN_nPortIndex).szEquipID = IN_nData->szEquipID;
+			m_nEquipmentID.at(IN_nPortIndex).szPortID = IN_nData->szPortID;
+		}	else 	{
+			m_nEquipmentID.at(IN_nPortIndex).szEquipID = IN_nData->szEquipID;
+			m_nEquipmentID.at(IN_nPortIndex).szPortID = IN_nData->szPortID;
+		}
+	}
+	else if (PtI_T_All == IN_nPortIndex)
+	{
+	}
+}
+#endif	//ADD_SOCKET_EES_XML

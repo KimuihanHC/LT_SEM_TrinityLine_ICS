@@ -110,7 +110,7 @@ protected:
 	virtual void	OnMonitor_TimeCheck			();
 	virtual void	OnMonitor_UpdateUI			();
 
-	enInsptrSysType		m_InspectionType		= Sys_Ics_Trinity_Line;
+	enInsptrSysType		m_InspectionType		= Sys_Dev_Mod_1;
 
 public:
 

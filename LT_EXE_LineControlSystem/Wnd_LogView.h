@@ -16,7 +16,6 @@
 #include "VGStatic.h"
 #include "LogOutput.h"
 #include <vector>
-#include "Wnd_InOutCount.h"
 
 //=============================================================================
 // CWnd_LogView
@@ -34,9 +33,10 @@ public:
 		Tab_Alarm = 0,
 		Tab_Load,
 		Tab_Unload,
-#ifdef USE_IN_OUT_COUNT_UI
-		Tab_InOut_Count,
-#endif
+		//2023.05.01a uhkim
+		Tab_TerminalMessage,
+		Tab_Opcall,
+
 		Tab_MaxCount,
 	};
 
@@ -74,10 +74,10 @@ protected:
 	CLogOutput		m_ed_Log_Unload;
 	//CLogOutput		m_ed_Log_NGInfo;
 
-	// 투입 / 배출 / 진행 / 소켓제거 카운트
-	CWnd_InOutCount	m_wnd_InOutCount;
-
-
+	//2023.05.02a uhkim
+	CLogOutput		m_ed_Log_TerminalMessage;
+	CLogOutput		m_ed_Log_OpCall;
+	//
 
 	CMFCButton				m_bn_Keyboard;
 
@@ -86,9 +86,6 @@ protected:
 public:
 	
 	virtual void	OnLanguage	(__in uint8_t IN_nLanguage);
-
-	// 권한 설정
-	void	Set_PermissionMode	(__in enPermissionMode IN_PermissionMode);
 
 	void	OnAdd_Log			(LPCTSTR lpszLog, BOOL bError /*= FALSE*/, UINT nLogType /*= 0*/, COLORREF clrTextColor /*= RGB(0, 0, 0)*/);
 	void	OnAdd_Log			(LPCTSTR lpszLog, UINT nLogType);
@@ -104,10 +101,9 @@ public:
 	void	Log_LoadSocket		(__in LPCTSTR lpszLog, __in bool bError = false);
 	void	Log_UnloadSocket	(__in LPCTSTR lpszLog, __in bool bError = false);
 	void	Log_NGInfo			(__in LPCTSTR lpszLog);
-
-	// 투입/배출 수량 카운트
-	void	Set_InOutCount		(__in const ST_InOutCount* IN_pCount);
-	
+	//2023.05.01a
+	void	Log_TerminalMessage	(__in LPCTSTR lpszLog);
+	void	Log_OpCall			(__in LPCTSTR lpszLog);
 };
 
 #endif // Wnd_LogView_h__

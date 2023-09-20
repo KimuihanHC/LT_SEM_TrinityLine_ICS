@@ -17,6 +17,7 @@ typedef enum
 {
 	TSH_No,
 	TSH_ItemAlias,			// Eqp Type + Number
+
 	TSH_EqpType,			// Equipmnet Type
 	TSH_EqpId,				// Equipment id
 	TSH_IpAddr,				// ip address
@@ -335,9 +336,38 @@ void CList_LineConfig::Set_EquipmentData(__in int nItem, __in const CConfig_Eqp*
 	// Equipment IP Address
 	szText = ConvIPAddrToString(IN_pEquipment->Get_IP_Address());
 	SetItemText(nItem, TSH_IpAddr, szText.GetBuffer());
-
 }
 
+void CList_LineConfig::Set_ServerData(__in int nItem, __in const CConfig_Eqp* IN_pEquipment)
+{
+	ASSERT(GetSafeHwnd());
+	if (NULL == IN_pEquipment)
+		return;
+
+	if (GetItemCount() <= nItem)
+		return;
+
+	CString szText;
+
+	// TSH_No
+	szText.Format(_T("%d"), nItem + 1);
+	SetItemText(nItem, TSH_No, szText);
+
+	// Alias (Eqp Type + Number)
+	SetItemText(nItem, TSH_ItemAlias, IN_pEquipment->Get_Alias());
+
+	// Equipmnet Type
+	//SetItemText(nItem, TSH_EqpType, g_szEqpTypeName[IN_pEquipment->Get_EquipmentType()]);
+	SetItemText(nItem, TSH_EqpType, g_szEqpTypeName_UI[IN_pEquipment->Get_EqpType_UI()]);
+
+	// Equipment id
+	SetItemText(nItem, TSH_EqpId, IN_pEquipment->Get_EquipmentId());
+
+	// Equipment IP Address
+	szText = ConvIPAddrToString(IN_pEquipment->Get_IP_Address());
+	SetItemText(nItem, TSH_IpAddr, szText.GetBuffer());
+
+}
 //=============================================================================
 // Method		: Insert_Equipment
 // Access		: protected  
@@ -362,6 +392,28 @@ void CList_LineConfig::Insert_Equipment(__in int nItem, __in const CConfig_Eqp* 
 	InsertItem(iNewCount, _T(""));
 
 	Set_EquipmentData(iNewCount, IN_pEquipment);
+
+	// 번호 재부여
+	Reset_Number();
+
+	// 화면에 보이게 하기
+	EnsureVisible(iNewCount, TRUE);
+	ListView_SetItemState(GetSafeHwnd(), iNewCount, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
+}
+void CList_LineConfig::Insert_Server(__in int nItem, __in const CConfig_Eqp* IN_pEquipment)
+{
+	ASSERT(GetSafeHwnd());
+	if (NULL == IN_pEquipment)
+		return;
+
+	if (GetItemCount() <= nItem)
+		return;
+
+	int iNewCount = nItem;
+
+	InsertItem(iNewCount, _T(""));
+
+	Set_ServerData(iNewCount, IN_pEquipment);
 
 	// 번호 재부여
 	Reset_Number();
@@ -396,6 +448,23 @@ void CList_LineConfig::Add_Equipment(const __in CConfig_Eqp* IN_pEquipment)
 	EnsureVisible(iNewCount, TRUE);
 	ListView_SetItemState(GetSafeHwnd(), iNewCount, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
 }
+//2023.02.13a uhkim [추가 옵션]
+void CList_LineConfig::Add_Server(const __in CConfig_Eqp* IN_pEquipment)
+{
+	ASSERT(GetSafeHwnd());
+	if (NULL == IN_pEquipment)
+		return;
+
+	int iNewCount = GetItemCount();
+
+	InsertItem(iNewCount, _T(""));
+
+	Set_ServerData(iNewCount, IN_pEquipment);
+
+	// 화면에 보이게 하기
+	EnsureVisible(iNewCount, TRUE);
+	ListView_SetItemState(GetSafeHwnd(), iNewCount, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
+}
 
 //=============================================================================
 // Method		: Modify_Equipment
@@ -422,7 +491,21 @@ void CList_LineConfig::Modify_Equipment(__in int nItem, __in const CConfig_Eqp* 
 	EnsureVisible(nItem, TRUE);
 	ListView_SetItemState(GetSafeHwnd(), nItem, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
 }
+void CList_LineConfig::Modify_Server(__in int nItem, __in const CConfig_Eqp* IN_pEquipment)
+{
+	ASSERT(GetSafeHwnd());
+	if (NULL == IN_pEquipment)
+		return;
 
+	if (GetItemCount() <= nItem)
+		return;
+
+	Set_ServerData(nItem, IN_pEquipment);
+
+	// 화면에 보이게 하기
+	EnsureVisible(nItem, TRUE);
+	ListView_SetItemState(GetSafeHwnd(), nItem, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
+}
 //=============================================================================
 // Method		: OnLanguage
 // Access		: public  
@@ -491,6 +574,7 @@ void CList_LineConfig::Set_LineInfo(__in const CConfig_Line* IN_pLineInfo)
 	}
 }
 
+
 //=============================================================================
 // Method		: Get_LineInfo
 // Access		: public  
@@ -537,6 +621,7 @@ void CList_LineConfig::Item_Add(__in CConfig_Eqp& IN_Equipment)
 	Set_Group_Equipment();
 }
 
+
 //=============================================================================
 // Method		: Item_Insert
 // Access		: public  
@@ -567,6 +652,7 @@ void CList_LineConfig::Item_Insert(__in CConfig_Eqp& IN_Equipment)
 		// 항목을 선택 하세요.
 	}
 }
+
 
 //=============================================================================
 // Method		: Item_Remove
@@ -758,6 +844,7 @@ void CList_LineConfig::Item_Modify(__in CConfig_Eqp& IN_Equipment)
 	}
 }
 
+
 //=============================================================================
 // Method		: Get_SelectedEquipment
 // Access		: public  
@@ -805,6 +892,7 @@ void CList_LineConfig::Add_LineInfo(__in const CConfig_Line* IN_pLineInfo)
 		}
 	}
 }
+
 
 //=============================================================================
 // Method		: Insert_LineInfo
@@ -985,7 +1073,6 @@ void CList_LineConfig::Check_EqpTypeUI_UpdateAlias(__in UINT nEqpTypeUI, __in bo
 		}
 	}
 }
-
 void CList_LineConfig::Check_EqpTypeUI_UpdateAlias()
 {
 	// 모든 설비 타입을 검색해서 Alias를 재 설정
@@ -1000,7 +1087,6 @@ void CList_LineConfig::Check_EqpTypeUI_UpdateAlias()
 		SetItemText(nIdx, TSH_ItemAlias, m_stLine_Info.GetAt(nIdx).Get_Alias().GetBuffer());
 	}
 }
-
 //=============================================================================
 // Method		: Check_EquipmentID
 // Access		: public  

@@ -33,7 +33,7 @@ void CXmlLineConfig::Backup_File(__in LPCTSTR szPath)
 {
 	//if (m_bUseBackup)
 	{
-		// 기존 파일명 + 현재 날짜/시간
+		// 기존 ?�일�?+ ?�재 ?�짜/?�간
 		// C:\\Recipe\\SEM_T01_SocketInfo.xml
 		// => C:\\Recipe\\BAK\\SEM_T01_SocketInfo_2021_1117_181900.xml
 
@@ -81,13 +81,10 @@ uint8_t CXmlLineConfig::Convert_EqpType_UI(__in int IN_iVer, __in uint8_t IN_nEq
 {
 	if (1 < m_xml_version)
 	{
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-		return IN_nEqpTypeUI_Old;
-#else
 		switch (IN_iVer)
 		{
 		case 1: // version 1.0 => 2.0
-			//return (IN_nEqpType_Old + 1); // Eqp_Handler가 0번 인덱스에 추가됨
+			//return (IN_nEqpType_Old + 1); // Eqp_Handler가 0�??�덱?�에 추�???/
 			switch (IN_nEqpTypeUI_Old)
 			{
 			case Eqp_V1_Loader:			// 0
@@ -102,7 +99,7 @@ uint8_t CXmlLineConfig::Convert_EqpType_UI(__in int IN_iVer, __in uint8_t IN_nEq
 				return enEquipmentType_UI::EqpUI_ColorCal;
 				break;
 
-			case Eqp_V1_SFR_CL_46:		// 3 : SFR 협각
+			case Eqp_V1_SFR_CL_46:		// 3 : SFR ?�각
 				return enEquipmentType_UI::EqpUI_SFR_CL_46;
 				break;
 
@@ -133,7 +130,10 @@ uint8_t CXmlLineConfig::Convert_EqpType_UI(__in int IN_iVer, __in uint8_t IN_nEq
 			case Eqp_V1_HotPixel3port:	// 10 : Hot Pixel 3 Para
 				return enEquipmentType_UI::EqpUI_HotPixel3port;
 				break;
-
+			//2023.01.29a uhkim [Test]
+			case Eqp_V1_ServerEes:
+				return enEquipmentType_UI::EqpUI_Ees;
+				break;
 			default:
 				return IN_nEqpTypeUI_Old;
 				break;
@@ -145,7 +145,6 @@ uint8_t CXmlLineConfig::Convert_EqpType_UI(__in int IN_iVer, __in uint8_t IN_nEq
 			return IN_nEqpTypeUI_Old;
 			break;
 		}
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 	}
 
 	return IN_nEqpTypeUI_Old;
@@ -165,13 +164,10 @@ uint8_t CXmlLineConfig::Convert_EquipmentType(__in int IN_iVer, __in uint8_t IN_
 {
 	if (1 < m_xml_version)
 	{
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-		return IN_nEqpType_Old;
-#else
 		switch (IN_iVer)
 		{
 		case 1: // version 1.0 => 2.0
-			//return (IN_nEqpType_Old + 1); // Eqp_Handler가 0번 인덱스에 추가됨
+			//return (IN_nEqpType_Old + 1); // Eqp_Handler가 0�??�덱?�에 추�???
 			switch (IN_nEqpType_Old)
 			{
 			case Eqp_V1_Loader:			// 0
@@ -186,7 +182,7 @@ uint8_t CXmlLineConfig::Convert_EquipmentType(__in int IN_iVer, __in uint8_t IN_
 				return enEquipmentType::Eqp_ColorCal;
 				break;
 
-			case Eqp_V1_SFR_CL_46:		// 3 : SFR 협각
+			case Eqp_V1_SFR_CL_46:		// 3 : SFR ?�각
 				return enEquipmentType::Eqp_SFR_CL_46;
 				break;
 
@@ -223,14 +219,11 @@ uint8_t CXmlLineConfig::Convert_EquipmentType(__in int IN_iVer, __in uint8_t IN_
 				return IN_nEqpType_Old;
 				break;
 			}
-
 			break;
-
 		default:
 			return IN_nEqpType_Old;
 			break;
 		}
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 	}
 	
 	return IN_nEqpType_Old;
@@ -292,9 +285,12 @@ int CXmlLineConfig::ReadXML_Header(__in tinyxml2::XMLElement* IN_pRoot)
 {
 	if (IN_pRoot)
 	{
-		IN_pRoot->Attribute("Version"); // ver2.0 에서 eqp type이 바뀜 호환 체크해아 함
-		IN_pRoot->Attribute("Maker");
-		IN_pRoot->Attribute("Format");
+		//2023.05.04a Test
+		CStringA szTemp1, szTemp2, szTemp3;
+		szTemp1 = IN_pRoot->Attribute("Version"); // ver2.0 ?�서 eqp type??바�??�환 체크?�아 ??
+		szTemp2 = IN_pRoot->Attribute("Maker");
+
+		szTemp3 = IN_pRoot->Attribute("Format");
 
 		CString szTemp;
 		szTemp = IN_pRoot->Attribute("Version", 0);
@@ -321,16 +317,28 @@ int CXmlLineConfig::ReadXML_Header(__in tinyxml2::XMLElement* IN_pRoot)
 BOOL CXmlLineConfig::WriteXML_Header(__in tinyxml2::XMLDocument* IN_pDoc, __in tinyxml2::XMLElement* IN_pRoot)
 {
 	tinyxml2::XMLDeclaration* decl = IN_pDoc->NewDeclaration();
-	IN_pDoc->LinkEndChild(decl);
+	IN_pDoc->LinkEndChild(decl);	
 	
 	CStringA szVersion;
-	szVersion.Format("%d.0", m_xml_version);
+	szVersion.Format("%d.0", m_xml_version);	
+	//IN_pRoot->SetAttribute("Version",	"1.0"); // ver2.0 ?�서 eqp type??바�??�환 체크?�아 ??	//IN_pRoot->SetAttribute("Version", (const char*)szVersion.GetBuffer(0)); // ver2.0 ?�서 eqp type??바�??�환 체크?�아 ??	//IN_pRoot->SetAttribute("Maker", "Luritech");
+	IN_pRoot->SetAttribute("Version", (const char*)szVersion.GetBuffer(0)); // ver2.0 ?�서 eqp type??바�??�환 체크?�아 ??
 
-	//IN_pRoot->SetAttribute("Version",	"1.0"); // ver2.0 에서 eqp type이 바뀜 호환 체크해아 함
-	IN_pRoot->SetAttribute("Version", szVersion.GetBuffer()); // ver2.0 에서 eqp type이 바뀜 호환 체크해아 함
-	IN_pRoot->SetAttribute("Maker",		"Luritech");
-	IN_pRoot->SetAttribute("Format",	"Line Configuration File"); 
+
+	CStringA szMaker;
+	szMaker = "Luritech";
+	IN_pRoot->SetAttribute("Maker", (const char*)szMaker.GetBuffer(0));
+
+
+
+	CStringA szFormat;
+	szFormat = "Line Configuration File";
+	IN_pRoot->SetAttribute("Format", (const char*)szFormat.GetBuffer(0));
+
+
+	
 	IN_pDoc->LinkEndChild(IN_pRoot);
+
 
 	return TRUE;
 }
@@ -366,7 +374,7 @@ BOOL CXmlLineConfig::WriteXML_Comment(__in tinyxml2::XMLDocument* IN_pDoc, __out
 //=============================================================================
 BOOL CXmlLineConfig::WriteXML_File(__in LPCTSTR szPath, __in tinyxml2::XMLDocument* IN_pDoc)
 {
-	// 파일 저장
+	// ?�일 ?�??
 	CStringA szFileName;
 	szFileName = CT2A(szPath);
 	if (tinyxml2::XML_SUCCESS == IN_pDoc->SaveFile(szFileName.GetBuffer(0)))
@@ -387,9 +395,10 @@ BOOL CXmlLineConfig::WriteXML_File(__in LPCTSTR szPath, __in tinyxml2::XMLDocume
 // Parameter	: __out CConfig_Line & OUT_stLineInfo
 // Parameter	: __in int IN_iVer
 // Qualifier	:
-// Last Update	: 2022/8/12 - 15:52
+// Last Update	: 2023.05.08
 // Desc.		:
 //=============================================================================
+/*
 BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CConfig_Line& OUT_stLineInfo, __in int IN_iVer)
 {
  	CStringA szTemp;
@@ -402,36 +411,115 @@ BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CC
 			tinyxml2::XMLElement* pEqpList = pLineInfo->FirstChildElement("EqpList");
 			if (pEqpList)
 			{
-				// 라인 설비 정보 초기화
+				// ?�인 ?�비 ?�보 초기??
 				OUT_stLineInfo.RemoveAll();
 
-				// 설비 개수
+				INT_PTR iItemCount = pEqpList->Int64Attribute("Count", 0);
+
+				std::vector<CConfig_Eqp> *cEqpList;	//2022.12.29a uhkim  TEST
+
+				CConfig_Eqp* OUT_pEqp = NULL;
+				for (INT_PTR nIdx = 0; nIdx < iItemCount; nIdx++)
+				{
+					// ?�비 1�?추�?
+					CConfig_Eqp stEquipment;
+					OUT_stLineInfo.Eqp_Add(stEquipment);						
+				}	
+
+				cEqpList = &OUT_stLineInfo.EqpList;
+				for (INT_PTR nIdx = 0; nIdx < iItemCount; nIdx++)
+				{					
+					OUT_pEqp = &cEqpList->at(nIdx);
+					if (OUT_pEqp == nullptr) {
+						continue;
+					}
+					szTemp.Format("Eqp_%03d", nIdx + 1);
+					tinyxml2::XMLElement* pEquipment = pEqpList->FirstChildElement(szTemp.GetBuffer(0));
+					if (pEquipment)
+					{
+ 						// uint8_t		m_nEqpOrder;		// ?�인?�서???�비 ?�서(번호)
+						OUT_pEqp->Set_EqpOrder(pEquipment->UnsignedAttribute("EqpOrder", 0));
+
+ 						// bool			m_bGroup;			// 검??그룹 (?)
+						OUT_pEqp->Set_Group(pEquipment->BoolAttribute("Group", false));
+
+ 						// uint8_t		m_nGroupIndex;		// 검??그룹???�비 ?�덱??						OUT_pEqp->Set_GroupIndex(pEquipment->UnsignedAttribute("GroupIndex", 0));
+
+						// CString		szAlias;			// Eqp Type + 검?�기�?Number (?�비 ?�서???�른 ?�동 ?�성)
+						szTemp = pEquipment->Attribute("Alias", 0);
+						OUT_pEqp->Set_Alias(CA2T(szTemp.GetBuffer()));
+
+						// uint8_t		nEquipmenttype;		// Equipmnet Type
+						OUT_pEqp->Set_EqpType_UI(Convert_EqpType_UI(IN_iVer, pEquipment->UnsignedAttribute("Equipment_Type", 0)));
+
+						// CString		szEquipmentId;		// Equipment id (고유id)
+						szTemp = pEquipment->Attribute("Equipment_ID", 0);
+						OUT_pEqp->Set_EquipmentId(CA2T(szTemp.GetBuffer()));
+
+						// uint32_t		nIP_Address;		// ip address
+						szTemp = pEquipment->Attribute("IP_Address", 0);
+						OUT_pEqp->Set_IP_Address(ntohl(inet_addr(szTemp.GetBuffer())));
+					}
+				}
+			}
+			else
+			{
+				return FALSE;
+			}
+		} 
+		else
+		{
+			return FALSE;
+		}
+	} 
+	else
+	{
+		return FALSE;
+	}
+	return TRUE;
+}
+*/
+BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CConfig_Line& OUT_stLineInfo, __in int IN_iVer)
+{
+	CStringA szTemp;
+
+	if (IN_pRoot)
+	{
+		tinyxml2::XMLElement* pLineInfo = IN_pRoot->FirstChildElement("LineInfo");
+		if (pLineInfo)
+		{
+			tinyxml2::XMLElement* pEqpList = pLineInfo->FirstChildElement("EqpList");
+			if (pEqpList)
+			{
+				// ?�인 ?�비 ?�보 초기??				
+				OUT_stLineInfo.RemoveAll();
+
+				// ?�비 개수
 				INT_PTR iItemCount = pEqpList->Int64Attribute("Count", 0);
 
 				CConfig_Eqp* OUT_pEqp = NULL;
 				for (INT_PTR nIdx = 0; nIdx < iItemCount; nIdx++)
 				{
-					// 설비 1개 추가
+					// ?�비 1�?추�?
 					CConfig_Eqp stEquipment;
 					OUT_stLineInfo.Eqp_Add(stEquipment);
-
-					// 추가된 설비 포인터
+			
 					OUT_pEqp = &OUT_stLineInfo.EqpList.at(nIdx);
 
 					szTemp.Format("Eqp_%03d", nIdx + 1);
 					tinyxml2::XMLElement* pEquipment = pEqpList->FirstChildElement(szTemp.GetBuffer(0));
 					if (pEquipment)
 					{
- 						// uint8_t		m_nEqpOrder;		// 라인에서의 설비 순서(번호)
+						// uint8_t		m_nEqpOrder;		// ?�인?�서???�비 ?�서(번호)
 						OUT_pEqp->Set_EqpOrder(pEquipment->UnsignedAttribute("EqpOrder", 0));
 
- 						// bool			m_bGroup;			// 검사 그룹 (?)
+						// bool			m_bGroup;			// 검??그룹 (?)
 						OUT_pEqp->Set_Group(pEquipment->BoolAttribute("Group", false));
 
- 						// uint8_t		m_nGroupIndex;		// 검사 그룹내 설비 인덱스
+						// uint8_t		m_nGroupIndex;		// 검??그룹???�비 ?�덱??						
 						OUT_pEqp->Set_GroupIndex(pEquipment->UnsignedAttribute("GroupIndex", 0));
 
-						// CString		szAlias;			// Eqp Type + 검사기별 Number (설비 순서에 따른 자동 생성)
+						// CString		szAlias;			// Eqp Type + 검?�기�?Number (?�비 ?�서???�른 ?�동 ?�성)
 						szTemp = pEquipment->Attribute("Alias", 0);
 						OUT_pEqp->Set_Alias(CA2T(szTemp.GetBuffer()));
 
@@ -451,7 +539,7 @@ BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CC
 						//OUT_pEqp->m_nPortCount = pEquipment->UnsignedAttribute("Port_Count", 1);
 						// uint8_t		nConveyorCount;		// Conveyor Count
 						//OUT_pEqp->m_nConveyorCount = pEquipment->UnsignedAttribute("Conveyor_Count", 1);
-						// uint8_t		m_nRFID_Count;			// RFID 리더 갯수
+						// uint8_t		m_nRFID_Count;			// RFID 리더 �?��
 
 					} // if (pEquipment)
 				} // for()
@@ -473,7 +561,6 @@ BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CC
 
 	return TRUE;
 }
-
 //=============================================================================
 // Method		: Write_LineInfo
 // Access		: public  
@@ -504,14 +591,13 @@ BOOL CXmlLineConfig::Write_LineInfo(__in tinyxml2::XMLDocument* IN_pDoc, __in ti
 			szTemp.Format("Eqp_%03d", nIdx + 1);
 			tinyxml2::XMLElement* pEquipment = IN_pDoc->NewElement(szTemp.GetBuffer(0));
 			{
-				// uint8_t		m_nEqpOrder;		// 라인에서의 설비 순서(번호)
+				// uint8_t		m_nEqpOrder;		// ?�인?�서???�비 ?�서(번호)
 				pEquipment->SetAttribute("EqpOrder", (unsigned)IN_pEqp->Get_EqpOrder());
-				// bool			m_bGroup;			// 검사 그룹 (?)
+				// bool			m_bGroup;			// 검??그룹 (?)
 				pEquipment->SetAttribute("Group", IN_pEqp->Get_Group());
-				// uint8_t		m_nGroupIndex;		// 검사 그룹내 설비 인덱스
-				pEquipment->SetAttribute("GroupIndex", (unsigned)IN_pEqp->Get_GroupIndex());
+				// uint8_t		m_nGroupIndex;		// 검??그룹???�비 ?�덱??				pEquipment->SetAttribute("GroupIndex", (unsigned)IN_pEqp->Get_GroupIndex());
 
-				// CString		szAlias;			// Eqp Type + 검사기별 Number (설비 순서에 따른 자동 생성)
+				// CString		szAlias;			// Eqp Type + 검?�기�?Number (?�비 ?�서???�른 ?�동 ?�성)
 				szTemp = CT2A(IN_pEqp->Get_Alias());
 				pEquipment->SetAttribute("Alias", szTemp.GetBuffer());
 
@@ -534,7 +620,7 @@ BOOL CXmlLineConfig::Write_LineInfo(__in tinyxml2::XMLDocument* IN_pDoc, __in ti
 				//pEquipment->SetAttribute("Port_Count", (unsigned)IN_pEqp->m_nPortCount);
 				// uint8_t		nConveyorCount;		// Conveyor Count
 				//pEquipment->SetAttribute("Conveyor_Count", (unsigned)IN_pEqp->m_nConveyorCount);
-				// uint8_t		m_nRFID_Count;			// RFID 리더 갯수
+				// uint8_t		m_nRFID_Count;			// RFID 리더 �?��
 			}
 
 			pEqpList->LinkEndChild(pEquipment);
@@ -562,7 +648,7 @@ BOOL CXmlLineConfig::LoadXML_LineInfo(__in LPCTSTR szPath, __out CConfig_Line& O
 	if (NULL == szPath)
 		return FALSE;
 
-	// 파일이 존재하는가?
+	// ?�일??존재?�는가?
 	if (!PathFileExists(szPath))
 	{
 		return FALSE;
@@ -610,7 +696,10 @@ BOOL CXmlLineConfig::SaveXML_LineInfo(__in LPCTSTR szPath, __in const CConfig_Li
 	tinyxml2::XMLDocument doc;
 
 	USES_CONVERSION;
-	tinyxml2::XMLElement* pRoot = doc.NewElement("Luritech");
+	CStringA szTemp;
+	szTemp = "Luritech";
+	tinyxml2::XMLElement* pRoot = doc.NewElement(szTemp.GetBuffer(0));
+	//tinyxml2::XMLElement* pRoot = doc.NewElement("Luritech");
 
 	WriteXML_Header(&doc, pRoot);	
 
@@ -620,8 +709,8 @@ BOOL CXmlLineConfig::SaveXML_LineInfo(__in LPCTSTR szPath, __in const CConfig_Li
 	// Line Configuration 
 	Write_LineInfo(&doc, pRoot, IN_pLineInfo);
 
-	// 파일로 저장
-	Backup_File(szPath);
+	// ?�일�??�??	Backup_File(szPath);
+
 	return WriteXML_File(szPath, &doc);
 }
 
@@ -649,7 +738,7 @@ BOOL CXmlLineConfig::Read_ModelInfo(__in tinyxml2::XMLElement* IN_pRoot, __out C
 		// Socket Type
 		OUT_stModelInfo.m_nSocketType = pModelInfo->UnsignedAttribute("Socket_Type", 0);
 
-		// Tester 사용여부
+		// Tester ?�용?��?
 		tinyxml2::XMLElement* pTesterList = pModelInfo->FirstChildElement("Tester_List");
 		if (pTesterList)
 		{
@@ -702,7 +791,7 @@ BOOL CXmlLineConfig::Write_ModelInfo(__in tinyxml2::XMLDocument* IN_pDoc, __in t
 		// Socket Type
 		pModelInfo->SetAttribute("Socket_Type", (unsigned)IN_pModelInfo->m_nSocketType);
 
-		// Tester 사용여부
+		// Tester ?�용?��?
 		tinyxml2::XMLElement* pTesterList = IN_pDoc->NewElement("Tester_List");
 		size_t iItemCount = Max_TesterCount;
 		pTesterList->SetAttribute("Count", (int64_t)iItemCount);
@@ -737,7 +826,7 @@ BOOL CXmlLineConfig::LoadXML_ModelInfo(__in LPCTSTR szPath, __out CConfig_Model&
 	if (NULL == szPath)
 		return FALSE;
 
-	// 파일이 존재하는가?
+	// ?�일??존재?�는가?
 	if (!PathFileExists(szPath))
 	{
 		return FALSE;
@@ -794,8 +883,7 @@ BOOL CXmlLineConfig::SaveXML_ModelInfo(__in LPCTSTR szPath, __in const CConfig_M
 	// Model Configuration 
 	Write_ModelInfo(&doc, pRoot, IN_pModelInfo);
 
-	// 파일로 저장
-	Backup_File(szPath);
+	// ?�일�??�??	Backup_File(szPath);
 	return WriteXML_File(szPath, &doc);
 }
 
@@ -815,7 +903,7 @@ BOOL CXmlLineConfig::LoadXML_LineModelInfo(__in LPCTSTR szPath, __out CConfig_Li
 	if (NULL == szPath)
 		return FALSE;
 
-	// 파일이 존재하는가?
+	// ?�일??존재?�는가?
 	if (!PathFileExists(szPath))
 	{
 		return FALSE;
@@ -840,8 +928,7 @@ BOOL CXmlLineConfig::LoadXML_LineModelInfo(__in LPCTSTR szPath, __out CConfig_Li
 		return FALSE;
 	}
 
-	// version 확인 해야 함
-
+	// version ?�인 ?�야 ??
 
 	if (FALSE == Read_LineInfo(pRoot, OUT_stLineInfo, iVer))
 	{
@@ -885,8 +972,6 @@ BOOL CXmlLineConfig::SaveXML_LineModelInfo(__in LPCTSTR szPath, __in const CConf
 	// Model Configuration 
 	Write_ModelInfo(&doc, pRoot, IN_pModelInfo);
 
-	// 파일로 저장
-	Backup_File(szPath);
+	// ?�일�??�??	Backup_File(szPath);
 	return WriteXML_File(szPath, &doc);
 }
-

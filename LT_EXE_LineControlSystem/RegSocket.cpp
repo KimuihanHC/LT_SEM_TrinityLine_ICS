@@ -13,7 +13,7 @@
 #include "Def_Socket_Info.h"
 #include "SocketMonitoring.h"
 
-//#define USE_VERIFY_KEY_ALWAYS	// 레지스트리에 데이터 기록 할 때마다 레지스트리 경로 체크 및 생성
+//#define USE_VERIFY_KEY_ALWAYS	// ?��??�트리에 ?�이??기록 ???�마???��??�트�?경로 체크 �??�성
 
 CRegSocket::CRegSocket()
 {
@@ -114,14 +114,14 @@ bool CRegSocket::Set_SocketInfo(__in LPCTSTR IN_szRFID, __in const CSocketInfo_U
 		//IN_pSocketInfo->nSocketType;
 		//IN_pSocketInfo->szComment;
 
-		// 제품 정보
+		// ?�품 ?�보
 		szValue = IN_pSocketInfo->m_szBarcode;
 		m_pReg->WriteString(_T("Barcode"), szValue.GetBuffer());
 
 		m_pReg->WriteDWORD(_T("Status"), IN_pSocketInfo->m_nStatus);
 		//m_pReg->WriteDWORD(_T("Judgment"), IN_pSocketInfo->m_nJudgement);
 
-		// 소켓 위치 정보
+		// ?�켓 ?�치 ?�보
 		m_pReg->WriteDWORD(_T("Equipment_Order"), IN_pSocketInfo->m_nEqpOrder);
 
 		szValue = IN_pSocketInfo->m_szEquipmentID;
@@ -134,14 +134,14 @@ bool CRegSocket::Set_SocketInfo(__in LPCTSTR IN_szRFID, __in const CSocketInfo_U
 		szValue = IN_pSocketInfo->m_szTargetEqpID;
 		m_pReg->WriteString(_T("Target_EqpID"), szValue.GetBuffer());
 
-		// 소켓 수율
+		// ?�켓 ?�율
 		m_pReg->WriteDWORD(_T("Yield_Total"), IN_pSocketInfo->m_Yield.dwTotal);
 
 		m_pReg->WriteDWORD(_T("Yield_Pass"), IN_pSocketInfo->m_Yield.dwPass);
 
 		m_pReg->WriteDWORD(_T("Yield_Fail"), IN_pSocketInfo->m_Yield.dwFail);
 
-		// 검사 결과
+		// 검??결과
 		//m_pReg->WriteDWORD(_T("Result_NG_Code"), IN_pSocketInfo->m_stTestResult.m_nNG_Code);
 		szValue.Format(_T("%d"), IN_pSocketInfo->m_stTestResult.m_nNG_Code);
 		m_pReg->WriteString(_T("Result_NG_Code"), szValue.GetBuffer());
@@ -197,7 +197,7 @@ bool CRegSocket::Set_SocketInfo_Barcode(__in LPCTSTR IN_szRFID, __in const CSock
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// 제품 정보
+		// ?�품 ?�보
 		szValue = IN_pSocketInfo->m_szBarcode;
 		m_pReg->WriteString(_T("Barcode"), szValue.GetBuffer());
 
@@ -284,7 +284,7 @@ bool CRegSocket::Set_SocketInfo_Equipment(__in LPCTSTR IN_szRFID, __in const CSo
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// 소켓 위치 정보
+		// ?�켓 ?�치 ?�보
 		m_pReg->WriteDWORD(_T("Equipment_Order"), IN_pSocketInfo->m_nEqpOrder);
 
 		szValue = IN_pSocketInfo->m_szEquipmentID;
@@ -329,7 +329,7 @@ bool CRegSocket::Set_SocketInfo_Location(__in LPCTSTR IN_szRFID, __in const CSoc
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// 소켓 위치 정보
+		// ?�켓 ?�치 ?�보
 		m_pReg->WriteDWORD(_T("Location_inEqp"), IN_pSocketInfo->m_nPort_inEqp);
 	}
 	else
@@ -414,7 +414,7 @@ bool CRegSocket::Set_SocketInfo_Yield(__in LPCTSTR IN_szRFID, __in const CSocket
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// 소켓 수율
+		// ?�켓 ?�율
 		m_pReg->WriteDWORD(_T("Yield_Total"), IN_pSocketInfo->m_Yield.dwTotal);
 
 		m_pReg->WriteDWORD(_T("Yield_Pass"), IN_pSocketInfo->m_Yield.dwPass);
@@ -460,7 +460,7 @@ bool CRegSocket::Set_SocketInfo_TestResult(__in LPCTSTR IN_szRFID, __in const CS
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// 검사 결과
+		// 검??결과
 		//m_pReg->WriteDWORD(_T("Result_NG_Code"), IN_pSocketInfo->m_stTestResult.m_nNG_Code);
 		szValue.Format(_T("%d"), IN_pSocketInfo->m_stTestResult.m_nNG_Code);
 		m_pReg->WriteString(_T("Result_NG_Code"), szValue.GetBuffer());
@@ -532,7 +532,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 		//OUT_SocketInto.nSocketType;
 		//OUT_SocketInto.szComment;
 
-		// 제품 정보
+		// ?�품 ?�보
 		if (m_pReg->ReadString(_T("Barcode"), szValue))
 			OUT_SocketInto.m_szBarcode = szValue.GetBuffer();
 		else
@@ -548,7 +548,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 // 		else
 // 			OUT_SocketInto.m_nJudgement = 0;
 
-		// 소켓 위치 정보
+		// ?�켓 ?�치 ?�보
 		if (m_pReg->ReadDWORD(_T("Equipment_Order"), dwValue))
 			OUT_SocketInto.m_nEqpOrder = static_cast<uint8_t>(dwValue);
 		else
@@ -574,7 +574,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 		else
 			OUT_SocketInto.m_szTargetEqpID.Empty();
 
-		// 소켓 수율
+		// ?�켓 ?�율
 		if (m_pReg->ReadDWORD(_T("Yield_Total"), dwValue))
 			OUT_SocketInto.m_Yield.dwTotal = static_cast<uint8_t>(dwValue);
 		else
@@ -590,7 +590,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 		else
 			OUT_SocketInto.m_Yield.dwFail = 0;
 
-		// 검사 결과
+		// 검??결과
 		/*if (m_pReg->ReadDWORD(_T("Result_NG_Code"), dwValue))
 			OUT_SocketInto.m_stTestResult.m_nNG_Code = static_cast<uint16_t>(dwValue);*/
 		if (m_pReg->ReadString(_T("Result_NG_Code"), szValue))
@@ -615,6 +615,13 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 		// Rework
 		if (m_pReg->ReadDWORD(_T("Rework"), dwValue))
 			OUT_SocketInto.m_bRework = (0 < dwValue) ? true : false;
+
+#if (USE_XML)
+		if (m_pReg->ReadString(_T("LotID"), szValue))
+			OUT_SocketInto.m_LotID = szValue.GetBuffer();
+		else
+			OUT_SocketInto.m_LotID.Empty();
+#endif
 	}
 	else
 	{
@@ -639,16 +646,14 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 //=============================================================================
 bool CRegSocket::Get_SocketInfo(__out CSocketMonitoring& OUT_SocketInto)
 {
-	// OUT_SocketInto에 있는 기본 소켓 Config 정보를 이용해서 레지스트리에 저장된 정보 불러옴
-
+	// OUT_SocketInto???�는 기본 ?�켓 Config ?�보�??�용?�서 ?��??�트리에 ?�?�된 ?�보 불러??
 	auto eIter = OUT_SocketInto.m_Sockets.end();
 	auto Iter = OUT_SocketInto.m_Sockets.begin();
 	while (Iter != eIter)
 	{
 		CSocketInfo_Unit SocketUnit;
 
-		// 레지스트리에 있는 소켓 정보 구하기
-		if (Get_SocketInfo (Iter->second.szRFID, SocketUnit))
+		// ?��??�트리에 ?�는 ?�켓 ?�보 구하�?		if (Get_SocketInfo (Iter->second.szRFID, SocketUnit))
 		{
 			OUT_SocketInto.Set_Stored_SocketInfo(Iter->second.szRFID, &SocketUnit);
 		}
@@ -658,3 +663,47 @@ bool CRegSocket::Get_SocketInfo(__out CSocketMonitoring& OUT_SocketInto)
 
 	return true;
 }
+#if (USE_XML)
+//=============================================================================
+// Method		: Set_SocketInfo_LOTID
+// Access		: public  
+// Returns		: bool
+// Parameter	: __in LPCTSTR IN_szRFID
+// Parameter	: __in const CSocketInfo_Unit * IN_pSocketInfo
+// Qualifier	:
+// Last Update	: 2022/8/12 - 12:05
+// Desc.		:
+//=============================================================================
+bool CRegSocket::Set_SocketInfo_LOTID(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo)
+{
+	CRegistry* m_pReg = new CRegistry(HKEY_CURRENT_USER);
+	CString		szRegPath;
+	CString		szValue;
+	szRegPath.Format(_T("%s\\%s"), m_szRegPath.GetBuffer(), IN_szRFID);
+
+	//#ifdef USE_VERIFY_KEY_ALWAYS
+	// 	if (!m_pReg->VerifyKey(szRegPath))
+	// 	{
+	// 		m_pReg->CreateKey(HKEY_CURRENT_USER, szRegPath);
+	// 	}
+	//	m_pReg->Close();
+	//#endif
+
+	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
+	{
+		// ?�품 ?�보
+		szValue = IN_pSocketInfo->m_LotID;
+		m_pReg->WriteString(_T("LotID"), szValue.GetBuffer());
+	}
+	else
+	{
+		delete m_pReg;
+		return false;
+	}
+
+	m_pReg->Close();
+
+	delete m_pReg;
+	return true;
+}
+#endif

@@ -52,10 +52,10 @@ public:
 	void		SaveOption_Inspector	(__in stOpt_Insp stOption);
 	BOOL		LoadOption_Inspector	(__out stOpt_Insp& stOption);
 
-	// Server 설정
-	void		SaveOption_Server		(__in stOpt_Server stOption);
-	BOOL		LoadOption_Server		(__out stOpt_Server& stOption);
-
+#if (20230905)
+	void		SaveOption_Server		(__in unsigned nType, __in  stOpt_Server stOption);
+	BOOL		LoadOption_Server		(__in unsigned nType, __out stOpt_Server& stOption);
+#endif
 	// 기타 설정
 	void		SaveOption_Misc			(__in stOpt_Misc stOption);
 	BOOL		LoadOption_Misc			(__out stOpt_Misc& stOption);

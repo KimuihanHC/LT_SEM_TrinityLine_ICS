@@ -27,7 +27,6 @@ enum enTabName
 	Tab_SocketJIG,
 	Tab_Setting,
 	Tab_Log,
-
 	Tab_MaxCount,
 };
 
@@ -35,8 +34,8 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][Tab_MaxCount] =
 {
 	// 한국어
 	{
-		_T("설비 운영"),			// Tab_Operation
-		_T("소켓 지그"),			// Tab_SocketJIG
+		_T("설비 운영"),		// Tab_Operation
+		_T("소켓 지그"),		// Tab_SocketJIG
 		_T("설정"),				// Tab_Setting
 		_T("로그"),				// Tab_Log
 	},
@@ -99,6 +98,11 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_MESSAGE(WM_PERMISSION_MODE,		OnWM_PermissionMode)
 	ON_MESSAGE(WM_LINE_CTRLCMD,			OnWM_LineCtrlCmd)
 	ON_MESSAGE(WM_EQP_CTRLCMD,			OnWM_EqpCtrlCmd)
+#if (USE_XML)
+	ON_MESSAGE(WM_EVENT_SERVER_CONNECTION, OnSet_CONNECTION)
+	ON_MESSAGE(WM_EVENT_REPORT_RMS_MODE,OnWM_REPORT_RMS_MODE)
+#endif
+//	ON_COMMAND(ID_CAPTION_DELETE, &CMainFrame::OnCaptionDelete)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -134,6 +138,14 @@ CMainFrame::CMainFrame()
 	m_infoMonitor.nHeight			= 1024;
 	m_infoMonitor.nBitPerPixel		= 16;
 	m_infoMonitor.nRefresh			= 60;
+	
+#if TEST
+	ssaTransationIDBufferCntr			= new ssaTransationIDCntr();
+	m_pssaTransationIDBufferCntrMutex	= new lt::StdMutex();
+
+	m_pLPARAMCntr						= new LPARAMCntr();
+	m_pLPARAMCntrMutex					= new lt::StdMutex();
+#endif
 }
 
 //=============================================================================
@@ -151,6 +163,13 @@ CMainFrame::~CMainFrame()
 	if (NULL != m_hThreadStartSetting)
 		CloseHandle(m_hThreadStartSetting);
 
+#if TEST
+	delete ssaTransationIDBufferCntr;
+	delete m_pssaTransationIDBufferCntrMutex;
+
+	delete m_pLPARAMCntr;
+	delete m_pLPARAMCntrMutex;
+#endif
 	TRACE(_T("<<< End ~CMainFrame >>> \n"));
 }
 
@@ -293,6 +312,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 //  	//m_wndTabViewBar.ShowButton_Exclusive(0, FALSE);	// **** 배포할때 사용해야 함
  	OnSet_PermissionMode(Permission_Operator, true);
 //#endif
+#if (USE_XML)
+	SetSystemTimePrivilege();
+#endif
 	return 0;
 }
 
@@ -457,6 +479,7 @@ void CMainFrame::OnClose()
 		CFrameWndEx::OnClose();
 	}
 }
+
 
 //=============================================================================
 // Method		: CMainFrame::OnActivate
@@ -825,7 +848,7 @@ void CMainFrame::AddLogProgramInfo()
 	OnAdd_Log (strLog);
 
 	//-------------------------------------------
-	// 옵션 설정 데이터 표시	
+	// 옵션 설정 데이터 표시	.
 	//-------------------------------------------
 	CLT_Option	ntOption;
 	stLT_Option	stOption;
@@ -839,7 +862,7 @@ void CMainFrame::AddLogProgramInfo()
 // Returns		: void
 // Qualifier	:
 // Last Update	: 2010/10/15 - 14:54
-// Desc.		: 프로그램 시작 할 때 처리해야 할 코드
+// Desc.		: 프로그램 시작 할 때 처리해야 할 코드.
 //=============================================================================
 void CMainFrame::InitProgram()
 {
@@ -856,7 +879,7 @@ void CMainFrame::InitProgram()
 // Returns		: void
 // Qualifier	:
 // Last Update	: 2010/10/15 - 14:54
-// Desc.		: 프로그램 종료 할 때 처리해야 할 코드
+// Desc.		: 프로그램 종료 할 때 처리해야 할 코드.
 //=============================================================================
 void CMainFrame::ExitProgram()
 {
@@ -1305,3 +1328,318 @@ LRESULT CMainFrame::OnWM_EqpCtrlCmd(WPARAM wParam, LPARAM lParam)
 
 	return 1;
 }
+#if (USE_XML)
+LRESULT CMainFrame::OnSet_CONNECTION(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.OnSet_Connection(lParam);
+	return 1;
+}
+
+//=============================================================================
+// Method		: REPORT_RMS_MODE
+// Access		: protected  
+// Returns		: LRESULT
+// Parameter	: WPARAM wParam
+// Parameter	: LPARAM lParam
+// Qualifier	:
+// Last Update	: 2023.07.10 - 19:44
+// Desc.		:
+//=============================================================================
+LRESULT CMainFrame::OnWM_REPORT_RMS_MODE(WPARAM wParam, LPARAM lParam)
+{
+	enEES_Mode nEESMode = (enEES_Mode)lParam;
+	OnSet_RMSMode(nEESMode);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_LINK_TEST(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestLinkTest(wParam, lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_LINK_TEST(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyLinkTest(wParam, lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_ONLINE_STATE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportOnlineState((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_USER_CHANGE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportUserChange((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_USER_CHANGE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestUserChange((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_USER_COMMAND(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyUserCommand((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_EQUIPMENT_STATE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportEquipmentState((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_EQUIPMENT_STATE_DISPLAY(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestEquipmentStateDisplay((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_EQUIPMENT_STATE_DISPLAY(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyEquipmentStateDisplay((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_LOSS_STATE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyLossState((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_LOSS_WINDOW(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestLossState((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_LOSS_WINDOW(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyLossWindow((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_ALARM_STATE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportAlarmState((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_ALARM_LIST(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestAlarmList((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_ALARM_LIST(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyAlarmList((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_RMS_MODE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerEESMode((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_SET_DATETIME(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestSetDateTime((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_SET_DATETIME(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplySetDateTime((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_TERMINAL_MESSAGE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestTerminalMessage((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_TERMINAL_MESSAGE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyTerminalMessage((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_OPCALL_MESSAGE(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestOpCallMessage((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_OPCALL(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplyOpCall((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+#endif 
+
+#if TEST
+LRESULT CMainFrame::OnWM_Svr_UNITID_READ(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerUnitIdRead((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REQUEST_UNITID_READ(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerRequestUnitIdRead((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPLY_UNITID_READ(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReplytUnitIdRead((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_START_PROCESS(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportStartProcess((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_START_LOT(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportStartLot((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_END_EVENT(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportEndEvent((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+LRESULT CMainFrame::OnWM_Svr_REPORT_END_PROCESS(WPARAM wParam, LPARAM lParam)
+{
+	m_wndView_MainCtrl.Proc_ServerReportEndProcess((WPARAM)wParam, (LPARAM)lParam);
+	return 1;
+}
+
+ST_TransactionID * CMainFrame::CreateTransactionID(CStringA cstr)
+{
+	CStringA szUUID;
+	szUUID.Format("%s", cstr);
+
+	ST_TransactionID * TransactionID = NULL;
+	TransactionID = new ST_TransactionID();
+
+	SetTransactionID(szUUID, TransactionID);
+
+	return TransactionID;
+}
+CStringA CMainFrame::CreateTransactionID()
+{
+	CStringA szUUID;
+	RPC_CSTR cstr;
+	UUID	uuid;
+	UuidCreate(&uuid);
+	UuidToStringA(&uuid, &cstr);
+	szUUID.Format("%s", cstr);
+
+	ST_TransactionID *TransactionID;
+	TransactionID = new ST_TransactionID();
+
+	SetTransactionID(szUUID, TransactionID);
+
+	return szUUID;
+}
+void CMainFrame::SetTransactionID(CStringA command, ST_TransactionID * data)
+{
+	SimpleLockPtr(m_pssaTransationIDBufferCntrMutex);
+
+	auto res = ssaTransationIDBufferCntr->emplace(command, std::move(data));
+
+	if (!res.second) {
+		(*res.first).second = std::move(data);
+	}
+}
+ST_TransactionID * CMainFrame::GetTransactionID(CStringA command) const
+{
+	SimpleLockPtr(m_pssaTransationIDBufferCntrMutex);
+
+	auto iter = ssaTransationIDBufferCntr->find(command);
+
+	//if (iter == ssaTransationIDBufferCntr->end())
+	//	return false;
+
+	auto data = (*iter).second;
+
+	return data;
+}
+
+bool CMainFrame::bGetTransactionID(CStringA command) const
+{
+	SimpleLockPtr(m_pssaTransationIDBufferCntrMutex);
+
+	auto iter = ssaTransationIDBufferCntr->find(command);
+
+	if (iter == ssaTransationIDBufferCntr->end())
+		return false;
+
+	return true;
+}
+void CMainFrame::ClearTransactionID(CStringA command)
+{
+	SimpleLockPtr(m_pssaTransationIDBufferCntrMutex);
+
+	auto iter = ssaTransationIDBufferCntr->find(command);
+
+	if (iter != ssaTransationIDBufferCntr->end()) {		
+		ST_TransactionID *TransactionID;
+		TransactionID = (*iter).second;
+		//auto ReportMsg = TransactionID->ReportMsg;
+		//auto RequestMsg = TransactionID->RequestMsg;
+		//auto ReplyMsg = TransactionID->ReplyMsg;
+		//auto nSize = sizeof(RequestMsg);
+		delete TransactionID;
+		TransactionID = nullptr;
+		//nSize = sizeof(RequestMsg);
+		//TransactionID->ReplyMsg;
+
+
+		ssaTransationIDBufferCntr->erase(iter);		
+	}		
+}
+
+//=============================================================================
+// Method		: CMainFrame::New_wnd_IdList
+// Access		: public 
+// Returns		: Cwnd_IdList
+// Qualifier	:
+// Last Update	: 2023.06.27
+// Desc.		: 
+//=============================================================================
+
+void CMainFrame::AddLPARAM(LPARAM PARA)
+{
+	SimpleLockPtr(m_pLPARAMCntrMutex);
+
+	m_pLPARAMCntr->emplace_back(PARA);
+}
+void CMainFrame::RemoveLPARAM(LPARAM PARA)
+{
+	SimpleLockPtr(m_pLPARAMCntrMutex);
+
+	auto iter = std::find(m_pLPARAMCntr->begin(), m_pLPARAMCntr->end(), PARA);
+
+	if (iter != m_pLPARAMCntr->end()){
+		m_pLPARAMCntr->erase(iter);
+	}
+}
+bool CMainFrame::FindLPARAM(LPARAM PARA)
+{
+	SimpleLockPtr(m_pLPARAMCntrMutex);
+
+	auto iter = std::find(m_pLPARAMCntr->begin(), m_pLPARAMCntr->end(), PARA);
+
+	if (iter != m_pLPARAMCntr->end()) {
+		return true;
+	}
+	return false;
+}
+#endif
+
+#if (USE_XML)
+void CMainFrame::OnSet_RMSMode(__in enEES_Mode nAcessMode, __in bool bInit /*= false*/)
+{
+	m_wndView_MainCtrl.OnSet_EESMode(nAcessMode);
+}
+void CMainFrame::SetSystemTimePrivilege()
+{
+	LUID luid;
+	TOKEN_PRIVILEGES tp;
+	HANDLE hToken;
+	OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
+
+	LookupPrivilegeValue(NULL, SE_SYSTEMTIME_NAME, &luid);
+	tp.PrivilegeCount = 1;
+	tp.Privileges[0].Luid = luid;
+	tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+	AdjustTokenPrivileges(hToken, FALSE, &tp, 0, NULL, NULL);
+}
+#endif

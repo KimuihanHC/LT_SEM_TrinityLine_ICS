@@ -220,7 +220,17 @@ LRESULT CWnd_Status_Equipment::OnWmEquipmentNotify(WPARAM wParam, LPARAM lParam)
 	case WM_EqpNotify_Production:
 		Set_Production((bool)LOWORD(lParam), (uint8_t)HIWORD(lParam));
 		break;
-
+#if (USE_XML)
+	case WM_EqpNotify_EQUIPMENTSTATE:
+		Set_EqpNotify_EQUIPMENTSTATE((lt::Report_Equipment_State_Args::Args*)lParam);
+		break;
+	case WM_EqpNotify_EQUIPMENTSTATEDISPLAY:
+		Set_EqpNotify_EQUIPMENTSTATEDISPLAY((CCommonModule *)lParam);
+		break;
+	case WM_EqpNotify_RGBDISPLAY:
+		Set_EqpNotify_RGBDISPLAY((lt::Request_Equipment_State_Display_Args::Args&)lParam);
+		break;
+#endif	//ADD_SOCKET_EES_XML
 	default:
 		break;
 	}
@@ -271,8 +281,9 @@ void CWnd_Status_Equipment::MoveWindow_Status(int x, int y, int nWidth, int nHei
 	m_st_IpAddress.MoveWindow(iLeft, iTop, iWidth, m_nCtrl_Height);
 	iTop += m_nCtrl_Height - 1;
 	m_st_OperMode.MoveWindow(iLeft, iTop, iWidth, m_nCtrl_Height);
-	iTop += m_nCtrl_Height + iSpacing;
 	
+	iTop += (m_nCtrl_Height/2) + iSpacing;
+
 	m_nTop_Status = iTop;
 }
 
@@ -591,6 +602,8 @@ void CWnd_Status_Equipment::SetPtr_EquipmentInfo(__in uint8_t IN_nEqpNo, const C
 	{
 		m_wnd_Yield.Set_EqpLoader(true);
 	}
+
+	auto test = m_pEquipmentStatus->Get_mEES_PortSubStatus();
 	
 	// 설비 순서
 	m_nEqpOrder = IN_nEqpNo;
@@ -735,10 +748,8 @@ void CWnd_Status_Equipment::Set_VerifyEqpConnection(__in bool bVerified)
 #ifdef USE_NO_VERIFY_EQPID
 	return;
 #endif
-
 	if (bVerified)
 	{
-		//m_st_EqpName.SetBackColor_COLORREF(RGB(197, 224, 180));
 		m_st_EqpName.SetBackColor_COLORREF(RGB(150, 255, 150));
 	}
 	else
@@ -1078,3 +1089,170 @@ void CWnd_Status_Equipment::Set_ConveyorStatus(__in uint8_t IN_nConveyorIndex, _
 {
 
 }
+
+#if (USE_XML)
+void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATE(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA){
+	if (m_pEquipmentStatus->Is_Loader())	{
+
+	}
+	if (m_pEquipmentStatus->Is_Tester())	{
+		CString EQUIPMENTSTATE;
+		EQUIPMENTSTATE.Format(_T("%s"), IN_DATA);
+		IN_nPort->SetText(EQUIPMENTSTATE.GetBuffer());
+		for (int i = 0; i < ES_MaxCount; i++) {
+			if (g_szEquipment_State[i] == EQUIPMENTSTATE) {
+				switch (i) {
+				case ES_IDLE:
+					IN_nPort->SetBackColor_COLORREF(RGB(255, 255, 0));
+					break;
+				case ES_RUN:
+					IN_nPort->SetBackColor_COLORREF(RGB(0, 255, 0));
+					break;
+				case ES_STOP:
+					IN_nPort->SetBackColor_COLORREF(RGB(255, 200, 0));
+					break;
+				case ES_SUDDENSTOP:
+					IN_nPort->SetBackColor_COLORREF(RGB(255, 0, 0));
+					break;
+				}
+			}
+		}
+	}
+}
+void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATEDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA){
+	if (m_pEquipmentStatus->Is_Loader())	{
+
+	}
+	if (m_pEquipmentStatus->Is_Tester())	{
+		CString EQUIPMENTSTATEDISPLAY;
+		EQUIPMENTSTATEDISPLAY.Format(_T("%s"), IN_DATA);
+		IN_nPort->SetText(EQUIPMENTSTATEDISPLAY);
+	}
+}
+void CWnd_Status_Equipment::SetUI_RGBDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA){
+	if (m_pEquipmentStatus->Is_Loader())	{
+
+	}
+	if (m_pEquipmentStatus->Is_Tester())	{
+		CString EQUIPMENTSTATEDISPLAY;
+		EQUIPMENTSTATEDISPLAY.Format(_T("%s"), IN_DATA);
+		COLORREF dw = Get_Color(EQUIPMENTSTATEDISPLAY);
+		IN_nPort->SetBackColor_COLORREF(dw);
+	}
+}
+void CWnd_Status_Equipment::Set_EqpNotify_EQUIPMENTSTATE(__in lt::Report_Equipment_State_Args::Args * IN_DATA) {
+
+}
+COLORREF CWnd_Status_Equipment::Get_Color(__in CString lParam) {
+	COLORREF clr;
+	CString csRet;
+	int nRgb[3];
+
+	lParam.TrimLeft();
+	lParam.TrimRight();
+	//1
+	int iPos = lParam.Find(',');
+	csRet.Format(_T("%s."), lParam.Left(iPos));
+	nRgb[0] = _ttoi(csRet);
+	lParam = lParam.Mid(iPos + 1);
+	lParam.TrimLeft();
+	//2
+	iPos = lParam.Find(',');
+	csRet.Format(_T("%s."), lParam.Left(iPos));
+	nRgb[1] = _ttoi(csRet);
+	lParam = lParam.Mid(iPos + 1);
+	lParam.TrimLeft();
+
+	iPos = lParam.GetLength();
+	csRet.Format(_T("%s."), lParam.Left(iPos));
+	nRgb[2] = _ttoi(csRet);
+
+	clr = RGB(nRgb[0], nRgb[1], nRgb[2]);
+	return clr;
+}
+void CWnd_Status_Equipment::Set_EqpNotify_EQUIPMENTSTATEDISPLAY(CCommonModule * N_DATA){
+
+}
+void CWnd_Status_Equipment::Set_EqpNotify_RGBDISPLAY(__in  lt::Request_Equipment_State_Display_Args::Args& IN_DATA){
+
+}
+
+void CWnd_Status_Equipment::Set_EquipmentID(__in CEquipment* IN_Data) {
+}
+
+#endif
+//=============================================================================
+// Method		: SetBaseDataConfig
+// Access		: public  
+// Returns		: void
+// Parameter	: __inOut CServer* IN_pServer
+// Qualifier	:
+// Last Update	: 2023.05.08 - 17:51
+// Desc.		:
+//=============================================================================
+#if SOCKET
+void CWnd_Status_Equipment::SetBaseDataConfig(CEquipment* IN_pEquipment) {
+
+	CString			szTemp;
+	ST_BaseDataID	m_BaseDataID;
+	//EqpID
+	//szTemp.Format(_T("%s"), IN_pEquipment->Get_EquipmentId());
+	//IN_pEquipment->Set_SValues(SV_EQUIPMENT_ID, szTemp);
+	//m_BaseDataID.EQUIPMENTID = szTemp;
+
+	//Type
+	szTemp.Format(_T("%s"), g_szEqpTypeName[IN_pEquipment->Get_EquipmentType()]);
+	//IN_pEquipment->Set_SValues(SV_TYPE, szTemp);
+	m_BaseDataID.TYPE = szTemp;
+
+	//IP Adress
+	DWORD dwAddress = ntohl(IN_pEquipment->Get_IP_Address());
+	szTemp.Format(_T("%d.%d.%d.%d"), FOURTH_IPADDRESS(dwAddress), THIRD_IPADDRESS(dwAddress), SECOND_IPADDRESS(dwAddress), FIRST_IPADDRESS(dwAddress));
+	//IN_pEquipment->Set_SValues(SV_IPADRESS, szTemp);
+	m_BaseDataID.IPADDRESS = szTemp;
+
+	//subEqpID
+	szTemp.Format(_T("%s"), IN_pEquipment->Get_SubEqpID());
+	//IN_pEquipment->Set_SValues(SV_SUBEQPID, szTemp);
+	m_BaseDataID.SUBEQPID = szTemp;
+
+	//EES Mode
+	szTemp.Format(_T("%s"), g_sEES_Mode[EES_OFFLINE]);
+	//IN_pEquipment->Set_SValues(SV_EES_MODE, szTemp);
+	m_BaseDataID.EESMODE = szTemp;
+
+	//ONLINESTATE
+	szTemp.Format(_T("%s"), g_szOnLine_State[ONLINESTATE_OFFLINE]);
+	//IN_pEquipment->Set_SValues(SV_ONLINESTATE, szTemp);
+	m_BaseDataID.ONLINESTATE = szTemp;
+
+	//Order
+	szTemp.Format(_T("%d"), IN_pEquipment->Get_EqpOrder());
+	//IN_pEquipment->Set_SValues(SV_ORDER, szTemp);
+	m_BaseDataID.ORDER = szTemp;
+
+	//ALIAS
+	szTemp.Format(_T("%s"), IN_pEquipment->Get_Alias());
+	//IN_pEquipment->Set_SValues(SV_ALIAS, szTemp);
+	m_BaseDataID.ALIAS = szTemp;
+
+	IN_pEquipment->GetXmlEes().SetBaseData(&m_BaseDataID);
+}
+#endif	//#if SOCKET
+
+#if ADD_SOCKET_EES_XML
+
+//=============================================================================
+// Method		: Set_SvrNotify_LOSSWINDOW
+// Access		: virtual public  
+// Returns		: void
+// Parameter	: __in uint8_t IN_nConveyorIndex
+// Parameter	: __in uint8_t IN_nStatus
+// Parameter	: __in uint8_t IN_nExistSocket
+// Qualifier	:
+// Last Update	: 2023.04.19
+// Desc.		:
+//=============================================================================
+
+
+#endif	//#if ADD_SOCKET_EES_XML

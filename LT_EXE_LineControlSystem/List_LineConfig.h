@@ -16,6 +16,8 @@
 #include "Def_ConfigLine.h"
 
 
+
+
 //=============================================================================
 // CList_LineConfig
 //=============================================================================
@@ -55,14 +57,19 @@ protected:
 
 	// 설비 데이터 리스트에 설정
 	void		Set_EquipmentData			(__in int nItem, __in const CConfig_Eqp* IN_pEquipment);
+	//2023.02.13a uhkim [추가 옵션]
+	void		Set_ServerData				(__in int nItem, __in const CConfig_Eqp* IN_pEquipment);	
 
 	// 원하는 위치에 아이템 삽입
 	void		Insert_Equipment			(__in int nItem, __in const CConfig_Eqp* IN_pEquipment);
+	//2023.02.13a uhkim [추가 옵션]
+	void		Insert_Server				(__in int nItem, __in const CConfig_Eqp* IN_pEquipment);
 	// 아이템 추가
 	void		Add_Equipment				(__in const CConfig_Eqp* IN_pEquipment);
+	void		Add_Server					(__in const CConfig_Eqp* IN_pEquipment);	//2023.02.13a uhkim [추가 옵션]
 	// 아이템 수정
 	void		Modify_Equipment			(__in int nItem, __in const CConfig_Eqp* IN_pEquipment);
-
+	void		Modify_Server				(__in int nItem, __in const CConfig_Eqp* IN_pEquipment);
 public:
 
 	void		OnLanguage					(__in uint8_t IN_nLanguage);
@@ -85,7 +92,6 @@ public:
 	void		Item_Modify					(__in CConfig_Eqp& IN_Equipment);
 	// 선택한 항목의 데이터 반환
 	bool		Get_SelectedEquipment		(__out CConfig_Eqp& OUT_Equipment);
-
 	// 리스트에 설비 리스트 추가
 	void		Add_LineInfo				(__in const CConfig_Line* IN_pLineInfo);
 	// 리스트 컨트롤의 선택된 위치에 설비	리스트 삽입
@@ -105,7 +111,6 @@ public:
 	void		Check_EqpTypeUI_UpdateAlias	(__in UINT nEqpTypeUI, __in bool bUpdateListCtrl = true);
 	// 설비 리스트의 설비 Alias 재설정
 	void		Check_EqpTypeUI_UpdateAlias	();
-
 	// Check EQP ID 중복
 	bool		Check_EquipmentID			();
 	bool		Check_EquipmentID			(__in LPCTSTR IN_szEquipmentID);

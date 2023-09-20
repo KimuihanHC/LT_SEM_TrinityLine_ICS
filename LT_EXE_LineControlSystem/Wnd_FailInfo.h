@@ -72,7 +72,6 @@ protected:
 	void	ScreenCapture					();
 	bool	WindowCapture					(__in HWND hTargetWnd);
 	bool	WindowCapture					(__in HWND hTargetWnd, __in LPCTSTR lpszFilePath);
-	void	WindowCapture					(__in CWnd* pTargetWnd, __in LPCTSTR lpszFilePath);
 		
 
 public:
@@ -93,7 +92,6 @@ public:
 	// 전체 불량 정보 갱신
 	void	Update_FailInfo					();
 
-	bool	Reset_NGCount_All				();
 };
 
 #endif // Wnd_FailInfo_h__

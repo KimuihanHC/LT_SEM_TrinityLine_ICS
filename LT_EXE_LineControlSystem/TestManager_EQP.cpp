@@ -358,7 +358,6 @@ void CTestManager_EQP::OnUpdate_ElapsedTime_Unit(__in UINT nEquipmentIdx, __in u
 {
 
 }
-
 //=============================================================================
 // Method		: OnInitialize
 // Access		: virtual public  
@@ -371,12 +370,7 @@ void CTestManager_EQP::OnInitialize()
 {
 	//__super::OnInitialize();	
 
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-	// 설비들의 소켓 유/무 체크하여 라인의 가동/비가동 상태 설정 (1초마다 체크)
-	OnCreateTimer_TimeCheck(10000, 1000);
-#endif
-
-	// Production End 체크 (10초마다 체크)
+	//OnCreateTimer_TimeCheck();
 	OnCreateTimer_UpdateUI(30000, 10000);
 }
 
@@ -438,3 +432,139 @@ void CTestManager_EQP::OnSet_PermissionMode(__in enPermissionMode nAcessMode)
 {
 	m_stInspInfo.PermissionMode = nAcessMode;
 }
+
+#if TESTTERMINAL
+//=============================================================================
+// Method		: OnLogFile_TerminalMessageResult
+// Access		: protected  
+// Returns		: bool
+// Parameter	: __in LPCTSTR IN_szRFID
+// Parameter	: __in LPCTSTR IN_szPath
+// Qualifier	:
+// Last Update	: 2023.05.02
+// Desc.		:
+//=============================================================================
+bool CTestManager_EQP::OnLogFile_TerminalMessageResult(__in lt::Request_Terminal_Message_Args::Args& IN_Data, __in LPCTSTR IN_szPath)
+{
+	SYSTEMTIME tmLocal;
+	GetLocalTime(&tmLocal);
+
+	CString szUnicode, szTime, szOut;
+	CStringA szANSI;
+	szTime.Format(_T("%04d/%02d/%02d %02d:%02d:%02d"), 
+		tmLocal.wYear, 
+		tmLocal.wMonth, 
+		tmLocal.wDay,
+		tmLocal.wHour, 
+		tmLocal.wMinute, 
+		tmLocal.wSecond);
+
+	CStringA EQUIPMENTID(IN_Data.Body.Get_EQUIPMENTID().c_str());
+	CStringA TERMINALMESSAGE(IN_Data.Body.Get_TERMINALMESSAGE().c_str());
+	
+	szUnicode.Format(_T(",%s,%s\r\n"),
+		szTime.GetBuffer(),
+		TERMINALMESSAGE);
+
+	CFile File;
+	CFileException e;
+
+	if (!PathFileExists(IN_szPath))
+	{
+		if (!File.Open(IN_szPath, CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite, &e))
+			return false;
+
+		// 헤더 추가
+		CString szHeader = _T(",Time,Log\r\n");
+		szUnicode = szHeader + szUnicode;
+	}
+	else
+	{
+		if (!File.Open(IN_szPath, CFile::modeWrite | CFile::shareDenyWrite, &e))
+			return false;
+	}
+
+	USES_CONVERSION;
+	szANSI = CT2A(szUnicode.GetBuffer());
+
+	File.SeekToEnd();
+	File.Write(szANSI.GetBuffer(0), szANSI.GetLength());
+	File.Flush();
+	File.Close();
+
+	return true;
+}
+#endif	//TESTTERMINAL
+#if TESTOPCALL
+//=============================================================================
+// Method		: OnLogFile_TerminalMessageResult
+// Access		: protected  
+// Returns		: bool
+// Parameter	: __in LPCTSTR IN_szRFID
+// Parameter	: __in LPCTSTR IN_szPath
+// Qualifier	:
+// Last Update	: 2023.05.02
+// Desc.		:
+//=============================================================================
+bool CTestManager_EQP::OnLogFile_OpCallResult(__in lt::Request_Opcall_Args::Args& IN_Data, __in LPCTSTR IN_szPath)
+{
+	SYSTEMTIME tmLocal;
+	GetLocalTime(&tmLocal);
+
+	CString szUnicode, szTime, szOut;
+	CStringA szANSI;
+	szTime.Format(_T("%04d/%02d/%02d %02d:%02d:%02d"),
+		tmLocal.wYear,
+		tmLocal.wMonth,
+		tmLocal.wDay,
+		tmLocal.wHour,
+		tmLocal.wMinute,
+		tmLocal.wSecond);
+
+	
+	CStringA EQUIPMENTID(IN_Data.Body.Get_EQUIPMENTID().c_str());
+	CStringA MESSAGE(IN_Data.Body.Get_MESSAGE().c_str());
+	CStringA TOWERLAMP(IN_Data.Body.Get_TOWERLAMP().c_str());
+	CStringA BUZZER(IN_Data.Body.Get_BUZZER().c_str());
+
+	szUnicode.Format(_T(",%s,%s,%s,%s\r\n"),
+		szTime.GetBuffer(),
+		MESSAGE,
+		TOWERLAMP,
+		BUZZER);
+
+	CFile File;
+	CFileException e;
+
+	if (!PathFileExists(IN_szPath))
+	{
+		if (!File.Open(IN_szPath, CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite, &e))
+			return false;
+
+		// 헤더 추가
+		CString szHeader = _T(",Time,MESSAGE,TOWERLAMP,BUZZER\r\n");
+		szUnicode = szHeader + szUnicode;
+	}
+	else
+	{
+		if (!File.Open(IN_szPath, CFile::modeWrite | CFile::shareDenyWrite, &e))
+			return false;
+	}
+
+	USES_CONVERSION;
+	szANSI = CT2A(szUnicode.GetBuffer());
+
+	File.SeekToEnd();
+	File.Write(szANSI.GetBuffer(0), szANSI.GetLength());
+	File.Flush();
+	File.Close();
+
+	return true;
+}
+#endif	//TESTOPCALL
+#if (USE_XML)
+void CTestManager_EQP::OnSet_EESMode(__in enEES_Mode nAcessMode)
+{
+	//m_stInspInfo.PermissionMode = nAcessMode;
+}
+#endif

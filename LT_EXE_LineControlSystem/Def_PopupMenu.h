@@ -24,7 +24,7 @@
 //-----------------------------------------------
 typedef enum
 {
-#ifndef HIDE_NOT_USE_EQP_CONTROL
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
 	CC_Init,			// 0 : Init
 	CC_Reset,			// 1 : Reset
 	CC_Run,				// 2 : Run (Auto)
@@ -60,7 +60,7 @@ typedef enum
 
 static LPCTSTR g_szCtrlCode[] =
 {
-#ifndef HIDE_NOT_USE_EQP_CONTROL
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
 	_T("Init"),					// CC_Init	
 	_T("Reset"),				// CC_Reset
 	_T("Run"),					// CC_Run		
@@ -96,7 +96,7 @@ static LPCTSTR g_szCtrlCode[] =
 
 static LPCTSTR g_szCtrlCode_Bn[] =
 {
-#ifndef HIDE_NOT_USE_EQP_CONTROL
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
 	_T("Init"),					// CC_Init	
 	_T("Reset"),				// CC_Reset
 	_T("Run\n(Auto)"),			// CC_Run	

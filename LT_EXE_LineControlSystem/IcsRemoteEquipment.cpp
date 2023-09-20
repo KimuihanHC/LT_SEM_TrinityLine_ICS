@@ -7,6 +7,7 @@
 #include "Event/EventMfnListener.hpp"
 #include "Util/StringUtil.hpp"
 
+
 CIcsRemoteEquipment::CIcsRemoteEquipment(CEquipment & equipment)
 : m_equipment(equipment)
 {
@@ -108,9 +109,11 @@ lt::ICommunicator * CIcsRemoteEquipment::Attach(lt::ICommunicator * commPtr)
 		.AddLog(_T("The communicator(%p) attached"),
 				commPtr);
 
+
 	GetEquipment().Set_ClientConnection(IsConnected());
 
 	return _commPtr;
+
 }
 
 lt::ICommunicator * CIcsRemoteEquipment::Detach()
@@ -393,30 +396,6 @@ lt::uint32 CIcsRemoteEquipment::SendUiVisible(int cmdShow)
 					cmdShow,
 					Timeout,
 					result);
-	}
-
-	return result;
-}
-
-lt::uint32 CIcsRemoteEquipment::SendOperationActiveStatus(lt::uint32 status)
-{
-	static constexpr lt::uint64 Timeout = 1000;
-
-	auto result = GetRemote().CommandOperationActiveStatus(
-		{
-			status
-		},
-		Timeout
-	);
-
-	if (result != ICS_COMM_OK)
-	{
-		GetLogger()
-			.SetLogLevel(lt::LogLevel::Error)
-			.AddLog(_T("lt::CIcsRemote::CommandOperationActiveStatus({ %d }, %d) failed %d"),
-				status,
-				Timeout,
-				result);
 	}
 
 	return result;

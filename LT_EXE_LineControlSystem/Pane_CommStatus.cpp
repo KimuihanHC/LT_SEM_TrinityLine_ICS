@@ -14,7 +14,19 @@
 #include "Dlg_UserLogin.h"
 #include "Def_PopupMenu.h"
 #include "Def_Language.h"
+#include "TestManager_EQP_ICS.h"//2023.01.05a
+#include "TestManager_EQP.h"
 
+#if (USE_XML)
+#include "Dlg_EES_RMS.h"
+#include "Dlg_Server.h"
+#endif
+
+
+#if (USE_XML || USE_TEST)
+#include "View_MainCtrl_ICS.h"
+CPane_CommStatus* mPane_CommStatus;
+#endif
 static LPCTSTR g_szDeviceName_T[Lang_MaxCount][CPane_CommStatus::DevSI_MaxCount] =
 {
 	// 한국어
@@ -64,8 +76,13 @@ static LPCTSTR g_szDeviceName_T[Lang_MaxCount][CPane_CommStatus::DevSI_MaxCount]
 		_T(""),				// DevSI_PermissionMode	
 		_T("用户"),			// DevSI_User	
 		_T("Production"),	// DevSI_Production
+#if (USE_XML)
+		_T("RMS"),		// DevSI_Dummy_2
+		_T("EES"),		// DevSI_Dummy_3
+#else
 		_T("Dummy 2"),		// DevSI_Dummy_2
 		_T("Dummy 3"),		// DevSI_Dummy_3
+#endif
 		_T("Dummy 4"),		// DevSI_Dummy_4
 		_T("Dummy 5"),		// DevSI_Dummy_5
 		_T("Dummy 6"),		// DevSI_Dummy_6
@@ -79,6 +96,10 @@ static LPCTSTR g_szBnDeviceName_T[Lang_MaxCount][CPane_CommStatus::DEV_BN_MaxCou
 	// 한국어
 	{
 		_T("로그인"),			// DEV_BN_PermissionChange
+#if (USE_XML)
+		_T("RMS"),
+		_T("EES"),
+#endif
 		_T("Init"),				// DEV_BN_Init
 		_T("Reset"),			// DEV_BN_Reset
 		_T("Run\n(Auto)"),		// DEV_BN_Run
@@ -91,6 +112,10 @@ static LPCTSTR g_szBnDeviceName_T[Lang_MaxCount][CPane_CommStatus::DEV_BN_MaxCou
 	// 영어
 	{
 		_T("Login"),			// DEV_BN_PermissionChange
+#if (USE_XML)
+		_T("RMS"),
+		_T("EES"),
+#endif
 		_T("Init"),				// DEV_BN_Init
 		_T("Reset"),			// DEV_BN_Reset
 		_T("Run\n(Auto)"),		// DEV_BN_Run
@@ -103,6 +128,10 @@ static LPCTSTR g_szBnDeviceName_T[Lang_MaxCount][CPane_CommStatus::DEV_BN_MaxCou
 	// 베트남어
 	{
 		_T("Login"),			// DEV_BN_PermissionChange
+#if (USE_XML)
+		_T("RMS"),
+		_T("EES"),		
+#endif
 		_T("Init"),				// DEV_BN_Init
 		_T("Reset"),			// DEV_BN_Reset
 		_T("Run\n(Auto)"),		// DEV_BN_Run
@@ -115,6 +144,10 @@ static LPCTSTR g_szBnDeviceName_T[Lang_MaxCount][CPane_CommStatus::DEV_BN_MaxCou
 	// 중국어
 	{
 		_T("登录"),					// DEV_BN_PermissionChange
+#if (USE_XML)
+		_T("RMS"),
+		_T("EES"),
+#endif
 		_T("设备原点\n(Init)"),		// DEV_BN_Init
 		_T("数据初始化\n(Reset)"),	// DEV_BN_Reset
 		_T("启动\n(自动 Auto)"),		// DEV_BN_Run
@@ -177,6 +210,9 @@ CPane_CommStatus::CPane_CommStatus()
 		ANTIALIASED_QUALITY,	// nQuality
 		FIXED_PITCH,			// nPitchAndFamily
 		_T("Arial")));			// lpszFacename
+#if (USE_XML || USE_TEST)
+	mPane_CommStatus = this;
+#endif
 }
 
 //=============================================================================
@@ -237,7 +273,20 @@ int CPane_CommStatus::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_bn_Device[nIdx].Create(g_szBnDeviceName_T[m_nLanguage][nIdx], dwStyle | BS_PUSHBUTTON, rectDummy, this, IDC_BN_DEVICE_S + nIdx);
 		m_bn_Device[nIdx].SetFont(&m_Font);
 	}
+#if (USE_XML)
+	m_st_RMS.SetStaticStyle(CVGStatic::StaticStyle_Title);
+	m_st_RMS.SetColorStyle(CVGStatic::ColorStyle_DarkGray);
+	m_st_RMS.SetFont_Gdip(L"Arial", 8.0F);
+	m_st_RMS.Create(g_sEES_Mode_UI[EES_OFFLINE], dwStyle, rectDummy, this, IDC_STATIC);
 
+	m_st_EES.SetStaticStyle(CVGStatic::StaticStyle_Title);
+	m_st_EES.SetColorStyle(CVGStatic::ColorStyle_DarkGray);
+	m_st_EES.SetFont_Gdip(L"Arial", 8.0F);
+	m_st_EES.Create(g_szOnLine_StateUI[ONLINESTATE_OFFLINE], dwStyle, rectDummy, this, IDC_STATIC);
+
+	m_bn_Device[DEV_BN_RMS]		.SetTextHotColor(RGB(255, 192, 0));
+	m_bn_Device[DEV_BN_SERVER]	.SetTextHotColor(RGB(255, 192, 0));
+#endif 
 	m_bn_Device[DEV_BN_Init]	.SetTextHotColor(RGB(255, 192, 0));
 	m_bn_Device[DEV_BN_Reset]	.SetTextHotColor(RGB(255, 192, 0));
 	m_bn_Device[DEV_BN_Run]		.SetTextHotColor(RGB(0, 192, 0));
@@ -278,6 +327,9 @@ int CPane_CommStatus::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// 그룹 추가
 	Add_PermissionMode();
+
+	Add_TCPIP();
+
 	Add_Command();
 
 #ifdef _DEBUG
@@ -440,6 +492,7 @@ void CPane_CommStatus::OnBnClickedTest(UINT nID)
 	}
 }
 
+
 //=============================================================================
 // Method		: OnUpdateCmdUI_Dev
 // Access		: protected  
@@ -477,7 +530,7 @@ void CPane_CommStatus::OnBnClicked_Dev(UINT nID)
 		switch (nTestNo)
 		{
 		case DEV_BN_LogIn:
-		{			
+		{
 			CDlg_UserLogin	dlgMode;
 			dlgMode.OnLanguage(m_nLanguage);
 			if (IDCANCEL != dlgMode.DoModal())
@@ -495,7 +548,29 @@ void CPane_CommStatus::OnBnClicked_Dev(UINT nID)
 			}
 		}
 			break;
-		
+#if (USE_XML)
+		case DEV_BN_RMS:
+		{
+			CDlg_EES_RMS	dlgMode;			
+			if (IDCANCEL != dlgMode.DoModal())			
+			{
+				uint8_t EES  = dlgMode.Get_EES();				
+				SetStatus_EES(EES);
+			}						
+		}
+			break;
+		case DEV_BN_SERVER:
+		{
+			CDlg_Server	dlg;
+			dlg.Set_Wnd_Status_Server(mPane_CommStatus->m_pwndServerList);
+			//dlg.Set_Wnd_Status_Server();
+			if (IDCANCEL != dlg.DoModal())
+			{
+				//mTestManager_Device->m_pIcsServer;
+			}
+		}
+#endif
+			break;
 		case DEV_BN_Init:
 			AfxGetMainWnd()->PostMessage(WM_LINE_CTRLCMD, (WPARAM)enConrolCode::CC_Init, (LPARAM)0);
 			break;
@@ -638,7 +713,15 @@ void CPane_CommStatus::Add_TCPIP()
 {
 	HICON hIcon = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON_TSP), IMAGE_ICON, 16, 16, LR_SHARED);
 
-	int nGroupCommStatus = AddGroup(_T("MES"), FALSE, TRUE, hIcon);
+#if (USE_XML)
+	int nGroupCommStatus = AddGroup(_T("EES"), FALSE, TRUE, hIcon);
+	AddWindow(nGroupCommStatus, m_st_RMS.GetSafeHwnd(), 20);
+	//AddWindow(nGroupCommStatus, m_bn_Device[DEV_BN_RMS].GetSafeHwnd(), 20);
+	AddWindow(nGroupCommStatus, m_st_EES.GetSafeHwnd(), 20);
+	AddWindow(nGroupCommStatus, m_bn_Device[DEV_BN_SERVER].GetSafeHwnd(), 20);	
+#endif
+	//
+	//int nGroupCommStatus = AddGroup(_T("MES"), FALSE, TRUE, hIcon);
 
 	//AddLabel(nGroupCommStatus, _T("MES"), -1, TRUE);
 	//AddWindow(nGroupCommStatus, m_st_Device[DevSI_MES].GetSafeHwnd(), 20);
@@ -809,7 +892,6 @@ void CPane_CommStatus::SetStatus_Login(__in enPermissionMode IN_nAuthority, __in
 		m_st_Device[DevSI_User].SetColorStyle(CVGStatic::ColorStyle_DeepDarkGray);
 	}
 }
-
 //=============================================================================
 // Method		: SetStatus_Production
 // Access		: public  
@@ -832,3 +914,39 @@ void CPane_CommStatus::SetStatus_Production(__in bool bEnd)
 		m_st_Device[DevSI_Production].SetText(_T("In Production"));
 	}
 }
+
+
+
+#if (0)
+HWND CPane_CommStatus::Get_ServerHWND(__in uint8_t IN_nSvrOrder)
+{
+	return m_pwndServerList.at(IN_nSvrOrder)->GetSafeHwnd();
+}
+void CPane_CommStatus::Init_ServerUI_List()
+{
+
+		// UI 다시 그리기
+		if (GetSafeHwnd())
+		{
+			CRect rc;
+			GetClientRect(rc);
+			SendMessage(WM_SIZE, (WPARAM)SIZE_RESTORED, MAKELPARAM(rc.Width(), rc.Height()));
+		}
+}
+#endif
+
+#if (USE_XML)
+void CPane_CommStatus::SetStatus_EES(__in uint8_t IN_EES)
+{
+	//m_bn_Device[DEV_BN_RMS].SetWindowText((g_sEES_Mode_UI[IN_EES]));
+	m_st_RMS.SetWindowText((g_sEES_Mode_UI[IN_EES]));
+}
+//TEST
+void CPane_CommStatus::EES_Test()
+{
+	mWnd_MainView->m_wndSvrEES;
+	CRect rtClient;
+	GetClientRect(&rtClient);
+	ClientToScreen(rtClient);	
+}
+#endif

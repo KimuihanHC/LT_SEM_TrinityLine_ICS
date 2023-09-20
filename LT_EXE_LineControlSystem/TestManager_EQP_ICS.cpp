@@ -10,7 +10,14 @@
 #include "stdafx.h"
 #include "TestManager_EQP_ICS.h"
 #include "Def_Test.h"
-#include "Def_Language_Message.h"
+
+#if (USE_XML)
+#include "xmlArgs.h"
+#include "Util/StringUtil.hpp"
+#endif 
+
+#include <sysinfoapi.h>
+
 
 CTestManager_EQP_ICS::CTestManager_EQP_ICS()
 {
@@ -64,7 +71,6 @@ void CTestManager_EQP_ICS::OnInit_Devicez(__in HWND hWndOwner /*= NULL*/)
 void CTestManager_EQP_ICS::OnMatchingEquipment()
 {
 	auto nEqpCnt = Get_EquipmentCount();
-
 	if (0 < nEqpCnt)
 	{
 		for (auto nIdx = 0; nIdx < nEqpCnt; ++nIdx)
@@ -97,7 +103,6 @@ void CTestManager_EQP_ICS::OnMatchingEquipment()
 				}
 			}
 			break;
-
 			default: // Tester
 			{
 				if (false == m_pIcsComm->CreateRemote((CEqpTester&)Get_Equipment(nIdx)))
@@ -110,6 +115,7 @@ void CTestManager_EQP_ICS::OnMatchingEquipment()
 		}
 	}
 }
+
 
 //=============================================================================
 // Method		: OnEvent_EquipmentConnection
@@ -139,22 +145,6 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentConnection(__in uint8_t IN_FromEqp, 
 	}
 	else
 	{
-		if (m_bFlag_CheckEqpConnection)
-		{
-			// Auto 상태인데, 통신이 끊기면 알람을 팝업한다 (2023.03.20)
-			if (enEqpOperatingMode::EOM_Auto == Get_Equipment(IN_FromEqp).Get_OperatingMode())
-			{
-				// 설비와의 통신이 끊겼습니다.
-				CString szMsg;
-				szMsg.Format(_T("%s\r\n Eqp_%02d: %s(%s)"), g_szMessageBox_T[MB_Eqp_Comm_Disconnected][m_stOption.Inspector.nLanguage],
-					IN_FromEqp,
-					Get_Equipment(IN_FromEqp).Get_Alias(),
-					Get_Equipment(IN_FromEqp).Get_EquipmentId());
-
-				LT_MessageBox(szMsg.GetBuffer());
-			}
-		}
-
 		OnLog(_T("[eqp %02d] tcp/ip disconnected"), IN_FromEqp);
 	}
 	
@@ -183,7 +173,7 @@ void CTestManager_EQP_ICS::OnEvent_AutoMode_Notify(__in uint8_t IN_FromEqp)
 	{
 		//OnLog(_T("User Login Info => id: %s, name: %s, level: %d"), stLogin.szID, stLogin.szName, stLogin.nAuthority);
 
-		// 설비들에게 사용자 권한 통보
+		// 설비들에게 사용자 권한 통보		
 		OnSend_UserLevel(IN_FromEqp, m_stInspInfo.PermissionMode, stLogin.szID.GetBuffer());
 	}
 	else
@@ -450,22 +440,8 @@ void CTestManager_EQP_ICS::OnEvent_CheckEmptyEquipment(__in uint8_t IN_FromEqp)
 
 			if (nCheckCount <= nEmptyCount)
 			{
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-				// 검사 포트가 2개 이상인 경우에만 메세지 전송
-				//if (1 < Get_Equipment(IN_FromEqp).Get_TestPortCount())
-				if (Get_EquipmentType(nEmptyCount) == enEquipmentType::Eqp_Distortion)
-				{
-					// 현재 설비로 생산 종료 메세지 전송
-					OnSend_EndOfProduction(IN_FromEqp, true);
-				}
-#else
-				//if (1 < Get_Equipment(IN_FromEqp).Get_TestPortCount())
-				if (Get_Equipment(nEmptyCount).Get_EqpType_UI() != enEquipmentType_UI::EqpUI_HotPixel3port)
-				{
-					// 현재 설비로 생산 종료 메세지 전송
-					OnSend_EndOfProduction(IN_FromEqp, true);
-				}
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+				// 현재 설비로 생산 종료 메세지 전송
+				OnSend_EndOfProduction(IN_FromEqp, true);
 			}
 		}
  		else if (Get_Equipment(IN_FromEqp).IsEmpty_Equipment())
@@ -486,25 +462,6 @@ void CTestManager_EQP_ICS::OnEvent_CheckEmptyEquipment(__in uint8_t IN_FromEqp)
 //=============================================================================
 void CTestManager_EQP_ICS::OnEvent_Loader_RegisterSocket(__in LPCTSTR IN_szRFID)
 {
-#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	if (false == m_stInspInfo.bCheckedRegister)
-	{
-		OnLog(_T("Begin Socket Register Time Check"));
-	}
-	m_stInspInfo.Set_LastRegisterTime();
-
-#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	// 라인 중간에서 수동으로 제거된 소켓인지 판단
-	auto nEqpIdx = Get_Socket(IN_szRFID).m_nTargetEqpOrder;
-	if (Get_Equipment(nEqpIdx).Is_Tester())
-	{
-		Get_Equipment(nEqpIdx).Decrease_ReservedPort(IN_szRFID);
-
-		OnLog(_T("[Loader] Register a socket that has been manually removed. (rfid: %s)"), IN_szRFID);
-	}
-
 	// log (소켓, 제품 바코드)
 	OnLog(_T("[Loader] Register Socket => rfid: %s,  barcode: %s, socket type: %s"),
 		IN_szRFID,
@@ -530,12 +487,6 @@ void CTestManager_EQP_ICS::OnEvent_Loader_RegisterSocket(__in LPCTSTR IN_szRFID)
 //=============================================================================
 void CTestManager_EQP_ICS::OnEvent_Loader_CheckTrackOut(__in LPCTSTR IN_szRFID)
 {
-	if (NULL == IN_szRFID)
-	{
-		OnLog_Err(_T("[Loader] Check Track Out => RFID is NULL"));
-		return;
-	}
-
 	// 로더 투입전 버퍼3의 상태가 없음 -> 제품 있음으로 바뀌면, 배출 승인을 알려준다.
 	OnLog(_T("[Loader] Check Track Out => rfid: %s"),IN_szRFID);
 	OnLog_SocketEvent(IN_szRFID, _T("[Loader] Check Track Out => rfid: %s"), IN_szRFID);
@@ -618,28 +569,6 @@ void CTestManager_EQP_ICS::OnEvent_Loader_TrackOut(__in LPCTSTR IN_szRFID)
 //=============================================================================
 void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in LPCTSTR IN_szRFID)
 {
-	//** 이미 트랙인 처리된 소켓이면 무시한다.
-	if (true == Get_SocketInfo().Is_TrackInSocket(IN_szRFID, IN_FromEqp))
-	{
-		auto nTime = Get_SocketInfo().Get_ElapsedTime_TrackIn(IN_szRFID);
-		if ((0 < nTime) && (nTime <= 900))
-		{
-			OnLog(_T("[eqp %02d] Skip Track In : Already Track In Completed => rfid: %s"), IN_FromEqp, IN_szRFID);
-			return;
-		}
-	}
-
-	// 설비에서 이미 Track In 요청된 소켓이면.. 무시
-	if (true == Get_Equipment(IN_FromEqp).IsTrackInRequest_Socket(IN_szRFID, 900))
-	{
-		OnLog(_T("[eqp %02d] Skip Track In : Already Track In Requested => rfid: %s"), IN_FromEqp, IN_szRFID);
-		return;
-	}
-	else
-	{
-		Get_Equipment(IN_FromEqp).Set_TrackInRequestSocket(IN_szRFID);
-	}
-
 	// 검사 설비에 소켓이 도착하여, RFID로 투입 승인 요청
 	OnLog(_T("[eqp %02d] Track In (Request Socket) => rfid: %s"), IN_FromEqp, IN_szRFID);
 	OnLog_SocketEvent(IN_szRFID, _T("[eqp %02d] Track In (Request Socket) => rfid: %s"), IN_FromEqp, IN_szRFID);
@@ -649,45 +578,11 @@ void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in 
 	// 2: 승인 (마지막 소켓)
 	// 3: Bypass
 
+
 	// 설비가 알람?
+
+
 	// 설비가 Skip?
-
-
-	// 목적 설비가 현재 설비보다 이전 설비이면 오류 상황.. (2023.08.01)
-	if (Get_Socket(IN_szRFID).m_nTargetEqpOrder < IN_FromEqp)
-	{
-		OnLog_Err(_T("[eqp %02d] Target Equipment Error!!! => rfid: %s, Target eqp: %d, Current eqp: %d"), 
-						IN_FromEqp, 
-						IN_szRFID, 
-						Get_Socket(IN_szRFID).m_nTargetEqpOrder, 
-						IN_FromEqp);
-
-		Get_Socket(IN_szRFID).Set_TestResult(-3, 0, IN_FromEqp, Get_EquipmentID(IN_FromEqp));
-
-		Proc_SetSocketTargetEquipment(IN_szRFID, Get_Returner().Get_EqpOrder());
-
-		// 리턴
-		// 서버->설비로 투입 승인 여부 통보
-		OnSend_Accept_SocketTrackIn(IN_FromEqp, IN_szRFID, enAcceptSocket::AS_Bypass, Get_SocketBarcode(IN_szRFID).GetBuffer());
-
-		OnLog(_T("[eqp %02d] Accept Socket Track In (Error) => rfid: %s, flag: %d (%s)"), IN_FromEqp, IN_szRFID, enAcceptSocket::AS_Bypass, g_szAcceptSocket[enAcceptSocket::AS_Bypass]);
-		OnLog_SocketEvent(IN_szRFID, _T("[eqp %02d] Accept Socket Track In (Error) => rfid: %s, flag: %d (%s)"), IN_FromEqp, IN_szRFID, enAcceptSocket::AS_Bypass, g_szAcceptSocket[enAcceptSocket::AS_Bypass]);
-		return;
-	}
-
-
-#ifdef USE_SET_TARGET_EQP_GROUP_TRACK_IN // 2023.03.23
-
-	if (Get_Equipment(IN_FromEqp).Get_EnableEquipment())
-	{
-		// 현재 설비가 스킵인가? // 2023.05.10
-		if (false == Get_Equipment(IN_FromEqp).Get_Skip())
-		{
-			Proc_SetTagetEquipment_Group(IN_szRFID, IN_FromEqp);
-		}
-	}
-
-#endif // USE_SET_TARGET_EQP_GROUP_TRACK_IN
 
 
 #ifdef USE_TARGET_EQP_DISTANCE
@@ -697,8 +592,7 @@ void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in 
 		if (Get_LineInfo().Is_FirstEquipment_inGroup(IN_FromEqp))
 		{
 			// 예약 1 감소
-			//Get_Equipment(IN_FromEqp).Decrease_ReservedPort();
-			Get_Equipment(IN_FromEqp).Decrease_ReservedPort(IN_szRFID);
+			Get_Equipment(IN_FromEqp).Decrease_ReservedPort();
 
 			// 목적 설비 재 설정
 			Proc_SetTagetEquipment_Group(IN_szRFID, Get_EquipmentType(IN_FromEqp));
@@ -706,6 +600,9 @@ void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in 
 	}
 #endif
 
+
+	Get_Equipment(IN_FromEqp);
+	Get_Socket(IN_szRFID);
 
 	// 소켓 상태 판단
 	uint8_t nFlag = enAcceptSocket::AS_Error;
@@ -870,82 +767,6 @@ void CTestManager_EQP_ICS::OnEvent_Unloader_TrackIn(__in LPCTSTR IN_szRFID)
 
 	Get_Socket(IN_szRFID).Set_Tacttime(dTacttime);
 
-#ifdef USE_NG_CODE_UPDATE_AT_UNLOAD
-
-	// 불량 정보 업데이트 
-	ST_TestResult* pRe = &Get_Socket(IN_szRFID).m_stTestResult;
-
-	// Log : 불량이 발생한 제품 정보 기록 (제품 바코드, NG 발생 검사: Pass된 검사)	
-	Get_Equipment(pRe->m_nNG_EqpOrder).IncreaseFailInfo(pRe->m_nNG_Code, pRe->m_nNG_Para);
-
-#endif // USE_NG_CODE_UPDATE_AT_UNLOAD
-
-#ifdef USE_EQP_YIELD_UPDATE_AT_UNLOAD
-	
-#ifndef USE_NG_CODE_UPDATE_AT_UNLOAD
-	ST_TestResult* pRe = &Get_Socket(IN_szRFID).m_stTestResult;
-#endif
-
-	// 설비별 양품 결과 업데이트
-	for (auto const &element : pRe->m_Eqp_Result)
-	{
-		// 검사가 진행된 설비 체크
-		if (1 == element.m_bTest)
-		{
-			if (0 == element.m_nNGCode)
-			{
-				Get_Equipment(element.m_nEqpOrder).Increase_Yield_Pass(element.m_nPara);
-			}
-			else if (Get_SocketInfo().Get_MES_ReworkCode() == element.m_nNGCode)
-			{
-				continue; // MES rework은 검사를 안해서 검사 결과가 없는게 정상 동작이다.
-			}
-			else // 불량
-			{
-				break;
-			}
-		}
-	}
-
-// 	for (auto nIdx = 0; pRe->m_Eqp_Result.size(); ++nIdx)
-// 	{
-// 		auto eqp = pRe->m_Eqp_Result.at(nIdx);
-// 
-// 		// 검사가 진행된 설비 체크
-// 		if (1 == eqp.m_bTest)
-// 		{
-// 			if (0 == eqp.m_nNGCode)
-// 			{
-// 				Get_Equipment(eqp.m_nEqpOrder).Increase_Yield_Pass(eqp.m_nPara);
-// 			}
-// 			else if (Get_SocketInfo().Get_MES_ReworkCode() == eqp.m_nNGCode)
-// 			{
-// 				continue; // MES rework은 검사를 안해서 검사 결과가 없는게 정상 동작이다.
-// 			}
-// 			else // 불량
-// 			{
-// 				break;
-// 			}			
-// 		}
-// 	}
-
-	// 양/불 체크
-	if (0 == pRe->m_nNG_Code)
-	{
-		// 양품은 설비에서 바로 업데이트
-	}
-	else if (Get_SocketInfo().Get_MES_ReworkCode() == pRe->m_nNG_Code)// MES Rework NG Code 이면...???
-	{
-		;
-	}
-	else
-	{
-		Get_Equipment(pRe->m_nNG_EqpOrder).Increase_Yield_Fail(pRe->m_nNG_Para);
-	}
-
-#endif //USE_EQP_YIELD_UPDATE_AT_UNLOAD
-
-
 	OnReport_Socket(IN_szRFID);
 }
 
@@ -985,12 +806,14 @@ void CTestManager_EQP_ICS::OnEvent_Unloader_UnregisterSocket(__in LPCTSTR IN_szR
 
 	// 제품이 불량인가? (불량이 발생한 검사 설비 ?)
 
-
-
 	// Test Result 초기화
 	Get_SocketInfo().Reset_RegisterData(IN_szRFID);
-
+	
 }
+
+
+
+
 
 //=============================================================================
 // Method		: Proc_SetSocketTargetEquipment
@@ -1008,8 +831,7 @@ void CTestManager_EQP_ICS::Proc_SetSocketTargetEquipment(__in LPCTSTR IN_szRFID,
 	Get_SocketInfo().Set_SocketTarget(IN_szRFID, IN_nTargetEqpOrder, Get_EquipmentID(IN_nTargetEqpOrder).GetBuffer());
 
 	// *** 소켓의 목적 설비를 설정하면 포트 사용 예약을 설정해야 한다.
-	//if (false == Get_Equipment(IN_nTargetEqpOrder).Increase_ReservedPort())
-	if (false == Get_Equipment(IN_nTargetEqpOrder).Increase_ReservedPort(IN_szRFID))
+	if (false == Get_Equipment(IN_nTargetEqpOrder).Increase_ReservedPort())
 	{
 		;
 	}
@@ -1027,56 +849,9 @@ void CTestManager_EQP_ICS::Proc_SetSocketTargetEquipment(__in LPCTSTR IN_szRFID,
 //=============================================================================
 void CTestManager_EQP_ICS::Proc_SetTagetEquipment_Group(__in LPCTSTR IN_szRFID, __in uint8_t IN_FromEqp)
 {
-#ifdef USE_TARGET_EQP_DISTANCE
-	//uint8_t IN_nTargetEqpOrder = Get_LineInfo().Get_TargetEquipment_inGroup((enEquipmentType)Get_Equipment(IN_FromEqp).Get_EquipmentType());
+	uint8_t IN_nTargetEqpOrder = Get_LineInfo().Get_TargetEquipment_inGroup((enEquipmentType)Get_Equipment(IN_FromEqp).Get_EquipmentType());
 
-	//Get_SocketInfo().Set_SocketTarget(IN_szRFID, IN_nTargetEqpOrder, Get_EquipmentID(IN_nTargetEqpOrder).GetBuffer());
-#endif // USE_TARGET_EQP_DISTANCE
-
-
-	// 설비가 그룹이고 설비가 그룹에서 첫번째 설비?
-	if (Get_LineInfo().Is_FirstEquipment_inGroup(IN_FromEqp))
-	{
-		// 현재 소켓의 대상 설비
-		auto nTargetEqp = Get_Socket(IN_szRFID).m_nTargetEqpOrder;
-
-		// 대상 설비가 현재 설비의 검사와 동일한가?
-		if (Get_EquipmentType(IN_FromEqp) == Get_EquipmentType(nTargetEqp))
-		{
-			// 이전 대상 설비 예약 1 감소
-			Get_Equipment(nTargetEqp).Decrease_ReservedPort(IN_szRFID);
-
-			// 새로운 목적 설비 구하기
-			uint8_t nNew_TargetEqpOrder = Get_LineInfo().Get_TargetEquipment_inGroup((enEquipmentType)Get_Equipment(IN_FromEqp).Get_EquipmentType());
-
-			if (nTargetEqp != nNew_TargetEqpOrder)
-			{
-				// 목적 설비 재 설정
-				Get_SocketInfo().Set_SocketTarget(IN_szRFID, nNew_TargetEqpOrder, Get_EquipmentID(nNew_TargetEqpOrder).GetBuffer());
-			}
-
-			// 새 대상 설비 예약 1 증가
-			if (false == Get_Equipment(nNew_TargetEqpOrder).Increase_ReservedPort(IN_szRFID))
-			{
-				;
-			}
-
-			// 목적 설비의 포트 상태 표시
-			OnLog(_T("[eqp %02d] Group Target Equipment(eqp %02d) Status => port: %d, using: %d, empty: %d, reserved: %d, reserved_over: %d"),
-				IN_FromEqp,
-				nNew_TargetEqpOrder,
-				Get_Equipment(nNew_TargetEqpOrder).Get_PortCount(),
-				//Get_Equipment(nNew_TargetEqpOrder).Check_AvablePortCnt(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_UsingPortCount(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_EmptyPortCount(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_ReservedPortCnt(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_ReservedOverCnt()
-			);
-
-			OnLog(_T("[eqp %02d] Group Set Target Eqp => rfid: %s, target: [eqp %02d]"), IN_FromEqp, IN_szRFID, nNew_TargetEqpOrder);
-			OnLog_SocketEvent(IN_szRFID, _T("[eqp %02d] Group Set Target Eqp => rfid: %s, target: [eqp %02d]"), IN_FromEqp, IN_szRFID, nNew_TargetEqpOrder);
-		}
-	}
+	Get_SocketInfo().Set_SocketTarget(IN_szRFID, IN_nTargetEqpOrder, Get_EquipmentID(IN_nTargetEqpOrder).GetBuffer());
 }
 
 //=============================================================================
@@ -1499,7 +1274,6 @@ void CTestManager_EQP_ICS::OnSend_TimeSync(__in uint8_t IN_nEqpOrder)
 void CTestManager_EQP_ICS::OnSend_UserLevel(__in enPermissionMode IN_nLevel, __in LPCTSTR IN_szUserId)
 {
 	OnLog(_T("[eqp all] OnSend_UserLevel() => level: %d, user id: %s"), IN_nLevel, IN_szUserId);
-
 	if (m_pIcsComm->SendUserLevel(IN_nLevel, IN_szUserId))
 	{
 		OnLog(_T("OnSend_UserLevel() All Equipment : comm succeed"));
@@ -1527,6 +1301,50 @@ void CTestManager_EQP_ICS::OnSend_UserLevel(__in uint8_t IN_nEqpOrder, __in enPe
 	}
 }
 
+
+void CTestManager_EQP_ICS::OnSend_UserLevel(__in _ICS_SERVER_Type In_Type,__in enPermissionMode IN_nLevel, __in LPCTSTR IN_szUserId)
+{
+
+	CString USERID(IN_szUserId);
+	OnLog(_T("[eqp all] OnSend_UserLevel() => level: %d, user id: %s"), IN_nLevel, IN_szUserId);
+	switch (In_Type) {
+		case ICS_SERVER_MODULE:
+			if (m_pIcsComm->SendUserLevel(IN_nLevel, IN_szUserId))
+			{
+				OnLog(_T("OnSend_UserLevel() All Equipment : comm succeed"));
+			}
+			else
+			{
+				OnLog_Err(_T("OnSend_UserLevel() All Equipment : comm failed"));
+			}
+			break;
+		case ICS_SERVER_EES:	
+#if (USE_XML)
+			for (int i = 0; i < Get_ServerCount(); i++) 
+			{				
+				if (Get_Server(i).Get_ClientConnection()) {
+					for (int IN_From = 0; IN_From < Get_EquipmentCount(); IN_From++) {
+						Get_Equipment(IN_From).Get_DEFINEDATA().Set_USERID(lt::ToMultiByte(USERID));
+					}
+					Get_Server(i).Get_DEFINEDATA().Set_USERID(lt::ToMultiByte(USERID));
+
+					
+					auto svr = m_pIcsServer->GetRemote(Get_ServerID(i).GetBuffer());
+					lt::Report_User_Change_Args::Args * Args = Get_Server(i).Create_Report_User_ChangeArgs(nullptr);
+					lt::XUUID ID = Args->Hd.Get_transactionId();					
+					svr->GetRemoteEes().CreateUserCommandProcedure(ID);
+					svr->GetRemoteEes().AddeUserCommandProcedure(ID, *Args);
+					delete Args;
+
+					auto cntr = svr->GetRemoteEes().UserCommandCtrl(ID);
+					OnSend_REPORT_USER_CHANGE(i, cntr.REPORT);
+				}
+			}		
+#endif
+			break;
+	}
+
+}
 //=============================================================================
 // Method		: OnSend_Language
 // Access		: protected  
@@ -1539,7 +1357,6 @@ void CTestManager_EQP_ICS::OnSend_UserLevel(__in uint8_t IN_nEqpOrder, __in enPe
 void CTestManager_EQP_ICS::OnSend_Language(__in uint8_t IN_nLanguage)
 {
 	OnLog(_T("[eqp all] OnSend_UserLevel() => language: %d"), IN_nLanguage);
-
 	if (m_pIcsComm->SendLanguage(IN_nLanguage))
 	{
 		OnLog(_T("OnSend_Language() => comm succeed"));
@@ -1594,29 +1411,6 @@ void CTestManager_EQP_ICS::OnSend_Model(__in uint8_t IN_nEqpOrder)
 }
 
 //=============================================================================
-// Method		: OnSend_OperationActiveStatus
-// Access		: protected  
-// Returns		: void
-// Parameter	: __in uint8_t IN_nStatus
-// Qualifier	:
-// Last Update	: 2023/3/7 - 14:32
-// Desc.		:
-//=============================================================================
-void CTestManager_EQP_ICS::OnSend_OperationActiveStatus(__in uint8_t IN_nStatus)
-{
-	OnLog(_T("[eqp all] OnSend_OperationActiveStatus() => status: %d"), IN_nStatus);
-
-	if (m_pIcsComm->SendOperationActiveStatus(IN_nStatus))
-	{
-		OnLog(_T("OnSend_OperationActiveStatus() => comm succeed"));
-	}
-	else
-	{
-		OnLog_Err(_T("OnSend_OperationActiveStatus() => comm failed"));
-	}
-}
-
-//=============================================================================
 // Method		: OnSend_Accept_SocketTrackIn
 // Access		: protected  
 // Returns		: void
@@ -1637,8 +1431,6 @@ void CTestManager_EQP_ICS::OnSend_Accept_SocketTrackIn(__in uint8_t IN_nEqpOrder
 		if (m_pIcsComm->SendSocketAccept(Get_EquipmentID(IN_nEqpOrder).GetBuffer(), IN_szRFID, IN_nFlag, IN_szBarcode))
 		{
 			OnLog(_T("[eqp %02d] OnSend_Accept_SocketTrackIn() => comm succeed"), IN_nEqpOrder);
-
-			Get_SocketInfo().Set_SocketTrackIn(IN_szRFID, IN_nEqpOrder, Get_EquipmentID(IN_nEqpOrder).GetBuffer());
 		}
 		else
 		{
@@ -1686,7 +1478,6 @@ void CTestManager_EQP_ICS::OnSend_Accept_SocketTrackOut(__in uint8_t IN_nEqpOrde
 bool CTestManager_EQP_ICS::OnSend_Forced_SocketTrackOut(__in bool IN_bOnOff)
 {
 	OnLog(_T("[eqp all] OnSend_Forced_SocketTrackOut() => OnOff: %d"), IN_bOnOff ? 1 : 0);
-
 	if (m_pIcsComm->SendForceEject(IN_bOnOff))
 	{
 		OnLog(_T("OnSend_Forced_SocketTrackOut() => comm succeed"));
@@ -1801,7 +1592,6 @@ bool CTestManager_EQP_ICS::OnSend_EndOfProduction(__in uint8_t IN_nEqpOrder, __i
 bool CTestManager_EQP_ICS::OnSend_Init()
 {
 	OnLog(_T("[eqp all] OnSend_Init()"));
-
 	if (m_pIcsComm->SendInitialization())
 	{
 		OnLog(_T("[eqp all] OnSend_Init() => comm succeed"));
@@ -1817,7 +1607,6 @@ bool CTestManager_EQP_ICS::OnSend_Init()
 bool CTestManager_EQP_ICS::OnSend_Init(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Init()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendInitialization(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Init() => comm succeed"), IN_nEqpOrder);
@@ -1841,7 +1630,6 @@ bool CTestManager_EQP_ICS::OnSend_Init(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_Reset()
 {
 	OnLog(_T("[eqp all] OnSend_Reset()"));
-
 	if (m_pIcsComm->SendReset())
 	{
 		OnLog(_T("[eqp all] OnSend_Reset() => comm succeed"));
@@ -1857,7 +1645,6 @@ bool CTestManager_EQP_ICS::OnSend_Reset()
 bool CTestManager_EQP_ICS::OnSend_Reset(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Reset()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendReset(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Reset() => comm succeed"), IN_nEqpOrder);
@@ -1881,21 +1668,9 @@ bool CTestManager_EQP_ICS::OnSend_Reset(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_Run()
 {
 	OnLog(_T("[eqp all] OnSend_Run()"));
-
 	if (m_pIcsComm->SendRun())
 	{
 		OnLog(_T("[eqp all] OnSend_Run() => comm succeed"));
-
-#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-		if (false == m_stInspInfo.bCheckedRegister)
-		{
-			OnLog(_T("Begin Socket Register Time Check"));
-		}
-		m_stInspInfo.Set_LastRegisterTime();
-
-#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
-
 		return true;
 	}
 	else
@@ -1908,7 +1683,6 @@ bool CTestManager_EQP_ICS::OnSend_Run()
 bool CTestManager_EQP_ICS::OnSend_Run(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Run()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendRun(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Run() => comm succeed"), IN_nEqpOrder);
@@ -1932,7 +1706,6 @@ bool CTestManager_EQP_ICS::OnSend_Run(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_Stop()
 {
 	OnLog(_T("[eqp all] OnSend_Stop()"));
-
 	if (m_pIcsComm->SendStop())
 	{
 		OnLog(_T("[eqp all] OnSend_Stop() => comm succeed"));
@@ -1948,7 +1721,6 @@ bool CTestManager_EQP_ICS::OnSend_Stop()
 bool CTestManager_EQP_ICS::OnSend_Stop(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Stop()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendStop(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Stop() => comm succeed"), IN_nEqpOrder);
@@ -1972,7 +1744,6 @@ bool CTestManager_EQP_ICS::OnSend_Stop(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_BuzzerOff()
 {
 	OnLog(_T("[eqp all] OnSend_BuzzerOff()"));
-
 	if (m_pIcsComm->SendBuzzerOff())
 	{
 		OnLog(_T("[eqp all] OnSend_BuzzerOff() => comm succeed"));
@@ -1988,7 +1759,6 @@ bool CTestManager_EQP_ICS::OnSend_BuzzerOff()
 bool CTestManager_EQP_ICS::OnSend_BuzzerOff(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_BuzzerOff()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendBuzzerOff(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_BuzzerOff() => comm succeed"), IN_nEqpOrder);
@@ -2013,7 +1783,6 @@ bool CTestManager_EQP_ICS::OnSend_BuzzerOff(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_ShowHide(__in bool bShow)
 {
 	OnLog(_T("[eqp all] OnSend_ShowHide()"));
-
 	if (m_pIcsComm->SendUiVisible(bShow ? SW_SHOW : SW_HIDE))
 	{
 		OnLog(_T("[eqp all] OnSend_ShowHide() => comm succeed"));
@@ -2029,7 +1798,6 @@ bool CTestManager_EQP_ICS::OnSend_ShowHide(__in bool bShow)
 bool CTestManager_EQP_ICS::OnSend_ShowHide(__in uint8_t IN_nEqpOrder, __in bool bShow)
 {
 	OnLog(_T("[eqp %02d] OnSend_ShowHide() => %s"), IN_nEqpOrder, bShow ? _T("Show") : _T("Hide"));
-
 	if (m_pIcsComm->SendUiVisible(Get_EquipmentID(IN_nEqpOrder).GetBuffer(), bShow ? SW_SHOW : SW_HIDE))
 	{
 		OnLog(_T("[eqp %02d] OnSend_ShowHide() => comm succeed"), IN_nEqpOrder);
@@ -2140,85 +1908,9 @@ void CTestManager_EQP_ICS::OnDeleteTimer_UpdateUI()
 	__super::OnDeleteTimer_UpdateUI();
 }
 
-//=============================================================================
-// Method		: OnMonitor_TimeCheck
-// Access		: virtual protected  
-// Returns		: void
-// Qualifier	:
-// Last Update	: 2023/3/7 - 15:32
-// Desc.		:
-//=============================================================================
 void CTestManager_EQP_ICS::OnMonitor_TimeCheck()
 {
-	if (false == m_mTimeMutex.try_lock())
-		return;
-
-	//__super::OnMonitor_TimeCheck();
-
-	// 인라인 가동/비가동 상태 체크 (전체 설비에 소켓이 없으면 비가동, 있으면 가동)
-
-	// 라인 설정이 안되어 있으면 사용하면 안됨 (프로그램 비정상 종료 됨)
-	if (Get_LineInfo().GetCount() <= 0)
-	{
-		m_mTimeMutex.unlock();
-		return;
-	}
-
-	// 서버가 open 되어 있는 경우에만 사용
-	if (false == m_pIcsComm->IsOpened())
-	{
-		m_mTimeMutex.unlock();
-		return;
-	}
-
-	// 로더 에서 리터너 까지 소켓 유/무 체크
-	uint8_t nBegin_eqp	= Get_Loader().Get_EqpOrder();
-	uint8_t nEnd_eqp	= Get_Returner().Get_EqpOrder();
-
-	uint8_t nActived = enOperationActiveStatus::OAS_Inactive;
-	for (auto nEqpIdx = nBegin_eqp; nEqpIdx < nEnd_eqp; ++nEqpIdx)
-	{
-		// 설비가 비어 있는가?
-		if (false == Get_Equipment(nEqpIdx).IsEmpty_Equipment_AnySocket())
-		{
-			nActived = enOperationActiveStatus::OAS_Active;
-			break;
-		}
-	}
-
-
-	// 활성화 <==> 비활성화 상태가 변경되면  통신 메세지를 전체 설비로 보낸다.
-	if (nActived != Get_LineInfo().Get_ActiveStatus())
-	{
-		Get_LineInfo().Set_ActiveStatus(nActived);
-
-		// 전체 설비에 메세지 전송
-		OnSend_OperationActiveStatus(nActived);
-	}
-
-#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	// 현재 Auto Mode인가?? (로더만 체크??? 소켓 투입모드는 auto?)
-	if (enEqpOperatingMode::EOM_Auto == Get_Loader().Get_OperatingMode())
-	{
-		// 소켓 투입 시간이 체크되었나?
-		if (m_stInspInfo.bCheckedRegister)
-		{
-			// 현재 시간 - 제품 마지막으로 투입된 시간 (분 단위)
-			if ((m_stOption.Inspector.nAutoModeDuration * 60.0) <= m_stInspInfo.Get_LastRegister_ElapsedTime())
-			{
-				OnSend_Stop();  // Manual Mode로 전환
-
-				// 체크 시간 초기화
-				m_stInspInfo.Reset_LastRegisterTime();
-				OnLog(_T("Reset Last Socket Rgister Time"));
-			}
-		}
-	}
-	
-#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	m_mTimeMutex.unlock();
+	__super::OnMonitor_TimeCheck();
 }
 
 //=============================================================================
@@ -2231,73 +1923,47 @@ void CTestManager_EQP_ICS::OnMonitor_TimeCheck()
 //=============================================================================
 void CTestManager_EQP_ICS::OnMonitor_UpdateUI()
 {
-	if (false == m_mUiMutex.try_lock())
-		return;
-
 	//__super::OnMonitor_UpdateUI();
 
-	// 라인 설정이 안되어 있으면 사용하면 안됨 (프로그램 비정상 종료 됨)
-	if (0 < Get_LineInfo().GetCount())
+	
+	// 서버가 open 되어 있는 경우에만 사용
+	if (m_pIcsComm->IsOpened())
 	{
-		// 서버가 open 되어 있는 경우에만 사용
-		if (m_pIcsComm->IsOpened())
+		// 검사 설비의 비어 있음을 체크하여   컨베이어 사용 제어
+		//OnLog(_T("Check Empty Equipment"));
+
+		static const uint8_t nCheckEqpCount = 2;
+
+		// 로더 다음 설비에서 리터너 전 설비까지
+		uint8_t nEnd_eqp = Get_Returner().Get_EqpOrder() - 1;
+
+		uint8_t nEmptyCount = 0;
+		uint8_t nCheckCount = nCheckEqpCount;
+		for (auto nEqpIdx = 0; nEqpIdx < nEnd_eqp; ++nEqpIdx)
 		{
-			// 검사 설비의 비어 있음을 체크하여   컨베이어 사용 제어
-			//OnLog(_T("Check Empty Equipment"));
+			nCheckCount = __min(nEqpIdx, nCheckEqpCount);
 
-			static const uint8_t nCheckEqpCount = 2;
-
-			// 로더 다음 설비에서 리터너 전 설비까지
-			uint8_t nEnd_eqp = Get_Returner().Get_EqpOrder() - 1;
-
-			uint8_t nEmptyCount = 0;
-			uint8_t nCheckCount = nCheckEqpCount;
-			for (auto nEqpIdx = 0; nEqpIdx < nEnd_eqp; ++nEqpIdx)
+			// 설비가 비어 있는가?
+			if (Get_Equipment(nEqpIdx).IsEmpty_Equipment())
 			{
-				nCheckCount = __min(nEqpIdx, nCheckEqpCount);
-
-				// 설비가 비어 있는가?
-				if (Get_Equipment(nEqpIdx).IsEmpty_Equipment())
+				++nEmptyCount;
+			}
+			else
+			{
+				if (Get_Equipment(nEqpIdx).Is_Tester() && Get_Equipment(nEqpIdx).IsLastSocket_onTestPort())
 				{
-					++nEmptyCount;
-				}
-				else
-				{
-					if (Get_Equipment(nEqpIdx).Is_Tester() && Get_Equipment(nEqpIdx).IsLastSocket_onTestPort())
+					if (nCheckCount <= nEmptyCount)
 					{
-						if (nCheckCount <= nEmptyCount)
-						{
-							// 현재 설비로 생산 종료 메세지 전송
-							//OnSend_EndOfProduction(nEqpIdx, true);
-
-							// 설비 구분하여 신호 처리
-							// Trinity : HotPixel 3para
-							// Rivian : Distortion;
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-							// 검사 포트가 2개 이상인 경우에만 메세지 전송
-							//if (1 < Get_Equipment(IN_FromEqp).Get_TestPortCount())
-							if (Get_EquipmentType(nEmptyCount) == enEquipmentType::Eqp_Distortion)
-							{
-								// 현재 설비로 생산 종료 메세지 전송
-								OnSend_EndOfProduction(nEqpIdx, true);
-							}
-#else
-							if (Get_Equipment(nEmptyCount).Get_EqpType_UI() != enEquipmentType_UI::EqpUI_HotPixel3port)
-							{
-								// 현재 설비로 생산 종료 메세지 전송
-								OnSend_EndOfProduction(nEqpIdx, true);
-							}
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-						}
+						// 현재 설비로 생산 종료 메세지 전송
+						OnSend_EndOfProduction(nEqpIdx, true);
 					}
-
-					nEmptyCount = 0;
 				}
+
+				nEmptyCount = 0;
 			}
 		}
 	}
-
-	m_mUiMutex.unlock();
+	
 }
 
 //=============================================================================
@@ -2322,3 +1988,2648 @@ void CTestManager_EQP_ICS::OnSet_PermissionMode(__in enPermissionMode nAcessMode
 {
 	__super::OnSet_PermissionMode(nAcessMode);
 }
+
+#if (USE_XML)
+void CTestManager_EQP_ICS::OnMatchingServer() {
+	auto nSvrCnt = Get_ServerCount();
+	if (0 < nSvrCnt)	{
+		for (auto nIdx = 0; nIdx < nSvrCnt; ++nIdx)		{
+			switch (Get_ServerType(nIdx))			{
+			case enServerType::SERVER_EES:
+				if (false == m_pIcsServer->CreateRemote((CSvrEes&)Get_Server(nIdx)))				{
+					OnLog_Err(_T("CreateRemote(CSvrEes) failed"));
+				}
+				break;
+			}
+		}
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerConnection(__in uint8_t IN_From, __in LPARAM IN_Data)
+{	
+	lt::Report_Online_State_Args::Args * Args = Get_Server(IN_From).Create_Report_Online_StateArgs(nullptr);
+	auto cntr = Add_Online_StateArgs(Get_ServerID(IN_From), *Args);
+	OnSend_REPORT_ONLINE_STATE(IN_From, cntr.REPORT);
+	
+	if (Get_Server(IN_From).Get_ClientConnection()) {		
+		for (int n_Eqp = 0; n_Eqp < Get_EquipmentCount(); n_Eqp++) {
+			if (Get_Equipment(n_Eqp).Get_ClientConnection()) {
+				auto EquipArgs = Get_Server(IN_From).Create_Report_Equipment_StateArgs(nullptr);
+				auto Equipcntr = Add_Equipment_StateArgs(Get_ServerID(IN_From), *EquipArgs);
+				for (int n_Eqp = 0; n_Eqp < Get_Equipment(n_Eqp).Get_mEES_PortSubStatusCount(); n_Eqp++) {
+					Equipcntr.REPORT.Body.Set_EQUIPMENTSTATE(lt::ToMultiByte(g_szPortStatus[Get_Equipment(n_Eqp).Get_mEES_PortSubStatus(n_Eqp).Get_nProcessStatus()]));
+					OnSend_REPORT_EQUIPMENT_STATE(IN_From, Equipcntr.REPORT);
+				}
+			} else {
+				for (int n_Eqp = 0; n_Eqp < Get_Equipment(n_Eqp).Get_mEES_PortSubStatusCount(); n_Eqp++) {
+					Get_Equipment(n_Eqp).Get_mEES_PortSubStatus(n_Eqp).Set_nProcessStatus(PtS_Empty);
+				}
+			}
+		}
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_LINK_TEST(__in uint8_t IN_From, __in LPARAM IN_Data)
+{	
+	lt::Request_Link_Test_Args::Args * Args = (lt::Request_Link_Test_Args::Args *) IN_Data;
+	auto cntr = Add_Link_TestArgs(Get_ServerID(IN_From), *Args);
+	cntr.RequestToReply();
+	OnSend_REPLY_LINK_TEST(IN_From, cntr.REPLY);
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_LINK_TEST(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_ONLINE_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	auto Args = Get_Server(IN_From).Create_Report_Online_StateArgs((lt::Report_Online_State_Args::Args *) IN_Data);
+	auto cntr = Add_Online_StateArgs(Get_ServerID(IN_From), *Args);
+	OnSend_REPORT_ONLINE_STATE(IN_From, cntr.REPORT);
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_USER_CHANGE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	auto Args = Get_Server(IN_From).Create_Report_User_ChangeArgs((lt::Report_User_Change_Args::Args *) IN_Data);
+	auto cntr = Add_User_CommandArgs(Get_ServerID(IN_From), *Args);
+	OnSend_REPORT_USER_CHANGE(IN_From, cntr.REPORT);
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_USER_CHANGE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	lt::XUUID ID;
+	lt::Request_User_Cpmmand_Args::Args * Args = (lt::Request_User_Cpmmand_Args::Args *) IN_Data;
+	auto cntr = Add_User_CommandArgs(Get_ServerID(IN_From), *Args);
+	cntr.RequestToReply();
+	OnSend_REPLY_USER_COMMAND(IN_From, cntr.REPLY);	
+}
+
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_USER_COMMAND(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	lt::Reply_User_Change_Args::Args * Args = (lt::Reply_User_Change_Args::Args *) IN_Data;
+	auto cntr = Add_User_CommandArgs(Get_ServerID(IN_From), *Args);
+	OnSend_REPLY_USER_COMMAND(IN_From, cntr.REPLY);
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_EQUIPMENT_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	//lt::Report_Equipment_State_Args::Args * Args = (lt::Report_Equipment_State_Args::Args *) IN_Data;
+	auto Args = Get_Server(IN_From).Create_Report_Equipment_StateArgs((lt::Report_Equipment_State_Args::Args *) IN_Data);
+	auto cntr = Add_Equipment_StateArgs(Get_ServerID(IN_From), *Args);
+	OnSend_REPORT_EQUIPMENT_STATE(IN_From, cntr.REPORT);
+#if TEST
+	ST_xml_REPORT_EQUIPMENT_STATE* IN_PARA = (ST_xml_REPORT_EQUIPMENT_STATE*)IN_Data;
+	/*
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString EQUIPMENTSTATE(IN_PARA->Body.EQUIPMENTSTATE);
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString LOTID(IN_PARA->Body.LOTID);
+	*/
+	auto bConnectionEvent = bGetClientConnectionEvent(IN_From);
+	if (IN_From < Get_ServerCount()){		
+		//if (bConnectionEvent && Get_Server(IN_From).Get_ClientConnection()) {
+		//	for (int n_SvrPort = 0; n_SvrPort < Get_Server(IN_From).Get_EquipmentIDCount(); n_SvrPort++) {
+		//		
+		//	}
+		//}
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			for (int n_SvrPort = 0; n_SvrPort < Get_Server(IN_From).Get_EquipmentIDCount(); n_SvrPort++) {
+				int State = ES_IDLE;
+				bool bSet = false;
+				for (int n_Eqp = 0; n_Eqp < Get_EquipmentCount(); n_Eqp++) {
+					if (Get_Equipment(n_Eqp).Get_ClientConnection()) {
+						if (bSet) {
+							continue;
+						}
+						for (int n_EqpPort = 0; n_EqpPort < Get_Equipment(n_Eqp).Get_PortCount(); n_EqpPort++) {
+							if (!Get_EquipmentTypeEvent(n_Eqp, n_EqpPort)) {
+								continue;
+							}
+							if (bSet) {
+								continue;
+							}
+							if (Get_Equipment(n_Eqp).Get_PortStatus(n_EqpPort).nEquipmentState == ES_SUDDENSTOP) {
+								State = ES_SUDDENSTOP;
+								bSet = true;								
+							}
+							else if (bSet == false){
+								if (Get_Equipment(n_Eqp).Get_PortStatus(n_EqpPort).nEquipmentState == ES_STOP) {
+									State = ES_STOP;
+									bSet = true;
+								}
+								else if (bSet == false) {
+									if (Get_Equipment(n_Eqp).Get_PortStatus(n_EqpPort).nEquipmentState == ES_RUN) {
+										State = ES_RUN;
+										bSet = true;
+									}
+									else {
+										State = ES_IDLE;
+										//bSet = true;
+									}
+								}
+							}
+						}
+					}
+				}
+				Get_Server(IN_From).Set_PortStatusEquipmentStateEvent(n_SvrPort, State);
+				if (bGetSvrEquipmentStateEvent(IN_From, n_SvrPort)) {
+					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_SvrPort).szEquipID);
+					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
+					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_SvrPort).szPortID);
+					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_PortStatus(n_SvrPort).nEquipmentState]);
+					CString LOTID;
+					auto m_p = Get_Server(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						EQUIPMENTSTATE,
+						LOTID);
+					Get_Server(IN_From).Set_Notify_EquipmentState(m_p);
+					OnSend_REPORT_EQUIPMENT_STATE(
+						IN_From,
+						m_p);
+					Get_Server(IN_From).Set_OldPortStatusEquipmentStateEvent(n_SvrPort, State);
+				}
+			}
+		}
+	}
+	/*
+	if (IN_From < Get_ServerCount()) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
+					OnSend_REPORT_EQUIPMENT_STATE(
+						IN_From,
+						IN_PARA);
+					//Get_Server(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
+					//	SUBEQPID,
+					//	PORTID,
+					//	EQUIPMENTSTATE,
+					//	LOTID));
+					Get_Server(IN_From).Set_Notify_EquipmentState(EQUIPMENTSTATE);
+				}
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_EQUIPMENT_STATE_DISPLAY(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	lt::XUUID ID;
+	lt::Reply_Equipment_State_Display_Args::Args * Args = (lt::Reply_Equipment_State_Display_Args::Args *) IN_Data;
+	auto svr = m_pIcsServer->GetRemote(Get_ServerID(IN_From));
+	if (Args != nullptr) {
+		ID = Args->Hd.Get_transactionId();
+		svr->GetRemoteEes().AddEquipmentStateProcedure(ID, *Args);
+		delete Args;
+	}
+	else {
+		ID = svr->GetRemoteEes().EquipmentStateCtrl();
+	}
+	auto cntr = svr->GetRemoteEes().EquipmentStateCtrl(ID);
+	cntr.RequestToReply();
+	CString EQUIPMENTID = lt::ToWideChar(cntr.REQUEST.Body.Get_EQUIPMENTID()).c_str();
+	
+	if (IN_From < Get_ServerCount()) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			/*
+			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID() == EQUIPMENTID) {
+				CString EQUIPMENTID = lt::ToWideChar(cntr.REQUEST.Body.Get_EQUIPMENTID()).c_str();
+					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID());
+					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
+					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).Get_PORTID());
+					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_mEES_PortSubStatus(n_Port).Get_nEquipmentStatus()]);
+					//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
+					OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+						IN_From,
+						cntr.REPLY);
+					
+					for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
+					{
+						if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
+							dsp.Dsp = IN_PARA;
+							dsp.EES = &Get_EES(nIdx);
+							Get_Server(IN_From).Set_Notify_EquipmentStateDisplay(&dsp);
+						}
+					}
+				}
+			}*/
+			for (int i = 0; i < Get_EquipmentCount(); i++) {
+				if (Get_Equipment(i).Get_ClientConnection()) {
+					for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
+						if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID() == EQUIPMENTID) {
+							
+							//CString EQUIPMENTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID);
+							//2023.06.28a uhkim
+							//CString SUBEQPID(Get_Equipment(i).Get_SubEqpID());
+							CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
+							CString PORTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_PORTID());
+							CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(i).Get_mEES_PortSubStatus(n_Port).Get_nProcessStatus()]);
+							//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
+							OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+								IN_From,
+								cntr.REPLY);
+							/*
+							for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
+							{
+								if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
+									dsp.Dsp = IN_PARA;
+									dsp.EES = &Get_EES(nIdx);
+									Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
+								}
+							}*/
+						}
+					}
+				}
+
+			}
+		}
+	}
+#if TEST
+	CString temp;
+	ST_EquipmentStateDisplay dsp;
+	ST_xml_REQUEST_EQUIPMENT_STATE_DISPLAY* IN_PARA = (ST_xml_REQUEST_EQUIPMENT_STATE_DISPLAY*)IN_Data;
+	
+	CString transactionId(IN_PARA->Hd.transactionId);
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	//CString PORTID(IN_PARA->Body.PORTID);
+	//int nPORTID = _ttoi(PORTID);
+	CString EQUIPMENTSTATEDISPLAY(IN_PARA->Body.EQUIPMENTSTATEDISPLAY);
+	CString RGBDISPLAY(IN_PARA->Body.RGBDISPLAY);
+
+
+	if (IN_From < Get_ServerCount()) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
+					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID);
+					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
+					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szPortID);
+					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_PortStatus(n_Port).nEquipmentState]);
+					//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
+					OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
+							transactionId,
+							EQUIPMENTID,
+							SUBEQPID,
+							PORTID,
+							EQUIPMENTSTATEDISPLAY,//EQUIPMENTSTATE,
+							RGBDISPLAY));
+
+					for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
+					{
+						if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
+							dsp.Dsp = IN_PARA;
+							dsp.EES = &Get_EES(nIdx);
+							Get_Server(IN_From).Set_Notify_EquipmentStateDisplay(&dsp);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < Get_EquipmentCount(); i++) {
+				if (Get_Equipment(i).Get_ClientConnection()) {
+					for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
+						if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
+
+							CString EQUIPMENTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID);
+							//2023.06.28a uhkim
+							//CString SUBEQPID(Get_Equipment(i).Get_SubEqpID());
+							CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
+							CString PORTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szPortID);
+							CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(i).Get_PortStatus(n_Port).nEquipmentState]);
+							CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
+							OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+								IN_From,
+								Get_Equipment(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
+									transactionId,
+									EQUIPMENTID,
+									SUBEQPID,
+									PORTID,
+									EQUIPMENTSTATEDISPLAY,//EQUIPMENTSTATE,
+									RGBDISPLAY));
+
+							for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
+							{
+								if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
+									dsp.Dsp = IN_PARA;
+									dsp.EES = &Get_EES(nIdx);
+									Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
+								}
+							}
+						}
+					}
+				}
+				
+			}
+		}
+	}
+
+	/*
+	if (Get_ServerID(IN_From).GetBuffer() == EQUIPMENTID) {
+		if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				if (IN_From < Get_ServerCount())
+				{
+
+				}
+			}
+		}
+		//
+		for (int i = 0; i < Get_EquipmentCount(); i++) {
+			if (Get_Equipment(i).Get_Alias() == SUBEQPID) {
+				if (Get_Equipment(i).Get_ClientConnection()) {
+					OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
+							transactionId,
+							SUBEQPID,
+							PORTID,
+							EQUIPMENTSTATEDISPLAY,
+							RGBDISPLAY));
+
+					for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
+					{
+						if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
+							dsp.Dsp = IN_PARA;
+							dsp.EES = &Get_EES(nIdx);
+							Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
+						}
+					}
+				}
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_EQUIPMENT_STATE_DISPLAY(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REPLY_EQUIPMENT_STATE_DISPLAY* IN_PARA = (ST_xml_REPLY_EQUIPMENT_STATE_DISPLAY*)IN_Data;
+	//서버 이벤트 처리.	
+	//CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	//CString EQUIPMENTSTATEDISPLAY(IN_PARA->Body.EQUIPMENTSTATE);
+	//CString RGBDISPLAY(IN_PARA->Body.LOTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				/*
+				OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+					IN_From,
+					Svr.Set_ReplyEquipMentStateDisplayParameter(
+						SUBEQPID,
+						EQUIPMENTSTATEDISPLAY,
+						RGBDISPLAY));
+				*/
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_LOSS_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REPORT_LOSS_STATE* IN_PARA = (ST_xml_REPORT_LOSS_STATE*)IN_Data;
+	//서버 이벤트 처리.	
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString EQUIPMENTSTATE(IN_PARA->Body.EQUIPMENTSTATE);
+	CString LOTID(IN_PARA->Body.LOTID);
+	CString LOSSSTATE(IN_PARA->Body.LOSSSTATE);
+	CString LOSSCOUNT(IN_PARA->Body.LOSSCOUNT);
+
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				OnSend_REPORT_LOSS_STATE(
+					IN_From,
+					IN_PARA);
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_LOSS_WINDOW(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REQUEST_LOSS_WINDOW* IN_PARA = (ST_xml_REQUEST_LOSS_WINDOW*)IN_Data;
+
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOSSWINDOW(IN_PARA->Body.LOSSWINDOW);
+
+	//서버 이벤트 처리.	
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				//서버 보고 이벤트
+				OnSend_REPLY_LOSS_WINDOW(
+					IN_From,
+					Get_Server(IN_From).GetXmlEes().Set_ReplyLossWindowParameter(
+						SUBEQPID,
+						LOSSWINDOW));
+				//Data 및 이벤트 처리.
+				Get_Server(IN_From).Set_Notify_LOSSWINDOW(LOSSWINDOW);
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_LOSS_WINDOW(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	CServer Svr;
+	ST_xml_REPLY_LOSS_WINDOW* IN_PARA = (ST_xml_REPLY_LOSS_WINDOW*)IN_Data;
+
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOSSWINDOW(IN_PARA->Body.LOSSWINDOW);
+
+	//서버 이벤트 처리.	
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_ALARM_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	CServer Svr;
+	ST_xml_REPORT_ALARM_STATE* IN_PARA = (ST_xml_REPORT_ALARM_STATE*)IN_Data;
+	//서버 이벤트 처리.	
+	CString LOTID(IN_PARA->Body.LOTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString ALARMCODE(IN_PARA->Body.ALARMCODE);
+	CString ALARMID(IN_PARA->Body.ALARMID);
+	CString ALARMMESSAGE(IN_PARA->Body.ALARMMESSAGE);	
+
+	/*
+	if (IN_From < Get_ServerCount()) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
+
+				}
+			}
+			for (int i = 0; i < Get_EquipmentCount(); i++) {
+				if (Get_Equipment(i).Get_ClientConnection()) {
+					for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
+						if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
+
+							CString EQUIPMENTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID);
+							CString SUBEQPID(Get_Equipment(i).Get_SubEqpID());
+							CString PORTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szPortID);
+							CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(i).Get_PortStatus(n_Port).nEquipmentState]);
+							CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
+							OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+								IN_From,
+								Get_Server(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
+									transactionId,
+									EQUIPMENTID,
+									SUBEQPID,
+									PORTID,
+									EQUIPMENTSTATE,
+									RGBDISPLAY));
+
+							for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
+							{
+								if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
+									dsp.Dsp = IN_PARA;
+									dsp.EES = &Get_EES(nIdx);
+									Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				OnSend_REPORT_ALARM_STATE(
+					IN_From,
+					IN_PARA);
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_ALARM_LIST(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REQUEST_ALARM_LIST* IN_PARA = (ST_xml_REQUEST_ALARM_LIST*)IN_Data;
+
+	CString transactionId(IN_PARA->Hd.transactionId);
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
+	CString returnCode;
+	CString returnMessage;
+
+	if (IN_From < Get_ServerCount()) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
+					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID);
+					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
+					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szPortID);
+					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_PortStatus(n_Port).nEquipmentState]);
+					//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
+					OnSend_REPLY_ALARM_LIST(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReplyAlarmListParameter(
+							transactionId,
+							EQUIPMENTID,
+							SUBEQPID,
+							IPADDRESS,
+							returnCode,//EQUIPMENTSTATE,
+							returnMessage));
+				}
+			}
+		}
+	}
+
+	//서버 이벤트 처리.	
+	/*
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				//서버 보고 이벤트
+				OnSend_REPLY_ALARM_LIST(
+					IN_From,
+					Svr.Set_ReplyAlarmListParameter(
+						SUBEQPID));
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_ALARM_LIST(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REPLY_ALARM_LIST* IN_PARA = (ST_xml_REPLY_ALARM_LIST*)IN_Data;
+
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+
+	//서버 이벤트 처리.	
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+
+
+
+//void CTestManager_EQP_ICS::OnSend_EESMode( __in enEES_Mode IN_nLevel)
+//{
+
+//}
+
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_RMS_MODE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REPORT_RMS_MODE* IN_PARA = (ST_xml_REPORT_RMS_MODE*)IN_Data;
+	
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString LOTID(IN_PARA->Body.LOTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString EESMODE(IN_PARA->Body.EESMODE);
+	
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+					OnSend_REPORT_RMS_MODE(
+						IN_From,
+						IN_PARA);
+					Get_Server(IN_From).Set_Notify_RMS(EESMODE);
+					Get_Server(IN_From).GetXmlEes().SetBaseDataPARA(SV_EES_MODE, EESMODE);
+				}
+			}
+		}
+	}
+	for (int IN_From = 0; IN_From < Get_EquipmentCount(); IN_From++) {
+		Get_Equipment(IN_From).GetXmlEes().SetBaseDataPARA(SV_EES_MODE, EESMODE);
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+
+
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_SET_DATETIME(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REQUEST_SET_DATETIME* IN_PARA = (ST_xml_REQUEST_SET_DATETIME*)IN_Data;
+
+
+	CString transactionId(IN_PARA->Hd.transactionId);	
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
+	CString DATETIME(IN_PARA->Body.DATETIME);
+
+	CString szTemp;
+	SYSTEMTIME time;
+	SYSTEMTIME tmLocal;
+	GetLocalTime(&tmLocal);
+
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+					if (GetNtPrivilege()) {
+
+						time.wYear = _ttoi(DATETIME.Mid(0, 4));
+						time.wMonth = _ttoi(DATETIME.Mid(4, 2));
+
+						time.wDayOfWeek = tmLocal.wDayOfWeek;
+
+						time.wDay = _ttoi(DATETIME.Mid(6, 2));
+						time.wHour = _ttoi(DATETIME.Mid(8, 2));
+						time.wMinute = _ttoi(DATETIME.Mid(10, 2));
+						time.wSecond = _ttoi(DATETIME.Mid(12, 2));
+						//time.wMilliseconds = _ttoi(DATETIME.Mid(14, 3));
+						time.wMilliseconds = 0;
+
+						SetLocalTime(&time);
+						//Get_Server(IN_From).Set_TimeSync(true);
+						OnSend_REPLY_SET_DATETIME(
+							IN_From,
+							Get_Server(IN_From).GetXmlEes().Set_ReplySetDateTimeParameter(
+								transactionId,
+								DATETIME));
+					}
+				}
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_SET_DATETIME(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REPLY_SET_DATETIME* IN_PARA = (ST_xml_REPLY_SET_DATETIME*)IN_Data;
+	CString transactionId(IN_PARA->Hd.transactionId);
+
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
+	CString DATETIME(IN_PARA->Body.DATETIME);
+
+	CString szTemp;
+	SYSTEMTIME time;
+	SYSTEMTIME tmLocal;
+	GetLocalTime(&tmLocal);
+
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+					if (GetNtPrivilege()) {
+
+						time.wYear = _ttoi(DATETIME.Mid(0, 4));
+						time.wMonth = _ttoi(DATETIME.Mid(4, 2));
+
+						time.wDayOfWeek = tmLocal.wDayOfWeek;
+
+						time.wDay = _ttoi(DATETIME.Mid(6, 2));
+						time.wHour = _ttoi(DATETIME.Mid(8, 2));
+						time.wMinute = _ttoi(DATETIME.Mid(10, 2));
+						time.wSecond = _ttoi(DATETIME.Mid(12, 2));
+						//time.wMilliseconds = _ttoi(DATETIME.Mid(14, 3));
+						time.wMilliseconds = 0;
+
+						SetLocalTime(&time);
+						//Get_Server(IN_From).Set_TimeSync(true);
+						OnSend_REPLY_SET_DATETIME(
+							IN_From,
+							IN_PARA);
+							//Get_Server(IN_From).GetXmlEes().Set_ReplySetDateTimeParameter(
+							//	transactionId,
+							//	DATETIME));
+					}
+				}
+			}
+		}
+	}
+	/*
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_Equipment(i).Get_Alias().GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_TERMINAL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{	
+#if TEST
+	ST_xml_REQUEST_TERMINAL_MESSAGE* IN_PARA = (ST_xml_REQUEST_TERMINAL_MESSAGE*)IN_Data;
+	CString transactionId(IN_PARA->Hd.transactionId);
+
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
+	CString TERMINALMESSAGE(IN_PARA->Body.TERMINALMESSAGE);
+
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+					OnReport_TerminalMessage(IN_PARA);
+					OnSend_REPLY_TERMINAL_MESSAGE(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReplyTerminalMessageParameter(
+							transactionId,
+							SUBEQPID,
+							TERMINALMESSAGE));
+					Get_Server(IN_From).Set_Notify_TERMINAL_MESSAGE(IN_PARA);
+				}
+			}
+		}
+	}
+	/*
+	if (Get_ServerID(IN_From).GetBuffer() == EQUIPMENTID) {
+		if (Get_ServerAlias(IN_From).GetBuffer() == SUBEQPID) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				if (IN_From < Get_ServerCount())
+				{
+					OnReport_TerminalMessage(IN_PARA);
+					OnSend_REPLY_TERMINAL_MESSAGE(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReplyTerminalMessageParameter(
+							transactionId,
+							SUBEQPID,
+							TERMINALMESSAGE));
+					Get_Server(IN_From).Set_Notify_TERMINAL_MESSAGE(IN_PARA);
+				}
+			}
+		}
+		for (int i = 0; i < Get_EquipmentCount(); i++)
+		{
+			if (Get_Equipment(i).Get_Alias().GetBuffer() == SUBEQPID) {
+				if (Get_Equipment(i).Get_ClientConnection()) {
+				}
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_TERMINAL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REPLY_TERMINAL_MESSAGE* IN_PARA = (ST_xml_REPLY_TERMINAL_MESSAGE*)IN_Data;
+
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+					OnSend_REPLY_TERMINAL_MESSAGE(
+						IN_From,
+						IN_PARA);
+				}
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_OPCALL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REQUEST_OPCALL* IN_PARA = (ST_xml_REQUEST_OPCALL*)IN_Data;
+
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString TERMINALMESSAGE(IN_PARA->Body.MESSAGE);
+	CString BUZZER(IN_PARA->Body.BUZZER);
+	CString TOWERLAMP(IN_PARA->Body.TOWERLAMP);
+
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+					OnReport_OpCall(IN_PARA);
+					Get_Server(IN_From).Set_Notify_OPCALL(IN_PARA);
+				}
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_OPCALL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+#if TEST
+	ST_xml_REPLY_OPCALL* IN_PARA = (ST_xml_REPLY_OPCALL*)IN_Data;
+	CString transactionId(IN_PARA->Hd.transactionId);
+
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString TERMINALMESSAGE(IN_PARA->Body.MESSAGE);
+	CString BUZZER(IN_PARA->Body.BUZZER);
+	CString TOWERLAMP(IN_PARA->Body.TOWERLAMP);
+
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+					OnSend_REPLY_OPCALL(
+						IN_From,
+						IN_PARA);
+				}
+			}
+		}
+	}
+	/*
+	if (Get_ServerID(IN_From).GetBuffer() == EQUIPMENTID) {
+		if (Get_ServerAlias(IN_From).GetBuffer() == SUBEQPID) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				if (IN_From < Get_ServerCount())
+				{
+					OnSend_REPLY_OPCALL(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReplyOpCallParameter(
+							transactionId,
+							SUBEQPID,
+							TERMINALMESSAGE,
+							BUZZER,
+							TOWERLAMP));
+				}
+			}
+		}
+
+		for (int i = 0; i < Get_EquipmentCount(); i++)
+		{
+			if (Get_Equipment(i).Get_Alias().GetBuffer() == SUBEQPID) {
+				if (Get_Equipment(i).Get_ClientConnection()) {
+
+				}
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+#endif
+}
+
+//=============================================================================
+// Method		: OnEvent_Equipment
+// Access		:   
+// Returns		: void
+// Parameter	: 
+// Qualifier	:
+// Last Update	: 2022/2/9 - 14:46
+// Desc.		: 개별 Equipment를 이벤트에 대한 데이터 처리.
+//=============================================================================
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_ONLINE_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_USER_CHANGE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_USER_COMMAND(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+//PtS_Empty = 0,	// 0 : 비어 있음
+//PtS_Exist_Socket,			// 1 : 제품 있음	
+//PtS_Wait_Out,				// 2 : 배출대기
+//PtS_Disable,				// 3 : 비활성
+//PtS_Alarm,					// 4 : Alarm
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_EQUIPMENT_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	//UI 처리
+	if (!Get_Equipment(IN_From).Get_ClientConnection())
+		return;
+	for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
+
+		
+		for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_mEES_PortSubStatusCount(); nPort++) {
+
+			auto a = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldOperMode();
+			auto b = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldProcessStatus();
+			auto c = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldPortStatus();
+			auto d = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOperMode();
+			auto e = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus();
+			auto f = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus();
+			if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldOperMode() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOperMode() &&	//작업 동작.
+				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldProcessStatus() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus() &&
+				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldPortStatus() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus()) {
+				continue;
+			}
+			auto nPortStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus();
+			auto nProcessStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus();
+			switch (nProcessStatus)
+			{
+			case enEqpProcessStatus::EPC_None:
+				if (nPortStatus == PtS_Exist_Socket) {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
+				}	else {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+				}
+				break;
+			case enEqpProcessStatus::EPC_Init:
+				if (nPortStatus == PtS_Exist_Socket) {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
+				}
+				else {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+				}
+				break;
+			case enEqpProcessStatus::EPC_Idle:
+				if (nPortStatus == PtS_Exist_Socket) {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
+				}
+				else {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+				}
+				break;
+			case enEqpProcessStatus::EPC_Run:
+				if (nPortStatus == PtS_RUN) {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_RUN);
+				}
+				else {
+					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+				}
+				break;
+			case enEqpProcessStatus::EPC_Alarm:
+				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_SUDDENSTOP);
+				break;
+			}
+			if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldEquipmentStatus() != Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus()) {
+				auto Args = Get_Server(nSvr).Create_Report_Equipment_StateArgs(nullptr);
+				auto cntr = Add_Equipment_StateArgs(Get_ServerID(nSvr), *Args);
+				cntr.REPORT.Body.Set_EQUIPMENTID(lt::ToMultiByte(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).Get_EQUIPMENTID()));
+				cntr.REPORT.Body.Set_EQUIPMENTSTATE(lt::ToMultiByte(g_szEquipment_State[Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldEquipmentStatus()]));
+				Get_Equipment(IN_From).Set_Notify_EquipmentState(&cntr.REPORT);
+
+				if (!Get_Server(nSvr).Get_ClientConnection()) {
+					RemoveEquipmentStateProcedure(Get_ServerID(nSvr).GetBuffer(), cntr.REPORT.Hd.Get_transactionId());
+					continue;
+				}
+				OnSend_REPORT_EQUIPMENT_STATE(nSvr, cntr.REPORT);
+			}
+			Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nOldEquipmentStatus(Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus());
+		}
+		if (IN_Data == enEqpProcessStatus::EPC_Alarm) {
+			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_SET);
+		}
+		else {
+			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_RESET);
+		}
+	}
+	
+#if TEST
+	bool bOut = false;
+
+	if (!Get_Equipment(IN_From).Get_ClientConnection())
+		return;
+
+	//설비 상태.
+	for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
+		if (!Get_Server(nSvr).Get_ClientConnection()) {
+			continue;
+		}
+		
+		//설비 LOT ID가져오기.
+		auto nProcessStatus = Get_Equipment(IN_From).Get_ProcessStatus();
+		auto nOperatingMode = Get_Equipment(IN_From).Get_OperatingMode();
+
+		auto bProcessEvent = bGetProcessStatusEvent(IN_From);
+		auto bOperModeEvent = bGetOperatingModeEvent(IN_From);		
+		auto bConnectionEvent = bGetClientConnectionEvent(IN_From);
+
+		if (bConnectionEvent) {
+			for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++)
+			{
+				auto bPortEvent = bGetPortStatusEvent(IN_From, nPort);
+				if (!bPortEvent) {
+					continue;
+				}
+				if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
+					continue;
+				}
+				auto bPortStatus = Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus;
+				//if (bGetPortLOTIDUseEvent(IN_From, nPort)) 
+				{
+					if (nProcessStatus == enEqpProcessStatus::EPC_None) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Init) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Idle) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Run) {
+						if (bPortStatus == PtS_Exist_Socket){
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Alarm)
+					{
+						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
+					}
+				}
+				/*
+				else {
+					if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
+						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Run)
+					{
+						if (bPortStatus == PtS_Exist_Socket)
+						{
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
+						}
+						else
+						{
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+					}
+					else {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}					
+					}
+				}*/
+				if (bGetPortEquipmentStateEvent(IN_From, nPort)) {
+					CString EQUIPMENTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szEquipID);	
+					//2023.06.28a uhkim
+					//CString SUBEQPID(Get_Equipment(IN_From).Get_SubEqpID());
+					CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
+					CString PORTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szPortID);
+					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState]);
+					CString LOTID(Get_Equipment(IN_From).Get_FromPortToLOTID(nPort));
+					auto m_p = Get_Equipment(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						EQUIPMENTSTATE,
+						LOTID);
+					//if (0 < LOTID.GetLength())
+					{
+						m_pIcsServer->SendReportEquipmentStateMassage(
+							Get_ServerID(nSvr),
+							m_p);
+					}
+					Get_Equipment(IN_From).Set_Notify_EquipmentState(
+						m_p);
+
+					Get_Equipment(IN_From).Set_OldPortStatusEquipmentStateEvent(nPort, Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState);
+					Get_Equipment(IN_From).Set_OldPortStatus(nPort,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).szRfid,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).szBarcode);
+				}
+			}
+			Get_Equipment(IN_From).Set_OldClientConnection(Get_Equipment(IN_From).Get_ClientConnection());
+		}
+
+		if (!bProcessEvent && !bOperModeEvent) {
+			//Equipment는 그대로고 Port상태만 바뀐 경우
+			for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++)
+			{
+				auto bPortEvent = bGetPortStatusEvent(IN_From, nPort);
+				if (!bPortEvent) {
+					continue;
+				}
+				if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
+					continue;
+				}
+				auto bPortStatus = Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus;
+				//if (bGetPortLOTIDUseEvent(IN_From, nPort)) 
+				{
+					if (nProcessStatus == enEqpProcessStatus::EPC_None) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Init) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Idle) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Run) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) 
+					{
+						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
+					}
+				}
+				/*
+				else {
+					if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
+						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Run)
+					{
+						if (bPortStatus == PtS_Exist_Socket)
+						{
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
+						}
+						else
+						{
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+					}
+					else {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+				}*/
+				if (bGetPortEquipmentStateEvent(IN_From, nPort)) {					
+					CString EQUIPMENTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szEquipID);
+					//2023.06.28a uhkim
+					//CString SUBEQPID(Get_Equipment(IN_From).Get_SubEqpID());
+					CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
+					CString PORTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szPortID);
+					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState]);
+					CString LOTID(Get_Equipment(IN_From).Get_FromPortToLOTID(nPort));
+					auto m_p = Get_Equipment(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						EQUIPMENTSTATE,
+						LOTID);
+					//if (0 < LOTID.GetLength())
+					{
+						m_pIcsServer->SendReportEquipmentStateMassage(
+							Get_ServerID(nSvr),
+							m_p);
+					}
+					Get_Equipment(IN_From).Set_Notify_EquipmentState(
+						m_p);
+					Get_Equipment(IN_From).Set_OldPortStatusEquipmentStateEvent(nPort, Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState);
+					Get_Equipment(IN_From).Set_OldPortStatus(nPort,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).szRfid,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).szBarcode);
+				}
+			}
+			//바뀔 PorcessState가 없을 경우
+			//continue;
+		}
+		//EquipmentState가 변경시.
+		else {
+			//Alarm 이벤트
+			//
+			for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++) 
+			{
+				if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
+					continue;
+				}
+				auto bPortStatus = Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus;
+				//if (bGetPortLOTIDUseEvent(IN_From, nPort)) 
+				{
+					if (nProcessStatus == enEqpProcessStatus::EPC_None) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Init) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Idle) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Run) {
+						if (bPortStatus == PtS_Exist_Socket) {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
+						}
+						else {
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
+						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
+					}
+				}				/*
+				else {
+					if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) 
+					{
+						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
+					}
+					else if (nProcessStatus == enEqpProcessStatus::EPC_Run) 
+					{
+						if (bPortStatus == PtS_Exist_Socket)
+						{
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
+						}
+						else 
+						{
+							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+						}
+					} 
+					else 
+					{
+						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
+					}
+				}*/
+				if (bGetPortEquipmentStateEvent(IN_From, nPort)) {
+					CString EQUIPMENTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szEquipID);
+					//2023.06.28a uhkim
+					//CString SUBEQPID(Get_Equipment(IN_From).Get_SubEqpID());
+					CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
+					CString PORTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szPortID);
+					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState]);
+					CString LOTID(Get_Equipment(IN_From).Get_FromPortToLOTID(nPort));
+					auto m_p = Get_Equipment(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						EQUIPMENTSTATE,
+						LOTID);
+					//if (0 < LOTID.GetLength())
+					{
+						m_pIcsServer->SendReportEquipmentStateMassage(
+							Get_ServerID(nSvr),
+							m_p);
+					}				
+					Get_Equipment(IN_From).Set_Notify_EquipmentState(
+						m_p);
+					Get_Equipment(IN_From).Set_OldPortStatusEquipmentStateEvent(nPort, Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState);
+					Get_Equipment(IN_From).Set_OldPortStatus(nPort,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).szRfid,
+						Get_Equipment(IN_From).Get_PortStatus(nPort).szBarcode);
+				}
+			}
+
+		}
+
+		if (bProcessEvent)
+		{
+			m_stInspInfo.LineInfo.GetAt(IN_From).Set_OldProcessStatus(nProcessStatus);
+		}
+		if (bOperModeEvent)
+		{
+			m_stInspInfo.LineInfo.GetAt(IN_From).Set_OldOperatingMode(nOperatingMode);
+		}
+
+		OnEvent_ServerREPORT_EQUIPMENT_STATE(nSvr, NULL);
+
+		if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
+			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_SET);
+		}
+		else {
+			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_RESET);
+		}
+	}
+#endif
+}
+
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_EQUIPMENT_STATE_DISPLAY(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_LOSS_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_LOSS_WINDOW(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_ALARM_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	uint32_t IN_PARA = (uint32_t )IN_Data;
+	CString temp;
+	if (enALARMSET::ALARMSET_SET == IN_PARA)
+	{
+		for (int i = 0; i < Get_EqpAlarmCount(IN_From); i++) {
+			if (Get_ptAlarmStatus(IN_From, i).Get_nAlarmSet() == ALARMSET_NULL) {				
+				Get_ptAlarmStatus(IN_From, i).Set_nAlarmSet(ALARMSET_SET);
+				for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++) {
+					if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
+						continue;	}
+
+					for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
+						for (int n = 0; n < Get_Server(nSvr).Get_mAlarmStatusCount(); n++)
+						{ 
+				
+
+							lt::XUUID ID;
+							lt::Report_Alarm_State_Args::Args * Args = (lt::Report_Alarm_State_Args::Args *) IN_Data;
+							auto svr = m_pIcsServer->GetRemote(Get_ServerID(IN_From));
+							if (Args != nullptr) {
+								ID = Args->Hd.Get_transactionId();
+								svr->GetRemoteEes().AddAlarmStateProcedure(ID, *Args);
+								delete Args;
+								//CString EQUIPMENTSTATE = lt::ToWideChar(Get_Server(nSvr).Get_mEES_PortSubStatus(n).Get_nEquipmentStatus()).c_str();
+								CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
+								CString IPADDRESS = lt::ToWideChar( Get_Server(nSvr).Get_DEFINEDATA().Get_IPADDRESS()).c_str();
+								CString EESMODE = lt::ToWideChar(Get_Server(nSvr).Get_DEFINEDATA().Get_EESMODE()).c_str();
+								CString ALARMCODE(g_sALARMSET[ALARMSET_SET]);
+								temp.Format(_T("%03d%s%02d"), Get_ptAlarmStatus(IN_From, i).Get_nAlarmCode(), SUBEQPID, nPort);
+								CString ALARMID(temp);
+								CString ALARMMESSAGE(Get_ptAlarmStatus(IN_From, i).Get_szAlarmInfo());
+
+								auto cntr = svr->GetRemoteEes().AlarmStateCtrl(ID);
+								//cntr.REPORT.Hd.Set_timeStamp(cntr.REPORT.Hd.Get_timeStamp());
+								//cntr.REPORT.Body.Set_EESMODE(EESMODE);
+								//cntr.REPORT.Body.Set_ALARMCODE(ALARMCODE);
+								//cntr.REPORT.Body.Set_ALARMID(ALARMID);
+								//cntr.REPORT.Body.Set_ALARMMESSAGE(ALARMMESSAGE);
+								m_pIcsServer->SendReportAlarmStateMassage(
+									Get_ServerID(nSvr),
+									cntr.REPORT);
+								svr->GetRemoteEes().RemoveOnlineStateProcedure(ID);
+							}
+						}
+					}
+				}				
+			}
+		}
+	}
+	else if (enALARMSET::ALARMSET_RESET == IN_PARA) {
+		for (int i = 0; i < Get_EqpAlarmCount(IN_From); i++) {
+			if (Get_ptAlarmStatus(IN_From, i).Get_nAlarmSet() == ALARMSET_SET) {
+				Get_ptAlarmStatus(IN_From, i).Set_nAlarmSet(ALARMSET_RESET);
+				for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++) {
+					if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
+						continue;
+					}
+					for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
+						for (int n = 0; n < Get_Server(nSvr).Get_mAlarmStatusCount(); n++)
+						{
+							lt::XUUID ID;
+							lt::Report_Alarm_State_Args::Args * Args = (lt::Report_Alarm_State_Args::Args *) IN_Data;
+							auto svr = m_pIcsServer->GetRemote(Get_ServerID(IN_From));
+							if (Args != nullptr) {
+								ID = Args->Hd.Get_transactionId();
+								svr->GetRemoteEes().AddAlarmStateProcedure(ID, *Args);
+								delete Args;
+
+								CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
+								CString IPADDRESS = lt::ToWideChar(Get_Server(nSvr).Get_DEFINEDATA().Get_IPADDRESS()).c_str();
+								CString EESMODE = lt::ToWideChar(Get_Server(nSvr).Get_DEFINEDATA().Get_EESMODE()).c_str();
+								CString ALARMCODE(g_sALARMSET[ALARMSET_RESET]);
+								temp.Format(_T("%03d%s%02d"), Get_ptAlarmStatus(IN_From, i).Get_nAlarmCode(), SUBEQPID, nPort);
+								CString ALARMID(temp);
+								CString ALARMMESSAGE(Get_ptAlarmStatus(IN_From, i).Get_szAlarmInfo());
+
+								auto cntr = svr->GetRemoteEes().AlarmStateCtrl(ID);
+								cntr.REPORT.Hd.Set_timeStamp(cntr.REPORT.Hd.Get_timeStamp());
+								//cntr.REPORT.Body.Set_EESMODE(EESMODE);
+								//cntr.REPORT.Body.Set_ALARMCODE(ALARMCODE);
+								//cntr.REPORT.Body.Set_ALARMID(ALARMID);
+								//cntr.REPORT.Body.Set_ALARMMESSAGE(ALARMMESSAGE);
+								m_pIcsServer->SendReportAlarmStateMassage(
+									Get_ServerID(nSvr),
+									cntr.REPORT);
+								svr->GetRemoteEes().RemoveOnlineStateProcedure(ID);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_RMS_MODE(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_OPCALL(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+
+void CTestManager_EQP_ICS::OnSend_REPLY_LINK_TEST(__in uint8_t IN_nSvrOrder, __in lt::Reply_Link_Test_Args::Args & IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPLY_LINK_TEST(transactionId %s)"), 
+		IN_nSvrOrder,
+		IN_LPARAM.Hd.Get_transactionId_XuuidToStr());
+	if (m_pIcsServer->SendReplyLinkTestMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_LINK_TEST() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_LINK_TEST() : comm failed"), IN_nSvrOrder);
+	}
+	RemoveLinkTestProcedure(Get_ServerID(IN_nSvrOrder).GetBuffer(), IN_LPARAM.Hd.Get_transactionId());
+}
+void CTestManager_EQP_ICS::OnSend_REPORT_ONLINE_STATE(__in uint8_t IN_nSvrOrder, __in lt::Report_Online_State_Args::Args& 	IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPORT_ONLINE_STATE(transactionId %s, ONLINESTATE %s, EESMODE %s)"), 
+		IN_nSvrOrder,
+		IN_LPARAM.Hd.Get_transactionId(), 
+		IN_LPARAM.Body.Get_ONLINESTATE(),
+		IN_LPARAM.Body.Get_EESMODE());
+	if (m_pIcsServer->SendReportOnlineStateMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_ONLINE_STATE() : comm succeed"), IN_nSvrOrder);
+	}else{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_ONLINE_STATE() : comm failed"), IN_nSvrOrder);
+	}
+	RemoveOnlineStateProcedure(Get_ServerID(IN_nSvrOrder).GetBuffer(), IN_LPARAM.Hd.Get_transactionId());
+}
+void CTestManager_EQP_ICS::OnSend_REPORT_USER_CHANGE(__in uint8_t IN_nSvrOrder, __in lt::Report_User_Change_Args::Args&	 IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPORT_USER_CHANGE(transactionId %s USERID %s)"), 
+		IN_nSvrOrder,
+		IN_LPARAM.Hd.Get_transactionId_XuuidToStr(),
+		IN_LPARAM.Body.Get_USERID());
+	if (m_pIcsServer->SendReportUserChangeMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_USER_CHANGE() : comm succeed"), IN_nSvrOrder);
+	}else{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_USER_CHANGE() : comm failed"), IN_nSvrOrder);
+	}
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_USER_COMMAND(__in uint8_t IN_nSvrOrder, __in lt::Reply_User_Change_Args::Args & IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPLY_USER_COMMAND(transactionId %s USERID %s)"), 
+		IN_nSvrOrder,
+		IN_LPARAM.Hd.Get_transactionId_XuuidToStr(),
+		IN_LPARAM.Body.Get_USERID());
+	if (m_pIcsServer->SendReplyUserCommandMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_USER_COMMAND() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_USER_COMMAND() : comm failed"), IN_nSvrOrder);
+	}
+	RemoveUserCommandProcedure(Get_ServerID(IN_nSvrOrder).GetBuffer(), IN_LPARAM.Hd.Get_transactionId());
+}
+void CTestManager_EQP_ICS::OnSend_REPORT_EQUIPMENT_STATE(__in uint8_t IN_nSvrOrder, __in lt::Report_Equipment_State_Args::Args& IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPORT_EQUIPMENT_STATE(transactionId %s  SUBEQPID %s, EQUIPMENTSTATE %s)"), 
+		IN_nSvrOrder, 
+		IN_LPARAM.Hd.Get_transactionId_XuuidToStr(),
+		IN_LPARAM.Body.Get_SUBEQPID(),
+		IN_LPARAM.Body.Get_EQUIPMENTSTATE());
+	if (m_pIcsServer->SendReportEquipmentStateMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_EQUIPMENT_STATE() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_EQUIPMENT_STATE() : comm failed"), IN_nSvrOrder);
+	}	
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(__in uint8_t IN_nSvrOrder, __in lt::Reply_Equipment_State_Display_Args::Args& IN_LPARAM)
+{	
+	OnLog(_T("[Svr %03d] OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(transactionId %s )"), 
+		IN_nSvrOrder,
+		IN_LPARAM.Hd.Get_transactionId_XuuidToStr());
+	if (m_pIcsServer->SendReplyEquipmentStateDisplayMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_EQUIPMENT_STATE_DISPLAY() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_EQUIPMENT_STATE_DISPLAY() : comm failed"), IN_nSvrOrder);
+	}
+	RemoveEquipmentStateProcedure(Get_ServerID(IN_nSvrOrder).GetBuffer(), IN_LPARAM.Hd.Get_transactionId());
+}
+void CTestManager_EQP_ICS::OnSend_REPORT_LOSS_STATE(__in uint8_t IN_nSvrOrder, __in lt::Report_Loss_State_Args::Args&	IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPORT_LOSS_STATE()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReportLossStateMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_LOSS_STATE() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_LOSS_STATE() : comm failed"), IN_nSvrOrder);
+	}
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_LOSS_WINDOW(__in uint8_t IN_nSvrOrder, __in lt::Reply_Loss_Window_Args::Args& IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPLY_LOSS_WINDOW()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReplyLossWindowMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_LOSS_WINDOW() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_LOSS_WINDOW() : comm failed"), IN_nSvrOrder);
+	}
+}
+void CTestManager_EQP_ICS::OnSend_REPORT_ALARM_STATE(__in uint8_t IN_nSvrOrder, __in lt::Report_Alarm_State_Args::Args& IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPORT_ALARM_STATE()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReportAlarmStateMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(), 
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_ALARM_STATE() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_ALARM_STATE() : comm failed"), IN_nSvrOrder);
+	}
+	RemoveAlarmStateProcedure(Get_ServerID(IN_nSvrOrder).GetBuffer(), IN_LPARAM.Hd.Get_transactionId());
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_ALARM_LIST(__in uint8_t IN_nSvrOrder, __in lt::Reply_Alarm_List_Args::Args& IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPLY_ALARM_LIST()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReplyAlarmListMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_ALARM_LIST() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_ALARM_LIST() : comm failed"), IN_nSvrOrder);
+	}
+	RemoveAlarmListProcedure(Get_ServerID(IN_nSvrOrder).GetBuffer(), IN_LPARAM.Hd.Get_transactionId());
+}
+void CTestManager_EQP_ICS::OnSend_REPORT_RMS_MODE(__in uint8_t IN_nSvrOrder, __in lt::Report_Rms_Mode_Args::Args& IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPORT_RMS_MODE(transactionId %s)"), 
+		IN_nSvrOrder,
+		IN_LPARAM.Hd.Get_transactionId_XuuidToStr());
+	if (m_pIcsServer->SendReportRmsModeMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_RMS_MODE() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_RMS_MODE() : comm failed"), IN_nSvrOrder);
+	}
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_SET_DATETIME(__in uint8_t IN_nSvrOrder, __in lt::Reply_Set_DateTime_Args::Args& IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPLY_SET_DATETIME()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReplySetDateTimeMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_LPARAM))	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_SET_DATETIME() : comm succeed"), IN_nSvrOrder);
+	}	else	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_SET_DATETIME() : comm failed"), IN_nSvrOrder);
+	}
+	RemoveSetDateTimeProcedure(Get_ServerID(IN_nSvrOrder).GetBuffer(), IN_LPARAM.Hd.Get_transactionId());
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_TERMINAL_MESSAGE(__in uint8_t IN_nSvrOrder, __in lt::Reply_Terminal_Message_Args::Args& IN_LPARAM)
+{
+
+	OnLog(_T("[Svr %03d] OnSend_REPLY_TERMINAL_MESSAGE()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReplyTerminalMessageMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_LPARAM))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_TERMINAL_MESSAGE() : comm succeed"), IN_nSvrOrder);
+	}else{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_TERMINAL_MESSAGE() : comm failed"), IN_nSvrOrder);
+	}
+
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_OPCALL(__in uint8_t IN_nSvrOrder, __in lt::Reply_Opcall_Args::Args&	IN_LPARAM)
+{
+	OnLog(_T("[Svr %03d] OnSend_REPLY_OPCALL()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReplyOpCallMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_LPARAM))	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_OPCALL() : comm succeed"), IN_nSvrOrder);
+	}else{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_OPCALL() : comm failed"), IN_nSvrOrder);
+	}
+}
+void CTestManager_EQP_ICS::OnSet_EESMode(__in enEES_Mode nAcessMode)
+{
+	__super::OnSet_EESMode(nAcessMode);
+}
+
+bool CTestManager_EQP_ICS::Get_EquipmentTypeEvent(
+	__in uint8_t  IN_From,
+	__in uint8_t  IN_nPortStatus) {
+	bool bReturn = true;
+	auto IN_nEqpType = Get_EquipmentType(IN_From);
+	switch (IN_nEqpType) {
+	case enEquipmentType::Eqp_Handler:
+		bReturn = false;
+		break;
+	case enEquipmentType::Eqp_Loader:
+		bReturn = false;
+		break;
+	case enEquipmentType::Eqp_Returner:
+		break;
+	default:
+		if ((IN_nPortStatus == PtI_T_Buffer) ||
+			(IN_nPortStatus == PtI_T_RFID)) {
+			bReturn = false;
+		}
+		break;
+	}
+	return bReturn;
+}
+#endif 
+
+
+
+#if SOCKET
+bool CTestManager_EQP_ICS::bGetClientConnectionEvent(__in uint8_t IN_From) {
+	auto nPara = Get_Equipment(IN_From).Get_ClientConnection();
+	auto nOldPara = Get_Equipment(IN_From).Get_OldClientConnection();
+
+	bool bEvent = false;
+	if ((nOldPara != nPara)) {
+		bEvent = true;
+	}
+	return bEvent;
+}
+
+
+bool CTestManager_EQP_ICS::bGetProcessStatusEvent(__in uint8_t IN_From) {
+	auto nPara = Get_Equipment(IN_From).Get_OldProcessStatus();
+	auto nOldPara = Get_Equipment(IN_From).Get_ProcessStatus();
+
+	bool bEvent = false;
+	if ((nOldPara != nPara)) {
+		bEvent = true;
+	}
+	return bEvent;
+}
+
+bool CTestManager_EQP_ICS::bGetOperatingModeEvent(__in uint8_t IN_From) {
+	auto nPara = Get_Equipment(IN_From).Get_OldOperatingMode();
+	auto nOldPara = Get_Equipment(IN_From).Get_OperatingMode();
+
+	bool bEvent = false;
+	if ((nOldPara != nPara)) {
+		bEvent = true;
+	}
+	return bEvent;
+}
+
+bool CTestManager_EQP_ICS::bGetPortStatusEvent(
+	__in uint8_t IN_From, 
+	__in uint8_t  IN_nPortStatus) 
+{
+	auto nPara = Get_Equipment(IN_From).Get_PortStatus(IN_nPortStatus).nStatus;
+	auto nOldPara = Get_Equipment(IN_From).Get_OldPortStatus(IN_nPortStatus).nStatus;
+	bool bEvent = false;
+	if ((nOldPara != nPara)) {
+		bEvent = true;
+	}
+	return bEvent;
+}
+
+
+bool CTestManager_EQP_ICS::bGetPortEquipmentStateEvent(
+	__in uint8_t IN_From,
+	__in uint8_t  IN_nPortStatus)
+{
+	auto nPara = Get_Equipment(IN_From).Get_PortStatus(IN_nPortStatus).nEquipmentState;
+	auto nOldPara = Get_Equipment(IN_From).Get_OldPortStatus(IN_nPortStatus).nEquipmentState;
+	bool bEvent = false;
+	if ((nOldPara != nPara)) {
+		bEvent = true;
+	}
+	return bEvent;
+}
+
+bool CTestManager_EQP_ICS::bGetPortLOTIDUseEvent(
+	__in uint8_t IN_From)
+{
+	bool bExist = false;
+	for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++)
+	{
+		auto szRFID = Get_Equipment(IN_From).Get_PortStatus(nPort).szRfid;
+		if (0 < szRFID.GetLength()) {
+			bExist = true;
+		}
+		//if (0 < m_stInspInfo.SocketInfo.GetAt(szRFID.GetBuffer()).Get_Lot().GetLength());
+	}
+	return bExist;	
+}
+
+bool CTestManager_EQP_ICS::bGetPortLOTIDUseEvent(
+	__in uint8_t  IN_From,
+	__in uint8_t  IN_nPortStatus)
+{
+	bool bExist = false;
+	
+	auto szRFID = Get_Equipment(IN_From).Get_PortStatus(IN_nPortStatus).szRfid;
+	if (0 < szRFID.GetLength()) {
+		bExist = true;
+	}
+	
+	return bExist;
+}
+
+
+
+bool CTestManager_EQP_ICS::Get_ServerTypeEvent(
+	__in uint8_t  IN_From,
+	__in uint8_t  IN_nPortStatus) {
+	bool bReturn = true;
+	auto IN_nEqpType = Get_ServerType(IN_From);
+	switch (IN_nEqpType) {
+	case enServerType::SERVER_EES:		
+		//if ((IN_nPortStatus == PtI_EES_0)) {
+		//	bReturn = false;
+		//}
+		break;
+	}
+	return bReturn;
+}
+
+bool CTestManager_EQP_ICS::bGetSvrEquipmentStateEvent(
+	__in uint8_t IN_From,
+	__in uint8_t IN_nPortStatus) {
+
+	auto nPara = Get_Server(IN_From).Get_PortStatus(IN_nPortStatus).nEquipmentState;
+	auto nOldPara = Get_Server(IN_From).Get_OldPortStatus(IN_nPortStatus).nEquipmentState;
+
+	bool bEvent = false;
+	if ((nOldPara != nPara)) {
+		bEvent = true;
+	}
+	return bEvent;
+}
+//=============================================================================
+// Method		: OnReport_TerminalMessage
+// Access		: virtual protected  
+// Returns		: void
+// Parameter	: __in LPCTSTR IN_szRFID
+// Qualifier	:
+// Last Update	: 2023.05.02
+// Desc.		:
+//=============================================================================
+void CTestManager_EQP_ICS::OnReport_TerminalMessage(__in lt::Request_Terminal_Message_Args::Args&  IN_szData)
+{
+	// 파일로 저장 (Load Time, Unload Time, RFID, Serial Number, NG Code, Eqp Type, Eqp No, Eqp ID, Eqp Para)
+	CString szPath;
+	CString szFullPath;
+
+	SYSTEMTIME tmLocal;
+	GetLocalTime(&tmLocal);
+
+	// Report\\Year\\Month\\ 
+	szPath.Format(_T("%s\\%04d\\%02d\\"), m_stInspInfo.Path.szReport, tmLocal.wYear, tmLocal.wMonth);
+	MakeDirectory(szPath);
+
+	szFullPath.Format(_T("%sTermanalMessage_%04d_%02d%02d.csv"), szPath, tmLocal.wYear, tmLocal.wMonth, tmLocal.wDay);
+
+	OnLogFile_TerminalMessageResult(IN_szData, szFullPath.GetBuffer());
+}
+
+//=============================================================================
+// Method		: OnReport_OpCall
+// Access		: virtual protected  
+// Returns		: void
+// Parameter	: __in LPCTSTR IN_szRFID
+// Qualifier	:
+// Last Update	: 2023.05.02
+// Desc.		:
+//=============================================================================
+void CTestManager_EQP_ICS::OnReport_OpCall(__in lt::Request_Opcall_Args::Args& IN_szData)
+{
+	// 파일로 저장 (Load Time, Unload Time, RFID, Serial Number, NG Code, Eqp Type, Eqp No, Eqp ID, Eqp Para)
+	CString szPath;
+	CString szFullPath;
+
+	SYSTEMTIME tmLocal;
+	GetLocalTime(&tmLocal);
+
+	// Report\\Year\\Month\\ 
+	szPath.Format(_T("%s\\%04d\\%02d\\"), m_stInspInfo.Path.szReport, tmLocal.wYear, tmLocal.wMonth);
+	MakeDirectory(szPath);
+
+	szFullPath.Format(_T("%sOpCall_%04d_%02d%02d.csv"), szPath, tmLocal.wYear, tmLocal.wMonth, tmLocal.wDay);
+
+	OnLogFile_OpCallResult(IN_szData, szFullPath.GetBuffer());
+	
+}
+//=============================================================================
+// Method		: GetNtPrivilege
+// Access		: virtual protected  
+// Returns		: void
+// Parameter	: __in LPCTSTR IN_szRFID
+// Qualifier	:
+// Last Update	: 2023.05.02
+// Desc.		:
+//=============================================================================
+BOOL CTestManager_EQP_ICS::GetNtPrivilege()
+{
+	HANDLE h_token;
+	TOKEN_PRIVILEGES privilege_info;
+	// 현재 프로세스의 권한과 관련된 정보를 변경하기 위해 토큰정보를 연다.
+	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &h_token))
+	{
+		// 권한과 관련된 정보 접근에 실패함..
+		return FALSE;
+	}
+
+	// 현재 프로세스가 SE_SHUTDOWN_NAME 권한을 사용할수 있도록 설정한다.
+	LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &privilege_info.Privileges[0].Luid);
+	privilege_info.PrivilegeCount = 1;
+	privilege_info.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+	// 지정한 값으로 권한을 조정한다.
+	AdjustTokenPrivileges(h_token, FALSE, &privilege_info, 0, (PTOKEN_PRIVILEGES)NULL, 0);
+	if (GetLastError() != ERROR_SUCCESS)
+	{
+		// 권한 조정에 실패한 경우...
+		return FALSE;
+	}
+
+	return TRUE;
+}
+#endif	//SOCKET
+
+
+#if TEST
+void CTestManager_EQP_ICS::OnEvent_ServerUNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	ST_xml_UNITID_READ* IN_PARA = (ST_xml_UNITID_READ*)IN_Data;
+
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString PRODUCTID(IN_PARA->Body.PRODUCTID);
+	//
+	if (Get_Server(IN_From).Get_ClientConnection()) {
+		if (IN_From < Get_ServerCount())
+		{
+
+		}
+	}
+	//
+	if (Get_Equipment(IN_From).Get_ClientConnection()) {
+		if (0 < Get_EquipmentCount())
+		{
+			if (Get_EquipmentID(IN_From).Compare(Get_Loader().Get_EquipmentId())) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_UNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	ST_xml_REQUEST_UNITID_READ* IN_PARA = (ST_xml_REQUEST_UNITID_READ*)IN_Data;
+
+	CString transactionId(IN_PARA->Hd.transactionId);
+
+	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
+	CString PRODUCTID(IN_PARA->Body.PRODUCTID);
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString LOTID(IN_PARA->Body.LOTID);
+	CString SUBEQPID;
+	CString CARRIERID;
+	CString MODULEID;
+
+	//서버 이벤트 처리.	
+	if (0 < Get_ServerCount()) {
+		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
+			if (Get_Server(IN_From).Get_ClientConnection()) {
+				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
+
+				}
+			}
+			for (int i = 0; i < Get_EquipmentCount(); i++) {
+				if (Get_Equipment(i).Get_ClientConnection()) {
+					for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
+						if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
+
+							CString SUBEQPID(Get_Equipment(i).Get_SubEqpID());
+							auto Get = MainFrame->GetTransactionID(IN_PARA->Hd.transactionId);
+							ST_xml_UNITID_READ a;
+							Get_Server(IN_From).GetXmlEes().ParseXML_UNITID_READ(Get->ReportMsg, &a);
+							MODULEID = a.Body.MODULEIDLIST->MODULEID.at(0).c_str();
+							CARRIERID = a.Body.CARRIERID;
+
+							OnSend_REPLY_UNITID_READ(
+								IN_From,
+								Get_Server(IN_From).GetXmlEes().Set_ReplyUnitReadParameter(
+									transactionId,
+									EQUIPMENTID,
+									PORTID,
+									LOTID));
+
+							OnSend_REPORT_START_LOT(
+								IN_From,
+								Get_Server(IN_From).GetXmlEes().Set_ReportStartLotParameter(
+									EQUIPMENTID,
+									SUBEQPID,
+									PORTID,
+									LOTID));
+
+							auto GetID = Get_EquipmentID(i);
+#if SOCKET_LOTID
+							if (GetID == Get_Loader().Get_EquipmentId()) {
+								//Get_Equipment(i).Recv_RegisterSocketLOT(CARRIERID, 0, LOTID);
+								Get_Equipment(i).Recv_RegisterSocketLOT(MODULEID, 1, LOTID);
+							}
+#endif
+						}
+					}
+				}
+
+			}
+		}
+	}
+	/*
+	if (Get_ServerID(IN_From).GetBuffer() == EQUIPMENTID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				if (MainFrame->bGetTransactionID(IN_PARA->Hd.transactionId)) {
+					auto Get = MainFrame->GetTransactionID(IN_PARA->Hd.transactionId);
+					ST_xml_UNITID_READ a;
+					Get_Server(IN_From).GetXmlEes().ParseXML_UNITID_READ(Get->ReportMsg, &a);
+					MODULEID	= a.Body.MODULEIDLIST->MODULEID.at(0).c_str();
+					CARRIERID	= a.Body.CARRIERID;
+
+					OnSend_REPLY_UNITID_READ(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReplyUnitReadParameter(
+							transactionId,
+							PORTID,
+							LOTID));
+
+					OnSend_REPORT_START_LOT(
+						IN_From,
+						Get_Server(IN_From).GetXmlEes().Set_ReportStartLotParameter(
+							SUBEQPID,
+							PORTID,
+							LOTID));
+				}
+			}
+		}
+		//설비 이벤트 처리
+		for (int i = 0; i < Get_EquipmentCount(); i++) {
+			if (0 < Get_EquipmentCount())
+			{
+				auto GetID = Get_EquipmentID(i);
+				if (GetID == Get_Loader().Get_EquipmentId()) {
+					//Get_Equipment(i).Recv_RegisterSocketLOT(CARRIERID, 0, LOTID);
+					Get_Equipment(i).Recv_RegisterSocketLOT(MODULEID, 1, LOTID);
+				}
+			}
+		}
+	}*/
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPLY_UNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	CServer Svr;
+	ST_xml_REPLY_UNITID_READ* IN_PARA = (ST_xml_REPLY_UNITID_READ*)IN_Data;
+
+
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString LOTID(IN_PARA->Body.LOTID);
+
+
+	//서버 이벤트 처리.	
+	if (Get_Server(IN_From).Get_ClientConnection()) {
+		if (IN_From < Get_ServerCount())
+		{
+			//서버 보고 이벤트
+
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (0 < Get_EquipmentCount())
+		{
+			if (Get_EquipmentID(i).Compare(Get_Loader().Get_EquipmentId())) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_START_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	CServer Svr;
+	ST_xml_REPORT_START_PROCESS* IN_PARA = (ST_xml_REPORT_START_PROCESS*)IN_Data;
+
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+	//
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				//서버 보고 이벤트
+				OnSend_REPORT_START_PROCESS(
+					IN_From,
+					IN_PARA);
+				//Svr.Set_ReportStartProcessParameter(
+					//SUBEQPID,
+					//PORTID,
+					//LOTID));
+			}
+		}
+	}
+	//
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_START_LOT(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	ST_xml_REPORT_START_LOT* IN_PARA = (ST_xml_REPORT_START_LOT*)IN_Data;
+
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+
+	//서버 이벤트 처리.	
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				//서버 보고 이벤트
+				//2023.05.17a 
+				//OnSend_REPORT_START_LOT(
+					//IN_From,
+					//IN_PARA);
+					//Svr.Set_ReportStartLotParameter(
+					//	SUBEQPID,
+					//	PORTID,
+					//	LOTID));
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_END_EVENT(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	CServer Svr;
+	ST_xml_REPORT_END_EVENT* IN_PARA = (ST_xml_REPORT_END_EVENT*)IN_Data;
+
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+
+	//서버 이벤트 처리.	
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				//서버 보고 이벤트
+				OnSend_REPORT_END_EVENT(
+					IN_From,
+					IN_PARA);
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_ServerREPORT_END_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	CServer Svr;
+	ST_xml_REPORT_END_PROCESS* IN_PARA = (ST_xml_REPORT_END_PROCESS*)IN_Data;
+
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+	//Test용도.
+
+	//서버 이벤트 처리.	
+	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
+		if (Get_Server(IN_From).Get_ClientConnection()) {
+			if (IN_From < Get_ServerCount())
+			{
+				//서버 보고 이벤트
+				OnSend_REPORT_END_PROCESS(
+					IN_From,
+					IN_PARA);
+				//Svr.Set_ReportEndProcessParameter(
+				//	SUBEQPID,
+				//	PORTID,
+				//	LOTID));
+			}
+		}
+	}
+	//설비 이벤트 처리
+	for (int i = 0; i < Get_EquipmentCount(); i++)
+	{
+		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
+			if (Get_Equipment(i).Get_ClientConnection()) {
+
+			}
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+
+void CTestManager_EQP_ICS::OnEvent_EquipmentUNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	ST_xml_UNITID_READ * IN_PARA = (ST_xml_UNITID_READ*)IN_Data;
+
+	for (int i = 0; i < m_stInspInfo.ServerInfo.GetCount(); i++) {
+		if (m_stInspInfo.ServerInfo.GetAt(i).Get_ClientConnection()) {
+			//auto Svr = &Get_Server(i).GetXmlEes().GetBaseData();
+			//In_Para->Body.EQUIPMENTID = Svr->EQUIPMENTID;
+
+			m_pIcsServer->SendUnitReadMassage(
+				Get_ServerID(i),
+				IN_PARA);
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_UNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_START_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	ST_xml_REPORT_START_PROCESS * IN_PARA = (ST_xml_REPORT_START_PROCESS *)IN_Data;
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+	for (int i = 0; i < m_stInspInfo.ServerInfo.GetCount(); i++) {
+		if (m_stInspInfo.ServerInfo.GetAt(i).Get_ClientConnection()) {
+			m_pIcsServer->SendReportStartProcessMassage(
+				Get_ServerID(i),
+				IN_PARA);
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_START_LOT(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	ST_xml_REPORT_START_LOT * IN_PARA = (ST_xml_REPORT_START_LOT *)IN_Data;
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+
+	for (int i = 0; i < m_stInspInfo.ServerInfo.GetCount(); i++) {
+		if (m_stInspInfo.ServerInfo.GetAt(i).Get_ClientConnection()) {
+			IN_PARA->Body.USERID = Get_Server(i).GetXmlEes().GetBaseData().USERID;
+			m_pIcsServer->SendReportStartLotMassage(
+				Get_ServerID(i),
+				IN_PARA);
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_END_EVENT(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+	ST_xml_REPORT_END_EVENT * IN_PARA = (ST_xml_REPORT_END_EVENT *)IN_Data;
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+
+	for (int i = 0; i < m_stInspInfo.ServerInfo.GetCount(); i++) {
+		if (m_stInspInfo.ServerInfo.GetAt(i).Get_ClientConnection()) {
+			//IN_Para->Body.EQUIPMENTID = Get_ServerID(i);
+			IN_PARA->Body.USERID = Get_Server(i).GetXmlEes().GetBaseData().USERID;
+			IN_PARA->Body.EESMODE = Get_Server(i).GetXmlEes().GetBaseData().EESMODE;
+			m_pIcsServer->SendReportEndEventMassage(
+				Get_ServerID(i),
+				IN_PARA);
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_END_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data)
+{
+
+	ST_xml_REPORT_END_PROCESS * IN_PARA = (ST_xml_REPORT_END_PROCESS *)IN_Data;
+	CString PORTID(IN_PARA->Body.PORTID);
+	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
+	CString LOTID(IN_PARA->Body.LOTLIST->LOTID);
+
+	for (int i = 0; i < m_stInspInfo.ServerInfo.GetCount(); i++) {
+		if (m_stInspInfo.ServerInfo.GetAt(i).Get_ClientConnection()) {
+			m_pIcsServer->SendReportEndProcessMassage(
+				Get_ServerID(i),
+				IN_PARA);
+		}
+	}
+	//2023.06.28a
+	if (MainFrame->FindLPARAM(IN_Data)) {
+		delete IN_PARA;
+		IN_PARA = nullptr;
+		MainFrame->RemoveLPARAM(IN_Data);
+	}
+}
+
+void CTestManager_EQP_ICS::OnSend_UNITID_READ(__in uint8_t IN_nSvrOrder, __in ST_xml_UNITID_READ * IN_LPARAM)
+{
+
+	ST_xml_UNITID_READ * IN_Data = (ST_xml_UNITID_READ *)IN_LPARAM;
+	OnLog(_T("[Svr %03d] OnSend_UNITID_READ()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendUnitReadMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_Data))
+	{
+		OnLog(_T("[Svr %03d] OnSend_UNITID_READ() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_UNITID_READ() : comm failed"), IN_nSvrOrder);
+	}
+}
+void CTestManager_EQP_ICS::OnSend_REPLY_UNITID_READ(__in uint8_t IN_nSvrOrder, __in ST_xml_REPLY_UNITID_READ * IN_LPARAM)
+{
+	ST_xml_REPLY_UNITID_READ * IN_Data = (ST_xml_REPLY_UNITID_READ *)IN_LPARAM;
+	OnLog(_T("[Svr %03d] OnSend_REPLY_UNITID_READ()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReplyUnitReadMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_Data))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPLY_UNITID_READ() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPLY_UNITID_READ() : comm failed"), IN_nSvrOrder);
+	}
+}
+//=============================================================================
+// Method		: OnSend_REPORT_START_LOT
+// Access		: protected  
+// Returns		: void
+// Qualifier	:
+// Last Update	: 2023/03/22 - 19:51
+// Desc.		:
+//=============================================================================
+void CTestManager_EQP_ICS::OnSend_REPORT_START_PROCESS(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_START_PROCESS * IN_LPARAM)
+{
+	ST_xml_REPORT_START_PROCESS * IN_Data = (ST_xml_REPORT_START_PROCESS *)IN_LPARAM;
+	OnLog(_T("[Svr %03d] OnSend_REPORT_START_PROCESS()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReportStartProcessMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_Data))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_START_PROCESS() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_START_PROCESS() : comm failed"), IN_nSvrOrder);
+	}
+}
+//=============================================================================
+// Method		: OnSend_REPORT_START_LOT
+// Access		: protected  
+// Returns		: void
+// Qualifier	:
+// Last Update	: 2023/03/22 - 19:51
+// Desc.		:
+//=============================================================================
+void CTestManager_EQP_ICS::OnSend_REPORT_START_LOT(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_START_LOT * IN_LPARAM)
+{
+	ST_xml_REPORT_START_LOT * IN_Data = (ST_xml_REPORT_START_LOT *)IN_LPARAM;
+	OnLog(_T("[Svr %03d] OnSend_REPORT_START_LOT()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReportStartLotMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_Data))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_START_LOT() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_START_LOT() : comm failed"), IN_nSvrOrder);
+	}
+}
+//=============================================================================
+// Method		: OnSend_REPORT_START_PROCESS
+// Access		: protected  
+// Returns		: void
+// Qualifier	:
+// Last Update	: 2023/03/22 - 19:51
+// Desc.		:
+//=============================================================================
+void CTestManager_EQP_ICS::OnSend_REPORT_END_EVENT(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_END_EVENT * IN_LPARAM)
+{
+	ST_xml_REPORT_END_EVENT * IN_Data = (ST_xml_REPORT_END_EVENT *)IN_LPARAM;
+	OnLog(_T("[Svr %03d] OnSend_REPORT_END_EVENT()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReportEndEventMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_Data))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_END_EVENT() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_END_EVENT() : comm failed"), IN_nSvrOrder);
+	}
+}
+//=============================================================================
+// Method		: OnSend_REPORT_START_PROCESS
+// Access		: protected  
+// Returns		: void
+// Qualifier	:
+// Last Update	: 2023/03/22 - 19:51
+// Desc.		:
+//=============================================================================
+void CTestManager_EQP_ICS::OnSend_REPORT_END_PROCESS(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_END_PROCESS * IN_LPARAM)
+{
+	ST_xml_REPORT_END_PROCESS * IN_Data = (ST_xml_REPORT_END_PROCESS *)IN_LPARAM;
+	OnLog(_T("[Svr %03d] OnSend_REPORT_END_PROCESS()"), IN_nSvrOrder);
+	if (m_pIcsServer->SendReportEndProcessMassage(Get_ServerID(IN_nSvrOrder).GetBuffer(),
+		IN_Data))
+	{
+		OnLog(_T("[Svr %03d] OnSend_REPORT_END_PROCESS() : comm succeed"), IN_nSvrOrder);
+	}
+	else
+	{
+		OnLog_Err(_T("[Svr %03d] OnSend_REPORT_END_PROCESS() : comm failed"), IN_nSvrOrder);
+	}
+
+}
+#endif

@@ -71,6 +71,15 @@ int CWnd_Status_Handler::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_st_Conveyor[nIdx].Create(g_szRt_Conveyor[nIdx], dwStyle /*| WS_BORDER*/ | SS_CENTER, rectDummy, this, IDC_STATIC);
 	}
 
+#if (USE_XML)
+	m_st_SubEqpID.SetFont_Gdip(L"Arial", 7.0F);
+	m_st_SubEqpID.Create(_T(" "), dwStyle /*| WS_BORDER*/ | SS_CENTER, rectDummy, this, IDC_STATIC);
+	for (auto nIdx = 0; nIdx < PtI_L_MaxCount; ++nIdx)
+	{
+		m_st_EquipmentID[nIdx].SetFont_Gdip(L"Arial", 7.0F);
+		m_st_EquipmentID[nIdx].Create(_T(" "), dwStyle /*| WS_BORDER*/ | SS_CENTER, rectDummy, this, IDC_STATIC);
+	}
+#endif
 
 	// 타이틀바, 외곽선
 	if (__super::OnCreate(lpCreateStruct) == -1)
@@ -94,9 +103,15 @@ void CWnd_Status_Handler::OnSize(UINT nType, int cx, int cy)
 {
 	__super::OnSize(nType, cx, cy);
 
-	//int iMargin = 5;
-
-	//MoveWindow_Handler(5, m_nTop_Status, cx - iMargin - iMargin, m_nDefInfo_Height - iMargin - m_nTop_Status);
+#if (USE_XML)
+	int iSpacing = 5;
+	int iLeft = 15;
+	int iTop = m_nTop_Status; // 타이틀 바, LED, 설비 Config 제외 위치
+	MoveWindow_Handler(5, m_nTop_Status, cx - iSpacing - iSpacing, m_nDefInfo_Height - iSpacing - m_nTop_Status);
+#else
+	int iMargin = 5;
+	MoveWindow_Handler(5, m_nTop_Status, cx - iMargin - iMargin, m_nDefInfo_Height - iMargin - m_nTop_Status);
+#endif	//ADD_SOCKET_EES_XML
 }
 
 //=============================================================================
@@ -119,7 +134,13 @@ void CWnd_Status_Handler::MoveWindow_Handler(int x, int y, int nWidth, int nHeig
 	int iTop		= nHeight - m_nCtrl_Height;
 
 	// 설비 상태 정보 ----------------------------
-
+#if (ADD_SOCKET_EES_XML)
+	iLeft = iSpacing;
+	iTop = (y + iSpacing + iSpacing);
+	m_st_SubEqpID.MoveWindow(iLeft, iTop, nWidth, m_nCtrl_Height);
+	iTop += (m_nCtrl_Height - 1);
+	m_st_EquipmentID[CvI_R_Buffer_1].MoveWindow(iLeft, iTop, nWidth, m_nCtrl_Height);
+#else
 	iTop = y + nHeight - m_nCtrl_Height - iSpacing;
 	m_st_Port[PtI_R_Buffer_2].MoveWindow(iLeft, iTop, m_nPort_Width + 1, m_nCtrl_Height);
 	iLeft += m_nPort_Width;
@@ -134,7 +155,7 @@ void CWnd_Status_Handler::MoveWindow_Handler(int x, int y, int nWidth, int nHeig
 	m_st_Conveyor[CvI_R_Buffer_1].MoveWindow(iLeft, iTop, iCvWidth + 1, m_nCtrl_Height);
 	iLeft += iCvWidth;
 	m_st_Port[PtI_R_Buffer_1].MoveWindow(iLeft, iTop, m_nPort_Width, m_nCtrl_Height);
-
+#endif	//ADD_SOCKET_EES_XML
 }
 
 void CWnd_Status_Handler::Init_Returner()
@@ -146,4 +167,23 @@ void CWnd_Status_Handler::Popup_SubMenu()
 {
 	__super::Popup_SubMenu();
 }
-
+#if (USE_XML)
+//=============================================================================
+// Method		: MoveWindow_EES
+// Access		: protected  
+// Returns		: void
+// Parameter	: int x
+// Parameter	: int y
+// Parameter	: int nWidth
+// Parameter	: int nHeight
+// Qualifier	:
+// Last Update	: 2023.05.25
+// Desc.		:
+//=============================================================================
+void CWnd_Status_Handler::Set_EquipmentID(__in CEquipment* IN_Data)
+{
+	__super::Set_EquipmentID(IN_Data);
+	m_st_SubEqpID.SetText(IN_Data->Get_SubEqpID());
+	m_st_EquipmentID[PtI_L_Load].SetText(IN_Data->Get_EquipmentIDStatus(PtI_L_Load).Get_EQUIPMENTID());
+}
+#endif // SOCKET

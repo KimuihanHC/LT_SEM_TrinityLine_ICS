@@ -33,11 +33,11 @@ protected:
 public:
 	void	Set_RegitryPath				(__in LPCTSTR lpszRegPath);
 
-	// 레지스트리 패스 체크하여 없으면 생성
+	// ?��??�트�??�스 체크?�여 ?�으�??�성
 	bool	Check_RegistryPath			(__in LPCTSTR IN_szRFID);
 	bool	Check_RegistryPath			(__in const CSocketMonitoring* IN_SocketInto);
 
-	// 레지스트리에 소켓정보 저장
+	// ?��??�트리에 ?�켓?�보 ?�??/
 	bool	Set_SocketInfo				(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
 	bool	Set_SocketInfo_Barcode		(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
 	bool	Set_SocketInfo_Status		(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
@@ -50,12 +50,13 @@ public:
 	bool	Set_SocketInfo_OutputTime	(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
 
 
-	// 레지스트리에 저장된 소켓 정보 가져오기
+	// ?��??�트리에 ?�?�된 ?�켓 ?�보 가?�오�?/
 	bool	Get_SocketInfo				(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& OUT_SocketInto);
 	bool	Get_SocketInfo				(__out CSocketMonitoring& OUT_SocketInto);
 
-
-
+#if (USE_XML)
+	bool	Set_SocketInfo_LOTID		(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
+#endif
 };
 
 

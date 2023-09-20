@@ -109,7 +109,7 @@ int CDlg_PopupMenu::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_bn_CtrlCmd[nIdx].SetFont(&m_font_Default);
 	}
 
-#ifndef HIDE_NOT_USE_EQP_CONTROL
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
 	m_bn_CtrlCmd[CC_Reset].SetTextColor(RGB(255, 255, 0));
 #endif
 	m_bn_CtrlCmd[CC_Run].SetTextColor(RGB(0, 200, 0));
@@ -158,7 +158,7 @@ void CDlg_PopupMenu::OnSize(UINT nType, int cx, int cy)
 		//	m_bn_CtrlCmd[nIdx].MoveWindow(nLeftSub, nTop, nBnWidth, nBnHeight);
 		//}
 
-#ifndef HIDE_NOT_USE_EQP_CONTROL
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
 		if (enConrolCode::CC_SaveYield != nIdx)
 #else
 		if ((enConrolCode::CC_SaveYield != nIdx) && (enConrolCode::CC_Reset != nIdx))

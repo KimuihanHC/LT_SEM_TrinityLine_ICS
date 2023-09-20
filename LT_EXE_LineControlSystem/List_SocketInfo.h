@@ -106,6 +106,13 @@ public:
 	// 아이템 찾기
 	int			Find_Socket					(__in LPCTSTR IN_szRFID);
 
+//2023.04.24a uhkim
+#if (USE_XML)
+public:
+	void		Update_Socket_LOTID			(__in int nRow, __in const CSocketInfo_Unit* IN_pSocket);
+protected:
+	void		Set_SocketData_LOTID		(__in int nItem, __in const CSocketInfo_Unit* IN_pSocket);
+#endif // List_SocketInfo_h__
 };
 
 #endif // List_SocketInfo_h__

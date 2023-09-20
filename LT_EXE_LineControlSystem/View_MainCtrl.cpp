@@ -18,6 +18,7 @@
 #include "CommonFunction.h"
 #include "Pane_CommStatus.h"
 
+#include "MainFrm.h"	//2023.01.14a Add
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -240,7 +241,7 @@ int CView_MainCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("m_wndLogView 뷰 창을 만들지 못했습니다.\n");
 		return -1;
 	}	
-
+	
 	m_wndMainView.ShowWindow(SW_SHOW);
 
 	auto nWndIdx = 0;
@@ -283,6 +284,8 @@ void CView_MainCtrl::OnSize(UINT nType, int cx, int cy)
 	m_wndSocketView.MoveWindow(0, 0, cx, cy);
 	m_wndSettingView.MoveWindow(0, 0, cx, cy);
 	m_wndLogView.MoveWindow(0, 0, cx, cy);
+	//2023.03.08a uhkim [Test 삭제]
+	//MainFrame->m_wndTestView->MoveWindow(0, 0, cx, cy);
 }
 
 //=============================================================================
@@ -377,8 +380,6 @@ HBRUSH CView_MainCtrl::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 void CView_MainCtrl::OnTimer(UINT_PTR nIDEvent)
 {
 	// 타이머 처리
-	
-
 	CWnd::OnTimer(nIDEvent);
 }
 

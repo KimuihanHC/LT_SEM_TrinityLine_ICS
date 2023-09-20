@@ -18,10 +18,22 @@ CEqpTester::CEqpTester()
 	m_nPortStatus.assign(PtI_T_MaxCount, { 0, _T("") });
 	m_nConveyorStatus.assign(CvI_T_MaxCount, { 0, 0, _T("") });
 
+	//2023.04.27a uhkim
+
+
 	for (auto nIdx = 0; nIdx < Para_MaxCount; ++nIdx)
 	{
 		memset(&m_tmInput_Para[nIdx], 0, sizeof(SYSTEMTIME));
 	}
+#if (USE_XML)
+	assign_mEES_PortSubStatus(PtI_T_MaxCount, {});
+	assign_EquipmentIDStatus(PtI_T_MaxCount, {});
+#endif
+
+#if SOCKET
+	m_nOldPortStatus.assign(PtI_T_MaxCount, { 0, _T("") });
+	m_nEquipmentID.assign(PtI_T_MaxCount, { _T("") , _T("") });
+#endif 
 }
 
 CEqpTester::~CEqpTester()
@@ -76,20 +88,34 @@ void CEqpTester::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 {
 	//__super::Set_PortStatus(IN_nPortIndex, IN_nStatus, IN_szRFID, IN_szBarcode);
 
+#if (USE_XML)
+	if (IN_nPortIndex < Get_mEES_PortSubStatusCount()) {
+		Get_mEES_PortSubStatus(IN_nPortIndex).Set_nPortStatus(IN_nStatus);
+		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szRfid(IN_szRFID);
+		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szBarcode(IN_szBarcode);
+		WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL);
+		if ((IN_nStatus == PtS_RUN) ||
+			(IN_nStatus == PtS_STOP) ||
+			(IN_nStatus == PtS_IDLE)) {
+			return;
+		}
+	}
+#endif
+
 	if (IN_nPortIndex < m_nPortStatus.size())
 	{
 		uint8_t oldStatus = m_nPortStatus.at(IN_nPortIndex).nStatus;
 
-		m_nPortStatus.at(IN_nPortIndex).nStatus		= IN_nStatus;
-		m_nPortStatus.at(IN_nPortIndex).szRfid		= IN_szRFID;
-		m_nPortStatus.at(IN_nPortIndex).szBarcode	= IN_szBarcode;
+		m_nPortStatus.at(IN_nPortIndex).nStatus = IN_nStatus;
+		m_nPortStatus.at(IN_nPortIndex).szRfid = IN_szRFID;
+		m_nPortStatus.at(IN_nPortIndex).szBarcode = IN_szBarcode;
 
 		if (IN_bSave)
 		{
 			Save_Equipment_Port(IN_nPortIndex);
 		}
 
-		// 포트 Disable, Alarm 체크
+		// ?�트 Disable, Alarm 체크
 		switch (oldStatus)
 		{
 		case enPortStatus::PtS_Disable:
@@ -99,7 +125,7 @@ void CEqpTester::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			case enPortStatus::PtS_Empty:
 			case enPortStatus::PtS_Exist_Socket:
 			case enPortStatus::PtS_Wait_Out:
-				// 포트 사용 불가 -> 포트 사용 가능 상태로 변경됨
+				// ?�트 ?�용 불�? -> ?�트 ?�용 가???�태�?변경됨
 				break;
 			}
 			break;
@@ -109,13 +135,13 @@ void CEqpTester::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			{
 			case enPortStatus::PtS_Disable:
 			case enPortStatus::PtS_Alarm:
-				// 포트 사용 가능 -> 포트 사용 불가 상태로 변경됨
+				// ?�트 ?�용 가??-> ?�트 ?�용 불�? ?�태�?변경됨
 				break;
 			}
 			break;
 		}
 
-		// 예약 체크
+		// ?�약 체크
 		if ((enPortStatus::PtS_Empty == oldStatus) && (enPortStatus::PtS_Exist_Socket == IN_nStatus))
 		{
 			switch (IN_nPortIndex)
@@ -124,12 +150,11 @@ void CEqpTester::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			case PtI_T_Test_L:
 			case PtI_T_Test_R:
 			case PtI_T_Test_C:
-				//Decrease_ReservedPort();
-				Decrease_ReservedPort(IN_szRFID);
+				Decrease_ReservedPort();
 				break;
 			}
 
-			// Tester의 L/R 파라에 소켓이 투입되면 시간 체크한다.
+			// Tester??L/R ?�라???�켓???�입?�면 ?�간 체크?�다.//
 			if ((PtI_T_Test_L == IN_nPortIndex) || (PtI_T_Test_R == IN_nPortIndex) || (PtI_T_Test_C == IN_nPortIndex))
 			{
 				uint8_t nPara = PortIndex2TestPara(IN_nPortIndex);
@@ -140,17 +165,49 @@ void CEqpTester::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 
 		// GUI 갱신
 		WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
-
-		// 이전 상태 : 제품 있음 or 배출 대기 => 현재 상태 : 비어 있음
+#if SOCKET
+		//2024.04.26a uhkim
+		CString szRFID(IN_szRFID);
+		//if (m_pSocketInfo->Is_ExistSocket(szRFID)) 
+		{
+			CString LOTID(Get_FromPortToLOTID(IN_nPortIndex));
+			CString EQUIPMENTID(Get_EquipmentIDStatus(IN_nPortIndex).szEquipID);
+			CString SUBEQPID(Get_SubEqpID());
+			CString PORTID(Get_EquipmentIDStatus(IN_nPortIndex).szPortID);
+			//CString LOTID(m_pSocketInfo->GetAt(szRFID).m_LotID);
+			//CString SUBEQPID(Get_EquipmentId());
+			//CString PORTID(g_szEES_PORTID[IN_nPortIndex]);
+#if TEST
+			if (IN_nStatus == PtS_Exist_Socket) {
+				Set_REPORT_START_PROCESS(
+					GetXmlEes().Set_ReportStartProcessParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						LOTID));
+			}
+			if (IN_nStatus == PtS_Wait_Out) {
+				Set_REPORT_END_PROCESS(
+					GetXmlEes().Set_ReportEndProcessParameter(
+						EQUIPMENTID,
+						SUBEQPID,
+						PORTID,
+						LOTID));
+			}
+#endif
+			
+		}	
+#endif
+		//============================================================
+		// ?�전 ?�태 : ?�품 ?�음 or 배출 ?��?=> ?�재 ?�태 : 비어 ?�음
 		if (((enPortStatus::PtS_Exist_Socket == oldStatus) || 
 			(enPortStatus::PtS_Wait_Out == oldStatus)) &&
 			(enPortStatus::PtS_Empty == IN_nStatus))
 		{
-			// 포트 상태 변경 이벤트
-			WM_Event_Equipment(WM_EVENT_EQUIPMENT_PORT_STATUS, (LPARAM)IN_nPortIndex);
+			// ?�트 ?�태 변�??�벤??			WM_Event_Equipment(WM_EVENT_EQUIPMENT_PORT_STATUS, (LPARAM)IN_nPortIndex);
 		}
 
-		// 소켓 정보 갱신
+		// ?�켓 ?�보 갱신
 		Update_SocketLocation(IN_nPortIndex, &m_nPortStatus.at(IN_nPortIndex));
 	}
 }
@@ -190,7 +247,7 @@ void CEqpTester::Set_ConveyorStatus(__in uint8_t IN_nConveyorIndex, __in uint8_t
 
 		WM_Notify_Equipment(WM_EqpNotify_ConveyorStatus, MAKELPARAM(IN_nConveyorIndex, MAKEWORD(IN_nStatus, IN_nExistSocket)));
 
-		// 이전 상태 : 중지 & 제품 있음 => 현재 상태 : nc, 제품 없음
+		// ?�전 ?�태 : 중�? & ?�품 ?�음 => ?�재 ?�태 : nc, ?�품 ?�음
 		if ((enConveyorStatus::CoS_Stop == oldStatus) &&
 			(enConveyorStatus_Exist::CoSE_Exist == oldExistStatus) &&
 			(enConveyorStatus_Exist::CoSE_Empty == IN_nExistSocket))
@@ -203,11 +260,10 @@ void CEqpTester::Set_ConveyorStatus(__in uint8_t IN_nConveyorIndex, __in uint8_t
 			if ((enConveyorStatus_Exist::CoSE_Exist == oldExistStatus) &&
 				(enConveyorStatus_Exist::CoSE_Empty == IN_nExistSocket))
 			{
-				// 설비내에 제품이 남아 있는가?
+				// ?�비?�에 ?�품???�아 ?�는가?
 				/*if (IsEmpty_Equipment())
 				{
-					// 생산 종료처리 완료됨
-					WM_Event_Equipment(WM_EVENT_EQUIPMENT_EMPTY_EQP, (LPARAM)0); //WM_EVENT_EQUIPMENT_EMPTY_EQP
+					// ?�산 종료처리 ?�료??					WM_Event_Equipment(WM_EVENT_EQUIPMENT_EMPTY_EQP, (LPARAM)0); //WM_EVENT_EQUIPMENT_EMPTY_EQP
 				}
 				else */
 				if (IsLastSocket_onTestPort())
@@ -251,5 +307,10 @@ void CEqpTester::Update_DataSize()
 			m_nPortStatus.clear();
 
 		m_nPortStatus.assign(m_nReservablePortCount + 1, { 0, _T("") });
+
+#if (USE_XML)
+		assign_mEES_PortSubStatus(m_nReservablePortCount + 1, {});
+#endif
 	}
+
 }

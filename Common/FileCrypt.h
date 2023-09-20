@@ -10,8 +10,8 @@
 #ifndef FileCrypt_h__
 #define FileCrypt_h__
 
-#include <io.h>				// 파일관련
-#include <WinCrypt.h>		// 암호화
+#include <io.h>				// 파일관련//
+#include <WinCrypt.h>		// 암호화//
 #include "Define_HWInfoFile.h"
 
 #define KEYLENGTH				0x00800000

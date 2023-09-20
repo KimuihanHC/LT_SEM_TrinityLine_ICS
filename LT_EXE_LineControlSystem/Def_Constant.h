@@ -12,7 +12,6 @@
 
 
 #pragma once
-
 //-----------------------------------------------
 // 포트 상태 (Port Status)
 //-----------------------------------------------
@@ -24,6 +23,11 @@ typedef enum
 	PtS_Wait_Out,				// 2 : 배출대기
 	PtS_Disable,				// 3 : 비활성
 	PtS_Alarm,					// 4 : Alarm
+#if (USE_XML)
+	PtS_RUN,				// 5 : 실행
+	PtS_STOP,					// 6 : 정지
+	PtS_IDLE,					// 7 : 
+#endif
 }enPortStatus;
 
 static LPCTSTR g_szPortStatus[] =
@@ -33,6 +37,11 @@ static LPCTSTR g_szPortStatus[] =
 	_T("Wait Out"),
 	_T("Disable"),
 	_T("Alarm"),
+#if (USE_XML)
+	_T("RUN"),
+	_T("Stop"),
+	_T("IDLE"),
+#endif
 	NULL
 };
 
@@ -43,6 +52,12 @@ static COLORREF g_clrPortStatus[] =
 	RGB(  0,   0, 255),			// PtS_Wait_Out,
 	RGB(100, 100, 100),			// PtS_Disable,	
 	RGB(255,   0,   0),			// PtS_Alarm,		
+#if (USE_XML)
+	RGB(0,   255, 0),			// PtS_EXECUTE,
+	RGB(100, 100, 100),			// PtS_STOP,	
+	RGB(0,   0, 255),			// PtS_IDLE,
+#endif
+
 };
 
 //-----------------------------------------------
@@ -285,6 +300,7 @@ static LPCTSTR g_szProcessStatus[] =
 	_T("Idle"),
 	_T("Run"),
 	_T("Alarm"),
+
 	NULL
 };
 
@@ -477,18 +493,13 @@ typedef enum
 
 }enProductionStatus;
 
+class CRegEquipment;
 
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-	#define		LINE_INFO_FILENAME			_T("SEM_RLine_LineInfo.xml")
-	#define		SOCKET_INFO_FILENAME		_T("SEM_RLine_SocketInfo.xml")
-	#define		NGCODE_INFO_FILENAME		_T("SEM_TLine_NGCodeInfo.ini")	// 설비 제어 프로그램하고 연동
-	#define		USER_INFO_FILENAME			_T("SEM_TLine_UserInfo.ini")	// 설비 제어 프로그램하고 연동
-#else
-	#define		LINE_INFO_FILENAME			_T("SEM_TLine_LineInfo.xml")
-	#define		SOCKET_INFO_FILENAME		_T("SEM_TLine_SocketInfo.xml")
-	#define		NGCODE_INFO_FILENAME		_T("SEM_TLine_NGCodeInfo.ini")
-	#define		USER_INFO_FILENAME			_T("SEM_TLine_UserInfo.ini")
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+#define		LINE_INFO_FILENAME			_T("SEM_TLine_LineInfo.xml")
+#define		SOCKET_INFO_FILENAME		_T("SEM_TLine_SocketInfo.xml")
+#define		NGCODE_INFO_FILENAME		_T("SEM_TLine_NGCodeInfo.ini")
+#define		USER_INFO_FILENAME			_T("SEM_TLine_UserInfo.ini")
+
 
 // 설비 프로그램 버전 정보
 
@@ -497,6 +508,5 @@ typedef enum
 #define			MAX_EQUIPMENT_COUNT			30	// UI상에 표시가능한 설비 최대 갯수
 
 #define			MAX_RESERVE_COUNT_TESTER	3	// 테스터에서 소켓 투입 예약 가능한 최대 갯수
-
 
 #endif // Def_Constant_h__

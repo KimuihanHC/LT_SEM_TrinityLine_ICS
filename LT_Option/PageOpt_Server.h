@@ -36,10 +36,14 @@ protected:
 	virtual void			SetPropListFont		();
 	virtual void			InitPropList		();
 
-	stOpt_Server				m_stOption;
-
-	stOpt_Server				Get_Option			();
-	void					Set_Option			(stOpt_Server stOption);
+	//2023.01.26a uhkim 추가 서버
+	stOpt_Server				m_stOption[ICS_SERVER_MAX];
+	//stOpt_Server				m_stOption;
+	//2023.01.26a uhkim 추가 서버
+	//stOpt_Server				Get_Option			();
+	void						Get_Option();
+	//void						Set_Option			(stOpt_Server stOption);
+	void						Set_Option			();
 
 public:
 

@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일\Comm">
+      <UniqueIdentifier>{28433960-7dc5-4cab-b9be-701bef25e069}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Event">
+      <UniqueIdentifier>{8ffbe3cf-d15d-4184-a78f-3e28a8763b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Logger">
+      <UniqueIdentifier>{dfa8c89f-4ed1-4b1b-b8de-cb11f763a563}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Util">
+      <UniqueIdentifier>{ec69dac0-0849-4231-8c53-a7a91f0dbf04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Comm">
+      <UniqueIdentifier>{b2881403-8a84-4060-bb5d-bcfa2285e754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Logger">
+      <UniqueIdentifier>{39f1ade8-0531-400e-b976-7c68ebc493b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util">
+      <UniqueIdentifier>{2167c2ec-1fcd-4adb-a914-4a16779d9655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Exception">
+      <UniqueIdentifier>{5f5b16fc-182f-4e88-ab5a-789db73a9ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Exception">
+      <UniqueIdentifier>{0266c046-3dd0-4ddb-b896-3e9ce76c9d56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Enumerator">
+      <UniqueIdentifier>{fa62f4e6-56e8-477f-9458-71f2f36a9b31}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\CommData.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\CommOption.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\Communicator.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\ICommunicator.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\SerialCommOption.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\SerialCommunicator.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\SocketCommunicator.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\TcpCommunicator.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\UdpCommunicator.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\BasicEventNotifier.hpp">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\CancellableEventArgs.hpp">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\CancellableEventNotifier.hpp">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\EmptyArgs.h">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\EventArgs.hpp">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\EventFnListener.hpp">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\EventMfnListener.hpp">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\EventNotifier.hpp">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\ICancellableEventArgs.h">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\IEventArgs.h">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\IEventListener.h">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Event\IEventNotifier.h">
+      <Filter>헤더 파일\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\DebugLogDispatcher.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\DebugLoggerHolder.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\IDebugLogDispatcher.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\ILogData.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\ILogDispatcher.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\ILoggable.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\ILogger.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\LogData.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\LogDispatcher.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\LogFilter.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\Logger.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Logger\LogLevel.h">
+      <Filter>헤더 파일\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\BasicTimer.h">
+      <Filter>헤더 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\FileFinder.h">
+      <Filter>헤더 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\FileUtil.hpp">
+      <Filter>헤더 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\MemoryUtil.hpp">
+      <Filter>헤더 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\StringUtil.hpp">
+      <Filter>헤더 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Util\SyncUtil.hpp">
+      <Filter>헤더 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Exception\Exception.h">
+      <Filter>헤더 파일\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Exception\Win32Exception.h">
+      <Filter>헤더 파일\Exception</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enumerator\EnumerableContainerIterator.hpp">
+      <Filter>헤더 파일\Enumerator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enumerator\Enumerator.hpp">
+      <Filter>헤더 파일\Enumerator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enumerator\IEnumerableContainer.h">
+      <Filter>헤더 파일\Enumerator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enumerator\IEnumerator.h">
+      <Filter>헤더 파일\Enumerator</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Comm\SocketCommOption.h">
+      <Filter>헤더 파일\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Comm\Communicator.cpp">
+      <Filter>소스 파일\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Comm\SerialCommunicator.cpp">
+      <Filter>소스 파일\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Comm\SocketCommunicator.cpp">
+      <Filter>소스 파일\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Comm\TcpCommunicator.cpp">
+      <Filter>소스 파일\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Comm\UdpCommunicator.cpp">
+      <Filter>소스 파일\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Logger\DebugLogDispatcher.cpp">
+      <Filter>소스 파일\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Logger\DebugLoggerHolder.cpp">
+      <Filter>소스 파일\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Logger\LogData.cpp">
+      <Filter>소스 파일\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Logger\LogDispatcher.cpp">
+      <Filter>소스 파일\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Logger\Logger.cpp">
+      <Filter>소스 파일\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Util\BasicTimer.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Util\FileFinder.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Exception\Exception.cpp">
+      <Filter>소스 파일\Exception</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Exception\Win32Exception.cpp">
+      <Filter>소스 파일\Exception</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ltics_base.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
