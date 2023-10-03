@@ -241,7 +241,7 @@ int CView_MainCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		TRACE0("m_wndLogView 뷰 창을 만들지 못했습니다.\n");
 		return -1;
 	}	
-	
+
 	m_wndMainView.ShowWindow(SW_SHOW);
 
 	auto nWndIdx = 0;
@@ -379,6 +379,8 @@ HBRUSH CView_MainCtrl::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 //=============================================================================
 void CView_MainCtrl::OnTimer(UINT_PTR nIDEvent)
 {
+
+
 	// 타이머 처리
 	CWnd::OnTimer(nIDEvent);
 }

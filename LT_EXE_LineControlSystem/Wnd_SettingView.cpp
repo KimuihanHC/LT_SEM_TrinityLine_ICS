@@ -36,6 +36,7 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 #ifdef USE_DEBUG_MODE
 		_T("디버그"),		//Tab_DebugMode
 #endif
+
 	},
 	// 영어
 	{
@@ -53,6 +54,7 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 #ifdef USE_DEBUG_MODE
 		_T("Debug"),		//Tab_DebugMode
 #endif
+
 	},
 	// 베트남어
 	{
@@ -70,6 +72,7 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 #ifdef USE_DEBUG_MODE
 		_T("Debug"),		//Tab_DebugMode
 #endif
+
 	},
 	// 중국어
 	{
@@ -87,6 +90,7 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 #ifdef USE_DEBUG_MODE
 		_T("调试"),			//Tab_DebugMode
 #endif
+
 	},
 };
 
@@ -280,6 +284,7 @@ int CWnd_SettingView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_frame_Tab.SetBackColor_COLORREF(RGB(30, 30, 30));
 	m_frame_Tab.Create(_T(""), dwStyle, rectDummy, this, IDC_STATIC);
+
 
 	Set_TabWindow(0);
 
@@ -629,6 +634,7 @@ void CWnd_SettingView::UpdateUI_NGCodeInfo()
 {
 
 }
+
 //=============================================================================
 // Method		: Init_RecipeView
 // Access		: public  

@@ -172,7 +172,7 @@ bool CNGCode_Info::Save_IniFile(__in LPCTSTR szPath, __in const std::map<int16_t
 		WritePrivateProfileString(szAppName, szKeyName, szValue, szPath);
 	}
 
-	// NG Code 데이터//
+	// NG Code 데이터
 	for (auto Iter = m_NG_Info.begin(); Iter != m_NG_Info.end(); Iter++)
 	{
 		szAppName.Format(_T("%d"), Iter->first);

@@ -14,7 +14,7 @@
 #include "Equipment.h"
 #include "Registry.h"
 
-//#define USE_VERIFY_KEY_ALWAYS	// ?ˆì??¤íŠ¸ë¦¬ì— ?°ì´??ê¸°ë¡ ???Œë§ˆ???ˆì??¤íŠ¸ë¦?ê²½ë¡œ ì²´í¬ ë°??ì„±
+//#define USE_VERIFY_KEY_ALWAYS	// ·¹Áö½ºÆ®¸®¿¡ µ¥ÀÌÅÍ ±â·Ï ÇÒ ¶§¸¶´Ù ·¹Áö½ºÆ®¸® °æ·Î Ã¼Å© ¹× »ý¼º
 
 CRegEquipment::CRegEquipment()
 {
@@ -114,7 +114,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 		//-------------------------------------------------------
 		// Base
 		//-------------------------------------------------------
-		// 	bool		m_bSkip				= false;	// ?¤ë¹„ Skip ?¬ë?
+		// 	bool		m_bSkip				= false;	// ¼³ºñ Skip ¿©ºÎ
 		m_pReg->WriteDWORD(_T("Skip"), IN_pEquipment->Get_Skip() ? 1 : 0);
 
 		// uint8_t		m_nReservedPortCnt	= 0;
@@ -190,7 +190,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// ?˜ë£¨ì¹??˜ìœ¨ (Sifht ë³€ê²????ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Day;		// ÇÏ·çÄ¡ ¼öÀ² (Sifht º¯°æ ½Ã ÀÚµ¿ ÃÊ±â
 		//IN_pEquipment->Get_Yield_Day().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Day_Total"), IN_pEquipment->Get_Yield_Day().dwTotal);
 
@@ -215,7 +215,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Day().m_Para[nPara].dwFail);
 		}
 
-		// CYield_Equipment		m_Yield_Cumulative;	// ?„ì  ?˜ìœ¨ (?˜ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Cumulative;	// ´©Àû ¼öÀ² (¼öµ¿ ÃÊ±âÈ­)
 		//IN_pEquipment->Get_Yield_Cumulative().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Cumulative_Total"), IN_pEquipment->Get_Yield_Cumulative().dwTotal);
 
@@ -240,7 +240,7 @@ bool CRegEquipment::Save_Equipment(__in const CEquipment* IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Cumulative().m_Para[nPara].dwFail);
 		}
 
-		// SYSTEMTIME		m_tm_CheckShift;	// ?¤ì „ 8??ì²´í¬
+		// SYSTEMTIME		m_tm_CheckShift;	// ¿ÀÀü 8½Ã Ã¼Å©
 		szValue = SystemTimeToFormatString(IN_pEquipment->Get_CheckShiftTime());
 		m_pReg->WriteString(_T("Shift_CheckTime"), szValue.GetBuffer());
 		//FormatStringToSystemTime();
@@ -288,7 +288,7 @@ bool CRegEquipment::Set_Equipment_Skip(const CEquipment * IN_pEquipment)
 		//-------------------------------------------------------
 		// Base
 		//-------------------------------------------------------
-		// 	bool		m_bSkip				= false;	// ?¤ë¹„ Skip ?¬ë?
+		// 	bool		m_bSkip				= false;	// ¼³ºñ Skip ¿©ºÎ
 		m_pReg->WriteDWORD(_T("Skip"), IN_pEquipment->Get_Skip() ? 1 : 0);
 	}
 	else
@@ -350,6 +350,56 @@ bool CRegEquipment::Set_Equipment_Reserve(const CEquipment * IN_pEquipment)
 	return true;
 }
 
+bool CRegEquipment::Set_Equipment_ReserveQueue(__in const CEquipment* IN_pEquipment)
+{
+	// ¼³ºñº°·Î ¿¹¾àµÈ ¼ÒÄÏ Á¤º¸ ÀúÀå
+	// ¼³ºñ¸í. ¿¹¾à °¹¼ö. rfid, ¿¹¾à ½Ã°£
+	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
+	CString		szRegPath;
+	CString		szValue;
+	szRegPath.Format(_T("%s\\%s"), m_szRegPath.GetBuffer(), IN_pEquipment->Get_EquipmentId());
+
+#ifdef USE_VERIFY_KEY_ALWAYS
+	if (!m_pReg->VerifyKey(szRegPath))
+	{
+		m_pReg->CreateKey(HKEY_CURRENT_USER, szRegPath);
+	}
+	m_pReg->Close();
+#endif
+
+	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
+	{
+		//-------------------------------------------------------
+		// Base
+		//-------------------------------------------------------
+		// uint8_t		m_nReservedPortCnt	= 0;
+		m_pReg->WriteDWORD(_T("ReservedPortCnt"), IN_pEquipment->Get_ReservedPortCnt());
+
+		// uint8_t		m_nReservedOvered	= 0;
+		m_pReg->WriteDWORD(_T("ReservedOvered"), IN_pEquipment->Get_ReservedOverCnt());
+
+
+		auto Socketz = ((CEquipment*)IN_pEquipment)->Get_ReservedInfo();
+		for (auto nIter = Socketz.begin(); nIter != Socketz.end(); ++nIter)
+		{
+			(*nIter).szRfid;
+			(*nIter).time;
+		}
+
+
+	}
+	else
+	{
+		delete m_pReg;
+		return false;
+	}
+
+	m_pReg->Close();
+
+	delete m_pReg;
+	return true;
+}
+
 //=============================================================================
 // Method		: Set_Equipment_EndProduction
 // Access		: public  
@@ -392,7 +442,7 @@ bool CRegEquipment::Set_Equipment_Shift(const CEquipment * IN_pEquipment)
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// SYSTEMTIME		m_tm_CheckShift;	// ?¤ì „ 8??ì²´í¬
+		// SYSTEMTIME		m_tm_CheckShift;	// ¿ÀÀü 8½Ã Ã¼Å©
 		szValue = SystemTimeToFormatString(IN_pEquipment->Get_CheckShiftTime());
 		m_pReg->WriteString(_T("Shift_CheckTime"), szValue.GetBuffer());
 	}
@@ -740,7 +790,7 @@ bool CRegEquipment::Set_Equipment_Yield(const CEquipment * IN_pEquipment)
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// ?˜ë£¨ì¹??˜ìœ¨ (Sifht ë³€ê²????ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Day;		// ÇÏ·çÄ¡ ¼öÀ² (Sifht º¯°æ ½Ã ÀÚµ¿ ÃÊ±âÈ­)
 		//IN_pEquipment->Get_Yield_Day().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Day_Total"), IN_pEquipment->Get_Yield_Day().dwTotal);
 
@@ -765,7 +815,7 @@ bool CRegEquipment::Set_Equipment_Yield(const CEquipment * IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Day().m_Para[nPara].dwFail);
 		}
 
-		// CYield_Equipment		m_Yield_Cumulative;	// ?„ì  ?˜ìœ¨ (?˜ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Cumulative;	// ´©Àû ¼öÀ² (¼öµ¿ ÃÊ±âÈ­)
 		//IN_pEquipment->Get_Yield_Cumulative().dwTotal;
 		m_pReg->WriteDWORD(_T("Yield_Cumulative_Total"), IN_pEquipment->Get_Yield_Cumulative().dwTotal);
 
@@ -790,7 +840,7 @@ bool CRegEquipment::Set_Equipment_Yield(const CEquipment * IN_pEquipment)
 			m_pReg->WriteDWORD(szKey.GetBuffer(), IN_pEquipment->Get_Yield_Cumulative().m_Para[nPara].dwFail);
 		}
 
-		// SYSTEMTIME		m_tm_CheckShift;	// ?¤ì „ 8??ì²´í¬
+		// SYSTEMTIME		m_tm_CheckShift;	// ¿ÀÀü 8½Ã Ã¼Å©
 		szValue = SystemTimeToFormatString(IN_pEquipment->Get_CheckShiftTime());
 		m_pReg->WriteString(_T("Shift_CheckTime"), szValue.GetBuffer());
 	}
@@ -830,7 +880,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		//-------------------------------------------------------
 		// Base
 		//-------------------------------------------------------
-		// 	bool		m_bSkip				= false;	// ?¤ë¹„ Skip ?¬ë?
+		// 	bool		m_bSkip				= false;	// ¼³ºñ Skip ¿©ºÎ
 		if (m_pReg->ReadDWORD(_T("Skip"), dwValue))
  			OUT_Equipment.Set_Skip(dwValue ? true : false, false);
  		else
@@ -957,7 +1007,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// ?˜ë£¨ì¹??˜ìœ¨ (Sifht ë³€ê²????ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Day;		// ÇÏ·çÄ¡ ¼öÀ² (Sifht º¯°æ ½Ã ÀÚµ¿ ÃÊ±âÈ­)
 		CYield_Equipment		Yield_Day;
 		//OUT_Equipment.Get_Yield_Day().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Day_Total"), dwValue))
@@ -1004,7 +1054,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		OUT_Equipment.Set_Yield_Day(&Yield_Day);
 
 
-		// CYield_Equipment		m_Yield_Cumulative;	// ?„ì  ?˜ìœ¨ (?˜ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Cumulative;	// ´©Àû ¼öÀ² (¼öµ¿ ÃÊ±âÈ­)
 		CYield_Equipment		Yield_Cumulative;
 		//OUT_Equipment.Get_Yield_Cumulative().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Cumulative_Total"), dwValue))
@@ -1053,7 +1103,7 @@ bool CRegEquipment::Load_Equipment(__in LPCTSTR IN_szEqpID, __out CEquipment& OU
 		
 		OUT_Equipment.Set_Yield_Cumulative(&Yield_Cumulative);
 
-		// SYSTEMTIME		m_tm_CheckShift;	// ?¤ì „ 8??ì²´í¬
+		// SYSTEMTIME		m_tm_CheckShift;	// ¿ÀÀü 8½Ã Ã¼Å©
 		if (m_pReg->ReadString(_T("Shift_CheckTime"), szValue))
 		{
 			SYSTEMTIME tmCheck;
@@ -1097,7 +1147,7 @@ bool CRegEquipment::Load_Yield(LPCTSTR IN_szEqpID, CEquipment & OUT_Equipment)
 		//-------------------------------------------------------
 		// Yield
 		//-------------------------------------------------------
-		// CYield_Equipment		m_Yield_Day;		// ?˜ë£¨ì¹??˜ìœ¨ (Sifht ë³€ê²????ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Day;		// ÇÏ·çÄ¡ ¼öÀ² (Sifht º¯°æ ½Ã ÀÚµ¿ ÃÊ±âÈ­)
 		CYield_Equipment		Yield_Day;
 		//OUT_Equipment.Get_Yield_Day().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Day_Total"), dwValue))
@@ -1144,7 +1194,7 @@ bool CRegEquipment::Load_Yield(LPCTSTR IN_szEqpID, CEquipment & OUT_Equipment)
 		OUT_Equipment.Set_Yield_Day(&Yield_Day);
 
 
-		// CYield_Equipment		m_Yield_Cumulative;	// ?„ì  ?˜ìœ¨ (?˜ë™ ì´ˆê¸°??
+		// CYield_Equipment		m_Yield_Cumulative;	// ´©Àû ¼öÀ² (¼öµ¿ ÃÊ±âÈ­)
 		CYield_Equipment		Yield_Cumulative;
 		//OUT_Equipment.Get_Yield_Cumulative().dwTotal;
 		if (m_pReg->ReadDWORD(_T("Yield_Cumulative_Total"), dwValue))
@@ -1193,7 +1243,7 @@ bool CRegEquipment::Load_Yield(LPCTSTR IN_szEqpID, CEquipment & OUT_Equipment)
 
 		OUT_Equipment.Set_Yield_Cumulative(&Yield_Cumulative);
 
-		// SYSTEMTIME		m_tm_CheckShift;	// ?¤ì „ 8??ì²´í¬
+		// SYSTEMTIME		m_tm_CheckShift;	// ¿ÀÀü 8½Ã Ã¼Å©
 		if (m_pReg->ReadString(_T("Shift_CheckTime"), szValue))
 		{
 			SYSTEMTIME tmCheck;

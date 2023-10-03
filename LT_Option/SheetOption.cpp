@@ -37,7 +37,7 @@ CSheetOption::CSheetOption()
 	m_WMItemChanged = NULL;
 	m_bSavedOption	= FALSE;
 
-	m_InsptrType	= enInsptrSysType::Sys_Dev_Mod_1;
+	m_InsptrType	= enInsptrSysType::Sys_Ics_Trinity_Line;
 }
 
 CSheetOption::CSheetOption(UINT nIDCaption, CWnd* pParentWnd /*= NULL*/) 
@@ -52,7 +52,7 @@ CSheetOption::CSheetOption(UINT nIDCaption, CWnd* pParentWnd /*= NULL*/)
 	m_nBarWidth = 120;//160;
 	m_WMItemChanged = NULL;
 
-	m_InsptrType	= enInsptrSysType::Sys_Dev_Mod_1;
+	m_InsptrType	= enInsptrSysType::Sys_Ics_Trinity_Line;
 }
 
 //=============================================================================

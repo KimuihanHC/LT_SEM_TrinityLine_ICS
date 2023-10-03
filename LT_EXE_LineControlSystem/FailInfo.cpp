@@ -176,3 +176,22 @@ bool CFailInfo::Write_CSV_File_Default()
 
 	return false;
 }
+
+bool CFailInfo::Write_CSV_File_Default(CString& OUT_szPath, SYSTEMTIME& OUT_tmLocal)
+{
+	if (false == m_szPath_Report.IsEmpty())
+	{
+		CString szPath;
+
+		GetLocalTime(&OUT_tmLocal);
+
+		szPath.Format(_T("%s\\NGCount\\%04d\\%02d"), m_szPath_Report.GetBuffer(), OUT_tmLocal.wYear, OUT_tmLocal.wMonth);
+		MakeSubDirectory(szPath.GetBuffer());
+
+		OUT_szPath = szPath;
+
+		return Write_CSV_File(szPath.GetBuffer());
+	}
+
+	return false;
+}

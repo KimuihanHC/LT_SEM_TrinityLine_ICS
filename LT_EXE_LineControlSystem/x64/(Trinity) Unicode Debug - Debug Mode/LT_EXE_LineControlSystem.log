@@ -1,0 +1,272 @@
+﻿  stdafx.cpp
+  BannerBar_SEM.cpp
+  CommonModule.cpp
+  Dlg_EESMode_PopupMenu.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_EES_RMS.cpp
+  Dlg_LossWindow_PopupMenu.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\dlg_losswindow_popupmenu.cpp(181): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Dlg_ModifyAL.cpp
+  Dlg_ModifyEES.cpp
+  Dlg_ModifyLoss.cpp
+  Dlg_ModifyNGcode.cpp
+  Dlg_ModifyServer.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_ModifyUser.cpp
+  Dlg_OpCall_Popup.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_PopupMenu.cpp
+  Dlg_Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_TerminalMessage_Popup.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_UserLogin.cpp
+  EqpReturner.cpp
+  EqpLoader.cpp
+  EqpTester.cpp
+  EqpHandler.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Equipment.cpp
+  FailInfo.cpp
+  FailInfo_Eqp.cpp
+  File_UserInfo.cpp
+  GdCtrl.cpp
+  IcsCommunicatorEes.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  IcsRemoteEquipmentHandler.cpp
+  IcsRemoteServer.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  IcsRemoteServerEes.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  InOutCount.cpp
+  List_ALID_ListConfig.cpp
+  List_EESConfig.cpp
+  List_FailInfo.cpp
+  List_LossConfig.cpp
+  List_NGCodeView.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(404): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(405): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(406): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(406): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+  List_ReworkInfo.cpp
+  List_ServerConfig.cpp
+  List_UnloadInfo.cpp
+  NGCode_Info.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(164): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(168): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(168): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(177): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(180): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(184): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(188): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(192): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(196): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(200): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(204): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(208): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(217): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(312): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(323): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(324): error C3536: 'Re': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(336): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(337): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(337): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(339): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(352): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(353): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(353): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(355): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(365): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(370): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(371): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(371): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(383): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(388): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+  RegCommModule.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  RegDebugInfo.cpp
+  RegRework.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(108): error C2039: 'Set_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.h(18): note: 'CRegRework' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(113): error C2065: 'm_szRegPath': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(208): error C2039: 'Get_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.h(18): note: 'CRegRework' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(214): error C2065: 'm_szRegPath': 선언되지 않은 식별자입니다.
+  RegServer.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Rework_Info.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.cpp(43): error C2039: 'Set_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.h(24): note: 'CRegRework' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.cpp(48): error C2039: 'Get_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.h(24): note: 'CRegRework' 선언을 참조하십시오.
+  IcsCommunicator.cpp
+  IcsRemoteEquipment.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\icsremoteequipment.cpp(405): error C2039: 'CommandOperationActiveStatus': 'lt::CIcsRemote'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\comm\icsremote.h(11): note: 'lt::CIcsRemote' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\icsremoteequipment.cpp(412): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+  IcsRemoteEquipmentLoUnloader.cpp
+  IcsRemoteEquipmentReturner.cpp
+  IcsRemoteEquipmentTester.cpp
+  LineControl.cpp
+  LineInfo.cpp
+  List_Alarm.cpp
+  List_NGCode.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(497): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(504): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(505): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(506): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(506): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(526): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(623): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(659): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(660): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(661): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(661): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+  List_SocketInfo.cpp
+  List_UserInfo.cpp
+  RegEquipment.cpp
+  RegSocket.cpp
+  Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  ServerInfo.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  SocketMonitoring.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  SvrEes.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  View_MonitoringData.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(102): error C2065: 'm_InspMode': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(250): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(260): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(262): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(285): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(496): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(498): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(503): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(558): error C2065: 'm_InspMode': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(563): error C2065: 'm_InspMode': 선언되지 않은 식별자입니다.
+  View_SubMonitoring.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(407): error C2039: 'Init_SocketUI_List': 'CView_SubMonitoring'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.h(24): note: 'CView_SubMonitoring' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(409): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(413): error C2065: 'm_lc_SocketList': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(415): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(420): error C2065: 'm_lc_SocketList': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(420): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(435): error C2039: 'Find_SocketOrder': 'CView_SubMonitoring'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.h(24): note: 'CView_SubMonitoring' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(439): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(443): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(444): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(445): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(445): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+  Wnd_Cfg_Alarm.cpp
+  Wnd_Cfg_ALID_List.cpp
+  Wnd_Cfg_Debug.cpp
+  Wnd_Cfg_EES.cpp
+  Wnd_Cfg_Loss.cpp
+  Wnd_Cfg_NGCode.cpp
+  Wnd_Cfg_Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_Cfg_User.cpp
+  Wnd_FailInfo.cpp
+  Wnd_InOutCount.cpp
+  Wnd_Judgment.cpp
+  Wnd_ReworkInfo.cpp
+  Wnd_SettingView.cpp
+  Wnd_Status_Base.cpp
+  Wnd_Status_EES.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_Status_Equipment.cpp
+  Wnd_Status_EquipmentEx.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Wnd_Status_Handler.cpp
+  Wnd_Status_Loader.cpp
+  Wnd_Status_Returner.cpp
+  Wnd_Status_Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_TesterSelection.cpp
+  Wnd_Yield_Eqp.cpp
+  XmlALConfig.cpp
+  XmlEESConfig.cpp
+  XmlLineConfig.cpp
+  Dlg_ModifyEquipment.cpp
+  List_LineConfig.cpp
+  List_SocketRFID.cpp
+  View_MainCtrl_ICS.cpp
+  TestManager_EQP_ICS.cpp
+  Wnd_Cfg_Line.cpp
+  Wnd_Cfg_Socket.cpp
+  Wnd_Dummy.cpp
+  File_Recipe.cpp
+  LT MainExecution.cpp
+  MainFrm.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Reg_InspInfo.cpp
+  TestManager_Device.cpp
+  TestManager_EQP.cpp
+  View_MainCtrl.cpp
+  Wnd_BaseView.cpp
+  Wnd_LogView.cpp
+  Wnd_MainView.cpp
+  Pane_CommStatus.cpp
+  Wnd_Cfg_Base.cpp
+  Wnd_SocketView.cpp
+  Wnd_MaintenanceView.cpp
+  Wnd_Status_Tester.cpp
+  XmlLineServerConfig.cpp
+  XmlLossConfig.cpp
+  XmlSocket.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\xmlsocket.cpp(184): error C2065: 'szFileName': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\xmlsocket.cpp(185): error C2065: 'szFileName': 선언되지 않은 식별자입니다.
+  코드를 생성하고 있습니다...

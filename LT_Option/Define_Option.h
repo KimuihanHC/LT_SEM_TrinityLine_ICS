@@ -13,9 +13,9 @@
 #pragma pack (push,1)
 
 #include "Define_OptionItem.h"
-#if (20230905)
+//#if (USE_XML)//20231001
 #include "Def_Enum_Cm.h"
-#endif
+//#endif
 #include <afxwin.h>
 #include <stdint.h>
 
@@ -192,6 +192,7 @@ namespace Luritech_Option
 	{
 		// 운영
 		uint8_t		nLanguage = 1;
+		uint16_t	nAutoModeDuration = 10; // 분 단위
 
 		// 저장 경로
 		CString		szPath_Log;
@@ -200,6 +201,9 @@ namespace Luritech_Option
 		CString		szPath_Socket;
 		CString		szPath_Shared;
 		CString		szPath_FailInfo;
+
+		// Auto 모드에서 설비의 통신 끊김 알람
+		BOOL		bAlarm_EqpDiscon_AutoMode;
 
 		// 자동 재 실행 사용 여부
 		BOOL		UseAutoRestart;
@@ -212,6 +216,7 @@ namespace Luritech_Option
 		_stOption_Inspector ()
 		{
 			nLanguage			= 1;
+			nAutoModeDuration	= 10;
 
 			szPath_Log			= _T("C:\\Log");
 			szPath_Report		= _T("C:\\Report");
@@ -221,11 +226,14 @@ namespace Luritech_Option
 			szPath_FailInfo		= _T("C:\\FailInfo");
 
 			UseAutoRestart		= FALSE;
+
+			bAlarm_EqpDiscon_AutoMode = FALSE;
 		};
 
 		void Reset ()
 		{
 			nLanguage			= 1;
+			nAutoModeDuration	= 10;
 
 			szPath_Log.Empty();
 			szPath_Report.Empty();
@@ -242,6 +250,7 @@ namespace Luritech_Option
 		_stOption_Inspector& operator= (_stOption_Inspector& ref)
 		{
 			nLanguage			= ref.nLanguage;
+			nAutoModeDuration	= ref.nAutoModeDuration;
 
 			szPath_Log			= ref.szPath_Log;
 			szPath_Report		= ref.szPath_Report;
@@ -254,6 +263,8 @@ namespace Luritech_Option
 
 			//Password_Admin	= ref.Password_Admin;
 
+			bAlarm_EqpDiscon_AutoMode = ref.bAlarm_EqpDiscon_AutoMode;
+
 			return *this;
 		};
 	}stOpt_Insp;
@@ -264,7 +275,7 @@ namespace Luritech_Option
 	typedef struct _stLT_Option
 	{
 		stOpt_Insp			Inspector;
-		stOpt_Server		Server[ICS_SERVER_MAX];
+		stOpt_Server		Server[_ICS_SERVER_Type::ICS_SERVER_MAX];
 		stOpt_Misc			Misc;
 
 		_stLT_Option ()

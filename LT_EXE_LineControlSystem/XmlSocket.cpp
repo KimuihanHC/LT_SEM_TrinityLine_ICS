@@ -180,7 +180,7 @@ BOOL CXmlSocket::WriteXML_Comment(__in tinyxml2::XMLDocument* IN_pDoc, __out tin
 //=============================================================================
 BOOL CXmlSocket::WriteXML_File(__in LPCTSTR szPath, __in tinyxml2::XMLDocument* IN_pDoc)
 {
-	// 파일 저장//
+	// 파일 저장
 	CStringA szFileName;
 	szFileName = CT2A(szPath);
 	if (tinyxml2::XML_SUCCESS == IN_pDoc->SaveFile(szFileName.GetBuffer(0)))
@@ -399,7 +399,7 @@ BOOL CXmlSocket::SaveXML_Socket_CfgList(__in LPCTSTR szPath, __in const CSocketL
 	// Line Configuration 
 	Write_Socket_CfgList(&doc, pRoot, IN_pSocketList);
 
-	// 파일로 저장//
+	// 파일로 저장
 	return WriteXML_File(szPath, &doc);
 }
 

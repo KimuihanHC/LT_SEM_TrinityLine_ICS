@@ -96,6 +96,21 @@ void CPageOpt_Insp::InitPropList()
 	apGroup_Etc->AddSubItem(pProp);
 	m_wndPropList.AddProperty(apGroup_Etc.release());
 
+	// Auto 모드에서  Manual 모드로 전환하는데 필요한 대기 시간
+	pProp = new CMFCPropertyGridProperty(_T("Wait time (Minutes) required to switch from Auto to Manual"), (_variant_t)10l, _T("Wait time (Minutes) required to switch from Auto mode to Manual mode."));
+	pProp->EnableSpinControl(TRUE, 1, 60);
+	apGroup_Etc->AddSubItem(pProp);
+
+
+	// Auto 모드에서 설비의 통신 끊김 알람
+// 	pProp = new CMFCPropertyGridProperty(_T("Enable Alarm : Disconnect the equipment in auto mode"), lpszUsableTable[0], _T("Disconnect the equipment from communication in Auto mode"));
+// 	pProp->AddOption(lpszUsableTable[0]);
+// 	pProp->AddOption(lpszUsableTable[1]);
+// 	pProp->AllowEdit(FALSE);
+// 	apGroup_Etc->AddSubItem(pProp);
+
+	m_wndPropList.AddProperty(apGroup_Etc.release());
+
 
 	//-----------------------------------------------------
 	// 경로 설정
@@ -210,6 +225,24 @@ Luritech_Option::stOpt_Insp CPageOpt_Insp::Get_Option()
 	}
 	m_stOption.nLanguage = (nIndex < OptLang_MaxCount) ? (uint8_t)nIndex : 1;
 
+	// Auto 모드에서  Manual 모드로 전환하는데 필요한 대기 시간
+	rVariant = (pPropertyGroup->GetSubItem(nSubItemIndex++))->GetValue();
+	varData = rVariant.Detach();
+	ASSERT(varData.vt == VT_I4);
+	m_stOption.nAutoModeDuration = varData.intVal;
+
+	// Auto 모드에서 설비의 통신 끊김 알람
+// 	rVariant = (pPropertyGroup->GetSubItem(nSubItemIndex++))->GetValue();
+// 	varData = rVariant.Detach();
+// 	ASSERT(varData.vt == VT_BSTR);
+// 	strValue = OLE2T(varData.bstrVal);
+// 
+// 	for (nIndex = 0; NULL != lpszUsableTable[nIndex]; nIndex++)
+// 	{
+// 		if (lpszUsableTable[nIndex] == strValue)
+// 			break;
+// 	}
+// 	m_stOption.bAlarm_EqpDiscon_AutoMode = (BOOL)nIndex;
 
 	//-----------------------------------------------------
 	// 경로 설정
@@ -309,9 +342,14 @@ void CPageOpt_Insp::Set_Option( stOpt_Insp stOption )
 	iSubItemCount = pPropertyGroup->GetSubItemsCount();
 	nSubItemIndex = 0;
 
-	// Password -----------------------------
+	// 언어 -----------------------------
 	(pPropertyGroup->GetSubItem(nSubItemIndex++))->SetValue(g_szOptLanguage[m_stOption.nLanguage]);
 
+	// Auto 모드에서  Manual 모드로 전환하는데 필요한 대기 시간
+	(pPropertyGroup->GetSubItem(nSubItemIndex++))->SetValue((_variant_t)(long int)m_stOption.nAutoModeDuration);
+
+	// Auto 모드에서 설비의 통신 끊김 알람
+	//(pPropertyGroup->GetSubItem(nSubItemIndex++))->SetValue(lpszUsableTable[m_stOption.bAlarm_EqpDiscon_AutoMode]);
 
 	//-----------------------------------------------------
 	// 경로 설정

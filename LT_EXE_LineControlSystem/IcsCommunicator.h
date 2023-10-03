@@ -97,6 +97,10 @@ public:
 	bool SendUiVisible(int cmdShow);
 	bool SendUiVisible(lt::ConstStringT equipmentId,
 					   int cmdShow);
+	// 인라인 가동/비가동
+	bool SendOperationActiveStatus(lt::uint32 status);
+	bool SendOperationActiveStatus(lt::ConstStringT equipmentId,
+		lt::uint32 status);
 
 	// 소켓 투입 승인
 	bool SendSocketAccept(lt::ConstStringT equipmentId,

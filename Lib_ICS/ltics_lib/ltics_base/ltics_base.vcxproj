@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="EES_Debug|Win32">
+      <Configuration>EES_Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="EES_Debug|x64">
+      <Configuration>EES_Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{2CF5B3AD-59E1-411C-BC9A-432C0C15CDD6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>mcslib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;MCSLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);LTICS_LIB_EXPORTS</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./;./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>md ..\..\lib\$(PlatformTarget)\lib
+md ..\..\lib\$(PlatformTarget)\bin
+md ..\..\lib\include
+xcopy $(TargetPath) ..\..\lib\$(PlatformTarget)\bin /k /y
+xcopy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(TargetName).lib ..\..\lib\$(PlatformTarget)\lib /k /y
+xcopy include ..\..\lib\include /s /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;MCSLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);LTICS_LIB_EXPORTS</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./;./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>md ..\..\lib\$(PlatformTarget)\lib
+md ..\..\lib\$(PlatformTarget)\bin
+md ..\..\lib\include
+xcopy $(TargetPath) ..\..\lib\$(PlatformTarget)\bin /k /y
+xcopy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(TargetName).lib ..\..\lib\$(PlatformTarget)\lib /k /y
+xcopy include ..\..\lib\include /s /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;MCSLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);LTICS_LIB_EXPORTS</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./;./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>md ..\..\lib\$(PlatformTarget)\lib
+md ..\..\lib\$(PlatformTarget)\bin
+md ..\..\lib\include
+xcopy $(TargetPath) ..\..\lib\$(PlatformTarget)\bin /k /y
+xcopy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(TargetName).lib ..\..\lib\$(PlatformTarget)\lib /k /y
+xcopy include ..\..\lib\include /s /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EES_Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;MCSLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);LTICS_LIB_EXPORTS</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./;./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>md ..\..\lib\$(PlatformTarget)\lib
+md ..\..\lib\$(PlatformTarget)\bin
+md ..\..\lib\include
+xcopy $(TargetPath) ..\..\lib\$(PlatformTarget)\bin /k /y
+xcopy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(TargetName).lib ..\..\lib\$(PlatformTarget)\lib /k /y
+xcopy include ..\..\lib\include /s /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MCSLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);LTICS_LIB_EXPORTS</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./;./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>md ..\..\lib\$(PlatformTarget)\lib
+md ..\..\lib\$(PlatformTarget)\bin
+md ..\..\lib\include
+xcopy $(TargetPath) ..\..\lib\$(PlatformTarget)\bin /k /y
+xcopy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(TargetName).lib ..\..\lib\$(PlatformTarget)\lib /k /y
+xcopy include ..\..\lib\include /s /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;MCSLIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);LTICS_LIB_EXPORTS</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>./;./include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>md ..\..\lib\$(PlatformTarget)\lib
+md ..\..\lib\$(PlatformTarget)\bin
+md ..\..\lib\include
+xcopy $(TargetPath) ..\..\lib\$(PlatformTarget)\bin /k /y
+xcopy $(ProjectDir)$(PlatformTarget)\$(Configuration)\$(TargetName).lib ..\..\lib\$(PlatformTarget)\lib /k /y
+xcopy include ..\..\lib\include /s /k /y
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="include\Comm\CommData.h" />
+    <ClInclude Include="include\Comm\CommOption.h" />
+    <ClInclude Include="include\Comm\Communicator.h" />
+    <ClInclude Include="include\Comm\ICommunicator.h" />
+    <ClInclude Include="include\Comm\SerialCommOption.h" />
+    <ClInclude Include="include\Comm\SerialCommunicator.h" />
+    <ClInclude Include="include\Comm\SocketCommunicator.h" />
+    <ClInclude Include="include\Comm\SocketCommOption.h" />
+    <ClInclude Include="include\Comm\TcpCommunicator.h" />
+    <ClInclude Include="include\Comm\UdpCommunicator.h" />
+    <ClInclude Include="include\Enumerator\EnumerableContainerIterator.hpp" />
+    <ClInclude Include="include\Enumerator\Enumerator.hpp" />
+    <ClInclude Include="include\Enumerator\IEnumerableContainer.h" />
+    <ClInclude Include="include\Enumerator\IEnumerator.h" />
+    <ClInclude Include="include\Event\BasicEventNotifier.hpp" />
+    <ClInclude Include="include\Event\CancellableEventArgs.hpp" />
+    <ClInclude Include="include\Event\CancellableEventNotifier.hpp" />
+    <ClInclude Include="include\Event\EmptyArgs.h" />
+    <ClInclude Include="include\Event\EventArgs.hpp" />
+    <ClInclude Include="include\Event\EventFnListener.hpp" />
+    <ClInclude Include="include\Event\EventMfnListener.hpp" />
+    <ClInclude Include="include\Event\EventNotifier.hpp" />
+    <ClInclude Include="include\Event\ICancellableEventArgs.h" />
+    <ClInclude Include="include\Event\IEventArgs.h" />
+    <ClInclude Include="include\Event\IEventListener.h" />
+    <ClInclude Include="include\Event\IEventNotifier.h" />
+    <ClInclude Include="include\Exception\Exception.h" />
+    <ClInclude Include="include\Exception\Win32Exception.h" />
+    <ClInclude Include="include\Logger\DebugLogDispatcher.h" />
+    <ClInclude Include="include\Logger\DebugLoggerHolder.h" />
+    <ClInclude Include="include\Logger\IDebugLogDispatcher.h" />
+    <ClInclude Include="include\Logger\ILogData.h" />
+    <ClInclude Include="include\Logger\ILogDispatcher.h" />
+    <ClInclude Include="include\Logger\ILoggable.h" />
+    <ClInclude Include="include\Logger\ILogger.h" />
+    <ClInclude Include="include\Logger\LogData.h" />
+    <ClInclude Include="include\Logger\LogDispatcher.h" />
+    <ClInclude Include="include\Logger\LogFilter.h" />
+    <ClInclude Include="include\Logger\Logger.h" />
+    <ClInclude Include="include\Logger\LogLevel.h" />
+    <ClInclude Include="include\Util\BasicTimer.h" />
+    <ClInclude Include="include\Util\FileFinder.h" />
+    <ClInclude Include="include\Util\FileUtil.hpp" />
+    <ClInclude Include="include\Util\MemoryUtil.hpp" />
+    <ClInclude Include="include\Util\StringUtil.hpp" />
+    <ClInclude Include="include\Util\SyncUtil.hpp" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='EES_Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='EES_Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="source\Comm\Communicator.cpp" />
+    <ClCompile Include="source\Comm\SerialCommunicator.cpp" />
+    <ClCompile Include="source\Comm\SocketCommunicator.cpp" />
+    <ClCompile Include="source\Comm\TcpCommunicator.cpp" />
+    <ClCompile Include="source\Comm\UdpCommunicator.cpp" />
+    <ClCompile Include="source\Exception\Exception.cpp" />
+    <ClCompile Include="source\Exception\Win32Exception.cpp" />
+    <ClCompile Include="source\Logger\DebugLogDispatcher.cpp" />
+    <ClCompile Include="source\Logger\DebugLoggerHolder.cpp" />
+    <ClCompile Include="source\Logger\LogData.cpp" />
+    <ClCompile Include="source\Logger\LogDispatcher.cpp" />
+    <ClCompile Include="source\Logger\Logger.cpp" />
+    <ClCompile Include="source\Util\BasicTimer.cpp" />
+    <ClCompile Include="source\Util\FileFinder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ltics_base.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

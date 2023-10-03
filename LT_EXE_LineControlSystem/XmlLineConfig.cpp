@@ -33,7 +33,7 @@ void CXmlLineConfig::Backup_File(__in LPCTSTR szPath)
 {
 	//if (m_bUseBackup)
 	{
-		// Í∏∞Ï°¥ ?åÏùºÎ™?+ ?ÑÏû¨ ?†Ïßú/?úÍ∞Ñ
+		// ±‚¡∏ ∆ƒ¿œ∏Ì + «ˆ¿Á ≥Ø¬•/Ω√∞£
 		// C:\\Recipe\\SEM_T01_SocketInfo.xml
 		// => C:\\Recipe\\BAK\\SEM_T01_SocketInfo_2021_1117_181900.xml
 
@@ -81,10 +81,13 @@ uint8_t CXmlLineConfig::Convert_EqpType_UI(__in int IN_iVer, __in uint8_t IN_nEq
 {
 	if (1 < m_xml_version)
 	{
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+		return IN_nEqpTypeUI_Old;
+#else
 		switch (IN_iVer)
 		{
 		case 1: // version 1.0 => 2.0
-			//return (IN_nEqpType_Old + 1); // Eqp_HandlerÍ∞Ä 0Î≤??∏Îç±?§Ïóê Ï∂îÍ???/
+			//return (IN_nEqpType_Old + 1); // Eqp_Handler∞° 0π¯ ¿Œµ¶Ω∫ø° √ﬂ∞°µ 
 			switch (IN_nEqpTypeUI_Old)
 			{
 			case Eqp_V1_Loader:			// 0
@@ -99,7 +102,7 @@ uint8_t CXmlLineConfig::Convert_EqpType_UI(__in int IN_iVer, __in uint8_t IN_nEq
 				return enEquipmentType_UI::EqpUI_ColorCal;
 				break;
 
-			case Eqp_V1_SFR_CL_46:		// 3 : SFR ?ëÍ∞Å
+			case Eqp_V1_SFR_CL_46:		// 3 : SFR «˘∞¢
 				return enEquipmentType_UI::EqpUI_SFR_CL_46;
 				break;
 
@@ -145,6 +148,7 @@ uint8_t CXmlLineConfig::Convert_EqpType_UI(__in int IN_iVer, __in uint8_t IN_nEq
 			return IN_nEqpTypeUI_Old;
 			break;
 		}
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 	}
 
 	return IN_nEqpTypeUI_Old;
@@ -164,10 +168,13 @@ uint8_t CXmlLineConfig::Convert_EquipmentType(__in int IN_iVer, __in uint8_t IN_
 {
 	if (1 < m_xml_version)
 	{
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+		return IN_nEqpType_Old;
+#else
 		switch (IN_iVer)
 		{
 		case 1: // version 1.0 => 2.0
-			//return (IN_nEqpType_Old + 1); // Eqp_HandlerÍ∞Ä 0Î≤??∏Îç±?§Ïóê Ï∂îÍ???
+			//return (IN_nEqpType_Old + 1); // Eqp_Handler∞° 0π¯ ¿Œµ¶Ω∫ø° √ﬂ∞°µ 
 			switch (IN_nEqpType_Old)
 			{
 			case Eqp_V1_Loader:			// 0
@@ -182,7 +189,7 @@ uint8_t CXmlLineConfig::Convert_EquipmentType(__in int IN_iVer, __in uint8_t IN_
 				return enEquipmentType::Eqp_ColorCal;
 				break;
 
-			case Eqp_V1_SFR_CL_46:		// 3 : SFR ?ëÍ∞Å
+			case Eqp_V1_SFR_CL_46:		// 3 : SFR «˘∞¢
 				return enEquipmentType::Eqp_SFR_CL_46;
 				break;
 
@@ -224,6 +231,7 @@ uint8_t CXmlLineConfig::Convert_EquipmentType(__in int IN_iVer, __in uint8_t IN_
 			return IN_nEqpType_Old;
 			break;
 		}
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 	}
 	
 	return IN_nEqpType_Old;
@@ -285,12 +293,9 @@ int CXmlLineConfig::ReadXML_Header(__in tinyxml2::XMLElement* IN_pRoot)
 {
 	if (IN_pRoot)
 	{
-		//2023.05.04a Test
-		CStringA szTemp1, szTemp2, szTemp3;
-		szTemp1 = IN_pRoot->Attribute("Version"); // ver2.0 ?êÏÑú eqp type??Î∞îÎÄ??∏Ìôò Ï≤¥ÌÅ¨?¥ÏïÑ ??
-		szTemp2 = IN_pRoot->Attribute("Maker");
-
-		szTemp3 = IN_pRoot->Attribute("Format");
+		IN_pRoot->Attribute("Version"); // ver2.0 ø°º≠ eqp type¿Ã πŸ≤Ò »£»Ø √º≈©«ÿæ∆ «‘
+		IN_pRoot->Attribute("Maker");
+		IN_pRoot->Attribute("Format");
 
 		CString szTemp;
 		szTemp = IN_pRoot->Attribute("Version", 0);
@@ -321,24 +326,11 @@ BOOL CXmlLineConfig::WriteXML_Header(__in tinyxml2::XMLDocument* IN_pDoc, __in t
 	
 	CStringA szVersion;
 	szVersion.Format("%d.0", m_xml_version);	
-	//IN_pRoot->SetAttribute("Version",	"1.0"); // ver2.0 ?êÏÑú eqp type??Î∞îÎÄ??∏Ìôò Ï≤¥ÌÅ¨?¥ÏïÑ ??	//IN_pRoot->SetAttribute("Version", (const char*)szVersion.GetBuffer(0)); // ver2.0 ?êÏÑú eqp type??Î∞îÎÄ??∏Ìôò Ï≤¥ÌÅ¨?¥ÏïÑ ??	//IN_pRoot->SetAttribute("Maker", "Luritech");
-	IN_pRoot->SetAttribute("Version", (const char*)szVersion.GetBuffer(0)); // ver2.0 ?êÏÑú eqp type??Î∞îÎÄ??∏Ìôò Ï≤¥ÌÅ¨?¥ÏïÑ ??
-
-
-	CStringA szMaker;
-	szMaker = "Luritech";
-	IN_pRoot->SetAttribute("Maker", (const char*)szMaker.GetBuffer(0));
-
-
-
-	CStringA szFormat;
-	szFormat = "Line Configuration File";
-	IN_pRoot->SetAttribute("Format", (const char*)szFormat.GetBuffer(0));
-
-
-	
+	//IN_pRoot->SetAttribute("Version",	"1.0"); // ver2.0 ø°º≠ eqp type¿Ã πŸ≤Ò »£»Ø √º≈©«ÿæ∆ «‘
+	IN_pRoot->SetAttribute("Version", szVersion.GetBuffer()); // ver2.0 ø°º≠ eqp type¿Ã πŸ≤Ò »£»Ø √º≈©«ÿæ∆ «‘
+	IN_pRoot->SetAttribute("Maker", "Luritech");
+	IN_pRoot->SetAttribute("Format", "Line Configuration File");	
 	IN_pDoc->LinkEndChild(IN_pRoot);
-
 
 	return TRUE;
 }
@@ -374,7 +366,7 @@ BOOL CXmlLineConfig::WriteXML_Comment(__in tinyxml2::XMLDocument* IN_pDoc, __out
 //=============================================================================
 BOOL CXmlLineConfig::WriteXML_File(__in LPCTSTR szPath, __in tinyxml2::XMLDocument* IN_pDoc)
 {
-	// ?åÏùº ?Ä??
+	// ∆ƒ¿œ ¿˙¿Â
 	CStringA szFileName;
 	szFileName = CT2A(szPath);
 	if (tinyxml2::XML_SUCCESS == IN_pDoc->SaveFile(szFileName.GetBuffer(0)))
@@ -398,87 +390,6 @@ BOOL CXmlLineConfig::WriteXML_File(__in LPCTSTR szPath, __in tinyxml2::XMLDocume
 // Last Update	: 2023.05.08
 // Desc.		:
 //=============================================================================
-/*
-BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CConfig_Line& OUT_stLineInfo, __in int IN_iVer)
-{
- 	CStringA szTemp;
-
-	if (IN_pRoot)
-	{
-		tinyxml2::XMLElement* pLineInfo = IN_pRoot->FirstChildElement("LineInfo");
-		if (pLineInfo)
-		{
-			tinyxml2::XMLElement* pEqpList = pLineInfo->FirstChildElement("EqpList");
-			if (pEqpList)
-			{
-				// ?ºÏù∏ ?§ÎπÑ ?ïÎ≥¥ Ï¥àÍ∏∞??
-				OUT_stLineInfo.RemoveAll();
-
-				INT_PTR iItemCount = pEqpList->Int64Attribute("Count", 0);
-
-				std::vector<CConfig_Eqp> *cEqpList;	//2022.12.29a uhkim  TEST
-
-				CConfig_Eqp* OUT_pEqp = NULL;
-				for (INT_PTR nIdx = 0; nIdx < iItemCount; nIdx++)
-				{
-					// ?§ÎπÑ 1Í∞?Ï∂îÍ?
-					CConfig_Eqp stEquipment;
-					OUT_stLineInfo.Eqp_Add(stEquipment);						
-				}	
-
-				cEqpList = &OUT_stLineInfo.EqpList;
-				for (INT_PTR nIdx = 0; nIdx < iItemCount; nIdx++)
-				{					
-					OUT_pEqp = &cEqpList->at(nIdx);
-					if (OUT_pEqp == nullptr) {
-						continue;
-					}
-					szTemp.Format("Eqp_%03d", nIdx + 1);
-					tinyxml2::XMLElement* pEquipment = pEqpList->FirstChildElement(szTemp.GetBuffer(0));
-					if (pEquipment)
-					{
- 						// uint8_t		m_nEqpOrder;		// ?ºÏù∏?êÏÑú???§ÎπÑ ?úÏÑú(Î≤àÌò∏)
-						OUT_pEqp->Set_EqpOrder(pEquipment->UnsignedAttribute("EqpOrder", 0));
-
- 						// bool			m_bGroup;			// Í≤Ä??Í∑∏Î£π (?)
-						OUT_pEqp->Set_Group(pEquipment->BoolAttribute("Group", false));
-
- 						// uint8_t		m_nGroupIndex;		// Í≤Ä??Í∑∏Î£π???§ÎπÑ ?∏Îç±??						OUT_pEqp->Set_GroupIndex(pEquipment->UnsignedAttribute("GroupIndex", 0));
-
-						// CString		szAlias;			// Eqp Type + Í≤Ä?¨Í∏∞Î≥?Number (?§ÎπÑ ?úÏÑú???∞Î•∏ ?êÎèô ?ùÏÑ±)
-						szTemp = pEquipment->Attribute("Alias", 0);
-						OUT_pEqp->Set_Alias(CA2T(szTemp.GetBuffer()));
-
-						// uint8_t		nEquipmenttype;		// Equipmnet Type
-						OUT_pEqp->Set_EqpType_UI(Convert_EqpType_UI(IN_iVer, pEquipment->UnsignedAttribute("Equipment_Type", 0)));
-
-						// CString		szEquipmentId;		// Equipment id (Í≥†Ïú†id)
-						szTemp = pEquipment->Attribute("Equipment_ID", 0);
-						OUT_pEqp->Set_EquipmentId(CA2T(szTemp.GetBuffer()));
-
-						// uint32_t		nIP_Address;		// ip address
-						szTemp = pEquipment->Attribute("IP_Address", 0);
-						OUT_pEqp->Set_IP_Address(ntohl(inet_addr(szTemp.GetBuffer())));
-					}
-				}
-			}
-			else
-			{
-				return FALSE;
-			}
-		} 
-		else
-		{
-			return FALSE;
-		}
-	} 
-	else
-	{
-		return FALSE;
-	}
-	return TRUE;
-}
-*/
 BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CConfig_Line& OUT_stLineInfo, __in int IN_iVer)
 {
 	CStringA szTemp;
@@ -491,16 +402,16 @@ BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CC
 			tinyxml2::XMLElement* pEqpList = pLineInfo->FirstChildElement("EqpList");
 			if (pEqpList)
 			{
-				// ?ºÏù∏ ?§ÎπÑ ?ïÎ≥¥ Ï¥àÍ∏∞??				
+				// ∂Û¿Œ º≥∫Ò ¡§∫∏ √ ±‚»≠			
 				OUT_stLineInfo.RemoveAll();
 
-				// ?§ÎπÑ Í∞úÏàò
+				// º≥∫Ò ∞≥ºˆ
 				INT_PTR iItemCount = pEqpList->Int64Attribute("Count", 0);
 
 				CConfig_Eqp* OUT_pEqp = NULL;
 				for (INT_PTR nIdx = 0; nIdx < iItemCount; nIdx++)
 				{
-					// ?§ÎπÑ 1Í∞?Ï∂îÍ?
+					// º≥∫Ò 1∞≥ √ﬂ∞°
 					CConfig_Eqp stEquipment;
 					OUT_stLineInfo.Eqp_Add(stEquipment);
 			
@@ -510,16 +421,16 @@ BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CC
 					tinyxml2::XMLElement* pEquipment = pEqpList->FirstChildElement(szTemp.GetBuffer(0));
 					if (pEquipment)
 					{
-						// uint8_t		m_nEqpOrder;		// ?ºÏù∏?êÏÑú???§ÎπÑ ?úÏÑú(Î≤àÌò∏)
+						// uint8_t		m_nEqpOrder;		// ∂Û¿Œø°º≠¿« º≥∫Ò º¯º≠(π¯»£)
 						OUT_pEqp->Set_EqpOrder(pEquipment->UnsignedAttribute("EqpOrder", 0));
 
-						// bool			m_bGroup;			// Í≤Ä??Í∑∏Î£π (?)
+						// bool			m_bGroup;			// ∞ÀªÁ ±◊∑Ï (?)
 						OUT_pEqp->Set_Group(pEquipment->BoolAttribute("Group", false));
 
-						// uint8_t		m_nGroupIndex;		// Í≤Ä??Í∑∏Î£π???§ÎπÑ ?∏Îç±??						
+						// uint8_t		m_nGroupIndex;		// ∞ÀªÁ ±◊∑Ï≥ª º≥∫Ò ¿Œµ¶Ω∫					
 						OUT_pEqp->Set_GroupIndex(pEquipment->UnsignedAttribute("GroupIndex", 0));
 
-						// CString		szAlias;			// Eqp Type + Í≤Ä?¨Í∏∞Î≥?Number (?§ÎπÑ ?úÏÑú???∞Î•∏ ?êÎèô ?ùÏÑ±)
+						// CString		szAlias;			// Eqp Type + ∞ÀªÁ±‚∫∞ Number (º≥∫Ò º¯º≠ø° µ˚∏• ¿⁄µø ª˝º∫)
 						szTemp = pEquipment->Attribute("Alias", 0);
 						OUT_pEqp->Set_Alias(CA2T(szTemp.GetBuffer()));
 
@@ -539,7 +450,7 @@ BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CC
 						//OUT_pEqp->m_nPortCount = pEquipment->UnsignedAttribute("Port_Count", 1);
 						// uint8_t		nConveyorCount;		// Conveyor Count
 						//OUT_pEqp->m_nConveyorCount = pEquipment->UnsignedAttribute("Conveyor_Count", 1);
-						// uint8_t		m_nRFID_Count;			// RFID Î¶¨Îçî Í∞?àò
+						// uint8_t		m_nRFID_Count;			// RFID ∏Æ¥ı ∞πºˆ
 
 					} // if (pEquipment)
 				} // for()
@@ -561,6 +472,7 @@ BOOL CXmlLineConfig::Read_LineInfo(__in tinyxml2::XMLElement* IN_pRoot, __out CC
 
 	return TRUE;
 }
+
 //=============================================================================
 // Method		: Write_LineInfo
 // Access		: public  
@@ -591,13 +503,14 @@ BOOL CXmlLineConfig::Write_LineInfo(__in tinyxml2::XMLDocument* IN_pDoc, __in ti
 			szTemp.Format("Eqp_%03d", nIdx + 1);
 			tinyxml2::XMLElement* pEquipment = IN_pDoc->NewElement(szTemp.GetBuffer(0));
 			{
-				// uint8_t		m_nEqpOrder;		// ?ºÏù∏?êÏÑú???§ÎπÑ ?úÏÑú(Î≤àÌò∏)
+				// uint8_t		m_nEqpOrder;		// ∂Û¿Œø°º≠¿« º≥∫Ò º¯º≠(π¯»£)
 				pEquipment->SetAttribute("EqpOrder", (unsigned)IN_pEqp->Get_EqpOrder());
-				// bool			m_bGroup;			// Í≤Ä??Í∑∏Î£π (?)
+				// bool			m_bGroup;			// ∞ÀªÁ ±◊∑Ï (?)
 				pEquipment->SetAttribute("Group", IN_pEqp->Get_Group());
-				// uint8_t		m_nGroupIndex;		// Í≤Ä??Í∑∏Î£π???§ÎπÑ ?∏Îç±??				pEquipment->SetAttribute("GroupIndex", (unsigned)IN_pEqp->Get_GroupIndex());
+				// uint8_t		m_nGroupIndex;		// ∞ÀªÁ ±◊∑Ï≥ª º≥∫Ò ¿Œµ¶Ω∫			
+				pEquipment->SetAttribute("GroupIndex", (unsigned)IN_pEqp->Get_GroupIndex());
 
-				// CString		szAlias;			// Eqp Type + Í≤Ä?¨Í∏∞Î≥?Number (?§ÎπÑ ?úÏÑú???∞Î•∏ ?êÎèô ?ùÏÑ±)
+				// CString		szAlias;			// Eqp Type + ∞ÀªÁ±‚∫∞ Number (º≥∫Ò º¯º≠ø° µ˚∏• ¿⁄µø ª˝º∫)
 				szTemp = CT2A(IN_pEqp->Get_Alias());
 				pEquipment->SetAttribute("Alias", szTemp.GetBuffer());
 
@@ -620,7 +533,7 @@ BOOL CXmlLineConfig::Write_LineInfo(__in tinyxml2::XMLDocument* IN_pDoc, __in ti
 				//pEquipment->SetAttribute("Port_Count", (unsigned)IN_pEqp->m_nPortCount);
 				// uint8_t		nConveyorCount;		// Conveyor Count
 				//pEquipment->SetAttribute("Conveyor_Count", (unsigned)IN_pEqp->m_nConveyorCount);
-				// uint8_t		m_nRFID_Count;			// RFID Î¶¨Îçî Í∞?àò
+				// uint8_t		m_nRFID_Count;			// RFID ∏Æ¥ı ∞πºˆ
 			}
 
 			pEqpList->LinkEndChild(pEquipment);
@@ -648,7 +561,7 @@ BOOL CXmlLineConfig::LoadXML_LineInfo(__in LPCTSTR szPath, __out CConfig_Line& O
 	if (NULL == szPath)
 		return FALSE;
 
-	// ?åÏùº??Ï°¥Ïû¨?òÎäîÍ∞Ä?
+	// ∆ƒ¿œ¿Ã ¡∏¿Á«œ¥¬∞°?
 	if (!PathFileExists(szPath))
 	{
 		return FALSE;
@@ -696,10 +609,7 @@ BOOL CXmlLineConfig::SaveXML_LineInfo(__in LPCTSTR szPath, __in const CConfig_Li
 	tinyxml2::XMLDocument doc;
 
 	USES_CONVERSION;
-	CStringA szTemp;
-	szTemp = "Luritech";
-	tinyxml2::XMLElement* pRoot = doc.NewElement(szTemp.GetBuffer(0));
-	//tinyxml2::XMLElement* pRoot = doc.NewElement("Luritech");
+	tinyxml2::XMLElement* pRoot = doc.NewElement("Luritech");
 
 	WriteXML_Header(&doc, pRoot);	
 
@@ -709,8 +619,8 @@ BOOL CXmlLineConfig::SaveXML_LineInfo(__in LPCTSTR szPath, __in const CConfig_Li
 	// Line Configuration 
 	Write_LineInfo(&doc, pRoot, IN_pLineInfo);
 
-	// ?åÏùºÎ°??Ä??	Backup_File(szPath);
-
+	// ∆ƒ¿œ∑Œ ¿˙¿Â	
+	Backup_File(szPath);
 	return WriteXML_File(szPath, &doc);
 }
 
@@ -738,7 +648,7 @@ BOOL CXmlLineConfig::Read_ModelInfo(__in tinyxml2::XMLElement* IN_pRoot, __out C
 		// Socket Type
 		OUT_stModelInfo.m_nSocketType = pModelInfo->UnsignedAttribute("Socket_Type", 0);
 
-		// Tester ?¨Ïö©?¨Î?
+		// Tester ªÁøÎø©∫Œ
 		tinyxml2::XMLElement* pTesterList = pModelInfo->FirstChildElement("Tester_List");
 		if (pTesterList)
 		{
@@ -791,7 +701,7 @@ BOOL CXmlLineConfig::Write_ModelInfo(__in tinyxml2::XMLDocument* IN_pDoc, __in t
 		// Socket Type
 		pModelInfo->SetAttribute("Socket_Type", (unsigned)IN_pModelInfo->m_nSocketType);
 
-		// Tester ?¨Ïö©?¨Î?
+		// Tester ªÁøÎø©∫Œ
 		tinyxml2::XMLElement* pTesterList = IN_pDoc->NewElement("Tester_List");
 		size_t iItemCount = Max_TesterCount;
 		pTesterList->SetAttribute("Count", (int64_t)iItemCount);
@@ -826,7 +736,7 @@ BOOL CXmlLineConfig::LoadXML_ModelInfo(__in LPCTSTR szPath, __out CConfig_Model&
 	if (NULL == szPath)
 		return FALSE;
 
-	// ?åÏùº??Ï°¥Ïû¨?òÎäîÍ∞Ä?
+	// ∆ƒ¿œ¿Ã ¡∏¿Á«œ¥¬∞°?
 	if (!PathFileExists(szPath))
 	{
 		return FALSE;
@@ -883,7 +793,8 @@ BOOL CXmlLineConfig::SaveXML_ModelInfo(__in LPCTSTR szPath, __in const CConfig_M
 	// Model Configuration 
 	Write_ModelInfo(&doc, pRoot, IN_pModelInfo);
 
-	// ?åÏùºÎ°??Ä??	Backup_File(szPath);
+	// ∆ƒ¿œ∑Œ ¿˙¿Â
+	Backup_File(szPath);
 	return WriteXML_File(szPath, &doc);
 }
 
@@ -903,7 +814,7 @@ BOOL CXmlLineConfig::LoadXML_LineModelInfo(__in LPCTSTR szPath, __out CConfig_Li
 	if (NULL == szPath)
 		return FALSE;
 
-	// ?åÏùº??Ï°¥Ïû¨?òÎäîÍ∞Ä?
+	// ∆ƒ¿œ¿Ã ¡∏¿Á«œ¥¬∞°?
 	if (!PathFileExists(szPath))
 	{
 		return FALSE;
@@ -928,7 +839,7 @@ BOOL CXmlLineConfig::LoadXML_LineModelInfo(__in LPCTSTR szPath, __out CConfig_Li
 		return FALSE;
 	}
 
-	// version ?ïÏù∏ ?¥Ïïº ??
+	// version »Æ¿Œ «ÿæﬂ «‘
 
 	if (FALSE == Read_LineInfo(pRoot, OUT_stLineInfo, iVer))
 	{
@@ -972,6 +883,7 @@ BOOL CXmlLineConfig::SaveXML_LineModelInfo(__in LPCTSTR szPath, __in const CConf
 	// Model Configuration 
 	Write_ModelInfo(&doc, pRoot, IN_pModelInfo);
 
-	// ?åÏùºÎ°??Ä??	Backup_File(szPath);
+	// ∆ƒ¿œ∑Œ ¿˙¿Â
+	Backup_File(szPath);
 	return WriteXML_File(szPath, &doc);
 }

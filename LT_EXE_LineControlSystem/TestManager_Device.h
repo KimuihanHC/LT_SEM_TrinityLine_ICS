@@ -18,6 +18,7 @@
 #include "Def_ErrorCode.h"
 
 #include "IcsCommunicator.h"
+
 #if (USE_XML)
 #include "xmlArgs.h"
 #include "IcsCommunicatorEes.h"

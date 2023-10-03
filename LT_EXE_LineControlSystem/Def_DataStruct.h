@@ -13,6 +13,7 @@
 #include <afxwin.h>
 #include "Def_DataStruct_Cm.h"
 #include "Def_RecipeInfo_Cm.h"
+
 #include "Def_ProductInfo.h"	// -> Equipment
 #include "Def_ConfigLine.h"
 #include "Def_ModelConfig.h"
@@ -24,12 +25,12 @@
 #include "FailInfo.h"
 
 #include "Def_DebugInfo.h"
+#include "Def_InOutCount.h"
 
 #if (USE_XML)
 #include "Def_Config_EES_LIST.h"
 #include "Def_Config_ALID_LIST.h"
 #include "Def_Config_Loss_LIST.h"
-#include "Def_RecipeInfo_Cm.h"
 #include "ServerInfo.h"
 #endif
 
@@ -44,6 +45,7 @@ class CRecipeInfo : public CRecipeInfo_Base
 {
 public:
 	CConfig_Line			LineInfo;
+
 #if (USE_XML)
 public:
 	CConfig_EES_LIST		EES_Info;
@@ -81,6 +83,7 @@ public:
 #endif
 	};
 };
+
 //---------------------------------------------------------
 // 프로그램에 사용되는 경로
 //---------------------------------------------------------
@@ -164,6 +167,7 @@ typedef struct _tag_TestTime //: public ST_TestTime_Base
 typedef struct _tag_SystemInfo : public ST_SystemInfo_Base
 {
 public:
+
 	CRecipeInfo			SettingInfo;		// 기본 레시피 설정
 	ST_ProgramPath		Path;				// 프로그램 경로 모음
 
@@ -173,6 +177,14 @@ public:
 	ST_DebugInfo		DebugMode;			// 프로그램 운영 조건 (디버그 용도)
 	
 	ST_TestTime			Tacttime;
+
+	ST_InOutCount		InOutCount;			// 소켓 투입/배출/진행 중/제거  카운트
+
+#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
+	bool				bCheckedRegister;
+	SYSTEMTIME			LastRegisterTime;	// 마지막으로 투입된 시간
+	SYSTEMTIME			LocalTime;			// 현재 체크 시간
+#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
 
 #if (USE_XML)
 	CServerInfo			ServerInfo;
@@ -191,6 +203,9 @@ public:
 #if (USE_XML)
 		ServerInfo.SetPtr_DebugMode(&DebugMode);
 #endif
+#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
+		bCheckedRegister = false;
+#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
 	};
 
 	// 검사기 종류 설정
@@ -202,7 +217,34 @@ public:
 	//------------------------------------------------------------------
 	// 검사 정보 갱신
 	//------------------------------------------------------------------
+#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
+	void Set_LastRegisterTime()
+	{
+		GetLocalTime(&LastRegisterTime);
 
+		if (false == bCheckedRegister)
+		{
+			bCheckedRegister = true;
+		}
+	}
+
+	SYSTEMTIME& Get_LastRegisterTime()
+	{
+		return LastRegisterTime;
+	}
+
+	double Get_LastRegister_ElapsedTime()
+	{
+		GetLocalTime(&LocalTime);
+
+		return CompareSystemTime(&LocalTime, &LastRegisterTime);
+	}
+
+	void Reset_LastRegisterTime()
+	{
+		bCheckedRegister = false;
+	}
+#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
 	
 }ST_SystemInfo, *PST_InspectionInfo;
 

@@ -10,8 +10,8 @@
 #ifndef FileCrypt_h__
 #define FileCrypt_h__
 
-#include <io.h>				// íŒŒì¼ê´€ë ¨//
-#include <WinCrypt.h>		// ì•”í˜¸í™”//
+#include <io.h>				// ÆÄÀÏ°ü·Ã
+#include <WinCrypt.h>		// ¾ÏÈ£È­
 #include "Define_HWInfoFile.h"
 
 #define KEYLENGTH				0x00800000

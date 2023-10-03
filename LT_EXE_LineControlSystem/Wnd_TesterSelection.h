@@ -18,8 +18,6 @@
 #include "Def_ConfigLineServer.h"
 #include "VGStatic.h"
 
-#define		USE_AUTO_SEL_MODELTYPE
-
 //-----------------------------------------------------------------------------
 // CWnd_TesterSelection
 //-----------------------------------------------------------------------------

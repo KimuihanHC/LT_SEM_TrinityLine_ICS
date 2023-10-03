@@ -17,17 +17,17 @@
 //-----------------------------------------------------------------------------
 // 검사기 구분용도
 //-----------------------------------------------------------------------------
-#define SYS_CUSTOMER			_T("Luritech")
+#define SYS_CUSTOMER			_T("SEM")
 
-#define SYS_DEV_MOD_1	0
-#define SYS_DEV_MOD_2	1
-#define SYS_DEV_MOD_3	2	
-#define SYS_DEV_MOD_4	3	
+#define SYS_ICS_TRINITY_LINE	0
+#define SYS_ICS_RIVIAN_LINE		1
+#define SYS_DEV_MOD_3			2	
+#define SYS_DEV_MOD_4			3		
 
 typedef enum 
 {
-	Sys_Dev_Mod_1	= SYS_DEV_MOD_1,	
-	Sys_Dev_Mod_2	= SYS_DEV_MOD_2,			
+	Sys_Ics_Trinity_Line = SYS_ICS_TRINITY_LINE,
+	Sys_Ics_Rivian_Line = SYS_ICS_RIVIAN_LINE,
 	Sys_Dev_Mod_3	= SYS_DEV_MOD_3,
 	Sys_Dev_Mod_4	= SYS_DEV_MOD_4
 }enInsptrSysType;
@@ -35,7 +35,7 @@ typedef enum
 static LPCTSTR g_szInsptrSysType[] =
 {
 	_T("In-Line Control System"),
-	_T(""),	
+	_T("In-Line Control System"),
 	_T(""),
 	_T(""),
 	nullptr
@@ -47,18 +47,18 @@ static LPCTSTR g_szInsptrSysType[] =
 typedef struct _tag_InspectorTable
 {
 	LONG	SysType;		// 검사기 구분 코드
-	bool	UseDIO;			// Digital I/O 사용 구분
-	int		DAQBrd_Cnt;		// 그래버 보드 사용 개수
-	int		CtrlBrd_Cnt;	// Cam Main 보드 사용 개수
+	bool	UseEES;			// EES 사용
+	int		Resered_01;		// 
+	int		Resered_02;		// 
 }ST_InspectorTable;
 
 static ST_InspectorTable g_InspectorTable[] =
-{	
-	//검사기				IO,		영상,	전원	
-	{ Sys_Dev_Mod_1,	false,	1,		1,	},
-	{ Sys_Dev_Mod_2,	false,	1,		1,	},
-	{ Sys_Dev_Mod_3,	false,	1,		1,	},
-	{ Sys_Dev_Mod_4,	false,	1,		1,	},
+{
+	//검사기					EES,		예약1,	예약2	
+	{ Sys_Ics_Trinity_Line,	true,		0,		0,	},
+	{ Sys_Ics_Rivian_Line,	false,		0,		0,	},
+	{ Sys_Dev_Mod_3,		false,		0,		0,	},
+	{ Sys_Dev_Mod_4,		false,		0,		0,	},
 	NULL
 };
 

@@ -7,11 +7,11 @@
     <LocalDebuggerMergeEnvironment>false</LocalDebuggerMergeEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">
-    <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'">
+    <LocalDebuggerMergeEnvironment>false</LocalDebuggerMergeEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EES Unicode Debug - Debug Mode|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">
     <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>

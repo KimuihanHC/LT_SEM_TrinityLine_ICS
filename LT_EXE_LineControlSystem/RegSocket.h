@@ -33,11 +33,11 @@ protected:
 public:
 	void	Set_RegitryPath				(__in LPCTSTR lpszRegPath);
 
-	// ?ˆì??¤íŠ¸ë¦??¨ìŠ¤ ì²´í¬?˜ì—¬ ?†ìœ¼ë©??ì„±
+	// ·¹Áö½ºÆ®¸® ÆÐ½º Ã¼Å©ÇÏ¿© ¾øÀ¸¸é »ý¼º
 	bool	Check_RegistryPath			(__in LPCTSTR IN_szRFID);
 	bool	Check_RegistryPath			(__in const CSocketMonitoring* IN_SocketInto);
 
-	// ?ˆì??¤íŠ¸ë¦¬ì— ?Œì¼“?•ë³´ ?€??/
+	// ·¹Áö½ºÆ®¸®¿¡ ¼ÒÄÏÁ¤º¸ ÀúÀå
 	bool	Set_SocketInfo				(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
 	bool	Set_SocketInfo_Barcode		(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
 	bool	Set_SocketInfo_Status		(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
@@ -50,7 +50,7 @@ public:
 	bool	Set_SocketInfo_OutputTime	(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
 
 
-	// ?ˆì??¤íŠ¸ë¦¬ì— ?€?¥ëœ ?Œì¼“ ?•ë³´ ê°€?¸ì˜¤ê¸?/
+	// ·¹Áö½ºÆ®¸®¿¡ ÀúÀåµÈ ¼ÒÄÏ Á¤º¸ °¡Á®¿À±â
 	bool	Get_SocketInfo				(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& OUT_SocketInto);
 	bool	Get_SocketInfo				(__out CSocketMonitoring& OUT_SocketInto);
 

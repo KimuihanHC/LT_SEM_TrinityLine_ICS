@@ -9,6 +9,8 @@
 //*****************************************************************************
 #ifndef RegEquipment_h__
 #define RegEquipment_h__
+
+
 #pragma once
 
 #include <stdint.h>
@@ -40,14 +42,15 @@ public:
 	void	Set_RegistryPath			(__in LPCTSTR lpszRegPath);
 	CString	Get_RegistryPath			() const;
 
-	// ?ˆì??¤íŠ¸ë¦??¨ìŠ¤ ì²´í¬?˜ì—¬ ?†ìœ¼ë©??ì„±
+	// ·¹Áö½ºÆ®¸® ÆĞ½º Ã¼Å©ÇÏ¿© ¾øÀ¸¸é »ı¼º
 	bool	Check_RegistryPath			(__in LPCTSTR IN_szEqpID);
 
-	// ?ˆì??¤íŠ¸ë¦¬ì— ?Œì¼“?•ë³´ ?€??/
+	// ·¹Áö½ºÆ®¸®¿¡ ¼ÒÄÏÁ¤º¸ ÀúÀå
 	bool	Save_Equipment				(__in const CEquipment* IN_pEquipment);
 	
 	bool	Set_Equipment_Skip			(__in const CEquipment* IN_pEquipment);
 	bool	Set_Equipment_Reserve		(__in const CEquipment* IN_pEquipment);
+	bool	Set_Equipment_ReserveQueue	(__in const CEquipment* IN_pEquipment);
 	bool	Set_Equipment_EndProduction	(__in const CEquipment* IN_pEquipment);
 	bool	Set_Equipment_Shift			(__in const CEquipment* IN_pEquipment);
 
@@ -59,9 +62,12 @@ public:
 	bool	Set_Equipment_Yield			(__in const CEquipment* IN_pEquipment);
 
 
-	// ?ˆì??¤íŠ¸ë¦¬ì— ?€?¥ëœ ?Œì¼“ ?•ë³´ ê°€?¸ì˜¤ê¸?/
+	// ·¹Áö½ºÆ®¸®¿¡ ÀúÀåµÈ ¼ÒÄÏ Á¤º¸ °¡Á®¿À±â
 	bool	Load_Equipment				(__in LPCTSTR IN_szEqpID, __out CEquipment& OUT_Equipment);
 	bool	Load_Yield					(__in LPCTSTR IN_szEqpID, __out CEquipment& OUT_Equipment);
 
+
 };
+
+
 #endif // RegEquipment_h__

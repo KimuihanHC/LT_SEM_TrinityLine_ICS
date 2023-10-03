@@ -704,3 +704,16 @@ void CView_MonitoringData::SetPath_Report(__in LPCTSTR IN_szReportPath)
 {
 	m_wndSocket.SetPath_Report(IN_szReportPath);
 }
+
+//=============================================================================
+// Method		: Reset_NGCount_All
+// Access		: public  
+// Returns		: bool
+// Qualifier	:
+// Last Update	: 2023/7/18 - 14:46
+// Desc.		:
+//=============================================================================
+bool CView_MonitoringData::Reset_NGCount_All()
+{
+	return m_wndFailInfo.Reset_NGCount_All();
+}

@@ -170,6 +170,7 @@ BOOL CNTInspectionSystemApp::InitInstance()
 		if (!pFrame)
 			return FALSE;
 		m_pMainWnd = pFrame;
+		// 프레임을 만들어 리소스와 함께 로드합니다.
 #ifdef _DEBUG
 		pFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
 #else

@@ -55,6 +55,7 @@ public:
 	enum enDeviceButtonIndex
 	{
 		DEV_BN_LogIn,
+
 #if (USE_XML)
 		DEV_BN_RMS,					
 		DEV_BN_SERVER,

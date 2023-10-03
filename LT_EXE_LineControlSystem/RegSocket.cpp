@@ -13,7 +13,7 @@
 #include "Def_Socket_Info.h"
 #include "SocketMonitoring.h"
 
-//#define USE_VERIFY_KEY_ALWAYS	// ?ˆì??¤íŠ¸ë¦¬ì— ?°ì´??ê¸°ë¡ ???Œë§ˆ???ˆì??¤íŠ¸ë¦?ê²½ë¡œ ì²´í¬ ë°??ì„±
+//#define USE_VERIFY_KEY_ALWAYS	// ·¹Áö½ºÆ®¸®¿¡ µ¥ÀÌÅÍ ±â·Ï ÇÒ ¶§¸¶´Ù ·¹Áö½ºÆ®¸® °æ·Î Ã¼Å© ¹× »ý¼º
 
 CRegSocket::CRegSocket()
 {
@@ -114,14 +114,14 @@ bool CRegSocket::Set_SocketInfo(__in LPCTSTR IN_szRFID, __in const CSocketInfo_U
 		//IN_pSocketInfo->nSocketType;
 		//IN_pSocketInfo->szComment;
 
-		// ?œí’ˆ ?•ë³´
+		// Á¦Ç° Á¤º¸
 		szValue = IN_pSocketInfo->m_szBarcode;
 		m_pReg->WriteString(_T("Barcode"), szValue.GetBuffer());
 
 		m_pReg->WriteDWORD(_T("Status"), IN_pSocketInfo->m_nStatus);
 		//m_pReg->WriteDWORD(_T("Judgment"), IN_pSocketInfo->m_nJudgement);
 
-		// ?Œì¼“ ?„ì¹˜ ?•ë³´
+		// ¼ÒÄÏ À§Ä¡ Á¤º¸
 		m_pReg->WriteDWORD(_T("Equipment_Order"), IN_pSocketInfo->m_nEqpOrder);
 
 		szValue = IN_pSocketInfo->m_szEquipmentID;
@@ -134,14 +134,14 @@ bool CRegSocket::Set_SocketInfo(__in LPCTSTR IN_szRFID, __in const CSocketInfo_U
 		szValue = IN_pSocketInfo->m_szTargetEqpID;
 		m_pReg->WriteString(_T("Target_EqpID"), szValue.GetBuffer());
 
-		// ?Œì¼“ ?˜ìœ¨
+		// ¼ÒÄÏ ¼öÀ²
 		m_pReg->WriteDWORD(_T("Yield_Total"), IN_pSocketInfo->m_Yield.dwTotal);
 
 		m_pReg->WriteDWORD(_T("Yield_Pass"), IN_pSocketInfo->m_Yield.dwPass);
 
 		m_pReg->WriteDWORD(_T("Yield_Fail"), IN_pSocketInfo->m_Yield.dwFail);
 
-		// ê²€??ê²°ê³¼
+		// °Ë»ç °á°ú
 		//m_pReg->WriteDWORD(_T("Result_NG_Code"), IN_pSocketInfo->m_stTestResult.m_nNG_Code);
 		szValue.Format(_T("%d"), IN_pSocketInfo->m_stTestResult.m_nNG_Code);
 		m_pReg->WriteString(_T("Result_NG_Code"), szValue.GetBuffer());
@@ -197,7 +197,7 @@ bool CRegSocket::Set_SocketInfo_Barcode(__in LPCTSTR IN_szRFID, __in const CSock
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// ?œí’ˆ ?•ë³´
+		// Á¦Ç° Á¤º¸
 		szValue = IN_pSocketInfo->m_szBarcode;
 		m_pReg->WriteString(_T("Barcode"), szValue.GetBuffer());
 
@@ -284,7 +284,7 @@ bool CRegSocket::Set_SocketInfo_Equipment(__in LPCTSTR IN_szRFID, __in const CSo
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// ?Œì¼“ ?„ì¹˜ ?•ë³´
+		// ¼ÒÄÏ À§Ä¡ Á¤º¸
 		m_pReg->WriteDWORD(_T("Equipment_Order"), IN_pSocketInfo->m_nEqpOrder);
 
 		szValue = IN_pSocketInfo->m_szEquipmentID;
@@ -329,7 +329,7 @@ bool CRegSocket::Set_SocketInfo_Location(__in LPCTSTR IN_szRFID, __in const CSoc
 
 	if (m_pReg->Open(HKEY_CURRENT_USER, szRegPath))
 	{
-		// ?Œì¼“ ?„ì¹˜ ?•ë³´
+		// ¼ÒÄÏ À§Ä¡ Á¤º¸
 		m_pReg->WriteDWORD(_T("Location_inEqp"), IN_pSocketInfo->m_nPort_inEqp);
 	}
 	else
@@ -532,7 +532,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 		//OUT_SocketInto.nSocketType;
 		//OUT_SocketInto.szComment;
 
-		// ?œí’ˆ ?•ë³´
+		// Á¦Ç° Á¤º¸
 		if (m_pReg->ReadString(_T("Barcode"), szValue))
 			OUT_SocketInto.m_szBarcode = szValue.GetBuffer();
 		else
@@ -548,7 +548,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 // 		else
 // 			OUT_SocketInto.m_nJudgement = 0;
 
-		// ?Œì¼“ ?„ì¹˜ ?•ë³´
+		// ¼ÒÄÏ À§Ä¡ Á¤º¸
 		if (m_pReg->ReadDWORD(_T("Equipment_Order"), dwValue))
 			OUT_SocketInto.m_nEqpOrder = static_cast<uint8_t>(dwValue);
 		else
@@ -574,7 +574,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 		else
 			OUT_SocketInto.m_szTargetEqpID.Empty();
 
-		// ?Œì¼“ ?˜ìœ¨
+		// ¼ÒÄÏ ¼öÀ²
 		if (m_pReg->ReadDWORD(_T("Yield_Total"), dwValue))
 			OUT_SocketInto.m_Yield.dwTotal = static_cast<uint8_t>(dwValue);
 		else
@@ -590,7 +590,7 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 		else
 			OUT_SocketInto.m_Yield.dwFail = 0;
 
-		// ê²€??ê²°ê³¼
+		// °Ë»ç °á°ú
 		/*if (m_pReg->ReadDWORD(_T("Result_NG_Code"), dwValue))
 			OUT_SocketInto.m_stTestResult.m_nNG_Code = static_cast<uint16_t>(dwValue);*/
 		if (m_pReg->ReadString(_T("Result_NG_Code"), szValue))
@@ -646,14 +646,16 @@ bool CRegSocket::Get_SocketInfo(__in LPCTSTR IN_szRFID, __out CSocketInfo_Unit& 
 //=============================================================================
 bool CRegSocket::Get_SocketInfo(__out CSocketMonitoring& OUT_SocketInto)
 {
-	// OUT_SocketInto???ˆëŠ” ê¸°ë³¸ ?Œì¼“ Config ?•ë³´ë¥??´ìš©?´ì„œ ?ˆì??¤íŠ¸ë¦¬ì— ?€?¥ëœ ?•ë³´ ë¶ˆëŸ¬??
+	// OUT_SocketInto¿¡ ÀÖ´Â ±âº» ¼ÒÄÏ Config Á¤º¸¸¦ ÀÌ¿ëÇØ¼­ ·¹Áö½ºÆ®¸®¿¡ ÀúÀåµÈ Á¤º¸ ºÒ·¯¿È
 	auto eIter = OUT_SocketInto.m_Sockets.end();
 	auto Iter = OUT_SocketInto.m_Sockets.begin();
 	while (Iter != eIter)
 	{
 		CSocketInfo_Unit SocketUnit;
 
-		// ?ˆì??¤íŠ¸ë¦¬ì— ?ˆëŠ” ?Œì¼“ ?•ë³´ êµ¬í•˜ê¸?		if (Get_SocketInfo (Iter->second.szRFID, SocketUnit))
+		// ·¹Áö½ºÆ®¸®¿¡ ÀÖ´Â ¼ÒÄÏ Á¤º¸ ±¸ÇÏ±â
+
+		if (Get_SocketInfo (Iter->second.szRFID, SocketUnit))
 		{
 			OUT_SocketInto.Set_Stored_SocketInfo(Iter->second.szRFID, &SocketUnit);
 		}

@@ -12,6 +12,7 @@
 
 
 #pragma once
+
 //-----------------------------------------------
 // 포트 상태 (Port Status)
 //-----------------------------------------------
@@ -495,11 +496,17 @@ typedef enum
 
 class CRegEquipment;
 
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+#define		LINE_INFO_FILENAME			_T("SEM_RLine_LineInfo.xml")
+#define		SOCKET_INFO_FILENAME		_T("SEM_RLine_SocketInfo.xml")
+#define		NGCODE_INFO_FILENAME		_T("SEM_TLine_NGCodeInfo.ini")	// 설비 제어 프로그램하고 연동
+#define		USER_INFO_FILENAME			_T("SEM_TLine_UserInfo.ini")	// 설비 제어 프로그램하고 연동
+#else
 #define		LINE_INFO_FILENAME			_T("SEM_TLine_LineInfo.xml")
 #define		SOCKET_INFO_FILENAME		_T("SEM_TLine_SocketInfo.xml")
 #define		NGCODE_INFO_FILENAME		_T("SEM_TLine_NGCodeInfo.ini")
 #define		USER_INFO_FILENAME			_T("SEM_TLine_UserInfo.ini")
-
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 
 // 설비 프로그램 버전 정보
 

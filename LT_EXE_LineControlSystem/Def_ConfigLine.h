@@ -20,7 +20,8 @@
 #include "Def_ConfigEquipment.h"
 
 //-----------------------------------------------------------------------------
-// ?¼ì¸??ê²€?¬ê¸° êµ¬ì„± ?¤ì •??êµ¬ì¡°ì²?//-----------------------------------------------------------------------------
+// ¶óÀÎÀÇ °Ë»ç±â ±¸¼º ¼³Á¤¿ë ±¸Á¶Ã¼
+//-----------------------------------------------------------------------------
 class CConfig_Line
 {
 public:
@@ -38,22 +39,25 @@ public:
 		return *this;
 	};
 
-	// ?¤í… ê°?ˆ˜
+	// ½ºÅÜ °¹¼ö
 	size_t GetCount() const
 	{
 		return EqpList.size();
 	};
-	// ëª¨ë“  ?¤í… ?? œ
+
+	// ¸ğµç ½ºÅÜ »èÁ¦
 	virtual void RemoveAll()
 	{
 		EqpList.clear();
 	};
-	// ?¤í… ì¶”ê?
+
+	// ½ºÅÜ Ãß°¡
 	virtual void Eqp_Add(__in CConfig_Eqp IN_stTestStep)
 	{
 		EqpList.push_back(IN_stTestStep);
 	};
-	// ?¤í… ?½ì…
+
+	// ½ºÅÜ »ğÀÔ
 	virtual void Eqp_Insert(__in uint16_t IN_nIdx, __in CConfig_Eqp IN_stTestStep)
 	{
 		if (0 < EqpList.size())
@@ -61,7 +65,7 @@ public:
 			EqpList.insert(EqpList.begin() + IN_nIdx, IN_stTestStep);
 		}
 	};
-	// ?¤í… ?? œ
+	// ½ºÅÜ »èÁ¦
 	virtual void Eqp_Remove(__in uint16_t IN_nIdx)
 	{
 		if (0 < EqpList.size())
@@ -69,7 +73,8 @@ public:
 			EqpList.erase(EqpList.begin() + IN_nIdx);
 		}
 	};
-	// ?¤í… ?˜ì •
+
+	// ½ºÅÜ ¼öÁ¤
 	virtual void Eqp_Modify(__in uint16_t IN_nIdx, __in CConfig_Eqp IN_stTestStep)
 	{
 		if (0 < EqpList.size())
@@ -77,12 +82,13 @@ public:
 			EqpList.at(IN_nIdx) = IN_stTestStep;
 		}
 	};
-	// ?¤í… ?„ë¡œ ?´ë™
+
+	// ½ºÅÜ À§·Î ÀÌµ¿
 	virtual void Eqp_Up(__in uint16_t IN_nIdx)
 	{
 		if (0 < EqpList.size())
 		{
-			// 0ë²??¸ë±?¤ëŠ” ?„ë¡œ ?´ë™ ë¶ˆê?
+			// 0¹ø ÀÎµ¦½º´Â À§·Î ÀÌµ¿ ºÒ°¡
 			if ((0 < IN_nIdx) && (1 < EqpList.size()))
 			{
 				CConfig_Eqp stStep = EqpList.at(IN_nIdx);
@@ -92,19 +98,19 @@ public:
 			}
 		}
 	};
-	// ?¤í… ?„ë˜ë¡??´ë™
+	// ½ºÅÜ ¾Æ·¡·Î ÀÌµ¿
 	virtual void Eqp_Down(__in uint16_t IN_nIdx)
 	{
 		if (0 < EqpList.size())
 		{
-			// ë§ˆì?ë§??¸ë±?¤ëŠ” ?„ë˜ë¡??´ë™ ë¶ˆê?
+			// ¸¶Áö¸· ÀÎµ¦½º´Â ¾Æ·¡·Î ÀÌµ¿ ºÒ°¡
 			if ((IN_nIdx < (EqpList.size() - 1)) && (1 < EqpList.size()))
 			{
 				CConfig_Eqp stStep = EqpList.at(IN_nIdx);
 
 				EqpList.erase(EqpList.begin() + IN_nIdx);
 
-				// ë³€ê²½ë˜???„ì¹˜ê°€ ìµœí•˜?¨ì´ë©? Insert ?€??Add ?¬ìš©
+				// º¯°æµÇ´Â À§Ä¡°¡ ÃÖÇÏ´ÜÀÌ¸é, Insert ´ë½Å Add »ç¿ë
 				if ((IN_nIdx + 1) < (EqpList.size()))
 				{
 					EqpList.insert(EqpList.begin() + IN_nIdx, stStep);
@@ -124,7 +130,7 @@ public:
 	{
 		return EqpList.at(IN_nIdx);
 	}
-	// Eqp idë¡?Eqp type êµ¬í•˜ê¸?/
+	// Eqp id·Î Eqp type ±¸ÇÏ±â
 	bool Get_EquipmentType(__in LPCTSTR IN_szEqpID, __out uint8_t& OUT_nEqpType)
 	{
 		for (auto nIdx = 0; nIdx < EqpList.size(); ++nIdx)
@@ -138,7 +144,7 @@ public:
 
 		return false;
 	};
-	// ?¤ë¹„ ?œì„œë¡?Eqp id êµ¬í•˜ê¸?/
+	// ¼³ºñ ¼ø¼­·Î Eqp id ±¸ÇÏ±â
 	bool Get_EquipmentID(__in uint8_t IN_LineOrder, __out CString& OUT_szEqpID)
 	{
 		if (IN_LineOrder < EqpList.size())
@@ -149,7 +155,7 @@ public:
 
 		return false;
 	};
-	// ?¤ë¹„ ?€?…ìœ¼ë¡??¼ì¸???™ì¼ ?¤ë¹„ ê°œìˆ˜ êµ¬í•˜ê¸?/
+	// ¼³ºñ Å¸ÀÔÀ¸·Î ¶óÀÎÀÇ µ¿ÀÏ ¼³ºñ °³¼ö ±¸ÇÏ±â
 	uint8_t Get_EquipmentCount(__in uint8_t nEquipmentType)
 	{
 		uint8_t nCount = 0;
@@ -164,7 +170,7 @@ public:
 
 		return nCount;
 	};
-	// Eqp IDë¡??¼ì¸???™ì¼ ?¤ë¹„ ê°œìˆ˜ êµ¬í•˜ê¸?/
+	// Eqp ID·Î ¶óÀÎÀÇ µ¿ÀÏ ¼³ºñ °³¼ö ±¸ÇÏ±â
 	uint8_t Get_EquipmentCount(__in LPCTSTR IN_szEqpID)
 	{
 		uint8_t nEquipmentType = 0;

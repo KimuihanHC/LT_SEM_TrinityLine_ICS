@@ -10,6 +10,10 @@
 #include "stdafx.h"
 #include "List_NGCodeView.h"
 #include "Def_Constant.h"
+//20231001
+#include "Def_NGCode.h"
+#include <stdint.h>
+using namespace std;
 
 typedef enum 
 {
@@ -18,15 +22,15 @@ typedef enum
 	TSH_NG_Section,			// NG 援щ텇 
 	TSH_Retry_Mode,			// Retry Mode
 	TSH_RetryCnt,			// Retry Cnt
-	TSH_Move_Retry,			// ?대룞 Retry
+	TSH_Move_Retry,			// 이동 Retry
 	TSH_Reset,				// Reset
-	TSH_AlarmCnt,			// ?곗냽 NG ?뚮엺 ??/
+	TSH_AlarmCnt,			// 연속 NG 알람 수
 	TSH_Description,		// Description
 
 	TSH_MaxCol,
 }enTestStepHeader;
 
-// ?ㅻ뜑
+// 헤더
 static const TCHAR*	g_lpszHeader[] =
 {
 	_T("No"),				// TSH_No
@@ -55,7 +59,7 @@ const int	iListAglin[] =
 	LVCFMT_LEFT,	 // TSH_Description
 };
 
-// 540 湲곗?
+// 540 기준
 const int	iHeaderWidth[] =
 {
 	40, 	// TSH_No
@@ -115,7 +119,6 @@ BEGIN_MESSAGE_MAP(CList_NGCodeView, CListCtrl)
 	ON_NOTIFY_REFLECT(NM_CLICK,	&CList_NGCodeView::OnNMClick)
 	ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
-
 
 
 // CList_NGCodeView message handlers
@@ -334,7 +337,7 @@ void CList_NGCodeView::Set_NG_Info(__in int nItem, __in const ST_NGCode* IN_pNG_
 	szText.Format(_T("%d"), IN_pNG_Code->m_nRetryCnt);
 	SetItemText(nItem, TSH_RetryCnt, szText);
 
-	// ?대룞 Retry
+	// 이동 Retry
 	szText.Format(_T("%d"), IN_pNG_Code->m_nMove_Retry);
 	SetItemText(nItem, TSH_Move_Retry, szText);
 
@@ -342,7 +345,8 @@ void CList_NGCodeView::Set_NG_Info(__in int nItem, __in const ST_NGCode* IN_pNG_
 	szText.Format(_T("%d"), IN_pNG_Code->m_nReset);
 	SetItemText(nItem, TSH_Reset, szText);
 
-	// ?곗냽 NG ?뚮엺 ??	szText.Format(_T("%d"), IN_pNG_Code->m_nAlarmCnt);
+	// 연속 NG 알람 수
+	szText.Format(_T("%d"), IN_pNG_Code->m_nAlarmCnt);
 	SetItemText(nItem, TSH_AlarmCnt, szText);
 
 	// Description
@@ -377,7 +381,7 @@ void CList_NGCodeView::Add_Item(const __in ST_NGCode* IN_pNG_Code)
 
 	Set_NG_Info(iNewCount, IN_pNG_Code);
 
-	// ?붾㈃??蹂댁씠寃??섍린
+	// 화면에 보이게 하기
 	EnsureVisible(iNewCount, TRUE);
 	ListView_SetItemState(GetSafeHwnd(), iNewCount, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
 }

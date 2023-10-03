@@ -281,8 +281,11 @@ void CWnd_Status_Equipment::MoveWindow_Status(int x, int y, int nWidth, int nHei
 	m_st_IpAddress.MoveWindow(iLeft, iTop, iWidth, m_nCtrl_Height);
 	iTop += m_nCtrl_Height - 1;
 	m_st_OperMode.MoveWindow(iLeft, iTop, iWidth, m_nCtrl_Height);
-	
-	iTop += (m_nCtrl_Height/2) + iSpacing;
+#if (USE_XML)
+	iTop += (m_nCtrl_Height / 2) + iSpacing;
+#else
+	iTop += m_nCtrl_Height + iSpacing;
+#endif
 
 	m_nTop_Status = iTop;
 }
@@ -602,9 +605,9 @@ void CWnd_Status_Equipment::SetPtr_EquipmentInfo(__in uint8_t IN_nEqpNo, const C
 	{
 		m_wnd_Yield.Set_EqpLoader(true);
 	}
-
+#if (USE_XML)
 	auto test = m_pEquipmentStatus->Get_mEES_PortSubStatus();
-	
+#endif
 	// 설비 순서
 	m_nEqpOrder = IN_nEqpNo;
 
@@ -748,8 +751,10 @@ void CWnd_Status_Equipment::Set_VerifyEqpConnection(__in bool bVerified)
 #ifdef USE_NO_VERIFY_EQPID
 	return;
 #endif
+
 	if (bVerified)
 	{
+		//m_st_EqpName.SetBackColor_COLORREF(RGB(197, 224, 180));
 		m_st_EqpName.SetBackColor_COLORREF(RGB(150, 255, 150));
 	}
 	else

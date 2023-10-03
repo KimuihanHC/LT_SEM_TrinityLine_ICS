@@ -20,10 +20,10 @@
 #include "Wnd_Status_Returner.h"
 #include "Wnd_Status_Handler.h"
 #include "Wnd_TesterSelection.h"
+#include <vector>
 #if (USE_XML)
 #include "Wnd_Status_Server.h"	//2023.03.21a uhkim
 #include "Wnd_Status_EES.h"		//2023.03.21a uhkim
-#include <vector>
 #endif
 
 
@@ -92,8 +92,6 @@ protected:
 	// 설비 리스트 UI 초기화
 	void				Init_EquipmentUI_List		();
 
-
-
 public:
 
 	virtual void	OnLanguage			(__in uint8_t IN_nLanguage);
@@ -109,7 +107,6 @@ public:
 
 	// 설비 윈도우의 핸들 구하기
 	HWND	Get_EquipmentHWND			(__in uint8_t IN_nEqpOrder);
-
 
 	// 레시피 정보 갱신
 	void	Update_LineInfo				();

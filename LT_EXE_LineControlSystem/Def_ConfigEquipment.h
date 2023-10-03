@@ -16,17 +16,20 @@
 #include "Def_Equipment_Type.h"
 
 //-----------------------------------------------------------------------------
-// Í≤Ä?¨Í∏∞ ?§Ï†ï??Í∏∞Î≥∏ Íµ¨Ï°∞Ï≤?//-----------------------------------------------------------------------------
+// ∞ÀªÁ±‚ º≥¡§øÎ ±‚∫ª ±∏¡∂√º
+//-----------------------------------------------------------------------------
 class CConfig_Eqp
 {
+//public:
 protected:
-//public://2022.12.29a
-	uint8_t		m_nEqpOrder;			// ?ºÏù∏?êÏÑú???§ÎπÑ ?úÏÑú(Î≤àÌò∏)
-	bool		m_bGroup;				// Í≤Ä??Í∑∏Î£π (?)
-	uint8_t		m_nGroupIndex;			// Í≤Ä??Í∑∏Î£π???§ÎπÑ ?∏Îç±??
-	CString		m_szAlias;				// Eqp Type + Í≤Ä?¨Í∏∞Î≥?Number (?§ÎπÑ ?úÏÑú???∞Î•∏ ?êÎèô ?ùÏÑ±)
-	
-	uint8_t		m_nEqpType_UI;			// Equipmnet Type (UI ?§Ï†ï Î∞??åÏùº ?Ä?•Ïö©)
+
+	uint8_t		m_nEqpOrder;			// ∂Û¿Œø°º≠¿« º≥∫Ò º¯º≠(π¯»£)
+	bool		m_bGroup;				// ∞ÀªÁ ±◊∑Ï (?)
+	uint8_t		m_nGroupIndex;			// ∞ÀªÁ ±◊∑Ï≥ª º≥∫Ò ¿Œµ¶Ω∫
+
+	CString		m_szAlias;				// Eqp Type + ∞ÀªÁ±‚∫∞ Number (º≥∫Ò º¯º≠ø° µ˚∏• ¿⁄µø ª˝º∫)
+
+	uint8_t		m_nEqpType_UI;			// Equipmnet Type (UI º≥¡§ π◊ ∆ƒ¿œ ¿˙¿ÂøÎ)
 
 private:
 	uint8_t		m_nEquipmentType;		// Equipmnet Type	
@@ -36,8 +39,9 @@ protected:
 
 	// uint8_t		m_nPortCount;		// Port Count
 	// uint8_t		m_nConveyorCount;	// Conveyor Count
-	uint8_t		m_nTestPortCount;		// Í≤Ä?¨Í? ÏßÑÌñâ?òÎäî Port Í∞úÏàò
-	uint8_t		m_nReservablePortCount;	// Í≤Ä?¨Í? ÏßÑÌñâ?òÎäî Port + Buffer Í∞úÏàò
+	uint8_t		m_nBuffercount; // Buffer Count
+	uint8_t		m_nTestPortCount;		// ∞ÀªÁ∞° ¡¯«‡µ«¥¬ Port ∞≥ºˆ
+	uint8_t		m_nReservablePortCount;	// ∞ÀªÁ∞° ¡¯«‡µ«¥¬ Port + Buffer ∞≥ºˆ
 
 public:
 	CConfig_Eqp()
@@ -50,8 +54,9 @@ public:
 		m_nEquipmentType		= 0;
 		m_nIP_Address			= 0;
 
-		m_nTestPortCount		= 2;	// Tester Í∏∞Ï? 2 ?åÎùº (Í∏∞Î≥∏)
-		m_nReservablePortCount	= 3;	// Tester Í∏∞Ï? 3 ?¨Ìä∏ (Í∏∞Î≥∏)
+		m_nBuffercount = 1;
+		m_nTestPortCount = 2;	// Tester ±‚¡ÿ 2 ∆ƒ∂Û (±‚∫ª)
+		m_nReservablePortCount = 3;	// Tester ±‚¡ÿ 3 ∆˜∆Æ (±‚∫ª)
 	};
 
 	~CConfig_Eqp()
@@ -71,6 +76,7 @@ public:
 		m_szEquipmentId			= ref.m_szEquipmentId;
 		m_nIP_Address			= ref.m_nIP_Address;
 
+		m_nBuffercount			= ref.m_nBuffercount;
 		m_nTestPortCount		= ref.m_nTestPortCount;
 		m_nReservablePortCount	= ref.m_nReservablePortCount;
 		return *this;
@@ -88,6 +94,7 @@ public:
 		m_szEquipmentId.Empty();
 		m_nIP_Address			= 0;
 
+		m_nBuffercount			= 1;
 		m_nTestPortCount		= 2;
 		m_nReservablePortCount	= 3;
 	};
@@ -96,60 +103,65 @@ protected:
 
 	virtual void Init_EquipmentType_UI()
 	{
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 		switch (m_nEqpType_UI)
 		{
-		case EqpUI_Loader:				// 0
-		case EqpUI_Returner:			// 1
-			m_nTestPortCount		= 0;
-			m_nReservablePortCount	= 0;
+		case EqpUI_Handler:				// 0
+		case EqpUI_Loader:				// 1
+		case EqpUI_Returner:			// 2
+			m_nBuffercount = 0;
+			m_nTestPortCount = 0;
+			m_nReservablePortCount = 0;
 			break;
 
-		case EqpUI_ColorCal:			// 2 
-		case EqpUI_SFR_CL_46:			// 3 : SFR ?ëÍ∞Å
-		case EqpUI_SFR_MultiCL_83:		// 4 : 83
-		case EqpUI_SFR_MultiCL_180:		// 5 : 180
-		case EqpUI_HotPixel:			// 6
-		case EqpUI_StrayLight:			// 7 : Ghost & Flare
-		case EqpUI_Distortion:			// 8
-		case EqpUI_SFR_MultiCL:			// 9 : SFR Í¥ëÍ∞Å
-			m_nTestPortCount		= 2;
-			m_nReservablePortCount	= 3;
+		case EqpUI_ColorCal:			// 3 
+		case EqpUI_SFR_CL:				// 4 : SFR «˘∞¢
+		case EqpUI_SFR_MultiCL:			// 7 : SFR ±§∞¢
+		case EqpUI_HotPixel:			// 8
+		case EqpUI_StrayLight:			// 10 : Ghost & Flare
+			m_nBuffercount = 0;
+			m_nTestPortCount = 1;
+			m_nReservablePortCount = 2; // 1;
 			break;
-		case EqpUI_HotPixel3port:		// 10 : Hot Pixel 3 Para
-			m_nTestPortCount		= 3;
-			m_nReservablePortCount	= 4;
+
+		case EqpUI_Distortion:			// 11
+			m_nBuffercount = 0;
+			m_nTestPortCount = 2;
+			m_nReservablePortCount = 3; // 2;
 			break;
 		}
-	};
+#else
+		switch (m_nEqpType_UI)
+		{
+		case EqpUI_Handler:				// 0
+		case EqpUI_Loader:				// 1
+		case EqpUI_Returner:			// 2
+			m_nBuffercount = 0;
+			m_nTestPortCount = 0;
+			m_nReservablePortCount = 0;
+			break;
 
-// 	virtual void Init_EquipmentType()
-// 	{
-// 		switch (m_nEquipmentType)
-// 		{
-// 		case Eqp_Loader:			// 0
-// 		case Eqp_Returner:			// 1
-// 			m_nTestPortCount		= 0;
-// 			m_nReservablePortCount	= 0;
-// 			break;
-// 
-// 		case Eqp_ColorCal:			// 2 
-// 		case Eqp_SFR_CL_46:			// 3 : SFR ?ëÍ∞Å
-// 		case Eqp_SFR_MultiCL_83:	// 4 : 83
-// 		case Eqp_SFR_MultiCL_180:	// 5 : 180
-// 		case Eqp_HotPixel:			// 6
-// 		case Eqp_StrayLight:		// 7 : Ghost & Flare
-// 		case Eqp_Distortion:		// 8
-// 		case Eqp_SFR_MultiCL:		// 9 : SFR Í¥ëÍ∞Å
-// 			m_nTestPortCount		= 2;
-// 			m_nReservablePortCount	= 3;
-// 			break;
-// 		case Eqp_HotPixel3port:		// 10 : Hot Pixel 3 Para
-// 			m_nTestPortCount		= 3;
-// 			m_nReservablePortCount	= 4;
-// 			break;
-// 		}
-// 	};
-	
+		case EqpUI_ColorCal:			// 3 
+		case EqpUI_SFR_CL_46:			// 4 : SFR «˘∞¢
+		case EqpUI_SFR_MultiCL_83:		// 5 : 83
+		case EqpUI_SFR_MultiCL_180:		// 6 : 180
+		case EqpUI_SFR_MultiCL:			// 7 : SFR ±§∞¢
+		case EqpUI_HotPixel:			// 8
+		case EqpUI_StrayLight:			// 10 : Ghost & Flare
+		case EqpUI_Distortion:			// 11
+			m_nBuffercount = 1;
+			m_nTestPortCount = 2;
+			m_nReservablePortCount = 3;
+			break;
+
+		case EqpUI_HotPixel3port:		// 9 : Hot Pixel 3 Para
+			m_nBuffercount = 1;
+			m_nTestPortCount = 3;
+			m_nReservablePortCount = 4;
+			break;
+		}
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+	};
 
 public:
 	uint8_t		Get_EqpOrder		() const
@@ -203,6 +215,11 @@ public:
 	{
 		return m_nIP_Address;
 	};
+	
+	uint8_t		Get_BufferCount() const
+	{
+		return m_nBuffercount;
+	};
 
 	uint8_t		Get_TestPortCount() const
 	{
@@ -238,6 +255,53 @@ public:
 	{
 		m_nEqpType_UI = IN_nEqpType_UI;
 
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+		switch (IN_nEqpType_UI)
+		{
+		case EqpUI_Handler:
+			Set_EquipmentType(enEquipmentType::Eqp_Handler);
+			break;
+
+		case EqpUI_Loader:
+			Set_EquipmentType(enEquipmentType::Eqp_Loader);
+			break;
+
+		case EqpUI_Returner:
+			Set_EquipmentType(enEquipmentType::Eqp_Returner);
+			break;
+
+		case EqpUI_ColorCal:
+			Set_EquipmentType(enEquipmentType::Eqp_ColorCal);
+			break;
+
+		case EqpUI_SFR_CL:
+			Set_EquipmentType(enEquipmentType::Eqp_SFR_CL);
+			break;
+
+		case EqpUI_SFR_MultiCL:
+			Set_EquipmentType(enEquipmentType::Eqp_SFR_MultiCL);
+			break;
+
+		case EqpUI_HotPixel:
+			Set_EquipmentType(enEquipmentType::Eqp_HotPixel);
+			break;
+
+		case EqpUI_StrayLight:
+			Set_EquipmentType(enEquipmentType::Eqp_StrayLight);
+			break;
+
+		case EqpUI_Distortion:
+			Set_EquipmentType(enEquipmentType::Eqp_Distortion);
+			break;
+
+		case EqpUI_EEPROM:
+			Set_EquipmentType(enEquipmentType::Eqp_EEPROM);
+			break;
+
+		default:
+			break;
+		}
+#else
 		switch (IN_nEqpType_UI)
 		{
 		case EqpUI_Handler:
@@ -288,9 +352,11 @@ public:
 		case EqpUI_EEPROM:
 			Set_EquipmentType(enEquipmentType::Eqp_EEPROM);
 			break;
+
 		default:
 			break;
 		}		
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 
 		Init_EquipmentType_UI();
 	};

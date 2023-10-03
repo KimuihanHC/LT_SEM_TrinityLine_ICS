@@ -1,0 +1,616 @@
+﻿  BannerBar_SEM.cpp
+  Dlg_EESMode_PopupMenu.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_EES_RMS.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(59): error C2019: 전처리기 지시문이 있어야 하는데 '#'이(가) 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(61): fatal error C1019: 예기치 않은 #else입니다.
+  Dlg_LossWindow_PopupMenu.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\dlg_losswindow_popupmenu.cpp(181): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Dlg_ModifyAL.cpp
+  Dlg_ModifyNGcode.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  Dlg_ModifyServer.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_ModifyUser.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  Dlg_OpCall_Popup.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_PopupMenu.cpp
+  Dlg_Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_TerminalMessage_Popup.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Dlg_UserLogin.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  EqpReturner.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  EqpLoader.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  EqpTester.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  EqpHandler.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Equipment.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.cpp(1531): error C2039: 'IsEmpty_Equipment_AnySocket': 'CEquipment'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regequipment.h(22): note: 'CEquipment' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.cpp(1534): error C2065: 'm_nPortStatus': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.cpp(1543): error C3536: 'nEndIdx': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.cpp(1546): error C2065: 'm_nPortStatus': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.cpp(1569): error C2065: 'm_nConveyorStatus': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.cpp(1572): error C2065: 'm_nConveyorStatus': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.cpp(1640): error C2143: 구문 오류: ')'이(가) '{' 앞에 없습니다.
+  FailInfo.cpp
+  IcsCommunicatorEes.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  IcsRemoteEquipmentHandler.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  IcsRemoteServer.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  IcsRemoteServerEes.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  InOutCount.cpp
+  List_NGCodeView.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(401): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(402): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(403): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcodeview.cpp(403): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+  List_ReworkInfo.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  List_ServerConfig.cpp
+  List_UnloadInfo.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  NGCode_Info.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(164): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(168): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(168): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(177): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(180): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(184): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(188): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(192): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(196): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(200): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(204): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(208): error C2065: 'Iter': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(217): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(312): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(323): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(324): error C3536: 'Re': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(336): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(337): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(337): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(339): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(352): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(353): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(353): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(355): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(365): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(370): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(371): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(371): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(383): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.cpp(388): error C2065: 'm_NG_Info': 선언되지 않은 식별자입니다.
+  RegCommModule.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  RegDebugInfo.cpp
+  RegRework.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(108): error C2039: 'Set_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.h(18): note: 'CRegRework' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(113): error C2065: 'm_szRegPath': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(208): error C2039: 'Get_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.h(18): note: 'CRegRework' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.cpp(214): error C2065: 'm_szRegPath': 선언되지 않은 식별자입니다.
+  RegServer.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Rework_Info.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.cpp(43): error C2039: 'Set_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.h(24): note: 'CRegRework' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\rework_info.cpp(48): error C2039: 'Get_ReworkProduct': 'CRegRework'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\regrework.h(24): note: 'CRegRework' 선언을 참조하십시오.
+  IcsCommunicator.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  IcsRemoteEquipment.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\icsremoteequipment.cpp(405): error C2039: 'CommandOperationActiveStatus': 'lt::CIcsRemote'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\comm\icsremote.h(11): note: 'lt::CIcsRemote' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\icsremoteequipment.cpp(412): error C3536: 'result': 초기화되기 전에 사용할 수 없습니다.
+  IcsRemoteEquipmentLoUnloader.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  IcsRemoteEquipmentReturner.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  IcsRemoteEquipmentTester.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LineControl.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  LineInfo.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\lineinfo.cpp(806): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\lineinfo.cpp(806): error C2568: '=': 함수 오버로드를 확인할 수 없습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\lineinfo.cpp(806): note: 'int8_t ConvTo_TesterType(enEquipmentType)'일 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\lineinfo.cpp(892): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\lineinfo.cpp(892): error C2568: '=': 함수 오버로드를 확인할 수 없습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\lineinfo.cpp(892): note: 'int8_t ConvTo_TesterType(enEquipmentType)'일 수 있습니다.
+  List_Alarm.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  List_NGCode.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(497): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(504): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(505): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(506): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(506): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(526): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(623): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(659): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(660): error C2039: 'm_NG_Info': 'CNGCode_Info'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\ngcode_info.h(21): note: 'CNGCode_Info' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(661): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\list_ngcode.cpp(661): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+  List_SocketInfo.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  List_UserInfo.cpp
+  RegEquipment.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  RegSocket.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+  ServerInfo.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  SocketMonitoring.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(624): error C2039: 'Set_EquipmentTrackIn': 'CSocketMonitoring'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.h(29): note: 'CSocketMonitoring' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(626): error C2065: 'm_Sockets': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(627): error C3536: 'result_sock': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(627): error C2065: 'm_Sockets': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(630): error C2065: 'm_Sockets': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(631): error C2065: 'm_Sockets': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(632): error C2065: 'm_Sockets': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\socketmonitoring.cpp(635): error C3861: 'Save_SocketInfo_Equipment': 식별자를 찾을 수 없습니다.
+  SvrEes.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  View_MonitoringData.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(102): error C2065: 'm_InspMode': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(250): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(260): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(262): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(285): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(496): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(498): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(503): error C2065: 'm_brBkgr': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(558): error C2065: 'm_InspMode': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_monitoringdata.cpp(563): error C2065: 'm_InspMode': 선언되지 않은 식별자입니다.
+  View_SubMonitoring.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(407): error C2039: 'Init_SocketUI_List': 'CView_SubMonitoring'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.h(24): note: 'CView_SubMonitoring' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(409): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(413): error C2065: 'm_lc_SocketList': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(415): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(420): error C2065: 'm_lc_SocketList': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(420): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(435): error C2039: 'Find_SocketOrder': 'CView_SubMonitoring'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.h(24): note: 'CView_SubMonitoring' 선언을 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(439): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(443): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(444): error C2065: 'm_pstSocketInfo': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(445): error C3536: 'Iter': 초기화되기 전에 사용할 수 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_submonitoring.cpp(445): error C3536: 'eIter': 초기화되기 전에 사용할 수 없습니다.
+  Wnd_Cfg_Alarm.cpp
+  Wnd_Cfg_Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_Cfg_User.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  Wnd_FailInfo.cpp
+  Wnd_Judgment.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  Wnd_ReworkInfo.cpp
+  Wnd_SettingView.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Wnd_Status_Base.cpp
+  Wnd_Status_EES.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_Status_Equipment.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Wnd_Status_EquipmentEx.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Wnd_Status_Handler.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Wnd_Status_Loader.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Wnd_Status_Returner.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Wnd_Status_Server.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_TesterSelection.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\wnd_testerselection.cpp(413): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\wnd_testerselection.cpp(413): error C2568: '=': 함수 오버로드를 확인할 수 없습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\wnd_testerselection.cpp(413): note: 'int8_t ConvTo_TesterType(enEquipmentType)'일 수 있습니다.
+  Wnd_Yield_Eqp.cpp
+  XmlLineConfig.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+  Dlg_ModifyEquipment.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  List_LineConfig.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+  List_SocketRFID.cpp
+  View_MainCtrl_ICS.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(553): error C2143: 구문 오류: ')'이(가) ';' 앞에 없습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(621): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(625): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(629): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(633): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(637): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(641): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(645): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(649): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(653): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(657): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(661): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(665): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(669): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(673): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(677): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(681): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(685): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(689): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(693): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(697): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(701): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(705): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(723): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(727): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(731): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(735): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(739): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(743): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(747): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(751): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(755): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\view_mainctrl_ics.cpp(759): warning C4244: '인수': 'WPARAM'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  TestManager_EQP_ICS.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\testmanager_eqp_ics.cpp(2234): error C2039: 'IsEmpty_Equipment_AnySocket': 'CEquipment'의 멤버가 아닙니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\equipment.h(153): note: 'CEquipment' 선언을 참조하십시오.
+  Wnd_Cfg_Line.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_Cfg_Socket.cpp
+  File_Recipe.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  LT MainExecution.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(59): error C2019: 전처리기 지시문이 있어야 하는데 '#'이(가) 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(61): fatal error C1019: 예기치 않은 #else입니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  MainFrm.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(59): error C2019: 전처리기 지시문이 있어야 하는데 '#'이(가) 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(61): fatal error C1019: 예기치 않은 #else입니다.
+  Reg_InspInfo.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  TestManager_Device.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  TestManager_EQP.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  View_MainCtrl.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(59): error C2019: 전처리기 지시문이 있어야 하는데 '#'이(가) 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\mainfrm.h(61): fatal error C1019: 예기치 않은 #else입니다.
+  Wnd_MainView.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\wnd_mainview.cpp(694): warning C4267: '=': 'size_t'에서 'uint8_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Pane_CommStatus.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+  Wnd_SocketView.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_MaintenanceView.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(45): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_ERROR' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(54): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML_PARSE' 왼쪽은 무시됩니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\common\xml3all.h(2462): warning C4091: 'typedef ': 변수를 선언하지 않으면 'XML3::XML::Parse::PARSEELEMENT' 왼쪽은 무시됩니다.
+  Wnd_Status_Tester.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_configequipment.h(199): error C2065: 'ConvTo_TesterType': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lib_ics\lib\include\util\stringutil.hpp(233): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  XmlLineServerConfig.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(452): error C2084: 'int8_t ConvTo_TesterType(enEquipmentType)' 함수에 이미 본문이 있습니다.
+  c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\def_equipment_type.h(396): note: 'ConvTo_TesterType'의 이전 정의를 참조하십시오.
+  XmlSocket.cpp
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\xmlsocket.cpp(184): error C2065: 'szFileName': 선언되지 않은 식별자입니다.
+c:\ees\#lt_sem_trinityline_ics-main\#github\lt_sem_trinityline_ics\lt_exe_linecontrolsystem\xmlsocket.cpp(185): error C2065: 'szFileName': 선언되지 않은 식별자입니다.
+  코드를 생성하고 있습니다...

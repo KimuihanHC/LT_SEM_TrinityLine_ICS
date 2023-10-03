@@ -16,13 +16,165 @@
 
 #pragma once
 
-// ?§ÎπÑ ?Ä??: version 1.0 (?∏Ìôò???†Ï? ?ÑÌï¥ ?¨Ïö©)
+// ==================================================================
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+// ==================================================================
+
+//-------------------------------------------------------------------
+// º≥∫Ò ≈∏¿‘ : version 2.0
+//-------------------------------------------------------------------
+typedef enum
+{
+	Eqp_Handler,		// 0
+	Eqp_Loader,			// 1
+	Eqp_Returner,		// 2
+
+	Eqp_ColorCal,		// 3 
+	Eqp_SFR_CL,			// 4 : SFR «˘∞¢
+	Eqp_SFR_MultiCL,	// 7 : SFR ±§∞¢
+	Eqp_HotPixel,		// 8
+	Eqp_StrayLight,		// 9 
+	Eqp_Distortion,		// 10
+	Eqp_EEPROM,			// 11 : øπæ‡
+
+	Max_EqpTypeCount,
+	Eqp_Tester_First = Eqp_ColorCal,
+	Eqp_Tester_Last = Eqp_EEPROM,
+
+}enEquipmentType;
+
+static LPCTSTR g_szEqpTypeName[] =
+{
+	_T("Handler"),
+	_T("Loader Machine"),
+	_T("Returner"),
+
+	_T("Color Calibration"),
+	_T("SFR CL"),			// «˘∞¢
+	_T("SFR Multi CL"),		// ±§∞¢
+	_T("Hot Pixel"),
+	_T("Stray Light"),
+	_T("Intrinsic Cal."),
+	_T("EEPROM"),
+	nullptr
+};
+
+static LPCTSTR g_szEqpTypeInitial[] =
+{
+	_T("Hlr"),
+	_T("Loa"),
+	_T("Ret"),
+	_T("CCa"),
+	_T("SCL"),
+	_T("SMC"),
+	_T("Hot"),
+	_T("GnF"),
+	_T("Cal"),
+	_T("E2P"),
+	nullptr
+};
+
+//-------------------------------------------------------------------
+// UI º≥¡§ π◊ ªÛºº º≥¡§øÎ º≥∫Ò ≈∏¿‘
+//-------------------------------------------------------------------
+typedef enum
+{
+	EqpUI_Handler,			//  0
+	EqpUI_Loader,			//  1
+	EqpUI_Returner,			//  2
+
+	EqpUI_ColorCal,			//  3 
+	EqpUI_SFR_CL,			//  4 : SFR «˘∞¢
+	EqpUI_SFR_MultiCL,		//  7 : SFR ±§∞¢
+	EqpUI_HotPixel,			//  8
+	EqpUI_StrayLight,		// 10 : Ghost & Flare
+	EqpUI_Distortion,		// 11
+	EqpUI_EEPROM,			// 12 : øπæ‡
+
+	Max_EqpTypeUICount,
+}enEquipmentType_UI;
+
+static LPCTSTR g_szEqpTypeName_UI[] =
+{
+	_T("Handler"),
+	_T("Loader Machine"),
+	_T("Returner"),
+
+	_T("Color Calibration"),
+	_T("SFR CL"),			// «˘∞¢
+	_T("SFR Multi CL"),		// ±§∞¢ 83 & 180
+	_T("Hot Pixel"),
+	_T("Stray Light"),
+	_T("Intrinsic Cal."),
+	_T("EEPROM"),
+	nullptr
+};
+
+static LPCTSTR g_szEqpTypeUI_Initial[] =
+{
+	_T("Hlr"),
+	_T("Loa"),
+	_T("Ret"),
+	_T("CCa"),
+	_T("SCL"),
+	_T("SMC"),
+	_T("Hot"),
+	_T("GnF"),
+	_T("Cal"),
+	_T("E2P"),
+	nullptr
+};
+
+//-------------------------------------------------------------------
+// ∞ÀªÁ º≥∫Ò ≈∏¿‘
+//-------------------------------------------------------------------
+typedef enum
+{
+	Tester_ColorCal,		// 0
+	Tester_SFR_CL,			// 1 : «˘∞¢
+	Tester_SFR_MultiCL,		// 4 : ±§∞¢
+	Tester_HotPixel,		// 5
+	Tester_StrayLight,		// 7 Ghost & Flare
+	Tester_Distortion,		// 8
+	Tester_EEPROM,
+	Max_TesterCount,
+}enTesterType;
+
+static LPCTSTR g_szTesterTypeName[] =
+{
+	_T("Color Calibration"),
+	_T("SFR CL"),			// «˘∞¢
+	_T("SFR Multi CL"),		// ±§∞¢
+	_T("Hot Pixel"),
+	_T("Stray Light"),
+	_T("Intrinsic Cal."),
+	_T("EEPROM"),
+	nullptr
+};
+
+static LPCTSTR g_szTesterTypeInitial[] =
+{
+	_T("CCa"),
+	_T("SCL"),
+	_T("SMC"),
+	_T("Hot"),
+	_T("GnF"),
+	_T("Cal"),
+	_T("E2P"),
+	nullptr
+};
+
+// ==================================================================
+#else // ±‚∫ª Trinity Line 
+// ==================================================================
+
+// º≥∫Ò ≈∏¿‘ : version 1.0 (»£»Øº∫ ¿Ø¡ˆ ¿ß«ÿ ªÁøÎ)
 typedef enum
 {
 	Eqp_V1_Loader,			// 0
 	Eqp_V1_Returner,		// 1
 	Eqp_V1_ColorCal,		// 2 
-	Eqp_V1_SFR_CL_46,		// 3 : SFR ?ëÍ∞Å
+	Eqp_V1_SFR_CL_46,		// 3 : SFR «˘∞¢
 	Eqp_V1_SFR_MultiCL_83,	// 4 : 83
 	Eqp_V1_SFR_MultiCL_180,	// 5 : 180
 	Eqp_V1_HotPixel,		// 6
@@ -38,7 +190,7 @@ typedef enum
 
 
 //-------------------------------------------------------------------
-// ?§ÎπÑ ?Ä??: version 2.0
+// º≥∫Ò ≈∏¿‘ : version 2.0
 //-------------------------------------------------------------------
 typedef enum
 {	
@@ -47,18 +199,19 @@ typedef enum
 	Eqp_Returner,		// 2
 
 	Eqp_ColorCal,		// 3 
-	Eqp_SFR_CL_46,		// 4 : SFR ?ëÍ∞Å
+	Eqp_SFR_CL_46,		// 4 : SFR «˘∞¢
 	Eqp_SFR_MultiCL_83,	// 5 : 83
 	Eqp_SFR_MultiCL_180,// 6 : 180
 	Eqp_SFR_MultiCL,	// 7 : SFR Í¥ëÍ∞Å
 	Eqp_HotPixel,		// 8
-	//Eqp_HotPixel3port,	// 10 : Hot Pixel 3 Para
 	Eqp_StrayLight,		// 9 Ghost & Flare
 	Eqp_Distortion,		// 10
-	Eqp_EEPROM,			// 11 : ?àÏïΩ
+	Eqp_EEPROM,			// 11 : øπæ‡
+
 	Max_EqpTypeCount,
 	Eqp_Tester_First	= Eqp_ColorCal,
-	Eqp_Tester_Last		= Eqp_EEPROM,		
+	Eqp_Tester_Last		= Eqp_EEPROM,	
+
 }enEquipmentType;
 
 static LPCTSTR g_szEqpTypeName[] =
@@ -68,12 +221,11 @@ static LPCTSTR g_szEqpTypeName[] =
 	_T("Returner"),
 
 	_T("Color Calibration"),
-	_T("SFR CL 46"),		// ?ëÍ∞Å
+	_T("SFR CL 46"),		// «˘∞¢
 	_T("SFR Multi CL 83"),	// Í¥ëÍ∞Å 83
 	_T("SFR Multi CL 180"),	// Í¥ëÍ∞Å 180
 	_T("SFR Multi CL"),		// Í¥ëÍ∞Å 83 & 180
 	_T("Hot Pixel"),
-	//_T("Hop Pixel 3 Para"),
 	_T("Stray Light"),
 	_T("Distortion"),
 	_T("EEPROM"),
@@ -91,7 +243,6 @@ static LPCTSTR g_szEqpTypeInitial[] =
 	_T("S180"),
 	_T("SMC"),
 	_T("Hot"),
-	//_T("HP3"),
 	_T("GnF"),
 	_T("Dis"),
 	_T("E2P"),
@@ -99,7 +250,7 @@ static LPCTSTR g_szEqpTypeInitial[] =
 };
 
 //-------------------------------------------------------------------
-// UI ?§Ï†ï Î∞??ÅÏÑ∏ ?§Ï†ï
+// UI º≥¡§ π◊ ªÛºº º≥¡§øÎ º≥∫Ò ≈∏¿‘
 //-------------------------------------------------------------------
 typedef enum
 {	
@@ -108,7 +259,7 @@ typedef enum
 	EqpUI_Returner,			//  2
 							    
 	EqpUI_ColorCal,			//  3 
-	EqpUI_SFR_CL_46,		//  4 : SFR ?ëÍ∞Å
+	EqpUI_SFR_CL_46,		//  4 : SFR «˘∞¢
 	EqpUI_SFR_MultiCL_83,	//  5 : 83
 	EqpUI_SFR_MultiCL_180,	//  6 : 180
 	EqpUI_SFR_MultiCL,		//  7 : SFR Í¥ëÍ∞Å
@@ -116,8 +267,8 @@ typedef enum
 	EqpUI_HotPixel3port,	//  9 : Hot Pixel 3 Para
 	EqpUI_StrayLight,		// 10 : Ghost & Flare
 	EqpUI_Distortion,		// 11
-	EqpUI_EEPROM,			// 12 : ?àÏïΩ
-	EqpUI_Ees,			//2023.01.05a Test//2023.01.26a uhkim ?¨Ïö© ?äÌï®
+	EqpUI_EEPROM,			// 12 : øπæ‡
+	EqpUI_Ees,				// 13 : EES socket.
 
 	Max_EqpTypeUICount,
 }enEquipmentType_UI;
@@ -129,7 +280,7 @@ static LPCTSTR g_szEqpTypeName_UI[] =
 	_T("Returner"),
 
 	_T("Color Calibration"),
-	_T("SFR CL 46"),		// ?ëÍ∞Å
+	_T("SFR CL 46"),		// «˘∞¢
 	_T("SFR Multi CL 83"),	// Í¥ëÍ∞Å 83
 	_T("SFR Multi CL 180"),	// Í¥ëÍ∞Å 180
 	_T("SFR Multi CL"),		// Í¥ëÍ∞Å 83 & 180
@@ -160,16 +311,16 @@ static LPCTSTR g_szEqpTypeUI_Initial[] =
 };
 
 //-------------------------------------------------------------------
-// Í≤Ä???§ÎπÑ ?Ä??//-------------------------------------------------------------------
+// ∞ÀªÁ º≥∫Ò ≈∏¿‘
+//-------------------------------------------------------------------
 typedef enum
 {
 	Tester_ColorCal,		// 0
-	Tester_SFR_CL_46,		// 1 : ?ëÍ∞Å
+	Tester_SFR_CL_46,		// 1 : «˘∞¢
 	Tester_SFR_MultiCL_83,	// 2 : Í¥ëÍ∞Å
 	Tester_SFR_MultiCL_180,	// 3 : Í¥ëÍ∞Å
 	Tester_SFR_MultiCL,		// 4 : Í¥ëÍ∞Å
-	Tester_HotPixel,		// 5
-	//Tester_HotPixel3port,	// 6 : Hot Pixel 3 Para
+	Tester_HotPixel,		// 5a
 	Tester_StrayLight,		// 7 Ghost & Flare
 	Tester_Distortion,		// 8
 	Tester_EEPROM,
@@ -179,12 +330,11 @@ typedef enum
 static LPCTSTR g_szTesterTypeName[] =
 {
 	_T("Color Calibration"),
-	_T("SFR CL 46"),		// ?ëÍ∞Å
+	_T("SFR CL 46"),		// «˘∞¢
 	_T("SFR Multi CL 83"),// Í¥ëÍ∞Å 83
 	_T("SFR Multi CL 180"),	// Í¥ëÍ∞Å 180
 	_T("SFR Multi CL"),// Í¥ëÍ∞Å 83 & 180
 	_T("Hot Pixel"),
-	//_T("Hop Pixel 3 Para"),
 	_T("Stray Light"),
 	_T("Distortion"),
 	_T("EEPROM"),
@@ -199,15 +349,15 @@ static LPCTSTR g_szTesterTypeInitial[] =
 	_T("S180"),
 	_T("SMC"),
 	_T("Hot"),
-	//_T("HP3"),
 	_T("GnF"),
 	_T("Dis"),
 	_T("E2P"),
 	nullptr
 };
+
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 //-------------------------------------------------------------------
-// Í≤Ä??Ï¢ÖÎ•ò
+// ∞ÀªÁ ¡æ∑˘
 //-------------------------------------------------------------------
 typedef enum
 {
@@ -241,12 +391,6 @@ static LPCTSTR g_szInspectionTypeName[] =
 // 4. Equipment Î≤àÌò∏
 // ex) TLine_01_Loader_01
 
-
-
-static int8_t ConvTo_TesterType(__in enEquipmentType IN_nEqpType)
-{
-	return  static_cast<int8_t>(IN_nEqpType - Eqp_Tester_First);
-};
 
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 static int8_t ConvTo_InspectionType(__in enEquipmentType IN_nEqpType)
@@ -294,6 +438,15 @@ static int8_t ConvTo_InspectionType(__in enEquipmentType IN_nEqpType)
 };
 #endif	// NEW_INSPECTION_TYPE_APPLY
 
+//===================================================================
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+//===================================================================
+
+static int8_t ConvTo_TesterType(__in enEquipmentType IN_nEqpType)
+{
+	return  static_cast<int8_t>(IN_nEqpType - Eqp_Tester_First);
+};
+
 static int8_t ConvTo_EquipmentType(__in enTesterType IN_nTesterType)
 {
 	return  static_cast<int8_t>(IN_nTesterType + Eqp_Tester_First);
@@ -305,8 +458,6 @@ static bool IsTester_byEqpType(__in uint8_t IN_nEqpType)
 };
 
 
-#define		LOADER_EQP_ORDER		0
-#define		FIRST_TESTER_EQP_ORDER	1
 
 
 

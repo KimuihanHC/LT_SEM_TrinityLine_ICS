@@ -19,16 +19,16 @@
 // CNGCode_Info
 //-----------------------------------------------------------------------------
 class CNGCode_Info
-{
+{	
 public:
 	CNGCode_Info();
 	virtual ~CNGCode_Info();
 
-	// NG Code 데이터//
-	std::map<int16_t, ST_NGCode>	m_NG_Info;
+	// NG Code 데이터
+	std::map<std::int16_t, ST_NGCode>	m_NG_Info;
 
 	// MES rework NG Code
-	int16_t		m_nMES_ReworkNGCode = -2;
+	std::int16_t		m_nMES_ReworkNGCode = -2;
 
 private:
 	void		MakeDirectory		(__in LPCTSTR szPath);

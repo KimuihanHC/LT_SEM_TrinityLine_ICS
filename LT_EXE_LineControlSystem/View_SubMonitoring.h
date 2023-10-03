@@ -64,7 +64,7 @@ protected:
 	CMFCButton			m_bn_Find;
 
 
-	// Unload  소켓 판정 결과.
+	// Unload  소켓 판정 결과
 	CWnd_Judgment		m_wndJudge;
 
 
@@ -73,10 +73,10 @@ protected:
 	enPermissionMode	m_InspMode			= enPermissionMode::Permission_Operator;
 	CSocketMonitoring*	m_pstSocketInfo		= nullptr;
 
-	// 소켓 리스트 UI 초기화.
+	// 소켓 리스트 UI 초기화
 	void	Init_SocketUI_List				();
 
-	// 소켓 RFID로 소켓 순서 구하기.
+	// 소켓 RFID로 소켓 순서 구하기
 	int		Find_SocketOrder				(__in LPCTSTR IN_szRFID);
 
 
@@ -87,16 +87,16 @@ public:
 		m_pstSocketInfo = IN_pstSocketInfo;
 	};
 
-	// 화면에 표시되는 소켓JIG 타입 설정.
+	// 화면에 표시되는 소켓JIG 타입 설정
 	void	Set_SocketType					(__in uint8_t IN_nSocketType);
 
-	// 검사 모드 설정.
+	// 검사 모드 설정
 	void	Set_PermissionMode				(__in enPermissionMode InspMode);
 	
-	// 전체 소켓 정보 갱신.
+	// 전체 소켓 정보 갱신
 	void	Update_SocketInfo				();
 
-	// 개별 소켓 상태 정보 갱신.
+	// 개별 소켓 상태 정보 갱신
 	void	Update_SocketStatus				(__in LPCTSTR IN_szRFID);
 	void	Update_SocketStatus_All			();
 	void	Update_SocketStatus_Barcode		(__in LPCTSTR IN_szRFID);
@@ -108,11 +108,11 @@ public:
 	void	Update_SocketStatus_Yield_All	();
 	void	Update_SocketStatus_TestResult	(__in LPCTSTR IN_szRFID);
 
-	// 소켓 데이터 갱신.
+	// 소켓 데이터 갱신
 	void	OnUpdate_SocketData				(__in uint16_t nFlag, __in LPCTSTR szRFID);
 	void	OnUpdate_SocketData_All			(__in uint16_t nFlag);
 
-	// 검사 결과.
+	// 검사 결과
 	void	Set_TestResult					(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in ST_TestResult* IN_pstResult);
 	void	Set_TestResult					(__in const CSocketInfo_Unit* IN_Socket);
 };
