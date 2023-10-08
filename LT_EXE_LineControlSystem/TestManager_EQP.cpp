@@ -370,12 +370,7 @@ void CTestManager_EQP::OnInitialize()
 {
 	//__super::OnInitialize();	
 
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-	// 설비들의 소켓 유/무 체크하여 라인의 가동/비가동 상태 설정 (1초마다 체크)
-	OnCreateTimer_TimeCheck(10000, 1000);
-#endif
-
-	// Production End 체크 (10초마다 체크)
+	//OnCreateTimer_TimeCheck();
 	OnCreateTimer_UpdateUI(30000, 10000);
 }
 

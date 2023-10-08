@@ -59,7 +59,6 @@ typedef enum
 
 	WM_EqpNotify_Skip,					// 
 	WM_EqpNotify_TimeSync,				// 
-
 	WM_EqpNotify_Yield,					// 
 	WM_EqpNotify_Production,
 #if (USE_XML)

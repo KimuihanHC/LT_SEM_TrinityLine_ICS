@@ -115,9 +115,6 @@
     <Filter Include="LineInfo\CommModule">
       <UniqueIdentifier>{71439c23-a0f5-41ca-b492-ab8960e96152}</UniqueIdentifier>
     </Filter>
-    <Filter Include="View_Log">
-      <UniqueIdentifier>{4c0fc2c2-4f77-469e-98c6-f0289507b07c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LT MainExecution.cpp">
@@ -461,12 +458,6 @@
     </ClCompile>
     <ClCompile Include="RegCommModule.cpp">
       <Filter>LineInfo\CommModule</Filter>
-    </ClCompile>
-    <ClCompile Include="InOutCount.cpp">
-      <Filter>View_Log</Filter>
-    </ClCompile>
-    <ClCompile Include="Wnd_InOutCount.cpp">
-      <Filter>ViewWnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -922,15 +913,6 @@
     </ClInclude>
     <ClInclude Include="RegCommModule.h">
       <Filter>LineInfo\CommModule</Filter>
-    </ClInclude>
-    <ClInclude Include="Def_InOutCount.h">
-      <Filter>View_Log</Filter>
-    </ClInclude>
-    <ClInclude Include="InOutCount.h">
-      <Filter>View_Log</Filter>
-    </ClInclude>
-    <ClInclude Include="Wnd_InOutCount.h">
-      <Filter>ViewWnd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

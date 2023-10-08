@@ -24,8 +24,6 @@ public:
 // 재정의입니다.
 public:
 	virtual BOOL InitInstance();
-	
-// 구현입니다.
 
 public:
 	//UINT  m_nAppLook;
@@ -37,7 +35,8 @@ public:
 
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
-	
+
+
 private:
 	// data members
 	Gdiplus::GdiplusStartupInput m_gdiplusStartupInput;

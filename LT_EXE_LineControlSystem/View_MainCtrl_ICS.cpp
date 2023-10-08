@@ -66,7 +66,6 @@ CView_MainCtrl_ICS::CView_MainCtrl_ICS()
 //-----------------------------------------------------------------------------
 CView_MainCtrl_ICS::~CView_MainCtrl_ICS()
 {
-
 		DeleteSplashScreen();
 }
 
@@ -80,7 +79,6 @@ BEGIN_MESSAGE_MAP(CView_MainCtrl_ICS, CView_MainCtrl)
 	ON_MESSAGE	(WM_CHANGED_SETTING_INFO,			OnWM_ChangedSetting)
 	ON_MESSAGE	(WM_EQP_CTRLCMD,					OnWM_EqpCtrlCmd)
 	ON_MESSAGE	(WM_TEST_SELECT,					OnWM_TestSelect)
-
 	ON_MESSAGE	(WM_EVENT_EQUIPMENT_CONNECTION,		OnWM_Eqp_Connection)
 	ON_MESSAGE	(WM_EVENT_EQUIPMENT_AUTO_MODE,		OnWM_Eqp_AutoMode)
 	ON_MESSAGE	(WM_EVENT_EQUIPMENT_ALARM,			OnWM_Eqp_Alarm)
@@ -88,15 +86,13 @@ BEGIN_MESSAGE_MAP(CView_MainCtrl_ICS, CView_MainCtrl)
 	ON_MESSAGE	(WM_EVENT_EQUIPMENT_CONVEYOR_STATUS,OnWM_Eqp_ConveyorStatus)
 	ON_MESSAGE	(WM_EVENT_EQUIPMENT_END_PRODUCTION,	OnWM_Eqp_EndOfProduction)
 	ON_MESSAGE	(WM_EVENT_EQUIPMENT_EMPTY_EQP,		OnWM_Eqp_CheckEmptyEqp)
-
 	ON_MESSAGE	(WM_EVENT_LOADER_RESISTER_SOCKET,	OnWM_Loader_RegisterSocket)
 	ON_MESSAGE	(WM_EVENT_LOADER_CHEKCK_TRACKOUT,	OnWM_Loader_Check_TrackOut)
 	ON_MESSAGE	(WM_EVENT_TESTER_TRACKIN,			OnWM_Tester_TrackIn)
 	ON_MESSAGE	(WM_EVENT_TESTER_END_INSPECTION,	OnWM_Tester_EndInspection)
 	ON_MESSAGE	(WM_EVENT_UNLOAD_REQ_TEST_RESULT,	OnWM_Unload_ReqTestResult)
 	ON_MESSAGE	(WM_EVENT_UNLOAD_NG_INFO,			OnWM_Unload_NG_Info)
-	ON_MESSAGE	(WM_EVENT_UNLOAD_UNREGISTER_SOCKET,	OnWM_Unload_UnregisterSocket)
-
+	ON_MESSAGE	(WM_EVENT_UNLOAD_UNREGISTER_SOCKET,	OnWM_Unload_UnregisterSocket)	
 	ON_MESSAGE	(WM_UPDATE_SOCKET_DATA,				OnWM_Update_SocketData)
 	ON_MESSAGE	(WM_UPDATE_SOCKET_DATA_ALL,			OnWM_Update_SocketData_All)
 #if (USE_XML)
@@ -290,7 +286,6 @@ LRESULT CView_MainCtrl_ICS::OnWM_ChangedSetting(WPARAM wParam, LPARAM lParam)
 	{
 	case WM_Setting_Line:	
 		// 라인 설정 변경 : 설비 대수, 설비 ip, 설비 eqp ip 비교해서 서버 재시작 판단.
-		m_bFlag_CheckEqpConnection = false;
 		OnShow_SplashScreen(TRUE, _T("Changing Line Setting !!"));
 		OnLoad_LineInfo(false);
 		OnMatchingEquipment();
@@ -300,7 +295,6 @@ LRESULT CView_MainCtrl_ICS::OnWM_ChangedSetting(WPARAM wParam, LPARAM lParam)
 		}
 		OnShow_SplashScreen(FALSE);
 		OnLog(_T("Changed Setting : Line Info"));
-		m_bFlag_CheckEqpConnection = true;
 		break;
 
 	case WM_Setting_Socket:
@@ -339,11 +333,13 @@ LRESULT CView_MainCtrl_ICS::OnWM_ChangedSetting(WPARAM wParam, LPARAM lParam)
 	case WM_Setting_Sever:
 		OnShow_SplashScreen(TRUE, _T("Changing Server Setting !!"));
 		OnLoad_ServerInfo(false);
+#if (USE_XML)
 		OnMatchingServer();
 		if (false == m_pIcsServer->IsOpened())
 		{
 			OnConnect_Devicez(ICS_SERVER_EES);
 		}
+#endif
 		OnShow_SplashScreen(FALSE);
 		OnLog(_T("Changed Setting : Server Info"));
 		break;
@@ -534,11 +530,8 @@ LRESULT CView_MainCtrl_ICS::OnWM_Tester_TrackIn(WPARAM wParam, LPARAM lParam)
 
 LRESULT CView_MainCtrl_ICS::OnWM_Tester_EndInspection(WPARAM wParam, LPARAM lParam)
 {
-	// 검사 결과 통지 (테스터)
-	uint8_t nFromEqp = (uint8_t)wParam;
-	CString szRFID = (LPCTSTR)lParam;
-	OnEvent_Tester_EndInspection(nFromEqp, szRFID.GetBuffer());
-
+	// 검사 결과 통지 (테스터)	
+	OnEvent_Tester_EndInspection((uint8_t)wParam, (LPCTSTR)lParam);
 	return 1;
 }
 
@@ -546,11 +539,7 @@ LRESULT CView_MainCtrl_ICS::OnWM_Unload_ReqTestResult(WPARAM wParam, LPARAM lPar
 {
 	// 검사 결과 요청 (로더 / 언로더)
 	//::SendNotifyMessage(m_hWndOwner, WM_EQUIPMENT_REQ_TEST_RESULT, (WPARAM)m_nEqpOrder, (LPARAM)IN_szRFID);
-
-	if (NULL != lParam)
-		OnEvent_Unloader_TrackIn((LPCTSTR)lParam);
-	else
-		OnLog_Err(_T("%s() => Error : lParam is NULL!!"), _T(__FUNCTION__));
+	OnEvent_Unloader_TrackIn((LPCTSTR)lParam);
 
 	return 1;
 }
@@ -905,9 +894,6 @@ void CView_MainCtrl_ICS::OnInit_ConstructionSetting()
 	m_ViewSub.SetPtr_FailInfo(&m_stInspInfo.FailInfo);
 	m_ViewSub.SetPath_Report(m_stInspInfo.Path.szReport);
 
-	// Log
-	//InOutCount;
-
 	// FailInfo
 	Get_FailInfo().Set_Path(m_stInspInfo.Path.szFailInfo);
 	Get_FailInfo().Set_Path_Report(m_stInspInfo.Path.szReport);
@@ -1255,6 +1241,7 @@ bool CView_MainCtrl_ICS::OnLoad_ModelInfo()
 			{
 				Get_Equipment(nIdx).Set_EnableEquipment(true);
 			}
+			
 		}
 
 		return true;
@@ -1314,7 +1301,7 @@ bool CView_MainCtrl_ICS::OnLoad_Prev_LineInfo()
 	size_t nCount = Get_LineInfo().GetCount();
 	for (auto nIdx = 0; nIdx < nCount; ++nIdx)
 	{
-		regEquipment.Load_Equipment(Get_EquipmentID(nIdx), Get_Equipment(nIdx));
+		regEquipment.Load_Equipment(Get_EquipmentID(nIdx), Get_Equipment(nIdx));	
 	}
 
 	return true;
@@ -1599,13 +1586,13 @@ void CView_MainCtrl_ICS::ReloadOption()
 	OnLog(_T("Path Shared: %s"), m_stOption.Inspector.szPath_Shared);
 	OnLog(_T("Path FailInfo: %s"), m_stOption.Inspector.szPath_FailInfo);
 	USES_CONVERSION;
-	//OnLog(_T("Sever Address: %s"), A2T(inet_ntoa(*(IN_ADDR*)&m_stOption.Server.Address.dwAddress)));
-	//OnLog(_T("Sever Port: %d"), m_stOption.Server.Address.dwPort);
 	//2023.01.26a uhkim 
 	for (int i = 0; i < ICS_SERVER_MAX; i++) {
 		OnLog(_T("Sever Address %d : %s"), i, A2T(inet_ntoa(*(IN_ADDR*)&m_stOption.Server[i].Address.dwAddress)));
 		OnLog(_T("Sever Port %d : %d"), i, m_stOption.Server[i].Address.dwPort);
 	}
+	//OnLog(_T("Sever Address: %s"), A2T(inet_ntoa(*(IN_ADDR*)&m_stOption.Server.Address.dwAddress)));
+	//OnLog(_T("Sever Port: %d"), m_stOption.Server.Address.dwPort);
 	OnLog(_T("---------------------------------------------------"));
 
 	// UI의 언어 설정 변경
@@ -1709,14 +1696,6 @@ void CView_MainCtrl_ICS::InitStartProgress()
 		return;
 	}
 
-#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	m_stInspInfo.Reset_LastRegisterTime();
-
-	m_stInspInfo.Set_LastRegisterTime();
-
-#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
-
 	// 2nd Window 활성화
 	ShowWindow_SubMonitoring(TRUE);
 
@@ -1726,8 +1705,6 @@ void CView_MainCtrl_ICS::InitStartProgress()
 	m_bFlag_ReadyTest = InitStartDeviceProgress() ? TRUE : FALSE;
 
 	OnLog(m_bFlag_ReadyTest ? LOGTYPE_NONE : LOGTYPE_ERROR, _T("InitStartProgress::m_bFlag_ReadyTest : %d"), m_bFlag_ReadyTest);
-
-	m_bFlag_CheckEqpConnection = true;
 
 	OnShow_SplashScreen(FALSE);
 
@@ -1763,7 +1740,6 @@ BOOL CView_MainCtrl_ICS::InitStartDeviceProgress()
 //=============================================================================
 void CView_MainCtrl_ICS::FinalExitProgress()
 {
-	m_bFlag_CheckEqpConnection = false;
 	m_bFlag_ReadyTest = FALSE;
 	m_bExitFlag = TRUE;
 
@@ -2026,7 +2002,7 @@ void CView_MainCtrl_ICS::Proc_LineCtrlCmd(__in uint8_t IN_nCmdIndex)
 			Get_SocketInfo().Reset_Yield_All();
 
 			// NG Count 초기화
-			if (false == m_ViewSub.Reset_NGCount_All())
+			if (false == Get_FailInfo().Write_CSV_File_Default())
 			{
 				// 저장에 실패
 				OnLog_Err(_T("NG Count File write failed!"));
@@ -2074,7 +2050,7 @@ void CView_MainCtrl_ICS::Proc_LineCtrlCmd(__in uint8_t IN_nCmdIndex)
 		}
 		break;
 
-#ifndef HIDE_NOT_USE_EQP_CONTROL
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
 	case enConrolCode::CC_ForcedEject:
 		break;
 #endif
@@ -2221,7 +2197,7 @@ void CView_MainCtrl_ICS::Proc_EquipmentCtrlCmd(__in uint8_t IN_nCmdIndex, __in u
 			}
 			break;
 
-#ifndef HIDE_NOT_USE_EQP_CONTROL
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
 		case enConrolCode::CC_ForcedEject:
 			if (IDYES == LT_MessageBox(szText, MB_YESNO))
 			{
@@ -2246,13 +2222,6 @@ void CView_MainCtrl_ICS::Proc_EquipmentCtrlCmd(__in uint8_t IN_nCmdIndex, __in u
 				// 로더에서 초기화하면 전체 설비를 초기화 한다.
 				if (IN_nEqpOrder == Get_Loader().Get_EqpOrder())
 				{
-					if (false == Get_LineInfo().Write_CSV_File(m_stInspInfo.Path.szReport.GetBuffer()))
-					{
-						// 저장에 실패
-						OnLog_Err(_T("Equipment Yield File write failed!"));
-					}
-					Get_LineInfo().Reset_EquipmentYield_All();
-
 					for (auto nIdx = 0; nIdx < Get_EquipmentCount(); ++nIdx)
 					{
 						Get_Equipment(nIdx).Reset_Yield_Day();
@@ -2317,12 +2286,7 @@ void CView_MainCtrl_ICS::Test_Process(__in UINT nTestNo)
 	{
 	case 0:
 	{
-		//::MessageBox((HWND)NULL, _T("MODELESS MessageBox"), _T("Equipment tcp/ip disconnected"), MB_OK);
-		LT_MessageBox(g_szMessageBox_T[MB_Eqp_Comm_Error][m_nLanguage]);
-
-		//OnSend_OperationActiveStatus(enOperationActiveStatus::OAS_Active);
-
-		//OnEvent_Loader_CheckTrackOut(_T("H-220215-001"));
+		OnEvent_Loader_CheckTrackOut(_T("H-220215-001"));
 
 		/*auto HWnd = GetSafeHwnd();
 		for (auto nIdx = 0; nIdx < 8; ++nIdx)
@@ -2374,57 +2338,21 @@ void CView_MainCtrl_ICS::Test_Process(__in UINT nTestNo)
 
 	case 1:
 	{
-		//OnSend_OperationActiveStatus(enOperationActiveStatus::OAS_Inactive);
+		srand((unsigned int)time(NULL));
+		int num = 0;
+		int num2 = 0;
 
-		std::thread thr([this]()
+		for (auto nIdx = 1; nIdx < 1330; ++nIdx)
 		{
-			srand((unsigned int)time(NULL));
-			int num = 0;
-			int num2 = 0;
-#if (SET_INSPECTOR == SYS_ICS_TRINITY_LINE)
-			CString szRFID = _T("H-221021-002");
-#else
-			CString szRFID = _T("A-230114-002");
-#endif
+			num = rand();
+			int16_t nSN = (int16_t)num % 32;
+			nSN = (nSN == 31) ? -1 : nSN;
 
+			num2 = rand();
+			Get_Equipment(4).Recv_NotifyTestResult(_T("V-220215-002"), nSN, num2 % 2);
 
-			// Test
-			for (auto nIdx = 1; nIdx < 133; ++nIdx)
-			{
-				// 설비
-				for (auto nEqp = Get_Loader().Get_EqpOrder() + 1; nEqp < Get_Returner().Get_EqpOrder(); ++nEqp)
-				{
-					num = rand();
-					int16_t nSN = (int16_t)num % 32;
-					nSN = (nSN == 31) ? -1 : nSN;
-
-					nSN = ((nSN % 7)) ? 0 : nSN;
-
-					num2 = rand();
-
-					Get_Equipment(nEqp).Recv_NotifyTestResult(szRFID.GetBuffer(), nSN, num2 % 2);
-
-					Sleep(20);
-
-					if (0 < nSN)
-						break;
-				}
-
-				// Unload
-				Sleep(20);
-
-				ST_TestResult testResult;
-				Get_Loader().Recv_ReqTestResult(szRFID.GetBuffer(), testResult);
-				Sleep(200);
-
-				// Reset
-				Get_Loader().Recv_UnregisterSocket(szRFID.GetBuffer());
-				//Get_Socket(szRFID.GetBuffer()).Reset_TestResult();
-			}
-
-			AfxMessageBox(_T("Test is Done!!"));
-		});
-		thr.detach();
+			Delay(20);
+		}
 		
 		//Get_Equipment(0).Recv_UnregisterSocket(_T("H-220215-002"));
 	}
@@ -2434,101 +2362,60 @@ void CView_MainCtrl_ICS::Test_Process(__in UINT nTestNo)
 	{
 //		OnSend_EndOfProduction(false);
 
-		//m_stInspInfo.Set_LastRegisterTime();
-		//OnEvent_Loader_RegisterSocket(_T("A-230114-011"));
-
-		//H-220823-011
-
-		Proc_SetSocketTargetEquipment(_T("H-220823-011"), 1);
-
-		std::thread thr([this]()
-		{
-			Get_Equipment(2).Recv_ReqAcceptSocket(_T("H-220823-011"));
-		});
-		thr.detach();
-
-		//Delay(10);
-		std::thread thr2([this]()
-		{
-			Get_Equipment(2).Recv_ReqAcceptSocket(_T("H-220823-011"));
-		});
-		thr2.detach();
-		//Delay(10);
-		Get_Equipment(2).Recv_ReqAcceptSocket(_T("H-220823-011"));
-		Delay(50);
-		Get_Equipment(2).Recv_ReqAcceptSocket(_T("H-220823-011"));
-		Delay(30);
-		Get_Equipment(2).Recv_ReqAcceptSocket(_T("H-220823-011"));
-		Delay(300);
-		Get_Equipment(2).Recv_ReqAcceptSocket(_T("H-220823-011"));
 	}
 	break;
 
 	case 3:
 	{
-		Get_Socket(_T("H-220823-001")).Set_TargetEqpOrder(3);
-		Get_Socket(_T("H-220823-002")).Set_TargetEqpOrder(3);
-		Get_Socket(_T("H-220823-003")).Set_TargetEqpOrder(3);
-		Get_Socket(_T("H-220823-004")).Set_TargetEqpOrder(3);
+		
 
-		Get_Equipment(3).Increase_ReservedPort(_T("H-220823-001"));
-		Get_Equipment(3).Increase_ReservedPort(_T("H-220823-002"));
-		Get_Equipment(3).Increase_ReservedPort(_T("H-220823-003"));
-		Get_Equipment(3).Increase_ReservedPort(_T("H-220823-004"));
-		Get_Equipment(3).Increase_ReservedPort(_T("H-220823-001"));
+		srand((unsigned int)time(NULL));
+		int num = 0;
 
+		CString szRFID, szBarcode;
+		uint16_t nRFID_idx = 1;
+		uint16_t nRFID_idx2 = 1;
+		for (auto nCount = 0; nCount < 10; nCount++)
+		{
+			// 로더
+			for (auto nEqpIdx = 0; nEqpIdx < Get_LineInfo().GetCount(); nEqpIdx++)
+			{
+				if (Get_Equipment(nEqpIdx).Is_Loader())
+				{
+					szRFID.Format(_T("V-220215-%03d"), nRFID_idx2++);
 
-		Get_Equipment(3).Decrease_ReservedPort(_T("H-220823-001"));
-		Get_Equipment(3).Decrease_ReservedPort(_T("H-220823-002"));
+					num = rand();
+					uint16_t nSN = (uint16_t)num % 1000;
+					szBarcode.Format(_T("SN_%05d"), nSN);
+					Get_Equipment(nEqpIdx).Recv_RegisterSocket(szRFID.GetBuffer(), szBarcode.GetBuffer());
+				}
+			}
+		}
 
+		for (auto nCount = 0; nCount < 10; nCount++)
+		{
+			// 검사 설비
+			for (auto nEqpIdx = 0; nEqpIdx < Get_LineInfo().GetCount(); nEqpIdx++)
+			{
+				if (Get_Equipment(nEqpIdx).Is_Tester())
+				{
+					// 파라 L / R 수율 업데이트
+					szRFID.Format(_T("V-220215-%03d"), nRFID_idx++);
 
-// 		srand((unsigned int)time(NULL));
-// 		int num = 0;
-// 
-// 		CString szRFID, szBarcode;
-// 		uint16_t nRFID_idx = 1;
-// 		uint16_t nRFID_idx2 = 1;
-// 		for (auto nCount = 0; nCount < 10; nCount++)
-// 		{
-// 			// 로더
-// 			for (auto nEqpIdx = 0; nEqpIdx < Get_LineInfo().GetCount(); nEqpIdx++)
-// 			{
-// 				if (Get_Equipment(nEqpIdx).Is_Loader())
-// 				{
-// 					szRFID.Format(_T("H-220215-%03d"), nRFID_idx2++);
-// 
-// 					num = rand();
-// 					uint16_t nSN = (uint16_t)num % 1000;
-// 					szBarcode.Format(_T("SN_%05d"), nSN);
-// 					Get_Equipment(nEqpIdx).Recv_RegisterSocket(szRFID.GetBuffer(), szBarcode.GetBuffer());
-// 				}
-// 			}
-// 		}
-// 
-// 		for (auto nCount = 0; nCount < 10; nCount++)
-// 		{
-// 			// 검사 설비
-// 			for (auto nEqpIdx = 0; nEqpIdx < Get_LineInfo().GetCount(); nEqpIdx++)
-// 			{
-// 				if (Get_Equipment(nEqpIdx).Is_Tester())
-// 				{
-// 					// 파라 L / R 수율 업데이트
-// 					szRFID.Format(_T("H-220215-%03d"), nRFID_idx++);
-// 
-// 					num = rand();
-// 					uint16_t nNGcode = (uint8_t)num % 2;
-// 					//Delay(11);
-// 					num = rand();
-// 					uint8_t nPara = (uint8_t)num % 2;
-// 
-// 					Get_Equipment(nEqpIdx).Recv_NotifyTestResult(szRFID.GetBuffer(), nNGcode, nPara);
-// 				}
-// 
-// 				Delay(47);
-// 			}
-// 
-// 			Delay(100);
-// 		}
+					num = rand();
+					uint16_t nNGcode = (uint8_t)num % 2;
+					//Delay(11);
+					num = rand();
+					uint8_t nPara = (uint8_t)num % 2;
+
+					Get_Equipment(nEqpIdx).Recv_NotifyTestResult(szRFID.GetBuffer(), nNGcode, nPara);
+				}
+
+				Delay(47);
+			}
+
+			Delay(100);
+		}
 
 // 		for (auto nCount = 0; nCount < 10; nCount++)
 // 		{
@@ -2538,7 +2425,7 @@ void CView_MainCtrl_ICS::Test_Process(__in UINT nTestNo)
 // 			{
 // 				if (Get_Equipment(nEqpIdx).Is_Loader())
 // 				{
-// 					szRFID.Format(_T("H-220215-%03d"), nRFID_idx2++);
+// 					szRFID.Format(_T("V-220215-%03d"), nRFID_idx2++);
 // 					Get_Equipment(nEqpIdx).Recv_UnregisterSocket(szRFID.GetBuffer());
 // 				}
 // 			}

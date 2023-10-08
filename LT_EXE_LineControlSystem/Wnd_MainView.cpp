@@ -129,7 +129,6 @@ int CWnd_MainView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 			TRACE0("Failed to create CWnd_Status_Equipment\n");
 		}
 	}
-
 #endif
 
 	m_wndTestSelect.SetOwner(GetParent());
@@ -463,7 +462,7 @@ void CWnd_MainView::Init_EquipmentUI_List()
 		size_t nCount = m_pstSysInfo->LineInfo.GetCount();
 		nCount = (nCount <= MAX_EQUIPMENT_COUNT) ? nCount : MAX_EQUIPMENT_COUNT;
 
-		m_nMaxCol = static_cast<uint8_t>(__max(m_nMinCol, nCount + 1));
+		m_nMaxCol = __max(m_nMinCol, nCount + 1);
 
 		if (0 < nCount)
 		{
@@ -548,7 +547,6 @@ void CWnd_MainView::Init_EquipmentUI_List()
 		}
 	}
 }
-
 //=============================================================================
 // Method		: OnLanguage
 // Access		: virtual public  
@@ -615,7 +613,6 @@ void CWnd_MainView::Set_PermissionMode(enPermissionMode IN_PermissionMode)
 	}
 #endif
 }
-
 //=============================================================================
 // Method		: Get_EquipmentHWND
 // Access		: public  
@@ -629,8 +626,6 @@ HWND CWnd_MainView::Get_EquipmentHWND(__in uint8_t IN_nEqpOrder)
 {
 	return m_pwndEquipmentList.at(IN_nEqpOrder)->GetSafeHwnd();
 }
-
-
 //=============================================================================
 // Method		: Update_LineInfo
 // Access		: public  
@@ -646,7 +641,6 @@ void CWnd_MainView::Update_LineInfo()
 		m_wndTestSelect.Set_Configuration(m_pstSysInfo->LineInfo);
 		m_wndTestSelect.Set_Config_Line(&m_pstSysInfo->SettingInfo.LineInfo);
 	}
-
 	Init_EquipmentUI_List();
 }
 

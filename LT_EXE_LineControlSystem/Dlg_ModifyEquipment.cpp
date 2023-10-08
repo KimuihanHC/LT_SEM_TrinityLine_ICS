@@ -24,7 +24,7 @@
 #define IDC_BN_MODIFY_STEP		1203
 #define IDC_ED_DATA_S			1210
 #define IDC_ED_DATA_E			IDC_ED_DATA_S + MAX_STEP_DATA - 1
-
+//2023.05.26
 #define IDC_ED_EQUIPID_S		4000
 #define IDC_ED_EQUIPID_E		IDC_ED_EQUIPID_S + 99
 #define IDC_ED_PORTID_S			IDC_ED_EQUIPID_E + 1
@@ -556,7 +556,7 @@ BOOL CDlg_ModifyEquipment::Get_EquipmentData_UI(__out CConfig_Eqp& OUT_stEquipme
 		LT_MessageBox(g_szMessageBox_T[MB_Line_IpAddr_Blank][m_nLanguage]);
 		return FALSE;
 	}
-#if SOCKET
+//#if SOCKET20230925
 	m_ed_SubEqpID.GetWindowText(szValue);
 	m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), 0, 0, szValue);	
 	switch (OUT_stEquipment.Get_EqpType_UI())
@@ -612,7 +612,7 @@ BOOL CDlg_ModifyEquipment::Get_EquipmentData_UI(__out CConfig_Eqp& OUT_stEquipme
 		}
 		break;
 	}
-#endif //SOCKET
+//#endif //SOCKET
 	// 검사 항목에 따라서 데이터 범위 체크 해야 함.
 	Verify_Equipment(OUT_stEquipment);
 

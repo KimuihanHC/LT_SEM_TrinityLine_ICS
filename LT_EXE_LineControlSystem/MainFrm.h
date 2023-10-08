@@ -7,11 +7,11 @@
 //	
 // Purpose	: 
 //*****************************************************************************
-// MainFrm.h : CMainFrame Å¬·¡½ºÀÇ ÀÎÅÍÆäÀÌ½º
+// MainFrm.h : CMainFrame ?´ë˜?¤ì˜ ?¸í„°?˜ì´??
 //
 #pragma once
 
-#if (SET_INSPECTOR == SYS_ICS_TRINITY_LINE) || (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+#if (SET_INSPECTOR == SYS_DEV_MOD_1)
 #include "View_MainCtrl_ICS.h"
 #else
 #include "View_MainCtrl.h"
@@ -41,12 +41,12 @@ public:
 protected: 
 	DECLARE_DYNAMIC(CMainFrame)
 
-	// ÀçÁ¤ÀÇÀÔ´Ï´Ù.
+	// ?¬ì •?˜ì…?ˆë‹¤.
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 
-	// ±¸ÇöÀÔ´Ï´Ù.
+	// êµ¬í˜„?…ë‹ˆ??
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -54,9 +54,9 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // ÄÁÆ®·Ñ ¸ğÀ½ÀÌ Æ÷ÇÔµÈ ¸â¹öÀÔ´Ï´Ù.
+protected:  // ì»¨íŠ¸ë¡?ëª¨ìŒ???¬í•¨??ë©¤ë²„?…ë‹ˆ??
 
-#if (SET_INSPECTOR == SYS_ICS_TRINITY_LINE) || (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+#if (SET_INSPECTOR == SYS_DEV_MOD_1)
 	CView_MainCtrl_ICS	m_wndView_MainCtrl;
 #else
 	CView_MainCtrl		m_wndView_MainCtrl;
@@ -64,7 +64,7 @@ protected:  // ÄÁÆ®·Ñ ¸ğÀ½ÀÌ Æ÷ÇÔµÈ ¸â¹öÀÔ´Ï´Ù.
 
 	ST_MONITORINFO		m_infoMonitor;
 
-	// »ı¼ºµÈ ¸Ş½ÃÁö ¸Ê ÇÔ¼ö
+	// ?ì„±??ë©”ì‹œì§€ ë§??¨ìˆ˜.
 protected:
 	afx_msg int		OnCreate			(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void	OnSetFocus			(CWnd *pOldWnd);
@@ -174,13 +174,13 @@ private:
 	UINT				m_nTabView;
 
 	CString				m_strExecutedAppTime;
-	// ÇÁ·Î±×·¥ ½ÃÀÛ ÇÒ ¶§
+	// ?„ë¡œê·¸ë¨ ?œì‘ ????
 	void			InitProgram			();
 
-	// ÇÁ·Î±×·¥ Á¾·á ÇÒ ¶§
+	// ?„ë¡œê·¸ë¨ ì¢…ë£Œ ????
 	void			ExitProgram			();
 
-	// ¿ÜºÎÀÇ ºñÁ¤»ó Á¾·á °¨½Ã ÇÁ·Î±×·¥À» ½ÇÇà ½ÃÅ´.
+	// ?¸ë???ë¹„ì •??ì¢…ë£Œ ê°ì‹œ ?„ë¡œê·¸ë¨???¤í–‰ ?œí‚´.	
 	PROCESS_INFORMATION	m_ProcessInfo;
 	BOOL			RunWatchProgram		();
 	void			CloseWatchProgram	();

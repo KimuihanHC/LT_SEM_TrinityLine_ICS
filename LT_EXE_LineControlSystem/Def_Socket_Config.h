@@ -16,68 +16,15 @@
 #include <afxwin.h>
 #include <map>
 
-// 家南 沥焊
+// ?岇紦 ?曤炒
 #define			MAX_SOCKET_COUNT		999
 
-//===================================================================
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-//===================================================================
 //-----------------------------------------------
-// 力前 葛胆 辆幅
+// ?滍拡 氇嵏 膦呺
 //-----------------------------------------------
 typedef enum
 {
-	Model_8M_30FOV,			// 蛆阿 8M 30档
-	Model_3M_180FOV_SIDE,	// 180 3M SIDE, 
-	Model_3M_180FOV_FRONT,	// 180 3M FRONT, 
-	Model_3M_180FOV_REAR,	// 180 3M REAR
-
-	Max_ModelCount,
-}enModelType;
-
-static LPCTSTR g_szModelType[] =
-{
-	_T("8M 30 FOV"),		// 30 8M, 
-	_T("3M 180 FOV SIDE"),	// 180 3M SIDE, 
-	_T("3M 180 FOV FRONT"), // 180 3M FRONT,
-	_T("3M 180 FOV REAR"),	// 180 3M REAR
-
-	NULL
-};
-
-//-----------------------------------------------
-// 家南 辆幅
-//-----------------------------------------------
-typedef enum
-{
-	Socket_30_FOV,	// 8M 30档
-	Socket_180_FOV,	// 3M 180档	
-	Max_SocketTypeCount,
-}enSocketType;
-
-static LPCTSTR g_szSocketTypeName[] =
-{
-	_T("30 FOV Type"),	 // Socket_30_FOV,	// 8M 30档
-	_T("180 FOV Type"),	 // Socket_180_FOV,	// 3M 180档
-	nullptr
-};
-
-static LPCTSTR g_szSocketType_Initial[] =
-{
-	_T("A"),   // 30 FOV Type
-	_T("B"),   // 180 FOV Type
-	nullptr
-};
-
-//===================================================================
-#else // Trinity Line
-//===================================================================
-//-----------------------------------------------
-// 力前 葛胆 辆幅
-//-----------------------------------------------
-typedef enum
-{
-	Model_46,	// SFR 蛆阿 H
+	Model_46,	// SFR ?戧皝 H
 	Model_83,	// SFR 甏戧皝 H, V
 	Model_180,	// SFR 甏戧皝 H
 
@@ -93,11 +40,11 @@ static LPCTSTR g_szModelType[] =
 };
 
 //-----------------------------------------------
-// 家南 辆幅
+// ?岇紦 膦呺
 //-----------------------------------------------
 typedef enum 
 {
-	Socket_H, // SFR 堡阿 H, SFR 蛆阿(Narrow)
+	Socket_H,	// SFR 甏戧皝 H, SFR ?戧皝(Narrow)
 	Socket_V,	// SFR 甏戧皝 V
 	Socket_Highland,
 	Max_SocketTypeCount,
@@ -111,26 +58,14 @@ static LPCTSTR g_szSocketTypeName[] =
 	nullptr
 };
 
-static LPCTSTR g_szSocketType_Initial[] =
-{
-	_T("H"),   // H Type
-	_T("V"),   // V Type
-	_T("L"),   // Highland
-	nullptr
-};
-
-//===================================================================
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-//===================================================================
-
-// 家南 捧涝 铰牢 惑怕
+// ?岇紦 ?瀰 ?轨澑 ?來儨
 // 0: Error
 // 1: Accept
 // 2: Accpet (All Test End)
 // 3: Bypass
 
 //-----------------------------------------------
-// 家南 八荤 柳青 惑怕
+// ?岇紦 瓴�??歆勴枆 ?來儨
 //-----------------------------------------------
 typedef enum
 {
@@ -159,9 +94,8 @@ public:
 	uint8_t		nSocketType;	// Socket Type
 	CString		szComment;		// Comment
 
-	//uint8_t		m_AngleOfView;		// 堡阿 / 蛆阿
-	//uint8_t		m_nDirectionType;	// 46档 / 90档 / 180档
-
+	//uint8_t		m_AngleOfView;		// 甏戧皝 / ?戧皝
+	//uint8_t		m_nDirectionType;	// 46??/ 90??/ 180??
 	CConfig_Socket()
 	{
 		nSocketType			= 0;
@@ -216,19 +150,19 @@ public:
 		return *this;
 	};
 
-	// 家南 肮荐
+	// ?岇紦 臧?垬
 	size_t GetCount() const
 	{
 		return SocketList.size();
 	};
 
-	// 葛电 家南 昏力
+	// 氇摖 ?岇紦 ??牅
 	virtual void RemoveAll()
 	{
 		SocketList.clear();
 	};
 
-	// 家南 火涝
+	// ?岇紦 ?届瀰
 	virtual bool Socket_Insert(__in CConfig_Socket IN_stSocket)
 	{
 		auto Ret = SocketList.insert({IN_stSocket.szRFID.GetBuffer(), IN_stSocket});
@@ -236,7 +170,7 @@ public:
 		return Ret.second;
 	};
 
-	// 家南 昏力
+	// ?岇紦 ??牅
 	virtual void Socket_Remove(__in LPCTSTR szRFID)
 	{
 		if (0 < SocketList.size())
@@ -245,7 +179,7 @@ public:
 		}
 	};
 
-	// 家南 荐沥
+	// ?岇紦 ?橃爼
 	virtual void Socket_Modify(__in CConfig_Socket IN_stSocket)
 	{
 		if (0 < SocketList.size())
@@ -283,7 +217,7 @@ public:
 	};
 
 
-	// RFID肺 Socket Type 备窍扁
+	// RFID搿?Socket Type 甑晿旮?/
 	bool Get_SocketType(__in LPCTSTR IN_szRFID, __out uint8_t& OUT_nSocketType)
 	{
 		auto result = SocketList.find(IN_szRFID);

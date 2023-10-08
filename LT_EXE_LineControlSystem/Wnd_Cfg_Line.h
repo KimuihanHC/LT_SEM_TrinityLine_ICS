@@ -150,8 +150,6 @@ protected:
 	// 루프 begin -> end 구조가 정상인지 판단
 	bool	Verify_EquipmentSequence	(__in const CConfig_Line* IN_pLineInfo);
 
-
-
 public:
 
 	virtual void	OnLanguage				(__in uint8_t IN_nLanguage);

@@ -92,20 +92,20 @@ protected:
 	CString		szBarcode;
 	CString		szLotID;
 	//Add EES Port State
-	int8_t		nOperMode = -1;		// ?댁쁺紐⑤뱶
-	int8_t		nOldOperMode = -1;
+	int8_t		nOperMode = 0;		// ?댁쁺紐⑤뱶
+	int8_t		nOldOperMode = 0;
 
-	int8_t		nPortStatus = -1;		// ?ㅻ퉬 媛???곹깭
-	int8_t		nOldPortStatus = -1;
+	int8_t		nPortStatus = 0;		// ?ㅻ퉬 媛???곹깭
+	int8_t		nOldPortStatus = 0;
 
-	int8_t		nProcessStatus = -1;		// ?ㅻ퉬 媛???곹깭
-	int8_t		nOldProcessStatus = -1;
+	int8_t		nProcessStatus = 0;		// ?ㅻ퉬 媛???곹깭
+	int8_t		nOldProcessStatus = 0;
 
-	int8_t		nEquipmentStatus = -1;
-	int8_t		nOldEquipmentStatus = -1;
+	int8_t		nEquipmentStatus = 0;
+	int8_t		nOldEquipmentStatus = 0;
 
-	int8_t		nConnection = -1;
-	int8_t		nOldConnection = -1;
+	int8_t		nConnection = 0;
+	int8_t		nOldConnection = 0;
 public:
 
 	CEES_PortSubStatus& operator= (const CEES_PortSubStatus& ref)
@@ -191,18 +191,30 @@ public:
 		szLotID = IN_Data;	};
 
 	void		Set_nOperMode(int8_t	IN_Data) {
+		if (IN_Data < 0) {
+			IN_Data = 0;
+		}
 		nOperMode = IN_Data;	};
 	void		Set_nOldOperMode(int8_t	IN_Data) {
 		nOldOperMode = IN_Data;	};
 	void		Set_nPortStatus(int8_t	IN_Data) {
+		if (IN_Data < 0) {
+			IN_Data = 0;
+		}
 		nPortStatus = IN_Data;	};
 	void		Set_nOldPortStatus(int8_t	IN_Data) {
 		nOldPortStatus = IN_Data;	};
 	void		Set_nProcessStatus(int8_t	IN_Data) {
+		if (IN_Data < 0) {
+			IN_Data = 0;
+		}
 		nProcessStatus = IN_Data;	};
 	void		Set_nOldProcessStatus(int8_t	IN_Data) {
 		nOldProcessStatus = IN_Data;	};
 	void		Set_nEquipmentStatus(int8_t	IN_Data) {
+		if (IN_Data < 0) {
+			IN_Data = 0;
+		}
 		nEquipmentStatus = IN_Data;	};
 	void		Set_nOldEquipmentStatus(int8_t	IN_Data) {
 		nOldEquipmentStatus = IN_Data;	};

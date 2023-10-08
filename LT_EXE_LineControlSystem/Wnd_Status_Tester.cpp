@@ -221,42 +221,53 @@ void CWnd_Status_Tester::MoveWindow_Tester(int x, int y, int nWidth, int nHeight
 
 	iLeft = x;
 	iTop -= (m_nCtrl_Height + iSpacing);
-
-	int nBufferCount = (m_pEquipmentStatus) ? m_pEquipmentStatus->Get_BufferCount() : 1;
-	if (0 < nBufferCount)
-		m_st_Port[PtI_T_Buffer].MoveWindow(iLeft, iTop, iCvWidth, m_nCtrl_Height);
-	else
-		m_st_Port[PtI_T_Buffer].MoveWindow(0, 0, 0, 0);
+	m_st_Port[PtI_T_Buffer].MoveWindow(iLeft, iTop, iCvWidth, m_nCtrl_Height);
 
 	// 검사 존
 	int nTestCount = (m_pEquipmentStatus) ? m_pEquipmentStatus->Get_TestPortCount() : 2;
 
-	switch (nTestCount)
-	{
-	case 1:
+	if (2 == nTestCount)
 	{
 		int iStHeight = m_nCtrl_Height;
-		int iStWidth = (nWidth - 15);
+		int iStWidth = (nWidth - 15 - iSpacing) / 2;
 		iLeft = x + 15;
 
 		iTop -= (m_nCtrl_Height + iSpacing + iSpacing);
 		m_st_Port[PtI_T_Test_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
 		m_st_Port[PtI_T_Test_C].MoveWindow(0, 0, 0, 0);
-		m_st_Port[PtI_T_Test_R].MoveWindow(0, 0, 0, 0);
+		m_st_Port[PtI_T_Test_R].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
 
 		iTop -= (iStHeight - 1);
 		m_st_Zone[Zone_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
 		m_st_Zone[Zone_C].MoveWindow(0, 0, 0, 0);
-		m_st_Zone[Zone_R].MoveWindow(0, 0, 0, 0);
-	}		
-	break;
+		m_st_Zone[Zone_R].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
+	}
+	else // 3 para
+	{
+		int iStHeight = m_nCtrl_Height;
+		int iStWidth = (nWidth - 15 - iSpacing - iSpacing) / 3;
+		iLeft = x + 15;
+
+		iTop -= (m_nCtrl_Height + iSpacing + iSpacing); 		
+		m_st_Port[PtI_T_Test_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
+		m_st_Port[PtI_T_Test_C].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
+		m_st_Port[PtI_T_Test_R].MoveWindow(iLeft + (iStWidth + iSpacing) * 2, iTop, iStWidth, iStHeight);
+
+		iTop -= (iStHeight - 1);
+		m_st_Zone[Zone_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
+		m_st_Zone[Zone_C].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
+		m_st_Zone[Zone_R].MoveWindow(iLeft + (iStWidth + iSpacing) * 2, iTop, iStWidth, iStHeight);
+	}
 #if (USE_XML)
-	case 2:
+	//2023.04.27a 
+	//2023.05.25a 
+	//2023.05.26a 
+	if (2 == nTestCount)
 	{
 		iMargin = 5;
 		iSpacing = 5;
 		iLeft = x;
-		iCvWidth = nWidth / 2;
+		iCvWidth =nWidth / 2;
 
 		iTop -= (m_nCtrl_Height + iSpacing);
 		m_st_EquipMentState[PtI_T_Test_L].MoveWindow(iLeft, iTop, iCvWidth, m_nCtrl_Height);
@@ -270,11 +281,9 @@ void CWnd_Status_Tester::MoveWindow_Tester(int x, int y, int nWidth, int nHeight
 		m_st_EquipmentID[PtI_T_Test_L].MoveWindow(iLeft, iTop, iCvWidth, m_nCtrl_Height);
 		m_st_EquipmentID[PtI_T_Test_C].MoveWindow(0, 0, 0, 0);
 		m_st_EquipmentID[PtI_T_Test_R].MoveWindow(iLeft + iCvWidth, iTop, iCvWidth, m_nCtrl_Height);
-		iTop -= (m_nCtrl_Height - 1);
-		m_st_SubEqpID.MoveWindow(iLeft, iTop, nWidth, m_nCtrl_Height);
+
 	}
-	break;
-	case 3:
+	if (3 == nTestCount)
 	{
 		iMargin = 5;
 		iSpacing = 5;
@@ -283,11 +292,15 @@ void CWnd_Status_Tester::MoveWindow_Tester(int x, int y, int nWidth, int nHeight
 
 		for (auto nIdx = 0; nIdx < PtI_T_MaxCount; ++nIdx)
 		{
+			//m_st_LossCode[nIdx].SetFont_Gdip(L"Arial", 7.0F);
 			m_st_EquipMentStateDisplay[nIdx].SetFont_Gdip(L"Arial", 7.0F);
 			m_st_EquipMentState[nIdx].SetFont_Gdip(L"Arial", 7.0F);
-	}
+		}
 
 		iTop -= (m_nCtrl_Height + iSpacing);
+		//m_st_LossCode[PtI_T_Test_L].MoveWindow(iLeft, iTop, iCvWidth, m_nCtrl_Height);
+		//m_st_LossCode[PtI_T_Test_C].MoveWindow(iLeft + iCvWidth, iTop, iCvWidth, m_nCtrl_Height);
+		//m_st_LossCode[PtI_T_Test_R].MoveWindow(iLeft + (iCvWidth * 2), iTop, iCvWidth, m_nCtrl_Height);
 		m_st_EquipMentState[PtI_T_Test_L].MoveWindow(iLeft, iTop, iCvWidth, m_nCtrl_Height);
 		m_st_EquipMentState[PtI_T_Test_C].MoveWindow(iLeft + iCvWidth, iTop, iCvWidth, m_nCtrl_Height);
 		m_st_EquipMentState[PtI_T_Test_R].MoveWindow(iLeft + (iCvWidth * 2), iTop, iCvWidth, m_nCtrl_Height);
@@ -299,80 +312,11 @@ void CWnd_Status_Tester::MoveWindow_Tester(int x, int y, int nWidth, int nHeight
 		m_st_EquipmentID[PtI_T_Test_L].MoveWindow(iLeft, iTop, iCvWidth, m_nCtrl_Height);
 		m_st_EquipmentID[PtI_T_Test_C].MoveWindow(iLeft + iCvWidth, iTop, iCvWidth, m_nCtrl_Height);
 		m_st_EquipmentID[PtI_T_Test_R].MoveWindow(iLeft + (iCvWidth * 2), iTop, iCvWidth, m_nCtrl_Height);
-		iTop -= (m_nCtrl_Height - 1);
-		m_st_SubEqpID.MoveWindow(iLeft, iTop, nWidth, m_nCtrl_Height);
 	}
-	break;
-#else
-	case 2:
-	{
-		int iStHeight = m_nCtrl_Height;
-		int iStWidth = (nWidth - 15 - iSpacing) / 2;
-		iLeft = x + 15;
-		iTop -= (m_nCtrl_Height + iSpacing + iSpacing);
-		m_st_Port[PtI_T_Test_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-		m_st_Port[PtI_T_Test_C].MoveWindow(0, 0, 0, 0);
-		m_st_Port[PtI_T_Test_R].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-		iTop -= (iStHeight - 1);
-		m_st_Zone[Zone_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-		m_st_Zone[Zone_C].MoveWindow(0, 0, 0, 0);
-		m_st_Zone[Zone_R].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-	}
-	break;
-
-	case 3:
-	{
-		int iStHeight = m_nCtrl_Height;
-		int iStWidth = (nWidth - 15 - iSpacing - iSpacing) / 3;
-		iLeft = x + 15;
-
-		iTop -= (m_nCtrl_Height + iSpacing + iSpacing);
-		m_st_Port[PtI_T_Test_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-		m_st_Port[PtI_T_Test_C].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-		m_st_Port[PtI_T_Test_R].MoveWindow(iLeft + (iStWidth + iSpacing) * 2, iTop, iStWidth, iStHeight);
-		iTop -= (iStHeight - 1);
-		m_st_Zone[Zone_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-		m_st_Zone[Zone_C].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-		m_st_Zone[Zone_R].MoveWindow(iLeft + (iStWidth + iSpacing) * 2, iTop, iStWidth, iStHeight);
-	}
-	break;
-#endif
-	default:
-		break;
-	}
-
-// 	if (2 == nTestCount)
-// 	{
-// 		int iStHeight = m_nCtrl_Height;
-// 		int iStWidth = (nWidth - 15 - iSpacing) / 2;
-// 		iLeft = x + 15;
-// 
-// 		iTop -= (m_nCtrl_Height + iSpacing + iSpacing);
-// 		m_st_Port[PtI_T_Test_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-// 		m_st_Port[PtI_T_Test_C].MoveWindow(0, 0, 0, 0);
-// 		m_st_Port[PtI_T_Test_R].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-// 
-// 		iTop -= (iStHeight - 1);
-// 		m_st_Zone[Zone_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-// 		m_st_Zone[Zone_C].MoveWindow(0, 0, 0, 0);
-// 		m_st_Zone[Zone_R].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-// 	}
-// 	else // 3 para
-// 	{
-// 		int iStHeight = m_nCtrl_Height;
-// 		int iStWidth = (nWidth - 15 - iSpacing - iSpacing) / 3;
-// 		iLeft = x + 15;
-// 
-// 		iTop -= (m_nCtrl_Height + iSpacing + iSpacing);
-// 		m_st_Port[PtI_T_Test_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-// 		m_st_Port[PtI_T_Test_C].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-// 		m_st_Port[PtI_T_Test_R].MoveWindow(iLeft + (iStWidth + iSpacing) * 2, iTop, iStWidth, iStHeight);
-// 
-// 		iTop -= (iStHeight - 1);
-// 		m_st_Zone[Zone_L].MoveWindow(iLeft, iTop, iStWidth, iStHeight);
-// 		m_st_Zone[Zone_C].MoveWindow(iLeft + iStWidth + iSpacing, iTop, iStWidth, iStHeight);
-// 		m_st_Zone[Zone_R].MoveWindow(iLeft + (iStWidth + iSpacing) * 2, iTop, iStWidth, iStHeight);
-// 	}
+	iTop -= (m_nCtrl_Height - 1);
+	m_st_SubEqpID.MoveWindow(iLeft, iTop, nWidth, m_nCtrl_Height);
+#endif	//ADD_SOCKET_EES_XML
+	//	
 }
 
 //=============================================================================

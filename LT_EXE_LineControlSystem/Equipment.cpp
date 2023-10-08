@@ -12,7 +12,7 @@
 #include "Def_Equipment_Type.h"
 #include "CommonFunction.h"
 #include "RegEquipment.h"
-
+//#include "RegServer.h"
 
 CEquipment::CEquipment()
 {
@@ -53,6 +53,7 @@ CEquipment& CEquipment::operator=(const CEquipment& ref)
 
 	m_nPortStatus.clear();
 	m_nPortStatus		= ref.m_nPortStatus;
+
 	m_nConveyorStatus.clear();
 	m_nConveyorStatus	= ref.m_nConveyorStatus;
 	m_nAlarmStatus.clear();
@@ -126,8 +127,6 @@ void CEquipment::WM_Event_Equipment(__in UINT IN_nWM_Event, __in LPCTSTR IN_szRF
 		if ((nullptr != IN_szRFID) && (0 != _tcsclen(IN_szRFID)) && (m_pSocketInfo->Is_ExistSocket(IN_szRFID)))
 		{
 			::SendNotifyMessage(m_hWndOwner, IN_nWM_Event, (WPARAM)m_nEqpOrder, (LPARAM)m_pSocketInfo->GetAt(IN_szRFID).szRFID.GetBuffer());
-			// ¾²·¹µå·Î Ã³¸®ÇÏÀÚ.
-			//::SendMessage(m_hWndOwner, IN_nWM_Event, (WPARAM)m_nEqpOrder, (LPARAM)m_pSocketInfo->GetAt(IN_szRFID).szRFID.GetBuffer());
 		}
 		else
 		{
@@ -159,7 +158,7 @@ bool CEquipment::Is_ChangeShift(__in const SYSTEMTIME* IN_ptmCurrent)
 // 	SYSTEMTIME tmLocal;
 // 	GetLocalTime(&tmLocal);
 
-	// ¿ÀÀü 8½Ã SHIFT º¯°æ µÊ
+	// ?¤ì „ 8??SHIFT ë³€ê²???/
 	if ((m_tm_CheckShift.wHour < 8) && (8 <= IN_ptmCurrent->wHour))
 	{
 		bReturn = true;
@@ -175,14 +174,14 @@ bool CEquipment::Is_ChangeShift(__in const SYSTEMTIME* IN_ptmCurrent)
 	{
 		auto DiffTime = CompareSystemTime((SYSTEMTIME*)IN_ptmCurrent, &m_tm_CheckShift);
 
-		// ÇÏ·ç ÀÌ»ó Â÷ÀÌ°¡ ³ª´Â°¡??
+		// ?˜ë£¨ ?´ìƒ ì°¨ì´ê°€ ?˜ëŠ”ê°€??
 		if (86400.0f < DiffTime)
 		{
 			bReturn = true;
 		}
 	}
 
-	// Ã¼Å©½Ã°£ º¯°æ
+	// ì²´í¬?œê°„ ë³€ê²?
 	//memcpy(&m_tm_CheckShift, &tmLocal, sizeof(SYSTEMTIME));
 
 	return bReturn;
@@ -216,7 +215,7 @@ bool CEquipment::Is_ChangeShift()
 //=============================================================================
 void CEquipment::Update_SocketLocation(__in uint8_t IN_nPortIndex, __in ST_PortStatus* IN_pstPort)
 {
-	// Port »óÅÂ°¡ PtS_Exist_SocketÀ¸·Î ¹Ù²î¸é ¼ÒÄÏ Á¤º¸¸¦ °»½ÅÇÑ´Ù.
+	// Port ?íƒœê°€ PtS_Exist_Socket?¼ë¡œ ë°”ë€Œë©´ ?Œì¼“ ?•ë³´ë¥?ê°±ì‹ ?œë‹¤.
 	if (enPortStatus::PtS_Exist_Socket == IN_pstPort->nStatus)
 	{
 		if (m_pSocketInfo)
@@ -238,11 +237,6 @@ void CEquipment::Save_Equipment_Skip()
 void CEquipment::Save_Equipment_Reserve()
 {
 	m_pRegEqp->Set_Equipment_Reserve(this);
-}
-
-void CEquipment::Save_Equipment_ReserveQueue()
-{
-	m_pRegEqp->Set_Equipment_ReserveQueue(this);
 }
 
 void CEquipment::Save_Equipment_EndProduction()
@@ -299,10 +293,10 @@ uint8_t CEquipment::Check_AvablePortCnt(__in uint8_t IN_OldStatus, __in uint8_t 
 {
 	bool bCheck = false;
 
-	// Tester¸¸ »ç¿ë
+	// Testerë§??¬ìš©
 	if (Is_Tester())
 	{
-		// Æ÷Æ® Disable, Alarm Ã¼Å©
+		// ?¬íŠ¸ Disable, Alarm ì²´í¬
 		switch (IN_OldStatus)
 		{
 		case enPortStatus::PtS_Disable:
@@ -312,7 +306,7 @@ uint8_t CEquipment::Check_AvablePortCnt(__in uint8_t IN_OldStatus, __in uint8_t 
 			case enPortStatus::PtS_Empty:
 			case enPortStatus::PtS_Exist_Socket:
 			case enPortStatus::PtS_Wait_Out:
-				// Æ÷Æ® »ç¿ë ºÒ°¡ -> Æ÷Æ® »ç¿ë °¡´É »óÅÂ·Î º¯°æµÊ
+				// ?¬íŠ¸ ?¬ìš© ë¶ˆê? -> ?¬íŠ¸ ?¬ìš© ê°€???íƒœë¡?ë³€ê²½ë¨
 				bCheck = true;
 				break;
 			}
@@ -323,7 +317,7 @@ uint8_t CEquipment::Check_AvablePortCnt(__in uint8_t IN_OldStatus, __in uint8_t 
 			{
 			case enPortStatus::PtS_Disable:
 			case enPortStatus::PtS_Alarm:
-				// Æ÷Æ® »ç¿ë °¡´É -> Æ÷Æ® »ç¿ë ºÒ°¡ »óÅÂ·Î º¯°æµÊ
+				// ?¬íŠ¸ ?¬ìš© ê°€??-> ?¬íŠ¸ ?¬ìš© ë¶ˆê? ?íƒœë¡?ë³€ê²½ë¨
 				bCheck = true;
 				break;
 			}
@@ -383,27 +377,6 @@ uint8_t CEquipment::PortIndex2TestPara(uint8_t IN_nPortIndex)
 	}
 
 	return nPara;
-}
-
-uint8_t CEquipment::TestPara2PortIndex(__in uint8_t IN_nTestPara)
-{
-	uint8_t OUT_nPortIndex = PtI_T_Test_L;
-	switch (IN_nTestPara)
-	{
-	case Para_Left:
-		OUT_nPortIndex = PtI_T_Test_L;
-		break;
-
-	case Para_Right:
-		OUT_nPortIndex = PtI_T_Test_R;
-		break;
-
-	case Para_Center:
-		OUT_nPortIndex = PtI_T_Test_C;
-		break;
-	}
-
-	return OUT_nPortIndex;
 }
 
 //=============================================================================
@@ -519,8 +492,6 @@ void CEquipment::Set_PortClear(__in uint8_t IN_nPortIndex)
 	if (IN_nPortIndex < m_nPortStatus.size())
 	{
 		m_nPortStatus.at(IN_nPortIndex).nStatus = 0;
-
-		WM_Notify_Equipment(WM_EqpNotify_PortClear, (LPARAM)IN_nPortIndex);
 #if ADD_SOCKET_EES_XML
 		m_nPortStatus.at(IN_nPortIndex).nEquipmentState = 0;
 #endif
@@ -529,11 +500,10 @@ void CEquipment::Set_PortClear(__in uint8_t IN_nPortIndex)
 	}
 	else if (PtI_L_All == IN_nPortIndex)
 	{
-		// ÀüÃ¼ Port ¸®¼Â
+		// ?„ì²´ Port ë¦¬ì…‹
 		for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			m_nPortStatus.at(nIdx).nStatus = 0;
-
 #if ADD_SOCKET_EES_XML
 			m_nPortStatus.at(nIdx).nEquipmentState = 0;
 #endif
@@ -552,11 +522,6 @@ const ST_PortStatus& CEquipment::Get_PortStatus(__in uint8_t IN_nPortIndex) cons
 	return m_nPortStatus.at(IN_nPortIndex);
 }
 
-const ST_PortStatus& CEquipment::Get_PortStatus_byTestPara(__in uint8_t IN_nTestPara)
-{
-	return m_nPortStatus.at(TestPara2PortIndex(IN_nTestPara));
-}
-
 void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nStatus, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in bool IN_bSave /*= true*/)
 {
 #if (USE_XML)
@@ -566,17 +531,16 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szRfid(IN_szRFID);
 		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szBarcode(IN_szBarcode);
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL);
-		//20230920
-		//if ((IN_nStatus == PtS_RUN) ||
-		//	(IN_nStatus == PtS_STOP) ||
-		//	(IN_nStatus == PtS_IDLE)) {
-		//	return;
-		//}
+		if ((IN_nStatus == PtS_RUN) ||
+			(IN_nStatus == PtS_STOP) ||
+			(IN_nStatus == PtS_IDLE)) {
+			return;
+		}
 	}
 #endif
 	if (IN_nPortIndex < m_nPortStatus.size())
 	{
-		// ·Î´õÀÇ ¹öÆÛ3ÀÇ »óÅÂ°¡ ¾øÀ½->ÀÖÀ½À¸·Î ¹Ù²î¸é ¹èÃâ ½ÂÀÎ ÀÌº¥Æ® Ã³¸®
+		// ë¡œë”??ë²„í¼3???íƒœê°€ ?†ìŒ->?ˆìŒ?¼ë¡œ ë°”ë€Œë©´ ë°°ì¶œ ?¹ì¸ ?´ë²¤??ì²˜ë¦¬
 		//WM_Event_Equipment(WM_EVENT_EQUIPMENT_PORT_STATUS, IN_szRFID);
 		if (Is_Loader())
 		{
@@ -591,14 +555,13 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			}
 
 			WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
-
-			// ·Î´õÀÇ ¹öÆÛ3ÀÇ »óÅÂ°¡ ¾øÀ½->ÀÖÀ½À¸·Î ¹Ù²î¸é ¹èÃâ ½ÂÀÎ ÀÌº¥Æ® Ã³¸®
+			// ë¡œë”??ë²„í¼3???íƒœê°€ ?†ìŒ->?ˆìŒ?¼ë¡œ ë°”ë€Œë©´ ë°°ì¶œ ?¹ì¸ ?´ë²¤??ì²˜ë¦¬
 			if (PtI_L_Buffer_3 == IN_nPortIndex)
 			{
 				if ((enPortStatus::PtS_Empty == nOld_PortStatus) &&
 					(enPortStatus::PtS_Exist_Socket == IN_nStatus))
 				{
-					// RFID Á¤º¸°¡ ¾øÀ¸¸é ¿À·ù
+					// RFID ?•ë³´ê°€ ?†ìœ¼ë©??¤ë¥˜
 					WM_Event_Equipment(WM_EVENT_LOADER_CHEKCK_TRACKOUT, IN_szRFID);
 				}
 			}
@@ -617,7 +580,7 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
 			WM_Event_Equipment(WM_EVENT_EQUIPMENT_PORT_STATUS, (LPARAM)IN_nPortIndex);
 
-			// TesterÀÇ L/R ÆÄ¶ó¿¡ ¼ÒÄÏÀÌ ÅõÀÔµÇ¸é ½Ã°£ Ã¼Å©ÇÑ´Ù.
+			// Tester??L/R ?Œë¼???Œì¼“???¬ì…?˜ë©´ ?œê°„ ì²´í¬?œë‹¤.
 			if ((PtS_Exist_Socket == IN_nStatus) && 
 				((PtI_T_Test_L == IN_nPortIndex) || (PtI_T_Test_R == IN_nPortIndex) || (PtI_T_Test_C == IN_nPortIndex)))
 			{
@@ -639,18 +602,18 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 				Save_Equipment_Port(IN_nPortIndex);
 			}
 
-
-			WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
+			
+			//WM_Notify_Equipment(WM_EqpNotify_PortStatus, MAKELPARAM(IN_nPortIndex, IN_nStatus));
 		}
 
-		// ¼ÒÄÏ Á¤º¸ °»½Å (RFIDÁ¤º¸°¡ ¾øÀ¸¸é, ¿À·ù)
+		//2023.04.25a
+		// ?Œì¼“ ?•ë³´ ê°±ì‹  (RFID?•ë³´ê°€ ?†ìœ¼ë©? ?¤ë¥˜)
 		Update_SocketLocation(IN_nPortIndex, &m_nPortStatus.at(IN_nPortIndex));
 	}
-	//else if (IN_nPortIndex == m_nPortStatus.size()) // 99·Î º¯°æ
-	else if (PtI_T_All == IN_nPortIndex) // 99·Î º¯°æ
+	//else if (IN_nPortIndex == m_nPortStatus.size()) // 99ë¡?ë³€ê²?
+	else if (PtI_T_All == IN_nPortIndex) // 99ë¡?ë³€ê²?/
 	{
-		// ÀüÃ¼ Port ¼³Á¤
-
+		// ?„ì²´ Port ?¤ì •//
 		// 
 	}
 }
@@ -755,7 +718,7 @@ void CEquipment::Set_Yield_Day(CYield_Equipment * IN_pYield)
 {
 	m_Yield_Day = *IN_pYield;
 
-	// GUI¿¡ Ç¥½Ã
+	// GUI???œì‹œ
 	WM_Notify_Equipment(WM_EqpNotify_Yield, (LPARAM)&m_Yield_Day);
 }
 
@@ -763,7 +726,7 @@ void CEquipment::Set_Yield_Cumulative(CYield_Equipment * IN_pYield)
 {
 	m_Yield_Cumulative = *IN_pYield;
 
-	// GUI¿¡ Ç¥½Ã
+	// GUI???œì‹œ
 
 }
 
@@ -789,8 +752,8 @@ void CEquipment::Reset_Yield_Cumulative()
 
 void CEquipment::Increase_Yield_Pass(__in uint8_t IN_nPara)
 {
-	// ½ÃÇÁÆ® Ã¼Å©
-	// ¿ÀÀü 8½Ã ÀÌÀü -> ¿ÀÀü 8½Ã ÀÌÈÄÀÌ¸é ¼öÀ² ÃÊ±âÈ­
+	// ?œí”„??ì²´í¬
+	// ?¤ì „ 8???´ì „ -> ?¤ì „ 8???´í›„?´ë©´ ?˜ìœ¨ ì´ˆê¸°??
 
 	m_Yield_Day.IncreasePass(IN_nPara);
 	m_Yield_Cumulative.IncreasePass(IN_nPara);
@@ -802,8 +765,8 @@ void CEquipment::Increase_Yield_Pass(__in uint8_t IN_nPara)
 
 void CEquipment::Increase_Yield_Fail(__in uint8_t IN_nPara)
 {
-	// ½ÃÇÁÆ® Ã¼Å©
-	// ¿ÀÀü 8½Ã ÀÌÀü -> ¿ÀÀü 8½Ã ÀÌÈÄÀÌ¸é ¼öÀ² ÃÊ±âÈ­
+	// ?œí”„??ì²´í¬
+	// ?¤ì „ 8???´ì „ -> ?¤ì „ 8???´í›„?´ë©´ ?˜ìœ¨ ì´ˆê¸°??
 
 	m_Yield_Day.IncreaseFail(IN_nPara);
 	m_Yield_Cumulative.IncreaseFail(IN_nPara);
@@ -843,7 +806,6 @@ uint8_t CEquipment::Get_ClientConnection() const
 {
 	return m_nConnection;
 }
-
 void CEquipment::Set_ClientConnection(__in uint8_t IN_nConStatus)
 {
 	m_nConnection = IN_nConStatus;
@@ -876,7 +838,6 @@ void CEquipment::Set_ClientConnection(__in uint8_t IN_nConStatus)
 // Qualifier	: const
 // Last Update	: 2022/1/13 - 19:52
 // Desc.		:
-//=============================================================================
 bool CEquipment::Get_VerifyEqpConnection() const
 {
 	return m_bVerifyID;
@@ -952,13 +913,13 @@ void CEquipment::Set_ProcessStatus(__in uint8_t IN_nStatus, __in uint32_t IN_nAl
 	uint8_t Old_Status	= m_nProcessStatus;
 	m_nProcessStatus	= IN_nStatus;
 
-	// ¾Ë¶÷ ´©Àû(????)
+	// ?ŒëŒ ?„ì (????)
 	//m_nAlarmCode	= IN_nAlarmCode;
 	//m_szAlarmInfo	= IN_szAlarmInfo;
 
 	WM_Notify_Equipment(WM_EqpNotify_ProcessStatus, (LPARAM)m_nProcessStatus);
 
-	// Á¤»ó => Alarm
+	// ?•ìƒ => Alarm
 	if (enEqpProcessStatus::EPC_Alarm == IN_nStatus)
 	{
 		ST_AlarmStatus stAlarm;
@@ -977,7 +938,7 @@ void CEquipment::Set_ProcessStatus(__in uint8_t IN_nStatus, __in uint32_t IN_nAl
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_ALARM, (LPARAM)m_nProcessStatus); // alarm on
 
 	}
-	// Alarm => Á¤»ó
+	// Alarm => ?•ìƒ
 	else if ((enEqpProcessStatus::EPC_Alarm == Old_Status) && (enEqpProcessStatus::EPC_Alarm != IN_nStatus))
 	{
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_ALARM, (LPARAM)m_nProcessStatus); // alarm off
@@ -1017,7 +978,6 @@ std::vector<ST_AlarmStatus>& CEquipment::Get_AlarmStatus()
 {
 	return m_nAlarmStatus;
 }
-
 const ST_AlarmStatus & CEquipment::Get_AlarmStatus(uint32_t IN_nIndex) const
 {
 	return m_nAlarmStatus.at(IN_nIndex);
@@ -1094,21 +1054,6 @@ void CEquipment::Set_TimeSync(__in bool IN_bTimeSync)
 }
 
 //=============================================================================
-// Method		: Reset_ReservedPortInfo
-// Access		: public  
-// Returns		: void
-// Qualifier	:
-// Last Update	: 2023/2/27 - 19:51
-// Desc.		:
-//=============================================================================
-void CEquipment::Reset_ReservedPortInfo()
-{
-	m_vReservePort.clear();
-	Set_ReservedOverCnt(0);
-	Set_ReservedPortCnt(0);
-}
-
-//=============================================================================
 // Method		: Get_ReservedPortCnt
 // Access		: public  
 // Returns		: uint8_t
@@ -1125,7 +1070,7 @@ void CEquipment::Set_ReservedPortCnt(uint8_t IN_nCount, __in bool IN_bSave /*= t
 {
 	m_nReservedPortCnt = IN_nCount;
 
-	//·¹Áö½ºÆ®¸®¿¡ ÀúÀå
+	//?ˆì??¤íŠ¸ë¦¬ì— ?€??
 	if (IN_bSave)
 	{
 		Save_Equipment_Reserve();
@@ -1138,81 +1083,25 @@ void CEquipment::Set_ReservedPortCnt(uint8_t IN_nCount, __in bool IN_bSave /*= t
 // Returns		: bool
 // Qualifier	:
 // Last Update	: 2022/5/12 - 15:06
-// Desc.		: ¼ÒÄÏ ÅõÀÔ ¿¹¾à (Å×½ºÅÍ only)
+// Desc.		: ?Œì¼“ ?¬ì… ?ˆì•½ (?ŒìŠ¤??only)
 //=============================================================================
 bool CEquipment::Increase_ReservedPort()
 {
 	bool bReturn = false;
 	if (Is_Tester())
 	{
-		// ¿¹¾à °¡´ÉÇÏ¸é Áõ°¡ÇÑ´Ù. (m_nAvablePortCnt - Get_UsingPortCount())
+		// ?ˆì•½ ê°€?¥í•˜ë©?ì¦ê??œë‹¤. (m_nAvablePortCnt - Get_UsingPortCount())
 		if (m_nReservedPortCnt < m_nAvablePortCnt)
 		{
 			++m_nReservedPortCnt;
 
 			bReturn = true;
 		}
-		else // ¿¹¾à ºÒ°¡´É ÇÏ¸é..
+		else // ?ˆì•½ ë¶ˆê????˜ë©´..
 		{
 			++m_nReservedOvered;
 		}
 
-		Save_Equipment_Reserve();
-	}
-
-	return bReturn;
-}
-
-bool CEquipment::Increase_ReservedPort(__in LPCTSTR IN_szRFID)
-{
-	bool bReturn = false;
-	if (Is_Tester())
-	{
-		// ¿¹¾àµÈ ¼ÒÄÏµé Ã¼Å©
-		uint8_t nRemovedCnt = Check_ReservedSocket();
-
-		// queue¿¡¼­ rfid °Ë»ö..  ÀÖÀ¸¸é ±âÁ¸°Å Á¦°ÅÇÏ°í »õ·Î Ãß°¡
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			if (0 == (*nIter).szRfid.Compare(IN_szRFID))
-			{
-				CString szText;
-				szText.Format(_T("[eqp %02d] (%s) : Removing reserved sockets due to duplicate RFIDs. => rfid: %s"),
-					m_nEqpOrder,
-					_T(__FUNCTION__),
-					(*nIter).szRfid);
-				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-				// Á¦°Å
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				++nIter;
-			}
-		}
-
-		// ¿¹¾à Á¤º¸ Ãß°¡
-		ST_ReservedSocket socket;
-		socket.szRfid = IN_szRFID;
-		GetLocalTime(&socket.time);
-		m_vReservePort.push_back(socket);
-
-		// ¿¹¾à Æ÷Æ® °¹¼ö ±¸ÇÏ±â
-		m_nReservedPortCnt = static_cast<uint8_t>(m_vReservePort.size());
-		if (m_nAvablePortCnt < m_nReservedPortCnt)
-		{
-			m_nReservedOvered = m_nReservedPortCnt - m_nAvablePortCnt;
-			m_nReservedPortCnt = m_nAvablePortCnt;
-		}
-		else
-		{
-			bReturn = true;
-		}
-
-		//Save_Equipment_ReserveQueue();
 		Save_Equipment_Reserve();
 	}
 
@@ -1236,50 +1125,6 @@ void CEquipment::Decrease_ReservedPort()
 	}
 }
 
-
-void CEquipment::Decrease_ReservedPort(__in LPCTSTR IN_szRFID)
-{
-	if (Is_Tester())
-	{
-		// ¿¹¾àµÈ ¼ÒÄÏµé Ã¼Å©
-		uint8_t nRemovedCnt = Check_ReservedSocket();
-
-		// queue¿¡¼­ rfid °Ë»ö..  ÀÖÀ¸¸é ±âÁ¸°Å Á¦°Å
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			if (0 == (*nIter).szRfid.Compare(IN_szRFID))
-			{
-				// 				CString szText;
-				// 				szText.Format(_T("[eqp %02d] (%s) : Remove reserved sockets. => rfid: %s"),
-				// 								m_nEqpOrder,
-				// 								_T(__FUNCTION__),
-				// 								(*nIter).szRfid);
-				// 				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-								// Á¦°Å
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				++nIter;
-			}
-		}
-
-		// ¿¹¾à Æ÷Æ® °¹¼ö ±¸ÇÏ±â
-		m_nReservedPortCnt = static_cast<uint8_t>(m_vReservePort.size());
-		if (m_nAvablePortCnt < m_nReservedPortCnt)
-		{
-			m_nReservedOvered = m_nReservedPortCnt - m_nAvablePortCnt;
-			m_nReservedPortCnt = m_nAvablePortCnt;
-		}
-
-		//Save_Equipment_ReserveQueue();
-		Save_Equipment_Reserve();
-	}
-}
-
 //=============================================================================
 // Method		: Get_ReservedOverCnt
 // Access		: public  
@@ -1299,95 +1144,6 @@ void CEquipment::Set_ReservedOverCnt(__in uint8_t IN_nCount)
 }
 
 //=============================================================================
-// Method		: Check_ReservedSocket
-// Access		: public  
-// Returns		: uint8_t
-// Qualifier	:
-// Last Update	: 2023/2/27 - 19:58
-// Desc.		: ¿¹¾àµÈ ¼ÒÄÏ Ã¼Å©
-//=============================================================================
-uint8_t CEquipment::Check_ReservedSocket()
-{
-	uint8_t nRemovedCnt = 0;
-
-	if (Is_Tester())
-	{
-		// 1. ¿¹¾àµÈ ½Ã°£ÀÌ ¿À·¡µÇ¾úÀ¸¸é Á¦°Å (Áß°£¿¡ ¶óÀÎ ¸ØÃá°Å °í·Á ÇØ¾ßÇÔ. ¿À·¡µÈ°ÍÀº Áß°£¿¡ ¼ÒÄÏ Á¦°Å·Î ÆÇ´Ü)
-		SYSTEMTIME tmLocal;
-		GetLocalTime(&tmLocal);
-
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			// ½Ã°£ ºñ±³ (¼³Á¤µÈ ½Ã°£ º¸´Ù Â÷ÀÌ°¡ Å©¸é »èÁ¦)
-			auto tmDiffer = abs(CompareSystemTime(&tmLocal, &(*nIter).time));
-
-			if (m_dReservedTimeoutSec <= tmDiffer)
-			{
-				CString szText;
-				szText.Format(_T("[eqp %02d] (%s) : Removed sockets reserved to time out => rfid: %s, time: %02d:%02d:%02d"),
-					m_nEqpOrder,
-					_T(__FUNCTION__),
-					(*nIter).szRfid,
-					(*nIter).time.wHour,
-					(*nIter).time.wMinute,
-					(*nIter).time.wSecond);
-				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-				// Á¦°Å			
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				//++nIter;
-				break;
-			}
-		}
-
-		// 2. ¿¹¾àµÈ RFIDÀÇ "Å¸°Ù"ÀÌ ÇöÀç ¼³ºñ°¡ ¾Æ´Ï¸é Á¦°Å (Áß°£¿¡ ºüÁ³´Ù ÀçÅõÀÔÀ¸·Î ÆÇ´Ü)
-		for (auto nIter = m_vReservePort.begin(); nIter != m_vReservePort.end(); )
-		{
-			auto socket = m_pSocketInfo->GetAt((*nIter).szRfid);
-			if (Get_EqpOrder() != socket.m_nTargetEqpOrder)
-			{
-				CString szText;
-				szText.Format(_T("[eqp %02d] (%s) : Remove the reserved socket because the socket's destination has changed. => rfid: %s, target eqp: %02d"),
-					m_nEqpOrder,
-					_T(__FUNCTION__),
-					(*nIter).szRfid,
-					socket.m_nTargetEqpOrder);
-				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-				// Á¦°Å
-				nIter = m_vReservePort.erase(nIter);
-
-				++nRemovedCnt;
-			}
-			else
-			{
-				++nIter;
-			}
-		}
-	}
-
-	return nRemovedCnt;
-}
-
-//=============================================================================
-// Method		: Get_ReservedInfo
-// Access		: public  
-// Returns		: std::vector<ST_ReservedSocket>&
-// Qualifier	:
-// Last Update	: 2023/2/27 - 19:58
-// Desc.		:
-//=============================================================================
-std::vector<ST_ReservedSocket>& CEquipment::Get_ReservedInfo()
-{
-	return m_vReservePort;
-}
-
-//=============================================================================
 // Method		: Get_CheckShiftTime
 // Access		: public  
 // Returns		: const SYSTEMTIME &
@@ -1404,7 +1160,7 @@ void CEquipment::Set_CheckShiftTime(SYSTEMTIME* IN_ptmCheck, bool IN_bSave /*= t
 {
 	memcpy(&m_tm_CheckShift, IN_ptmCheck, sizeof(SYSTEMTIME));
 
-	//·¹Áö½ºÆ®¸®¿¡ ÀúÀå
+	//?ˆì??¤íŠ¸ë¦¬ì— ?€??
 	if (IN_bSave)
 	{
 		Save_Equipment_Shift();
@@ -1438,7 +1194,7 @@ bool CEquipment::IsAlarm()
 // Parameter	: __in bool bIgnore_EmptySocket
 // Qualifier	:
 // Last Update	: 2022/2/19 - 16:50
-// Desc.		: ¼³ºñ¿¡ ¼ÒÄÏÀÇ Á¸Àç À¯/¹« ÆÇ´Ü
+// Desc.		: ?¤ë¹„???Œì¼“??ì¡´ì¬ ??ë¬??ë‹¨
 //=============================================================================
 bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 {
@@ -1451,13 +1207,13 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		nEndIdx		= enPortIndex_Loader::PtI_L_Buffer_3 + 1;
 	}
 
-	// Æ÷Æ®°¡ ºñ¾î ÀÖ³ª?
+	// ?¬íŠ¸ê°€ ë¹„ì–´ ?ˆë‚˜?
 	for (auto nIdx = nStartIdx; nIdx < nEndIdx; ++nIdx)
 	{
-		// PtS_Exist_Socket,	// 1 : Á¦Ç° ÀÖÀ½
-		// PtS_Wait_Out,		// 2 : ¹èÃâ´ë±â
+		// PtS_Exist_Socket,	// 1 : ?œí’ˆ ?ˆìŒ	
+		// PtS_Wait_Out,		// 2 : ë°°ì¶œ?€ê¸?
 
-		// Æ÷Æ®¿¡ ¼ÒÄÏ À¯/¹« ÆÇ´Ü
+		// ?¬íŠ¸???Œì¼“ ??ë¬??ë‹¨
 		switch (m_nPortStatus.at(nIdx).nStatus)
 		{
 		case PtS_Empty:
@@ -1469,7 +1225,7 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		{
 			if (bIgnore_EmptySocket)
 			{
-				// ¼ÒÄÏÀÌ Á¦Ç°ÀÌ ¾ø´Â ºó ¼ÒÄÏÀÎ°¡?
+				// ?Œì¼“???œí’ˆ???†ëŠ” ë¹??Œì¼“?¸ê??
 				if (false == m_nPortStatus.at(nIdx).szBarcode.IsEmpty())
 				{
 					return false;
@@ -1490,7 +1246,7 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		break;
 
 		case PtS_Alarm:
-			// ¾Ë¶÷ »óÅÂ¿¡¼­´Â ¼ÒÄÏ À¯/¹« ÆÇ´ÜÀ» ¾î¶»°Ô ÇØ¾ß ÇÏ´Â°¡??????
+			// ?ŒëŒ ?íƒœ?ì„œ???Œì¼“ ??ë¬??ë‹¨???´ë–»ê²??´ì•¼ ?˜ëŠ”ê°€??????
 			break;
 
 		default:
@@ -1498,10 +1254,10 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 		}
 	}
 
-	// ÄÁº£ÀÌ¾î°¡ ºñ¾î ÀÖ³ª?
+	// ì»¨ë² ?´ì–´ê°€ ë¹„ì–´ ?ˆë‚˜?
 	for (auto nIdx = 0; nIdx < m_nConveyorStatus.size(); ++nIdx)
 	{
-		// ÄÁº£ÀÌ¾îÀ§¿¡ ¼ÒÄÏ À¯/¹« ÆÇ´Ü
+		// ì»¨ë² ?´ì–´?„ì— ?Œì¼“ ??ë¬??ë‹¨
 		if (enConveyorStatus_Exist::CoSE_Exist == m_nConveyorStatus.at(nIdx).nExistSocket)
 		{
 			if (bIgnore_EmptySocket)
@@ -1528,56 +1284,6 @@ bool CEquipment::IsEmpty_Equipment(__in bool bIgnore_EmptySocket /*= true*/)
 	return true;
 }
 
-bool CEquipment::IsEmpty_Equipment_AnySocket()
-{
-	auto nStartIdx = 0;
-	auto nEndIdx = m_nPortStatus.size();
-
-	// 	if (Is_Loader())
-	// 	{
-	// 		nStartIdx = enPortIndex_Loader::PtI_L_RFID;
-	// 		nEndIdx = enPortIndex_Loader::PtI_L_Buffer_3 + 1;
-	// 	}
-
-		// Æ÷Æ®°¡ ºñ¾î ÀÖ³ª?
-	for (auto nIdx = nStartIdx; nIdx < nEndIdx; ++nIdx)
-	{
-		// Æ÷Æ®¿¡ ¼ÒÄÏ À¯/¹« ÆÇ´Ü
-		switch (m_nPortStatus.at(nIdx).nStatus)
-		{
-		case PtS_Empty:
-		case PtS_Disable:
-			break;
-
-		case PtS_Exist_Socket:
-		case PtS_Wait_Out:
-		{
-			return false;
-		}
-		break;
-
-		case PtS_Alarm:
-			// ¾Ë¶÷ »óÅÂ¿¡¼­´Â ¼ÒÄÏ À¯/¹« ÆÇ´ÜÀ» ¾î¶»°Ô ÇØ¾ß ÇÏ´Â°¡??????
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	// ÄÁº£ÀÌ¾î°¡ ºñ¾î ÀÖ³ª?
-	for (auto nIdx = 0; nIdx < m_nConveyorStatus.size(); ++nIdx)
-	{
-		// ÄÁº£ÀÌ¾îÀ§¿¡ ¼ÒÄÏ À¯/¹« ÆÇ´Ü
-		if (enConveyorStatus_Exist::CoSE_Exist == m_nConveyorStatus.at(nIdx).nExistSocket)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
 //=============================================================================
 // Method		: IsLastSocket_onTestPort
 // Access		: public  
@@ -1592,7 +1298,7 @@ bool CEquipment::IsLastSocket_onTestPort()
 
 	if (Is_Tester())
 	{
-		// °Ë»ç ÁßÀÌ°Å³ª ´ë±â ÁßÀÎ Á¦Ç° Ä«¿îÆ®
+		// ê²€??ì¤‘ì´ê±°ë‚˜ ?€ê¸?ì¤‘ì¸ ?œí’ˆ ì¹´ìš´??/
 		uint8_t nTestCount = 0;
 
 		if ((PtS_Exist_Socket == m_nPortStatus.at(enPortIndex_Tester::PtI_T_RFID).nStatus) ||
@@ -1601,11 +1307,11 @@ bool CEquipment::IsLastSocket_onTestPort()
 			return false;
 		}
 
-		// Æ÷Æ®°¡ ºñ¾î ÀÖ³ª?
+		// ?¬íŠ¸ê°€ ë¹„ì–´ ?ˆë‚˜?
 		//for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx <= enPortIndex_Tester::PtI_T_Test_R; ++nIdx)
 		for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
-			// Æ÷Æ®¿¡ ¼ÒÄÏ À¯/¹« ÆÇ´Ü
+			// ?¬íŠ¸???Œì¼“ ??ë¬??ë‹¨
 			switch (m_nPortStatus.at(nIdx).nStatus)
 			{
 			case PtS_Exist_Socket:
@@ -1631,21 +1337,19 @@ bool CEquipment::IsLastSocket_onTestPort()
 // Method		: Get_EmptyPortCount
 // Access		: virtual public  
 // Returns		: uint8_t
-// Parameter	: __in bool bOnlyTestPort
+// Parameter	: __in bool bCount_EmptySocket
 // Qualifier	:
 // Last Update	: 2022/2/19 - 14:22
 // Desc.		:
 //=============================================================================
-uint8_t CEquipment::Get_EmptyPortCount(__in bool bOnlyTestPort /*= false*/)
+uint8_t CEquipment::Get_EmptyPortCount(__in bool bCount_EmptySocket /*= true*/)
 {
 	uint8_t nCount = 0;
 
 	if (Is_Tester())
 	{
-		uint8_t nStartPort = bOnlyTestPort ? enPortIndex_Tester::PtI_T_Test_L : enPortIndex_Tester::PtI_T_Buffer;
-
-		//for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
-		for (uint8_t nIdx = nStartPort; nIdx < m_nPortStatus.size(); ++nIdx)
+		//for (uint8_t nIdx = PtI_T_Buffer; nIdx <= PtI_T_Test_R; ++nIdx)
+		for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			if (enPortStatus::PtS_Empty == m_nPortStatus.at(nIdx).nStatus)
 			{
@@ -1653,18 +1357,18 @@ uint8_t CEquipment::Get_EmptyPortCount(__in bool bOnlyTestPort /*= false*/)
 			}
 		}
 
-		// PtI_T_RFID : Ä«¿îÆ® ÇÏÁö ¾ÊÀ½ (°Ë»ç¿Í °ü·ÃµÈ Port¸¸ Ã¼Å©)
+		// PtI_T_RFID : ì¹´ìš´???˜ì? ?ŠìŒ (ê²€?¬ì? ê´€?¨ëœ Portë§?ì²´í¬)
 
-		// »ç¿ë ¿¹¾à ÁßÀÎ°¡?
+		// ?¬ìš© ?ˆì•½ ì¤‘ì¸ê°€?
 		if (0 < m_nReservedPortCnt)
 		{
-			// ½ÇÁ¦ ºñ¾îÀÖ´Â Æ÷Æ®¿¡¼­ ¿¹¾àµÈ Æ÷Æ® °¹¼ö¸¦ Á¦¿ÜÇÑ´Ù.
+			// ?¤ì œ ë¹„ì–´?ˆëŠ” ?¬íŠ¸?ì„œ ?ˆì•½???¬íŠ¸ ê°?ˆ˜ë¥??œì™¸?œë‹¤.
 			nCount = (m_nReservedPortCnt < nCount) ? (nCount - m_nReservedPortCnt) : 0;
 		}
 	}
-	else if (Is_Returner()) // ¿¹¾à ¾øÀ½
+	else if (Is_Returner()) // ?ˆì•½ ?†ìŒ
 	{
-		// ¹öÆÛ1, È¯½Â, ¹öÆÛ2
+		// ë²„í¼1, ?˜ìŠ¹, ë²„í¼2
 		for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			if (enPortStatus::PtS_Empty == m_nPortStatus.at(nIdx).nStatus)
@@ -1673,7 +1377,7 @@ uint8_t CEquipment::Get_EmptyPortCount(__in bool bOnlyTestPort /*= false*/)
 			}
 		}
 	}
-	else // ¿¹¾à ¾øÀ½, Ã¼Å© ÇÊ¿ä ¾øÀ½
+	else // ?ˆì•½ ?†ìŒ, ì²´í¬ ?„ìš” ?†ìŒ
 	{
 
 	}
@@ -1703,7 +1407,7 @@ uint8_t CEquipment::Get_EmptyConveyorCount()
 			}
 		}
 	}
-	else if (Is_Returner()) // ¿¹¾à ¾øÀ½
+	else if (Is_Returner()) // ?ˆì•½ ?†ìŒ
 	{
 		for (auto nIdx = 0; nIdx < m_nConveyorStatus.size(); ++nIdx)
 		{
@@ -1731,9 +1435,9 @@ uint8_t CEquipment::Get_UsingPortCount()
 			}
 		}
 	}
-	else if (Is_Returner()) // ¿¹¾à ¾øÀ½
+	else if (Is_Returner()) // ?ˆì•½ ?†ìŒ
 	{
-		// ¹öÆÛ1, È¯½Â, ¹öÆÛ2
+		// ë²„í¼1, ?˜ìŠ¹, ë²„í¼2
 		for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
 			if (enPortStatus::PtS_Exist_Socket == m_nPortStatus.at(nIdx).nStatus)
@@ -1742,7 +1446,7 @@ uint8_t CEquipment::Get_UsingPortCount()
 			}
 		}
 	}
-	else // ¿¹¾à ¾øÀ½, Ã¼Å© ÇÊ¿ä ¾øÀ½
+	else // ?ˆì•½ ?†ìŒ, ì²´í¬ ?„ìš” ?†ìŒ
 	{
 
 	}
@@ -1843,7 +1547,7 @@ uint8_t CEquipment::Get_WaitOutCount()
 //=============================================================================
 uint8_t CEquipment::Get_SocketCount()
 {
-	// ¼³ºñ ³»¿¡ Á¸ÀçÇÏ´Â ¼ÒÄÏ °¹¼ö
+	// ?¤ë¹„ ?´ì— ì¡´ì¬?˜ëŠ” ?Œì¼“ ê°?ˆ˜
 	uint8_t nCount = 0;
 
 	for (auto nIdx = 0; nIdx < m_nPortStatus.size(); ++nIdx)
@@ -1867,7 +1571,7 @@ uint8_t CEquipment::Get_SocketCount()
 
 uint8_t CEquipment::Get_ProductCount()
 {
-	// ¼³ºñ ³»¿¡ Á¸ÀçÇÏ´Â Á¦Ç°ÀÌ ½Ç¸° ¼ÒÄÏ °¹¼ö
+	// ?¤ë¹„ ?´ì— ì¡´ì¬?˜ëŠ” ?œí’ˆ???¤ë¦° ?Œì¼“ ê°?ˆ˜
 	uint8_t nRetCount = 0;
 
 	auto nStartIdx	= 0;
@@ -1926,20 +1630,20 @@ bool CEquipment::Check_EndProduction()
 // Method		: Get_InputAvailabilityStatus
 // Access		: virtual public  
 // Returns		: uint8_t
-// 					-> IAS_NoInput,		// ÀüÃ¼ »ç¿ë ºÒ°¡	
-// 					-> IAS_Bypass,		// Bypass °¡´É
-// 					-> IAS_Test,		// °Ë»ç °¡´É	
+// 					-> IAS_NoInput,		// ?„ì²´ ?¬ìš© ë¶ˆê?	
+// 					-> IAS_Bypass,		// Bypass ê°€??
+// 					-> IAS_Test,		// ê²€??ê°€??
 // Qualifier	:
 // Last Update	: 2022/2/14 - 16:00
 // Desc.		:
 //=============================================================================
 uint8_t CEquipment::Get_InputAvailabilityStatus()
 {
-	// °Ë»ç ¼³ºñ ?
+	// ê²€???¤ë¹„ ?
 	if (Is_Tester())
 	{
 		//-----------------------------------------------------------
-		// ¼³ºñ ¾Ë¶÷ ?
+		// ?¤ë¹„ ?ŒëŒ ?
 		if (IsAlarm())
 		{
 			TRACE(_T("[eqp %02d] Get_InputAvailabilityStatus() => Alarm \n"), m_nEqpOrder);
@@ -1947,7 +1651,7 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 		}
 
 		//-----------------------------------------------------------
-		// ¼³ºñ ¾Ë¶÷ ?
+		// ì»¨ë² ?´ì–´ ?íƒœ ì²´í¬??
 		if ((enConveyorStatus::CoS_Stop == m_nConveyorStatus.at(CvI_T_Test).nStatus) &&
 			(enConveyorStatus_Exist::CoSE_Exist == m_nConveyorStatus.at(CvI_T_Test).nExistSocket)) // 0: Empty, 1: Exist
 		{
@@ -1956,15 +1660,15 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 		}
 
 		//-----------------------------------------------------------
-		// ¼³ºñ Skip ?
+		// ?¤ë¹„ Skip ?//
 		if (Get_Skip())
 		{
 			return enInputAvailabilityStatus::IAS_Bypass;
 		}
 
 		//-----------------------------------------------------------
-		// Æ÷Æ® Ã¼Å© (PtI_T_RFID, PtI_T_Buffer, PtI_T_Test_L, PtI_T_Test_R)
-		// °Ë»ç ÆÄ¶ó ¹× ¹öÆÛ ÅõÀÔ °¡´É
+		// ?¬íŠ¸ ì²´í¬ (PtI_T_RFID, PtI_T_Buffer, PtI_T_Test_L, PtI_T_Test_R)
+		// ê²€???Œë¼ ë°?ë²„í¼ ?¬ì… ê°€??/
 		bool bEmpty = false;
 		for (uint8_t nIdx = enPortIndex_Tester::PtI_T_Buffer; nIdx < m_nPortStatus.size(); ++nIdx)
 		{
@@ -1980,7 +1684,7 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 			(enPortStatus::PtS_Empty == m_nPortStatus.at(PtI_T_Buffer).nStatus))*/
 		if (bEmpty)
 		{
-			// »ç¿ë ¿¹¾à ÁßÀÎ°¡?
+			// ?¬ìš© ?ˆì•½ ì¤‘ì¸ê°€?
 			if (0 < Get_EmptyPortCount())
 			{
 				TRACE(_T("[eqp %02d] Get_InputAvailabilityStatus() => testable \n"), m_nEqpOrder);
@@ -1999,14 +1703,14 @@ uint8_t CEquipment::Get_InputAvailabilityStatus()
 	}
 	else if (Is_Returner())
 	{
-		// ¹öÆÛ1, È¯½Â, ¹öÆÛ2 (¹öÆÛ 1ÀÌ ºñ¾î ÀÖÀ¸¸é ÅõÀÔ °¡´É)
+		// ë²„í¼1, ?˜ìŠ¹, ë²„í¼2 (ë²„í¼ 1??ë¹„ì–´ ?ˆìœ¼ë©??¬ì… ê°€??
 		if (0 < Get_EmptyPortCount())
 		{
 			TRACE(_T("[returner] Get_InputAvailabilityStatus() => bypass \n"), m_nEqpOrder);
 			return enInputAvailabilityStatus::IAS_Test;
 		}
 	}
-	else // ·Î´õ : Ã¼Å© ÇÊ¿ä ¾øÀ½
+	else // ë¡œë” : ì²´í¬ ?„ìš” ?†ìŒ
 	{		
 		return enInputAvailabilityStatus::IAS_Test;
 	}
@@ -2041,19 +1745,20 @@ uint32_t CEquipment::Get_ElapsedTime_InputPara(__in uint8_t IN_nPara)
 //=============================================================================
 bool CEquipment::Recv_RegisterSocket(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode)
 {
-	// ·Î´õ¿¡¼­ ¼ÒÄÏ¿¡ Á¦Ç°À» ÀåÂøÇÏ¿©, RFID ÀĞ¾î¼­ ¼­¹ö¿¡ Àü¼ÛÇÔ
+	// ë¡œë”?ì„œ ?Œì¼“???œí’ˆ???¥ì°©?˜ì—¬, RFID ?½ì–´???œë²„???„ì†¡??
 
 	if (Is_Loader())
 	{
 		if (m_pSocketInfo)
 		{
-			// Á¦Ç° ÀÖÀ½ / Á¦Ç° ¾øÀ½ ?
+			// ?œí’ˆ ?ˆìŒ / ?œí’ˆ ?†ìŒ ?
 			if (0 < _tcslen(IN_szBarcode))
 			{
 
 			}
 
-			// ¹ÙÄÚµå¿¡¼­ \r \n Á¦°Å
+
+			// ë°”ì½”?œì—??\r \n ?œê±°
 			/*CString szBarcode = IN_szBarcode;
 			szBarcode.Remove(_T('\r'));
 			szBarcode.Remove(_T('\n'));*/
@@ -2063,7 +1768,6 @@ bool CEquipment::Recv_RegisterSocket(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szB
 				bool bReturn = m_pSocketInfo->Register_Socket(m_szEquipmentId, IN_szRFID, IN_szBarcode);
 
 				WM_Event_Equipment(WM_EVENT_LOADER_RESISTER_SOCKET, IN_szRFID);
-
 #if ADD_SOCKET_EES_XML
 				CString EQUIPMENTID(Get_EquipmentIDStatus(PtI_L_Load).szEquipID);
 				CString PORTID(Get_EquipmentIDStatus(PtI_L_Load).szPortID);
@@ -2106,20 +1810,18 @@ bool CEquipment::Recv_ReqAcceptSocket(__in LPCTSTR IN_szRFID)
 {
 	if (m_hWndOwner)
 	{
-		// ¼³ºñ¿¡ ¼ÒÄÏ µµÂøÇÏ¿© ÅõÀÔ °¡´ÉÇÏÁö ÆÇ´Ü
+		// ?¤ë¹„???Œì¼“ ?„ì°©?˜ì—¬ ?¬ì… ê°€?¥í•˜ì§€ ?ë‹¨
 
-		// ¼³ºñ°¡ ¾Ë¶÷?
+		// ?¤ë¹„ê°€ ?ŒëŒ?
 
-		// ¼³ºñ°¡ Skip?
+		// ?¤ë¹„ê°€ Skip?
 
 		if (m_pSocketInfo)
 		{
-			// ÇöÀç ¸ğµ¨ ¼³Á¤¿¡ ¸Â´Â RFIDÀÎ°¡?
+			// ?„ì¬ ëª¨ë¸ ?¤ì •??ë§ëŠ” RFID?¸ê??
 			//if (m_pSocketInfo->Is_ExistSocket(IN_szRFID))
 			if (m_pSocketInfo->Verify_Socket(IN_szRFID))
 			{
-				//Set_TrackInRequestSocket(IN_szRFID); // 2023.08.07
-
 				WM_Event_Equipment(WM_EVENT_TESTER_TRACKIN, IN_szRFID);
 
 				return true;
@@ -2145,7 +1847,7 @@ bool CEquipment::Recv_NotifyTestResult(__in LPCTSTR IN_szRFID, __in int16_t IN_n
 {
 	if (Is_Tester())
 	{
-		// Shift º¯°æ Ã¼Å© & Tacttime Ã¼Å©
+		// Shift ë³€ê²?ì²´í¬ & Tacttime ì²´í¬
 		if (Is_ChangeShift())
 		{
 			Report_Yield_Day();
@@ -2156,27 +1858,21 @@ bool CEquipment::Recv_NotifyTestResult(__in LPCTSTR IN_szRFID, __in int16_t IN_n
 			}
 		}
 
-		// ¾ç/ºÒ Ã¼Å©
-		if (0 == IN_nNGCode) // MES Rework NG Code ÀÌ¸é...???
+		// ??ë¶?ì²´í¬
+		if (0 == IN_nNGCode) // MES Rework NG Code ?´ë©´...???
 		{
-#ifndef USE_EQP_YIELD_UPDATE_AT_UNLOAD
 			Increase_Yield_Pass(IN_nPara);
-#endif //USE_EQP_YIELD_UPDATE_AT_UNLOAD
 		}
-		else if (m_pSocketInfo->Get_MES_ReworkCode() == IN_nNGCode)// MES Rework NG Code ÀÌ¸é...???
+		else if (m_pSocketInfo->Get_MES_ReworkCode() == IN_nNGCode)// MES Rework NG Code ?´ë©´...???
 		{
 			;
 		}
 		else
 		{
-#ifndef USE_EQP_YIELD_UPDATE_AT_UNLOAD
 			Increase_Yield_Fail(IN_nPara);
-#endif //USE_EQP_YIELD_UPDATE_AT_UNLOAD
 
-#ifndef USE_NG_CODE_UPDATE_AT_UNLOAD
-			// Log : ºÒ·®ÀÌ ¹ß»ıÇÑ Á¦Ç° Á¤º¸ ±â·Ï (Á¦Ç° ¹ÙÄÚµå, NG ¹ß»ı °Ë»ç: PassµÈ °Ë»ç)
+			// Log : ë¶ˆëŸ‰??ë°œìƒ???œí’ˆ ?•ë³´ ê¸°ë¡ (?œí’ˆ ë°”ì½”?? NG ë°œìƒ ê²€?? Pass??ê²€??
 			IncreaseFailInfo(IN_nNGCode, IN_nPara);
-#endif // USE_NG_CODE_UPDATE_AT_UNLOAD
 		}
 
 		if (m_pSocketInfo)
@@ -2186,7 +1882,7 @@ bool CEquipment::Recv_NotifyTestResult(__in LPCTSTR IN_szRFID, __in int16_t IN_n
 			{
 				if (m_pSocketInfo->Is_ExistSocket(IN_szRFID))
 				{
-					// °Ë»ç °á°ú¸¦ ¹ŞÀ¸¸é ¹èÃâ ½ÂÀÎ ¿©ºÎ¸¦ ÆÇ´ÜÇØ¼­ ¼­¹ö->¼³ºñ·Î ¾Ë·ÁÁà¾ß ÇÑ´Ù.
+					// ê²€??ê²°ê³¼ë¥?ë°›ìœ¼ë©?ë°°ì¶œ ?¹ì¸ ?¬ë?ë¥??ë‹¨?´ì„œ ?œë²„->?¤ë¹„ë¡??Œë ¤ì¤˜ì•¼ ?œë‹¤.
 					WM_Event_Equipment(WM_EVENT_TESTER_END_INSPECTION, IN_szRFID);
 
 					return true;
@@ -2223,13 +1919,13 @@ bool CEquipment::Recv_ReqTestResult(__in LPCTSTR IN_szRFID, __out ST_TestResult&
 #endif
 		WM_Event_Equipment(WM_EVENT_UNLOAD_REQ_TEST_RESULT, IN_szRFID);
 
-		// °Ë»ç °á°ú¸¦ Àü¼ÛÇÑ´Ù.
+		// ê²€??ê²°ê³¼ë¥??„ì†¡?œë‹¤.
 		if (m_pSocketInfo)
 		{
-			// Á¦Ç° ÀÖÀ½ : ¾çÇ°
-			// Á¦Ç° ÀÖÀ½ : ºÒ·®
-			// Á¦Ç° ¾øÀ½ : ¾çÇ°
-			// ¹èÃâ ½Ã°£ ¼³Á¤
+			// ?œí’ˆ ?ˆìŒ : ?‘í’ˆ
+			// ?œí’ˆ ?ˆìŒ : ë¶ˆëŸ‰
+			// ?œí’ˆ ?†ìŒ : ?‘í’ˆ
+			// ë°°ì¶œ ?œê°„ ?¤ì •
 			m_pSocketInfo->Check_UnloadTime(IN_szRFID);
 
 			return m_pSocketInfo->Get_TestResult(IN_szRFID, OUT_stResult);
@@ -2254,7 +1950,7 @@ bool CEquipment::Recv_UnregisterSocket(__in LPCTSTR IN_szRFID)
 
 	if (Is_Loader())
 	{
-		// Á¦Ç°ÀÌ ÀÖ´Â°¡?
+		// ?œí’ˆ???ˆëŠ”ê°€?
 		if (m_pSocketInfo->GetAt(IN_szRFID).IsEmpty_Barcode())
 		{
 			;
@@ -2262,21 +1958,17 @@ bool CEquipment::Recv_UnregisterSocket(__in LPCTSTR IN_szRFID)
 
 		if (m_pSocketInfo->Is_ExistSocket(IN_szRFID))
 		{
-			// ÃÖÁ¾ ¼öÀ² ¾÷µ¥ÀÌÆ®
+			// ìµœì¢… ?˜ìœ¨ ?…ë°?´íŠ¸
 			ST_TestResult stResult;
 			m_pSocketInfo->Get_TestResult(IN_szRFID, stResult);
 			if (0 == stResult.m_nNG_Code)
 			{
-				Increase_Yield_Pass(0); // ¾çÇ°Àº Para ±¸ºĞ ºÒ°¡ (¾çÇ° ÆÇÁ¤ °Ë»ç ¼³ºñ°¡ ¿©·¯´ë)
+				Increase_Yield_Pass(0); // ?‘í’ˆ?€ Para êµ¬ë¶„ ë¶ˆê? (?‘í’ˆ ?ì • ê²€???¤ë¹„ê°€ ?¬ëŸ¬?€)
 			}
-			else if (m_pSocketInfo->Get_MES_ReworkCode() == stResult.m_nNG_Code)// MES Rework NG Code ÀÌ¸é...???
+			else if (m_pSocketInfo->Get_MES_ReworkCode() == stResult.m_nNG_Code)// MES Rework NG Code ?´ë©´...???
 			{
-				// ¿À·ù »óÈ²......
+				// ?¤ë¥˜ ?í™©......
 				Increase_Yield_Fail(stResult.m_nNG_Para);
-			}
-			else if (-2 == stResult.m_nNG_Code)
-			{
-				; // -2 (ºó ¼ÒÄÏ)Àº Ä«¿îÆ® Ã³¸® ¾ÈÇÔ (2023.06.08)
 			}
 			else
 			{
@@ -2299,7 +1991,7 @@ bool CEquipment::Recv_UnregisterSocket(__in LPCTSTR IN_szRFID)
 				LOTID));
 #endif	//TEST
 #endif	//ADD_SOCKET_EES_XML
-			// ¼ÒÄÏ µî·Ï ÇØÁ¦
+			// ?Œì¼“ ?±ë¡ ?´ì œ
 			if (m_pSocketInfo)
 			{
 				bReturn = m_pSocketInfo->Unregister_Socket(m_szEquipmentId, IN_szRFID);

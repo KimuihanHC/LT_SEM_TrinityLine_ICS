@@ -20,47 +20,13 @@
 #include "Def_Constant.h"
 #include "CommonFunction.h"
 
-//msec ÃøÁ¤ ¶óÀÌºê·¯¸® Ãß°¡
-#include <Mmsystem.h>
-#pragma comment (lib,"winmm.lib")
-
-// ¼³ºñº° °Ë»ç °á°ú
-typedef struct _tag_TestResult_Eqp
-{
-	uint8_t		m_nEqpOrder = 0;	// °Ë»ç ¼³ºñ ÀÎµ¦½º
-	uint8_t		m_bTest = 0;	// °Ë»ç ÁøÇà: Tested, No Test
-	int16_t		m_nNGCode = 0;	// °Ë»ç °á°ú: NGCode (0 ÀÌ¸é ¾çÇ°)
-	int8_t		m_nPara = 0;	// °Ë»ç ÆÄ¶ó: L/R/C
-
-	_tag_TestResult_Eqp& operator= (const _tag_TestResult_Eqp& ref)
-	{
-		m_nEqpOrder = ref.m_nEqpOrder;
-		m_bTest = ref.m_bTest;
-		m_nNGCode = ref.m_nNGCode;
-		m_nPara = ref.m_nPara;
-
-		return *this;
-	};
-
-	void Reset()
-	{
-		m_nEqpOrder = 0;
-		m_bTest = 0;
-		m_nNGCode = 0;
-		m_nPara = 0;
-	}
-
-}ST_TestResult_Eqp;
-
 typedef struct _tag_TestResult
 {
-	int16_t		m_nNG_Code = 0;	// NGCode (0 ÀÌ¸é ¾çÇ°)
-	int8_t		m_nNG_Para = 0;	// Fail Para (-1 ÀÌ¸é ¾çÇ° or ¹Ì °Ë»ç)
-	uint8_t		m_nNG_EqpOrder = 0;	// Fail Equipment ¼ø¼­ (0 ÀÌ¸é ¾çÇ° or ¹Ì °Ë»ç)
-	CString		m_szNG_EqpID;			// Fail Equipment id (null ÀÌ¸é ¾çÇ° or ¹Ì °Ë»ç)
-	uint8_t		m_nNG_EqpType = 0;	// Fail ¹ß»ýÇÑ ¼³ºñ Á¾·ù (Test Á¾·ù)
-
-	std::vector<ST_TestResult_Eqp>	m_Eqp_Result;
+	int16_t		m_nNG_Code		= 0;	// NGCode (0 ?´ë©´ ?‘í’ˆ)
+	int8_t		m_nNG_Para		= 0;	// Fail Para (-1 ?´ë©´ ?‘í’ˆ or ë¯?ê²€??
+	uint8_t		m_nNG_EqpOrder	= 0;	// Fail Equipment ?œì„œ (0 ?´ë©´ ?‘í’ˆ or ë¯?ê²€??
+	CString		m_szNG_EqpID;			// Fail Equipment id (null ?´ë©´ ?‘í’ˆ or ë¯?ê²€??
+	uint8_t		m_nNG_EqpType	= 0;	// Fail ë°œìƒ???¤ë¹„ ì¢…ë¥˜ (Test ì¢…ë¥˜)//
 
 	_tag_TestResult& operator= (const _tag_TestResult& ref)
 	{
@@ -69,10 +35,6 @@ typedef struct _tag_TestResult
 		m_nNG_EqpOrder	= ref.m_nNG_EqpOrder;
 		m_szNG_EqpID	= ref.m_szNG_EqpID;
 		m_nNG_EqpType	= ref.m_nNG_EqpType;
-
-		m_Eqp_Result.clear();
-		m_Eqp_Result = ref.m_Eqp_Result;
-
 		return *this;
 	};
 
@@ -83,14 +45,7 @@ typedef struct _tag_TestResult
 		m_nNG_EqpOrder	= 0;
 		m_szNG_EqpID.Empty();
 		m_nNG_EqpType	= 0;
-
-		m_Eqp_Result.clear();
 	}
-
-	virtual void Add(__in ST_TestResult_Eqp IN_stResult)
-	{
-		m_Eqp_Result.push_back(IN_stResult);
-	};
 
 }ST_TestResult;
 
@@ -105,30 +60,29 @@ public:
 	//uint8_t		nSocketType;	// Socket Type
 	//CString		szComment;		// Comment
 
-	// Á¦Ç° Á¤º¸
-	CString			m_szBarcode;		// Á¦Ç° ¹ÙÄÚµå
-	uint8_t			m_nStatus;			// ¼ÒÄÏ »óÅÂ, Á¦Ç° °Ë»ç ÆÇÁ¤ (Pass, Fail, Bypass, ...)
-	uint8_t			m_nJudgement[Max_TesterCount];		// Á¦Ç° °Ë»çº° ÆÇÁ¤ (Not Test, Pass, Fail)
+	// ?œí’ˆ ?•ë³´
+	CString			m_szBarcode;		// ?œí’ˆ ë°”ì½”??/
+	uint8_t			m_nStatus;			// ?Œì¼“ ?íƒœ, ?œí’ˆ ê²€???ì • (Pass, Fail, Bypass, ...)
+	uint8_t			m_nJudgement[Max_TesterCount];		// ?œí’ˆ ê²€?¬ë³„ ?ì • (Not Test, Pass, Fail)
 
-	// ¼ÒÄÏ À§Ä¡ Á¤º¸
-	uint8_t			m_nEqpOrder;		// ¼³ºñ ¼ø¼­ (ÇöÀç Track in µÈ ¼³ºñ)
-	CString			m_szEquipmentID;	// ¼³ºñ id
-	uint8_t			m_nPort_inEqp;		// ¼³ºñ ³»ÀÇ À§Ä¡ (Port, Conveyor) -> Port ¿ì¼±
-	uint8_t			m_nTargetEqpOrder;	// ¸ñÀûÁö ¼³ºñ ¼ø¼­
-	CString			m_szTargetEqpID;	// ¸ñÀûÁö ¼³ºñ id
+	// ?Œì¼“ ?„ì¹˜ ?•ë³´
+	uint8_t			m_nEqpOrder;		// ?¤ë¹„ ?œì„œ
+	CString			m_szEquipmentID;	// ?¤ë¹„ id
+	uint8_t			m_nPort_inEqp;		// ?¤ë¹„ ?´ì˜ ?„ì¹˜ (Port, Conveyor) -> Port ?°ì„ 
+	uint8_t			m_nTargetEqpOrder;	// ëª©ì ì§€ ?¤ë¹„ ?œì„œ
+	CString			m_szTargetEqpID;	// ëª©ì ì§€ ?¤ë¹„ id
 
-	bool			m_bTargetFar;		// ¸ñÀû ¼³ºñ°¡ Ãâ¹ß ¼³ºñ¿¡¼­ ¸Ö¸® ÀÖ´Ù.
+	bool			m_bTargetFar;		// ëª©ì  ?¤ë¹„ê°€ ì¶œë°œ ?¤ë¹„?ì„œ ë©€ë¦??ˆë‹¤.
 
-	ST_TestResult	m_stTestResult;		// °Ë»ç °á°ú
-	CYield_Socket	m_Yield;			// ¼ÒÄÏ ¼öÀ²
-	SYSTEMTIME		m_tmLoad;			// ¼ÒÄÏ ÅõÀÔ ½Ã°£ (Loader)
-	SYSTEMTIME		m_tmUnload;			// ¼ÒÄÏ ¹èÃâ ½Ã°£ (Unloader)
-	SYSTEMTIME		m_tmTrackIn;		// ¼³ºñ¿¡ ÅõÀÔµÈ ½Ã°£ (Tester)
-	DWORD			m_dwTrackInTime;	// ¼³ºñ¿¡ Track In Ã³¸®µÈ Time
-	double			m_dCycleTime;		// Load -> Unload ½Ã°£
-	double			m_dTacttime;		// ÀÌÀü ¼ÒÄÏ ¹èÃâ½Ã°£ -> ÇöÀç ¼ÒÄÏ ¹èÃâ½Ã°£
+	ST_TestResult	m_stTestResult;		// ê²€??ê²°ê³¼
+	CYield_Socket	m_Yield;			// ?Œì¼“ ?˜ìœ¨
+	SYSTEMTIME		m_tmLoad;			// ?Œì¼“ ?¬ìž… ?œê°„ (Loader)
+	SYSTEMTIME		m_tmUnload;			// ?Œì¼“ ë°°ì¶œ ?œê°„ (Unloader)
+	SYSTEMTIME		m_tmTrackIn;		// ?¤ë¹„???¬ìž…???œê°„ (Tester)
+	double			m_dCycleTime;		// Load -> Unload ?œê°„
+	double			m_dTacttime;		// ?´ì „ ?Œì¼“ ë°°ì¶œ?œê°„ -> ?„ìž¬ ?Œì¼“ ë°°ì¶œ?œê°„
 
-	bool			m_bRework;			// Àç°Ë»çÇÏ´Â Á¦Ç°ÀÎ°¡?
+	bool			m_bRework;			// ?¬ê??¬í•˜???œí’ˆ?¸ê??//
 #if (USE_XML)
 	CString			m_LotID;
 #endif
@@ -146,15 +100,10 @@ public:
 		memset(&m_tmLoad, 0, sizeof(SYSTEMTIME));
 		memset(&m_tmUnload, 0, sizeof(SYSTEMTIME));
 		memset(&m_tmTrackIn, 0, sizeof(SYSTEMTIME));
-		m_dwTrackInTime		= 0;
 		m_dCycleTime		= 0.0f;
 		m_dTacttime			= 0.0f;
 
 		m_bRework			= false;
-
-#if (USE_XML)
-		m_LotID				= _T("");
-#endif 
 	};
 
 	virtual ~CSocketInfo_Unit()
@@ -188,12 +137,10 @@ public:
 		memcpy(&m_tmLoad,    &ref.m_tmLoad, sizeof(SYSTEMTIME));
 		memcpy(&m_tmUnload,  &ref.m_tmUnload, sizeof(SYSTEMTIME));
 		memcpy(&m_tmTrackIn, &ref.m_tmTrackIn, sizeof(SYSTEMTIME));
-		m_dwTrackInTime		= ref.m_dwTrackInTime;
 		m_dCycleTime		= ref.m_dCycleTime;
 		m_dTacttime			= ref.m_dTacttime;
 
 		m_bRework			= ref.m_bRework;
-
 #if (USE_XML)
 		m_LotID				= ref.m_LotID;
 #endif 
@@ -219,7 +166,6 @@ public:
 		memset(&m_tmLoad, 0, sizeof(SYSTEMTIME));
 		memset(&m_tmUnload, 0, sizeof(SYSTEMTIME));
 		memset(&m_tmTrackIn, 0, sizeof(SYSTEMTIME));
-		m_dwTrackInTime		= 0;
 		m_dCycleTime		= 0.0f;
 		m_dTacttime			= 0.0f;
 
@@ -246,7 +192,7 @@ public:
 
 		if (m_szBarcode.IsEmpty())
 		{
-			// ¼ÒÄÏ¿¡ Á¦Ç°ÀÌ ¾øÀ¸¸é NG Ã³¸®ÇÑ´Ù.
+			// ?Œì¼“???œí’ˆ???†ìœ¼ë©?NG ì²˜ë¦¬?œë‹¤.
 			m_stTestResult.m_nNG_Code = -2;
 		}
 	};
@@ -260,6 +206,8 @@ public:
 	{
 		return m_szBarcode.IsEmpty();
 	}
+
+
 
 	void Set_Status(__in uint8_t IN_nStatus)
 	{
@@ -310,13 +258,6 @@ public:
 		m_stTestResult.m_nNG_Para		= IN_nPara;
 		m_stTestResult.m_nNG_EqpOrder	= IN_nNG_EqpOrder;
 		m_stTestResult.m_szNG_EqpID		= IN_szNG_EqpID;
-
-		ST_TestResult_Eqp nEqp;
-		nEqp.m_nEqpOrder = IN_nNG_EqpOrder;
-		nEqp.m_bTest = 1;
-		nEqp.m_nNGCode = IN_nNGCode;
-		nEqp.m_nPara = IN_nPara;
-		m_stTestResult.Add(nEqp);
 	};
 
 	void Set_TestResult(__in int16_t IN_nNGCode, __in uint8_t IN_nPara, __in uint8_t IN_nNG_EqpOrder, __in LPCTSTR IN_szNG_EqpID, __in uint8_t IN_nNG_EqpType)
@@ -326,13 +267,6 @@ public:
 		m_stTestResult.m_nNG_EqpOrder	= IN_nNG_EqpOrder;
 		m_stTestResult.m_szNG_EqpID		= IN_szNG_EqpID;
 		m_stTestResult.m_nNG_EqpType	= IN_nNG_EqpType;
-
-		ST_TestResult_Eqp nEqp;
-		nEqp.m_nEqpOrder = IN_nNG_EqpOrder;
-		nEqp.m_bTest = 1;
-		nEqp.m_nNGCode = IN_nNGCode;
-		nEqp.m_nPara = IN_nPara;
-		m_stTestResult.Add(nEqp);
 	};
 
 	// Increase (equipment id, socket rfid, pass/fail)
@@ -367,7 +301,6 @@ public:
 
 		m_dCycleTime = CompareSystemTime(&m_tmUnload, &m_tmLoad);
 	};
-
 	void Set_TrackInTime()
 	{
 		GetLocalTime(&m_tmTrackIn);
@@ -389,34 +322,15 @@ public:
 
 	uint32_t Get_ElapsedTime_TrackIn()
 	{
-		// 		if (m_nStatus == enSocketStatus::SoS_Ready)
-		// 			return 0;
-		// 
-		// 		SYSTEMTIME tmLocal;
-		// 		GetLocalTime(&tmLocal);
-		// 
-		// 		auto difftime = CompareSystemTime(&tmLocal, &m_tmTrackIn);
-		// 
-		// 		return static_cast<uint32_t>(difftime);
+		if (m_nStatus == enSocketStatus::SoS_Ready)
+			return 0;
 
-		if (0 < m_dwTrackInTime)
-		{
-			DWORD dwElapsedTime = 0;
-			DWORD dwCurrentTime = timeGetTime();
+		SYSTEMTIME tmLocal;
+		GetLocalTime(&tmLocal);
 
-			if (dwCurrentTime < m_dwTrackInTime)
-			{
-				dwElapsedTime = 0xFFFFFFFF - m_dwTrackInTime + dwCurrentTime;
-			}
-			else
-			{
-				dwElapsedTime = dwCurrentTime - m_dwTrackInTime;
-			}
+		auto difftime = CompareSystemTime(&tmLocal, &m_tmTrackIn);
 
-			return dwElapsedTime;
-		}
-
-		return 0;
+		return static_cast<uint32_t>(difftime);
 	}
 
 	double Get_CycleTime()
@@ -484,5 +398,4 @@ public:
 	}
 #endif
 };
-
 #endif // Def_Socket_Info_h__

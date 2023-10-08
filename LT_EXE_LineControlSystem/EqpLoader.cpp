@@ -92,10 +92,10 @@ void CEqpLoader::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 
 		if (PtI_L_Buffer_3 == IN_nPortIndex)
 		{			
-			// ·Î´õÀÇ ¹öÆÛ3ÀÇ »óÅÂ°¡ ¾øÀ½->ÀÖÀ½À¸·Î ¹Ù²î¸é ¹èÃâ ½ÂÀÎ ÀÌº¥Æ® Ã³¸®
+			// ë¡œë”??ë²„í¼3???íƒœê°€ ?†ìŒ->?ˆìŒ?¼ë¡œ ë°”ë€Œë©´ ë°°ì¶œ ?¹ì¸ ?´ë²¤??ì²˜ë¦¬
 // 			if ((enPortStatus::PtS_Empty == nOld_PortStatus) &&
 // 				(enPortStatus::PtS_Exist_Socket == IN_nStatus))
-			// ·Î´õ¿¡¼­ ½ÅÈ£Ã³¸®°¡ Á¦´ë·Î ¾ÈµÇ´Â °æ¿ì°¡ ÀÖ¾î¼­ ¼öÁ¤ (2022.10.17)
+			// ë¡œë”?ì„œ ? í˜¸ì²˜ë¦¬ê°€ ?œë?ë¡??ˆë˜??ê²½ìš°ê°€ ?ˆì–´???˜ì • (2022.10.17)
 			if (enPortStatus::PtS_Exist_Socket == IN_nStatus)
 			{
 				WM_Event_Equipment(WM_EVENT_LOADER_CHEKCK_TRACKOUT, IN_szRFID);
@@ -140,7 +140,7 @@ void CEqpLoader::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 						if ((0 == m_pSocketInfo->GetAt(IN_szRFID).m_stTestResult.m_nNG_Code) &&
 							(enSocketStatus::SoS_Ready != m_pSocketInfo->GetAt(IN_szRFID).m_nStatus))
 						{
-							// ¾çÇ°ÀÎ °æ¿ì¿¡¸¸ Ç¥½Ã (ºÒ·® Á¦Ç°µµ Áö³ª°¡±â ¶§¹®)
+							// ?‘í’ˆ??ê²½ìš°?ë§Œ ?œì‹œ (ë¶ˆëŸ‰ ?œí’ˆ??ì§€?˜ê?ê¸??Œë¬¸)
 							WM_Event_Equipment(WM_EVENT_UNLOAD_NG_INFO, IN_szRFID);
 						}
 					}
@@ -150,13 +150,13 @@ void CEqpLoader::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 			{
 				if (enPortStatus::PtS_Empty == m_nPortStatus.at(PtI_L_Un_NG).nStatus)
 				{
-					// OK, NG ¸ğµÎ ¼ÒÄÏÀÌ ¾ø´Ù. READY·Î Ç¥½Ã
+					// OK, NG ëª¨ë‘ ?Œì¼“???†ë‹¤. READYë¡??œì‹œ
 					WM_Event_Equipment(WM_EVENT_UNLOAD_NG_INFO, nullptr);
 				}
 			}
 		}
 
-		// ¼ÒÄÏ Á¤º¸ °»½Å
+		// ?Œì¼“ ?•ë³´ ê°±ì‹ 
 		Update_SocketLocation(IN_nPortIndex, &m_nPortStatus.at(IN_nPortIndex));
 	}
 }

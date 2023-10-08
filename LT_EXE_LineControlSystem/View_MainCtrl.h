@@ -31,11 +31,10 @@ typedef enum _enumSubView
 }enumSubView;
 
 //=============================================================================
-// CView_MainCtrl Ã¢
-//=============================================================================
+// CView_MainCtrl ì°?//=============================================================================
 class CView_MainCtrl : public CWnd
 {
-	// »ı¼ºÀÔ´Ï´Ù.
+// ?ì„±?…ë‹ˆ??
 public:
 	CView_MainCtrl();
 	virtual ~CView_MainCtrl();
@@ -53,12 +52,11 @@ protected:
 	
 	virtual BOOL	PreCreateWindow			(CREATESTRUCT& cs);
 
-	// ¹è°æ»ö Ã³¸®¿ë
+	// ë°°ê²½??ì²˜ë¦¬??/
 	CBrush				m_brBkgr;
 
 	//-----------------------------------------------------
-	// Â÷ÀÏµå À©µµ¿ì ±¸ºĞ¿ë
-	//-----------------------------------------------------	
+	// ì°¨ì¼???ˆë„??êµ¬ë¶„??	//-----------------------------------------------------	
 	UINT					m_nWndIndex;
 	CWnd*					m_pWndPtr[SUBVIEW_MAX];
 
@@ -67,28 +65,25 @@ protected:
 	CWnd_SettingView		m_wndSettingView;
 	CWnd_LogView			m_wndLogView;
 
-	// Åë½Å »óÅÂ Ç¥½Ã PaneÀÇ Æ÷ÀÎÅÍ
+	// ?µì‹  ?íƒœ ?œì‹œ Pane???¬ì¸??/
 	CWnd*					m_pwndCommPane				= nullptr;
 
-	CView_MonitoringData	m_ViewSub;			// Sub À©µµ¿ì
+	CView_MonitoringData	m_ViewSub;			// Sub ?ˆë„??
 
-	ST_MONITORINFO			m_infoMonitor;		// ¸ğ´ÏÅÍ Á¤º¸ ±¸Á¶Ã¼
-
+	ST_MONITORINFO			m_infoMonitor;		// ëª¨ë‹ˆ???•ë³´ êµ¬ì¡°ì²?	
 	uint8_t					m_nLanguage					= 1;
 
 	//-----------------------------------------------------
-	// ÃÊ±â ¼³Á¤ °ü·Ã
-	//-----------------------------------------------------
-	// »ı¼ºÀÚ¿¡¼­ ÃÊ±âÈ­ ÇÒ ¼¼ÆÃ
+	// ì´ˆê¸° ?¤ì • ê´€??	//-----------------------------------------------------
+	// ?ì„±?ì—??ì´ˆê¸°?????¸íŒ…
 	virtual void	OnInit_ConstructionSetting			(){};
-	// Window »ı¼º ÈÄ ¼¼ÆÃ
+	// Window ?ì„± ???¸íŒ…
 	virtual void	OnInit_UISetting					(){};
-	// ÁÖº¯ÀåÄ¡µé ±âº» ¼³Á¤
+	// ì£¼ë??¥ì¹˜??ê¸°ë³¸ ?¤ì •
 	virtual void	OnInit_DeviceSetting				(){};
 	
 	//-----------------------------------------------------
-	// Sub À©µµ¿ì ¼³Á¤ °ü·Ã
-	//-----------------------------------------------------
+	// Sub ?ˆë„???¤ì • ê´€??	//-----------------------------------------------------
 	void			Create_SubWindows			();
 	virtual void	ShowWindow_SubMonitoring	(__in BOOL bShow);
 
@@ -98,27 +93,26 @@ protected:
 public: 
 //=============================================================================
 	
-	// À©µµ¿ì ¹è°æ»ö ¼³Á¤¿ë ÇÔ¼ö
+	// ?ˆë„??ë°°ê²½???¤ì •???¨ìˆ˜
 	void			SetBackgroundColor			(__in COLORREF color, __in BOOL bRepaint = TRUE);
 
-	// Â÷ÀÏµå À©µµ¿ì ÀüÈ¯ ½Ã »ç¿ë
+	// ì°¨ì¼???ˆë„???„í™˜ ???¬ìš©
 	virtual UINT	SwitchWindow				(__in UINT nIndex);
-	// ÀåÄ¡ Åë½Å »óÅÂ Ç¥½Ã À©µµ¿ì Æ÷ÀÎÅÍ ¼³Á¤
+	// ?¥ì¹˜ ?µì‹  ?íƒœ ?œì‹œ ?ˆë„???¬ì¸???¤ì •
 	virtual void	SetCommPanePtr				(__in CWnd* pwndCommPane);
 	
-	// ¿É¼ÇÀÌ º¯°æ µÇ¾úÀ» °æ¿ì ´Ù½Ã UI³ª µ¥ÀÌÅÍ¸¦ ¼¼ÆÃÇÏ±â À§ÇÑ ÇÔ¼ö
+	// ?µì…˜??ë³€ê²??˜ì—ˆ??ê²½ìš° ?¤ì‹œ UI???°ì´?°ë? ?¸íŒ…?˜ê¸° ?„í•œ ?¨ìˆ˜
 	virtual void	ReloadOption				(){};
 
-	// ÇÁ·Î±×·¥ ·Îµù ³¡³­ ÈÄ ÀÚµ¿ Ã³¸®¸¦ À§ÇÑ ÇÔ¼ö
+	// ?„ë¡œê·¸ë¨ ë¡œë”© ?ë‚œ ???ë™ ì²˜ë¦¬ë¥??„í•œ ?¨ìˆ˜
 	virtual void	InitStartProgress			(){};	
-	// ÇÁ·Î±×·¥ Á¾·á½Ã Ã³¸®ÇØ¾ß ÇÒ ±â´ÉµéÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+	// ?„ë¡œê·¸ë¨ ì¢…ë£Œ??ì²˜ë¦¬?´ì•¼ ??ê¸°ëŠ¥?¤ì„ ì²˜ë¦¬?˜ëŠ” ?¨ìˆ˜
 	virtual void	FinalExitProgress			(){};
 	
 	//--------------------- TEST --------------------------
 	virtual void	Test_Process				(__in UINT nTestNo) = 0;
 	//--------------------- TEST --------------------------
 	
-
 };
 
 #endif // View_MainCtrl_h__

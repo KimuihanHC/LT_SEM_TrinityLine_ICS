@@ -3,7 +3,7 @@
 // Created	: 2010/10/14
 // Modified	: 2012/1/19 - 11:15
 //
-// Author   : G.H Lee (¼öÁ¤ : PiRing)
+// Author	: G.H Lee (ìˆ˜ì • : PiRing)
 //
 // Purpose	: 
 //*****************************************************************************
@@ -26,18 +26,18 @@ private:
 
 	CFile		m_fileLog;
 
-	//·Î±×Æú´õ¿¡ ÇöÀç ÀÛ¼ºµÉ ·Î±×Æú´õÀÌ¸§ÀÌ Á¸ÀçÇÏ´ÂÁö °Ë»ç
+	//ë¡œê·¸í´ë”ì— í˜„ì¬ ì‘ì„±ë  ë¡œê·¸í´ë”ì´ë¦„ì´ ì¡´ì¬í•˜ëŠ”ì§€ ê²€ì‚¬//
 	BOOL		FindLogFile			();
 	void		GetLogFilePath		(CString& strPath);
 	CString		Logfilename			();
 	void		CreateLogFolder		(CString strPath );	
 	CString		GetTime				();
 
-	// ±âº» ·Î±× Ãâ·Â
+	// ê¸°ë³¸ ë¡œê·¸ ì¶œë ¥
 	void		OnAdd_Log				(LPCTSTR lpszLog, 
 									 LPCTSTR lpszSubDir = NULL,
 									 LPCTSTR lpszLogName = NULL,
-									 UINT	nFileDivType = 0 // ·Î±× ÆÄÀÏ ºĞÇÒ Á¾·ù(none, am / pm, filesize, hour)
+									 UINT	nFileDivType = 0	// ë¡œê·¸ íŒŒì¼ ë¶„í•  ì¢…ë¥˜ (none, am/pm, filesize, hour)
 									);
 
 	CString		m_strPath;
@@ -64,24 +64,24 @@ public:
 	void		LogWrite			(LPCTSTR lpszMsg);
 	void		LogWriteWithHeader	(LPCTSTR lpszMsg, LPCTSTR lpszHeader = NULL);
 
-	// Log ±âº» ÆÄÀÏ¸í ¼³Á¤ (ÆÄÀÏ¸í + ³¯Â¥ + ½Ã°£ or Ä«¿îÆ®)
+	// Log ê¸°ë³¸ íŒŒì¼ëª… ì„¤ì • (íŒŒì¼ëª… + ë‚ ì§œ + ì‹œê°„ or ì¹´ìš´íŠ¸)
 	void		SetLogName			(LPCTSTR lpszLogName);
 
 	void		SetSubDirName		(LPCTSTR lpszSubDirName);
 
-	// ·Î±× ÆÄÀÏ ºĞÇÒ Á¾·ù (none, am/pm, filesize, hour)
+	// ë¡œê·¸ íŒŒì¼ ë¶„í•  ì¢…ë¥˜ (none, am/pm, filesize, hour)
 	void		SetFileDivType		(BYTE byDivType);
 
 
-	//  ³¯Â¥ Æú´õ »ı¼º¿©ºÎ (³â, ¿ù, ÀÏ)
-	// all, ¿ù±îÁö, ³â±îÁö, »ı¼º¾ÈÇÔ
+	//  ë‚ ì§œ í´ë” ìƒì„±ì—¬ë¶€ (ë…„, ì›”, ì¼)
+	// all, ì›”ê¹Œì§€, ë…„ê¹Œì§€, ìƒì„±ì•ˆí•¨
 	//void		SetUseDateSubDir	(BYTE byDateDirLimit = 0);
 
-	// ÇöÀç ÀúÀåµÇ´Â ·Î±× ÆÄÀÏÀÇ ÆĞ½º¸¦ ¹İÈ¯
-	CString		GetFilePath();
+	// í˜„ì¬ ì €ì¥ë˜ëŠ” ë¡œê·¸ íŒŒì¼ì˜ íŒ¨ìŠ¤ë¥¼ ë°˜í™˜
+	CString		GetFilePath			();
 
-	// Ãß°¡ ÆÄÀÏ È®ÀåÀÚ ÁöÁ¤ (±âº» .log)
-	void		SetFileExt(LPCTSTR lpszExt);
+	// ì¶”ê°€ íŒŒì¼ í™•ì¥ì ì§€ì • (ê¸°ë³¸ .log)
+	void		SetFileExt			(LPCTSTR lpszExt);
 };
 
 #endif // LogFile_h__

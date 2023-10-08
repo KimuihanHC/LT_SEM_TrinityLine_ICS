@@ -149,11 +149,11 @@ typedef enum
 
 }_ConstVar;
 
-//#if	(USE_XML)
+#if	(USE_XML)
 typedef enum {
 	ICS_SERVER_MODULE,
 	ICS_SERVER_EES,
-	ICS_SERVER_MAX,
+	ICS_SERVER_MAX
 }_ICS_SERVER_Type;
 
 static LPCTSTR strLogName[] = {
@@ -161,7 +161,7 @@ static LPCTSTR strLogName[] = {
 	_T("ICS_SERVER_EES"),
 	_T("ICS_MAX"),
 };
-//#endif
+#endif
 
 // Access 모드 설정값
 #endif // Def_Enum_Cm_h__

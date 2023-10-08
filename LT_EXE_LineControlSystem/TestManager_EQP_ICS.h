@@ -113,7 +113,6 @@ protected:
 	void	OnSend_Language					(__in uint8_t IN_nLanguage);									// 언어
 	void	OnSend_Language					(__in uint8_t IN_nEqpOrder, __in uint8_t IN_nLanguage);			// 언어
 	void	OnSend_Model					(__in uint8_t IN_nEqpOrder);									// 모델
-	void	OnSend_OperationActiveStatus(__in uint8_t IN_nStatus);											// 인라인 가동/비가동 상태
 
 	void	OnSend_Accept_SocketTrackIn		(__in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szRFID, __in uint8_t IN_nFlag, __in LPCTSTR IN_szBarcode);	// 소켓 투입 승인
 	void	OnSend_Accept_SocketTrackOut	(__in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szRFID);			// 배출 승인
@@ -154,8 +153,6 @@ protected:
 	//virtual void	OnReport_Yield_Socket_Cumulative(__in LPCTSTR IN_szRFID);
 	//virtual void	OnReport_Yield_Eqp_Day			(__in uint8_t IN_nEqpOder);
 	//virtual void	OnReport_Yield_Eqp_Cumulative	(__in uint8_t IN_nEqpOder);
-
-	//virtual void OnUpdate_InOutCount (__in bool IN_nIn, __in bool IN_nOut, __in bool IN_nRemove);
 
 	//-----------------------------------------------------
 	// 타이머 

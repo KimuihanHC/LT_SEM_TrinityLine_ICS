@@ -453,19 +453,14 @@ void CWnd_Cfg_Line::OnSize(UINT nType, int cx, int cy)
 	int iWidth			= cx - iMargin - iMargin;
 	int iHeight			= cy - iMargin - iMargin;
 	int iCtrlHeight		= 40;
-
-#if (USE_XML)
+	//int iCtrlWidth		= 400;//2023.02.13a List추가 (크기)
 	int iCtrlWidth		= 300;
+	//int iStWidth		= 140;//2023.02.13a List추가 (크기)
 	int iStWidth		= 120;
-	int iListWidth		= 700;
-#else
-	int iCtrlWidth		= 400;
-	int iStWidth		= 140;
-	int iListWidth		= 800;
-#endif
-
 	int iEdWidth		= iCtrlWidth - iStWidth - iSpacing;
-	int iLeft_Sub		= iLeft + iStWidth + iSpacing;	
+	int iLeft_Sub		= iLeft + iStWidth + iSpacing;
+	//int iListWidth		= 800;
+	int iListWidth = 700;//2023.02.13a
 	int iListHeight		= iHeight - ((iCtrlHeight + iSpacing) * 2);
 
 	iLeft = iMargin + iCtrlWidth + iSpacing + iListWidth - 250;
@@ -519,10 +514,16 @@ void CWnd_Cfg_Line::OnSize(UINT nType, int cx, int cy)
 
 
 	// 리스트 컨트롤
-	iTop = iMargin + iCtrlHeight + iSpacing;	
-	iLeft = iMargin + iCtrlWidth + iCateSpacing;;
+	iTop = iMargin + iCtrlHeight + iSpacing;
+	iLeft = iMargin + iCtrlWidth + iCateSpacing;;//2023.02.13a List추가 (크기)
 	iWidth = cx - iLeft - iMargin;
+	//2023.02.13a List추가 (크기)
 	m_lc_LineInfo.MoveWindow(iLeft, iTop, iListWidth, iListHeight);
+	//iTop = iMargin + iCtrlHeight + iSpacing;
+	//iLeft = iMargin + iListWidth + iCateSpacing + iLeft;
+	//iWidth = cx - iLeft - iMargin;
+	//m_lc_LineInfo[ICS_SERVER_EES].MoveWindow(iLeft, iTop, iListWidth, iListHeight);
+	//m_lc_LineInfo.MoveWindow(iMargin, iMargin, 600, iHeight);
 
 
 	iTop += iListHeight + iSpacing;
@@ -654,7 +655,6 @@ void CWnd_Cfg_Line::MoveWindow_EqpItem(int x, int y, int nWidth, int nHeight)
 void CWnd_Cfg_Line::OnBnClickedBnEqpCtrl(UINT nID)
 {
 	enEqpCtrl nIDIdx = (enEqpCtrl)(nID - IDC_BN_STEPCTRL_S);
-
 	switch (nIDIdx)
 	{
 	case CWnd_Cfg_Line::EC_Add:
@@ -737,7 +737,7 @@ void CWnd_Cfg_Line::OnBnClickedBnListCtrl(UINT nID)
 		//if (IDYES == LT_MessageBox(_T("Are you sure you want to delete all equipments in the list?"), MB_YESNO))
 		if (IDYES == LT_MessageBox(g_szMessageBox_T[MB_Line_Delete_AllEqp][m_nLanguage], MB_YESNO))
 		{
-			m_lc_LineInfo.Clear_LineInfo();
+			m_lc_LineInfo.Clear_LineInfo();	//2023.02.13a uhkim [선택 옵션 추가]
 		}
 	}
 	break;
@@ -954,8 +954,6 @@ void CWnd_Cfg_Line::Item_Add()
 	if (Get_EquipmentData(stEquipment))
 	{
 		m_lc_LineInfo.Item_Add(stEquipment);
-
-
 		m_lc_LineInfo.Get_SelectedEquipment(stEquipment);
 		m_ed_EqpAlias.SetWindowText(stEquipment.Get_Alias());
 	}
@@ -975,7 +973,6 @@ void CWnd_Cfg_Line::Item_Insert()
 	if (Get_EquipmentData(stEquipment))
 	{
 		m_lc_LineInfo.Item_Insert(stEquipment);
-
 		m_lc_LineInfo.Get_SelectedEquipment(stEquipment);		
 		m_ed_EqpAlias.SetWindowText(stEquipment.Get_Alias());
 	}
@@ -1023,7 +1020,6 @@ void CWnd_Cfg_Line::Item_Modify()
 		{
 			CConfig_Eqp stEuipment_New;
 			stEuipment_New = m_dlg_ModifyEqp.Get_EquipmentData();
-
 			m_lc_LineInfo.Item_Modify(stEuipment_New);
 		}
 	}
@@ -1192,6 +1188,7 @@ BOOL CWnd_Cfg_Line::LoadXML_LineInfo(__in LPCTSTR IN_szFilePath, __out CConfig_L
 		}
 
 		return TRUE;
+
 	}
 	else
 	{
@@ -1370,7 +1367,6 @@ bool CWnd_Cfg_Line::Verify_EquipmentSequence(__in const CConfig_Line* IN_pLineIn
 		return false;
 	}
 }
-
 //=============================================================================
 // Method		: OnLanguage
 // Access		: virtual public  
@@ -1493,8 +1489,6 @@ void CWnd_Cfg_Line::Set_PermissionMode(__in enPermissionMode IN_PermissionMode)
 		}
 	}
 		break;
-	default:
-		break;
 	}
 }
 
@@ -1552,8 +1546,6 @@ void CWnd_Cfg_Line::Set_UseExtraData(__in bool bUse)
 void CWnd_Cfg_Line::Set_Configuration(__in const CConfig_Line* IN_pLineInfo)
 {
 	m_lc_LineInfo.Set_LineInfo(IN_pLineInfo);
-
-	IN_pLineInfo->EqpList;
 }
 
 //=============================================================================

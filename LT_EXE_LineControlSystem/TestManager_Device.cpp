@@ -32,15 +32,11 @@ CTestManager_Device::~CTestManager_Device()
 {
 	TRACE(_T("<<< Start ~CTestManager_Device >>> \n"));
 
-	//OnFinalize();bReturn &= stOption.LoadOption_Server
+	//OnFinalize();
 	if (m_pIcsComm->IsOpened())
 	{
 		m_pIcsComm->Close();
 	}	
-
-	//	delete m_pIcsComm;
-
-
 #if (USE_XML)
 	if (m_pIcsServer->IsOpened())
 	{		
@@ -63,7 +59,7 @@ BOOL CTestManager_Device::OnLoad_Option()
 	CLT_Option	stOption;
 	stOption.SetInspectorType((enInsptrSysType)SET_INSPECTOR);
 	BOOL		bReturn = TRUE;
-	
+
 	stOption.SetRegistryPath(REG_PATH_OPTION_BASE);
 	bReturn &= stOption.LoadOption_Inspector(m_stOption.Inspector);
 	for (int i = 0; i < ICS_SERVER_MAX; i++) {		
@@ -95,7 +91,7 @@ void CTestManager_Device::OnInit_Devicez(HWND hWndOwner /*= NULL*/)
 // Access		: virtual protected  
 // Returns		: void
 // Qualifier	:
-// Last Update	: 2023/03/07 - 10:47
+// Last Update	: 2023/3/07 - 10:47
 // Desc.		:
 //=============================================================================
 void CTestManager_Device::OnConnect_Devicez(int nIn)
@@ -135,7 +131,8 @@ void CTestManager_Device::OnConnect_Devicez(int nIn)
 		break;
 #endif
 	}
-
+	//
+	//
 	//OnShow_SplashScreen(FALSE);
 }
 
@@ -169,7 +166,6 @@ void CTestManager_Device::OnDisconnect_Devicez(int nIn)
 	}
 
 	OnSetStatus_Server(COMM_STATUS_NOTCONNECTED);
-
 	//OnShow_SplashScreen(FALSE);
 }
 //=============================================================================

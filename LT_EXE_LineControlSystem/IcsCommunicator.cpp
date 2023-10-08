@@ -32,7 +32,8 @@ CIcsCommunicator::CIcsCommunicator()
 	m_pLogDispatcher = new lt::CLogDispatcher();
 	m_pLogger = new lt::CLogger();
 	m_pLogAddedEventListener =
-		new LogAddedEventListener(this, &CIcsCommunicator::OnLogAddedEvent);
+		new LogAddedEventListener(this, &CIcsCommunicator
+			::OnLogAddedEvent);
 
 	static_cast<lt::ILogDispatcher *>(*m_pDebugLogDispatcher)->Dispatch(
 		lt::LogLevel::None,
@@ -66,7 +67,6 @@ CIcsCommunicator::~CIcsCommunicator()
 {
 	// Remote
 	//RemoveRemotes();
-
 	delete m_pRemoteCntr;
 	delete m_pRemoteCntrMutex;
 
@@ -100,7 +100,6 @@ CIcsCommunicator::~CIcsCommunicator()
 CIcsCommunicator & CIcsCommunicator::GetInstance()
 {
 	static CIcsCommunicator instance;
-
 	return instance;
 }
 
@@ -824,42 +823,6 @@ bool CIcsCommunicator::SendUiVisible(lt::ConstStringT equipmentId,
 				equipmentId,
 				cmdShow,
 				result);
-
-	return false;
-}
-
-bool CIcsCommunicator::SendOperationActiveStatus(lt::uint32 status)
-{
-	auto result = InvokeRemote(&CIcsRemoteEquipment::SendOperationActiveStatus,
-		status);
-
-	if (!result)
-	{
-		GetLogger()
-			.SetLogLevel(lt::LogLevel::Error)
-			.AddLog(_T("CIcsRemoteEquipment::SendOperationActiveStatus(%d) failed"),
-				status);
-	}
-
-	return result;
-}
-
-bool CIcsCommunicator::SendOperationActiveStatus(lt::ConstStringT equipmentId,
-	lt::uint32 status)
-{
-	auto result = InvokeRemote(equipmentId,
-		&CIcsRemoteEquipment::SendOperationActiveStatus,
-		status);
-
-	if (result == ICS_COMM_OK)
-		return true;
-
-	GetLogger()
-		.SetLogLevel(lt::LogLevel::Error)
-		.AddLog(_T("%s CIcsRemoteEquipment::SendOperationActiveStatus(%d) failed %d"),
-			equipmentId,
-			status,
-			result);
 
 	return false;
 }

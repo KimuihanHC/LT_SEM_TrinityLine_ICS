@@ -33,7 +33,6 @@ protected:
 	// ë¡œê·¸ ë©”ì„¸ì§€
 	afx_msg	LRESULT	OnWM_LogMsg					(WPARAM wParam, LPARAM lParam);
 
-	// °Ë»ç Á¦¾î
 	afx_msg	LRESULT	OnWM_SwitchPermissionMode	(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_ChangeRecipe			(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_ChangedSetting			(WPARAM wParam, LPARAM lParam);
@@ -117,93 +116,89 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	//=========================================================================
-	// CView_MainCtrl ÀçÁ¤ÀÇ
-	//=========================================================================
+	// CView_MainCtrl ?¬ì •??	//=========================================================================
 	//-----------------------------------------------------
-	// ÃÊ±â ¼³Á¤ °ü·Ã
-	//-----------------------------------------------------
-	// »ı¼ºÀÚ¿¡¼­ ÃÊ±âÈ­ ÇÒ ¼¼ÆÃ
-	virtual void	OnInit_ConstructionSetting();
-	// Window »ı¼º ÈÄ ¼¼ÆÃ
-	virtual void	OnInit_UISetting();
-	// ÁÖº¯ÀåÄ¡µé ±âº» ¼³Á¤
-	virtual void	OnInit_DeviceSetting();
+	// ì´ˆê¸° ?¤ì • ê´€??	//-----------------------------------------------------
+	// ?ì„±?ì—??ì´ˆê¸°?????¸íŒ…
+	virtual void	OnInit_ConstructionSetting		();
+	// Window ?ì„± ???¸íŒ…
+	virtual void	OnInit_UISetting				();
+	// ì£¼ë??¥ì¹˜??ê¸°ë³¸ ?¤ì •
+	virtual void	OnInit_DeviceSetting			();
 
 	//-------------------------------------------------------------------------
-	// ÆÄÀÏ ºÒ·¯¿À±â ¹× ¼¼ÆÃ
+	// ?Œì¼ ë¶ˆëŸ¬?¤ê¸° ë°??¸íŒ…
 	bool			OnLoad_LineInfo					(__in bool IN_bNotifySettingWnd = true);
 	bool			OnLoad_SocketInfo				(__in bool IN_bNotifySettingWnd = true);
 	bool			OnLoad_UserInfo					(__in bool IN_bNotifySettingWnd = true);
 	//bool			OnLoad_AlarmInfo				(__in bool IN_bNotifySettingWnd = true);
 	bool			OnLoad_NGCodeInfo				(__in bool IN_bNotifySettingWnd = true);
 	bool			OnLoad_DebugInfo				(__in bool IN_bNotifySettingWnd = true);
+
 	bool			OnLoad_ModelInfo				();
 	bool			OnLoad_FailInfo					();
 
 	bool			OnLoad_Prev_LineInfo			();
 	bool			OnLoad_Prev_LineInfo_OnlyYield	();
 
-	// ¼³ºñ µ¥ÀÌÅÍ, Åë½Å, GUI ¸ÅÄª
+	// ?¤ë¹„ ?°ì´?? ?µì‹ , GUI ë§¤ì¹­
 	virtual void	OnMatchingEquipment				();
 	bool			Compare_LineConfig_ServRestart	(__in CConfig_Line* IN_Old, __in CConfig_Line* IN_New);
-
 	//=========================================================================
-	// CTestManager_EQP_ICS ÀçÁ¤ÀÇ
+	// CTestManager_EQP_ICS ?¬ì •??	
 	//=========================================================================
 	//-----------------------------------------------------
-	// ·Î±×/ÆÄÀÏ Ã³¸®
+	// ë¡œê·¸/?Œì¼ ì²˜ë¦¬
 	//-----------------------------------------------------
 	virtual void	OnInit_LogFolder				();
 
 	//-----------------------------------------------------
-	// UI ¾÷µ¥ÀÌÆ®
+	// UI ?…ë°?´íŠ¸
 	//-----------------------------------------------------
 	virtual void	OnSetStatus_Production			(__in bool IN_bEnd);
 
 	//-----------------------------------------------------
-	// °á°ú µ¥ÀÌÅÍ Ã³¸®
+	// ê²°ê³¼ ?°ì´??ì²˜ë¦¬
 	//-----------------------------------------------------
 	virtual void	OnLog_EquipmentAlarm			(__in uint8_t IN_nEqpOder, __in const ST_AlarmStatus* IN_pAlarm);
 	virtual void	OnLog_RegisterSocket			(__in LPCTSTR IN_szRFID);
 
-	// Á¦Ç° °á°ú È­¸é¿¡ Ç¥½Ã
+	// ?œí’ˆ ê²°ê³¼ ?”ë©´???œì‹œ
 	virtual void	OnReport_Socket					(__in LPCTSTR IN_szRFID);
 	virtual void	OnReport_Socket_NG				(__in LPCTSTR IN_szRFID);
 
-	// °Ë»ç ÁøÇà ½Ã°£ Ã¼Å© (¼³ºñ, ÆÄ¶ó L/R)
+	// ê²€??ì§„í–‰ ?œê°„ ì²´í¬ (?¤ë¹„, ?Œë¼ L/R)
 	virtual void	OnUpdate_ElapsedTime_Unit		(__in UINT nEquipmentIdx, __in uint8_t IN_nPara);
 	virtual void	OnUpdate_ElapsedTime_All		();
 
 public: 
 	//=========================================================================
-	// CView_MainCtrl ÀçÁ¤ÀÇ
-	//=========================================================================
-	// Â÷ÀÏµå À©µµ¿ì ÀüÈ¯ ½Ã »ç¿ë
+	// CView_MainCtrl ?¬ì •??	//=========================================================================
+	// ì°¨ì¼???ˆë„???„í™˜ ???¬ìš©
 	virtual UINT	SwitchWindow				(__in UINT nIndex);
-	// ÀåÄ¡ Åë½Å »óÅÂ Ç¥½Ã À©µµ¿ì Æ÷ÀÎÅÍ ¼³Á¤
+	// ?¥ì¹˜ ?µì‹  ?íƒœ ?œì‹œ ?ˆë„???¬ì¸???¤ì •
 	virtual void	SetCommPanePtr				(__in CWnd* pwndCommPane);
 
-	// ¿É¼ÇÀÌ º¯°æ µÇ¾úÀ» °æ¿ì ´Ù½Ã UI³ª µ¥ÀÌÅÍ¸¦ ¼¼ÆÃÇÏ±â À§ÇÑ ÇÔ¼ö
+	// ?µì…˜??ë³€ê²??˜ì—ˆ??ê²½ìš° ?¤ì‹œ UI???°ì´?°ë? ?¸íŒ…?˜ê¸° ?„í•œ ?¨ìˆ˜
 	virtual void	ReloadOption				();
 
-	// ÇÁ·Î±×·¥ ·Îµù ³¡³­ ÈÄ ÀÚµ¿ Ã³¸®¸¦ À§ÇÑ ÇÔ¼ö
+	// ?„ë¡œê·¸ë¨ ë¡œë”© ?ë‚œ ???ë™ ì²˜ë¦¬ë¥??„í•œ ?¨ìˆ˜
 	virtual void	InitStartProgress			();	
 	virtual BOOL	InitStartDeviceProgress		();	
 
-	// ÇÁ·Î±×·¥ Á¾·á½Ã Ã³¸®ÇØ¾ß ÇÒ ±â´ÉµéÀ» Ã³¸®ÇÏ´Â ÇÔ¼ö
+	// ?„ë¡œê·¸ë¨ ì¢…ë£Œ??ì²˜ë¦¬?´ì•¼ ??ê¸°ëŠ¥?¤ì„ ì²˜ë¦¬?˜ëŠ” ?¨ìˆ˜
 	virtual void	FinalExitProgress			();
 
 	//=========================================================================
-	// CTestManager_EQP_ICS ÀçÁ¤ÀÇ
-	//=========================================================================
-	// °Ë»ç±â Á¾·ù ¼³Á¤
+	// CTestManager_EQP_ICS ?¬ì •??	//=========================================================================
+	// ê²€?¬ê¸° ì¢…ë¥˜ ?¤ì •
 	virtual void	OnSet_SystemType			(__in enInsptrSysType nSysType);
 
-	// ·Î±× ¸Ş¼¼Áö Ã³¸®¿ë ÇÔ¼ö
+	// ë¡œê·¸ ë©”ì„¸ì§€ ì²˜ë¦¬???¨ìˆ˜
 	virtual void	OnAdd_Log					(__in LPCTSTR lpszLog, __in BOOL bError = FALSE, __in UINT nLogType = LOGTYPE_NONE, __in BOOL bOnlyLogType = FALSE);
 	virtual void	OnAdd_Log					(__in LPCTSTR lpszLog, __in UINT nLogType = LOGTYPE_NONE);
 
-	// Á¦¾î ±ÇÇÑ ¼³Á¤
+	// ?œì–´ ê¶Œí•œ ?¤ì •
 	virtual void	OnInit_PermissionMode		(__in enPermissionMode nAcessMode);	
 	virtual void	OnSet_PermissionMode		(__in enPermissionMode nAcessMode);	
 
@@ -214,7 +209,6 @@ public:
 	// TEST ì½”ë“œ
 	//=========================================================================
 	virtual void	Test_Process				(__in UINT nTestNo);	
-	//--------------------- TEST --------------------------
 
 #if (USE_XML)
 protected:

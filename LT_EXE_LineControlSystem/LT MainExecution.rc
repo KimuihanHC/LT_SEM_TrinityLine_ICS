@@ -776,8 +776,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2023,9,25,0
- PRODUCTVERSION 1,5,26,0
+ FILEVERSION 2022,11,10,0
+ PRODUCTVERSION 1,4,4,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -794,12 +794,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Luritech"
             VALUE "FileDescription", "In-Line Control System"
-            VALUE "FileVersion", "2023,9,25,0"
+            VALUE "FileVersion", "2022.11.10.0"
             VALUE "InternalName", "LT EXE Inline Control System.exe"
             VALUE "LegalCopyright", "(c) <Luritech>.  All rights reserved. (https://www.luritech.com/)"
             VALUE "OriginalFilename", "LT EXE Inline Control System.exe"
             VALUE "ProductName", "Inline Control System"
-            VALUE "ProductVersion", "1,5,26,0"
+            VALUE "ProductVersion", "1.4.4.0"
         END
     END
     BLOCK "VarFileInfo"

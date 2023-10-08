@@ -75,9 +75,6 @@ void CSocketMonitoring::WM_Update_GUI_Data(__in LPCTSTR IN_szRFID, __in uint16_t
 		if (m_hWndOwner)
 		{
 			::SendNotifyMessage(m_hWndOwner, WM_UPDATE_SOCKET_DATA, (WPARAM)IN_nFlag, (LPARAM)m_Sockets.at(IN_szRFID).szRFID.GetBuffer());
-
-			// ¾²·¹µå·Î Ã³¸®ÇÏÀÚ.
-			//::SendMessage(m_hWndOwner, WM_UPDATE_SOCKET_DATA, (WPARAM)IN_nFlag, (LPARAM)m_Sockets.at(IN_szRFID).szRFID.GetBuffer());
 		}
 	}
 }
@@ -156,7 +153,7 @@ bool CSocketMonitoring::Save_SocketInfo_OutputTime(__in LPCTSTR IN_szRFID)
 // Parameter	: __in LPCTSTR IN_szRFID
 // Qualifier	:
 // Last Update	: 2021/12/23 - 16:00
-// Desc.		: ·¹Áö½ºÆ®¸®¿¡ ÀúÀåµÈ ¼ÒÄÏ »óÅÂ ºÒ·¯¿À±â
+// Desc.		: ?ˆì??¤íŠ¸ë¦¬ì— ?€?¥ëœ ?Œì¼“ ?íƒœ ë¶ˆëŸ¬?¤ê¸°
 //=============================================================================
 bool CSocketMonitoring::Load_SocketInfo(__in LPCTSTR IN_szRFID)
 {
@@ -167,12 +164,12 @@ bool CSocketMonitoring::Load_SocketInfo(__in LPCTSTR IN_szRFID)
 		auto result_sock = m_Sockets.find(IN_szRFID);
 		if (result_sock != m_Sockets.end())
 		{
-			// µ¥ÀÌÅÍ °»½Å
+			// ?°ì´??ê°±ì‹ 
 			m_Sockets.at(IN_szRFID) = stSocket;
 		}
 		else
 		{
-			// µ¥ÀÌÅÍ Ãß°¡ »ğÀÔ
+			// ?°ì´??ì¶”ê? ?½ì…
 			m_Sockets.insert({ IN_szRFID, stSocket });
 		}
 
@@ -198,7 +195,7 @@ bool CSocketMonitoring::Write_File(LPCTSTR IN_szPathFile, LPCTSTR IN_szData, LPC
 		if (!File.Open(szFullPath.GetBuffer(), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite, &e))
 			return false;
 
-		// Çì´õ Ãß°¡
+		// ?¤ë” ì¶”ê?
 		CString szHeader = IN_szHeader;
 		szUnicode = szHeader + szUnicode;
 	}
@@ -225,8 +222,7 @@ bool CSocketMonitoring::Write_File(LPCTSTR IN_szPathFile, LPCTSTR IN_szData, LPC
 // Returns		: void
 // Qualifier	:
 // Last Update	: 2021/12/23 - 10:38
-// Desc.		: ÀüÃ¼ µ¥ÀÌÅÍ  ÃÊ±âÈ­
-//=============================================================================
+// Desc.		: ?„ì²´ ?°ì´?? ì´ˆê¸°??//=============================================================================
 void CSocketMonitoring::Reset()
 {
 	for (auto Iter = m_Sockets.begin(); Iter != m_Sockets.end(); Iter++)
@@ -235,7 +231,7 @@ void CSocketMonitoring::Reset()
 	}
 };
 
-//Æ¯Á¤ ¼ÒÄÏ µ¥ÀÌÅÍ ÃÊ±âÈ­
+// ?¹ì • ?Œì¼“ ?°ì´??ì´ˆê¸°??
 void CSocketMonitoring::Reset_Socket(__in LPCTSTR szRFID)
 {
 	//m_Sockets.at(szRFID).Reset();
@@ -253,7 +249,7 @@ void CSocketMonitoring::Reset_Socket(__in LPCTSTR szRFID)
 // Parameter	: __in const std::vector<std::wstring> * IN_RFIDs
 // Qualifier	:
 // Last Update	: 2022/2/20 - 13:48
-// Desc.		: ¼ÒÄÏ ¸ñ·Ï ¾÷µ¥ÀÌÆ® (¼ÒÄÏ µ¥ÀÌÅÍ Ãß°¡)
+// Desc.		: ?Œì¼“ ëª©ë¡ ?…ë°?´íŠ¸ (?Œì¼“ ?°ì´??ì¶”ê?)
 //=============================================================================
 #ifdef _UNICODE
 void CSocketMonitoring::Init_Sockets(__in const std::vector<std::wstring>* IN_RFIDs)
@@ -318,7 +314,7 @@ void CSocketMonitoring::IncreaseYield_Final(__in LPCTSTR szRFID)
 	}
 }
 
-// ¼ÒÄÏ °¹¼ö
+// ?Œì¼“ ê°?ˆ˜
 //=============================================================================
 // Method		: GetCount
 // Access		: public  
@@ -332,13 +328,13 @@ size_t CSocketMonitoring::GetCount() const
 	return m_Sockets.size();
 };
 
-// ¸ğµç ¼ÒÄÏ »èÁ¦
+// ëª¨ë“  ?Œì¼“ ?? œ
 void CSocketMonitoring::RemoveAll()
 {
 	m_Sockets.clear();
 };
 
-// ¼ÒÄÏ »ğÀÔ
+// ?Œì¼“ ?½ì…
 bool CSocketMonitoring::Socket_Insert(__in CSocketInfo_Unit& IN_stSocket)
 {
 	auto Ret = m_Sockets.insert({ IN_stSocket.szRFID.GetBuffer(), IN_stSocket });
@@ -346,7 +342,7 @@ bool CSocketMonitoring::Socket_Insert(__in CSocketInfo_Unit& IN_stSocket)
 	return Ret.second;
 };
 
-// ¼ÒÄÏ »èÁ¦
+// ?Œì¼“ ?? œ
 void CSocketMonitoring::Socket_Remove(__in LPCTSTR szRFID)
 {
 	if (0 < m_Sockets.size())
@@ -355,7 +351,7 @@ void CSocketMonitoring::Socket_Remove(__in LPCTSTR szRFID)
 	}
 };
 
-// ¼ÒÄÏ ¼öÁ¤
+// ?Œì¼“ ?˜ì •
 void CSocketMonitoring::Socket_Modify(__in CSocketInfo_Unit* IN_pstSocket)
 {
 	if (0 < m_Sockets.size())
@@ -448,10 +444,10 @@ void CSocketMonitoring::Set_SocketInfo(__in LPCTSTR IN_szRFID, __in const CSocke
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID) = *IN_pSocketInfo;
 
-		// ·¹Áö½ºÆ®¸® °»½Å(??)
+		// ?ˆì??¤íŠ¸ë¦?ê°±ì‹ (??)
 		Save_SocketInfo(IN_szRFID);
 	}
 }
@@ -463,10 +459,10 @@ void CSocketMonitoring::Set_Stored_SocketInfo(__in LPCTSTR IN_szRFID, __in const
 	{
 		CConfig_Socket CfgSocket = m_Sockets.at(IN_szRFID);
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀåµÈ ¼ÒÄÏ µ¥ÀÌÅÍ ¼³Á¤
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€?¥ëœ ?Œì¼“ ?°ì´???¤ì •
 		m_Sockets.at(IN_szRFID) = *IN_pSocketInfo;
 
-		// ¼³Á¤µÈ ¼ÒÄÏ Á¤º¸ (Config Socket)¸¦ ´Ù½Ã ¼³Á¤
+		// ?¤ì •???Œì¼“ ?•ë³´ (Config Socket)ë¥??¤ì‹œ ?¤ì •
 		m_Sockets.at(IN_szRFID) = CfgSocket;
 	}
 }
@@ -523,10 +519,10 @@ void CSocketMonitoring::Set_InputTime(__in LPCTSTR IN_szRFID)
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID).Set_InputTime();
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€???)
 		Save_SocketInfo_InputTime(IN_szRFID);
 	}
 }
@@ -536,10 +532,10 @@ void CSocketMonitoring::Set_OutputTime(__in LPCTSTR IN_szRFID)
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID).Set_OutputTime();
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€???)
 		Save_SocketInfo_OutputTime(IN_szRFID);
 	}
 }
@@ -560,10 +556,10 @@ void CSocketMonitoring::Set_Barcode(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBa
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID).Set_Barcode(IN_szBarcode, IN_bRework);
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€???)
 		Save_SocketInfo_Barcode(IN_szRFID);
 	}
 }
@@ -573,24 +569,23 @@ void CSocketMonitoring::Set_Status(__in LPCTSTR IN_szRFID, __in uint8_t IN_nStat
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID).Set_Status(IN_nStatus);
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€???)
 		Save_SocketInfo_Status(IN_szRFID);
 	}
 }
 
 void CSocketMonitoring::Set_Judgment_Final(__in LPCTSTR IN_szRFID, __in uint8_t IN_nJudge)
 {
-	// ÃÖÁ¾ °Ë»ç ÁøÇà ÈÄ....
+	// ìµœì¢… ê²€??ì§„í–‰ ??...
 
 
-	// ¸ñÀûÁö -> ¸®ÅÍ³Ê
-
-	// Status ¾÷µ¥ÀÌÆ®
-
-	// ÀüÃ¼ ¼öÀ² ¾÷µ¥ÀÌÆ®
+	// ëª©ì ì§€ -> ë¦¬í„°??	
+	// Status ?…ë°?´íŠ¸
+	
+	// ?„ì²´ ?˜ìœ¨ ?…ë°?´íŠ¸
 
 
 }
@@ -608,31 +603,16 @@ void CSocketMonitoring::Set_Equipment(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_sz
 	}
 }
 
-void CSocketMonitoring::Set_EquipmentTrackIn(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID)
-{
-	auto result_sock = m_Sockets.find(IN_szRFID);
-	if (result_sock != m_Sockets.end())
-	{
-		// µ¥ÀÌÅÍ °»½Å
-		m_Sockets.at(IN_szRFID).Set_TrackInTime();
-		m_Sockets.at(IN_szRFID).Set_Equipment(IN_szEqpID);
-		m_Sockets.at(IN_szRFID).Set_EquipmentOrder(IN_nEqpOrder);
-
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
-		Save_SocketInfo_Equipment(IN_szRFID);
-	}
-}
-
 void CSocketMonitoring::Set_Location(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szEqpID, __in uint8_t IN_nLocation)
 {
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
-		m_Sockets.at(IN_szRFID).Set_Equipment(IN_szEqpID);
+		// ?°ì´??ê°±ì‹ 
+		m_Sockets.at(IN_szRFID).Set_Location_inEqp(IN_szEqpID, IN_nLocation);
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
-		Save_SocketInfo_Equipment(IN_szRFID);
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€???)
+		Save_SocketInfo_Location(IN_szRFID);
 	}
 }
 
@@ -641,11 +621,11 @@ void CSocketMonitoring::Set_TargetEquipment(__in LPCTSTR IN_szRFID, __in uint8_t
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID).Set_TargetEqpOrder(IN_nEqpOrder);
 		m_Sockets.at(IN_szRFID).Set_TargetEquipment(IN_szEqpID);
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€???)
 		Save_SocketInfo_Target(IN_szRFID);
 	}
 }
@@ -655,14 +635,14 @@ void CSocketMonitoring::Set_Judgment_Tester(__in LPCTSTR IN_szRFID, __in uint8_t
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID).Set_Judgment_Tester(IN_nTester, IN_nJudge);
 
 
-		// ¼öÀ² °è»ê
+		// ?˜ìœ¨ ê³„ì‚°
 
 
-		// ·¹Áö½ºÆ®¸®¿¡ ÀúÀå(?)
+		// ?ˆì??¤íŠ¸ë¦¬ì— ?€???)
 		//Save_ProductInfo(IN_szRFID);
 	}
 }
@@ -757,19 +737,19 @@ bool CSocketMonitoring::Verify_Socket(LPCTSTR IN_szRFID)
 //=============================================================================
 bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode)
 {
-	// ·Î´õ -> ¼­¹ö·Î Åë½Å
+	// ë¡œë” -> ?œë²„ë¡??µì‹ 
 
-	// Á¤»óÀÌ¸é (µî·ÏµÇ¾îÀÖ³ª?, °Ë»ç°¡ Á¾·á »óÅÂ ÀÎ°¡?, Socket TypeÀÌ ÇöÀç ¼³Á¤°ú °°Àº°¡?
+	// ?•ìƒ?´ë©´ (?±ë¡?˜ì–´?ˆë‚˜?, ê²€?¬ê? ì¢…ë£Œ ?íƒœ ?¸ê??, Socket Type???„ì¬ ?¤ì •ê³?ê°™ì?ê°€?
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ÇöÀç ¼³Á¤µÈ ¼ÒÄÏ Å¸ÀÔ°ú ·Î´õ¿¡¼­ µî·ÏÇÏ·Á´Â ¼ÒÄÏ Å¸ÀÔÀÌ ´Ù¸§
+		// ?„ì¬ ?¤ì •???Œì¼“ ?€?…ê³¼ ë¡œë”?ì„œ ?±ë¡?˜ë ¤???Œì¼“ ?€?…ì´ ?¤ë¦„
 		if (m_nLineSocketJIG_Type != m_Sockets.at(IN_szRFID).nSocketType)
 		{
 			return false;
 		}
 
-		// Unregister µÈ »óÅÂÀÎ°¡?
+		// Unregister ???íƒœ?¸ê??
 		if (enSocketStatus::SoS_Ready == m_Sockets.at(IN_szRFID).m_nStatus)
 		{
 			;
@@ -780,13 +760,13 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 		}
 
 
-		// ¼ÒÄÏ µ¥ÀÌÅÍ ÃÊ±âÈ­ (?)
+		// ?Œì¼“ ?°ì´??ì´ˆê¸°??(?)
 		Reset_RegisterData(IN_szRFID);
 
-		// ÅõÀÔ ½Ã°£ ¼³Á¤
+		// ?¬ì… ?œê°„ ?¤ì •
 		Set_InputTime(IN_szRFID);
 
-		// ¼ÒÄÏ ¹× Á¦Ç° µî·Ï
+		// ?Œì¼“ ë°??œí’ˆ ?±ë¡
 #ifdef USE_DEBUG_MODE
 
 		Set_Barcode(IN_szRFID, IN_szBarcode);
@@ -795,7 +775,7 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 		Set_Barcode(IN_szRFID, IN_szBarcode);
 #endif // USE_DEBUG_MODE
 
-		// ¼ÒÄÏ »óÅÂ : Á¤»ó (Á¦Ç° ¾øÀ¸¸é Bypass)
+		// ?Œì¼“ ?íƒœ : ?•ìƒ (?œí’ˆ ?†ìœ¼ë©?Bypass)
 		if (0 < _tcslen(IN_szBarcode))
 		{
 			Set_Status(IN_szRFID, (uint8_t)enSocketStatus::SoS_Pass);
@@ -816,10 +796,10 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 #endif // USE_DEBUG_MODE
 		}
 		
-		// ¼ÒÄÏÀÌ ÀÖ´Â ¼³ºñ ¼³Á¤
+		// ?Œì¼“???ˆëŠ” ?¤ë¹„ ?¤ì •
 		Set_Equipment(IN_szRFID, IN_FromEqpID);
 		
-		// GUI ¾÷µ¥ÀÌÆ®
+		// GUI ?…ë°?´íŠ¸
 		//uint16_t nFlag = WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Equipment;
 		WM_Update_GUI_Data(IN_szRFID, WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Equipment);
 
@@ -841,16 +821,16 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 //=============================================================================
 bool CSocketMonitoring::Unregister_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR IN_szRFID)
 {
-	// ·Î´õ(¾ğ·Îµå) -> ¼­¹ö·Î Åë½Å
+	// ë¡œë”(?¸ë¡œ?? -> ?œë²„ë¡??µì‹ 
 
-	// Á¤»óÀÌ¸é (µî·Ï?, °Ë»ç? ºÒ·®?)
+	// ?•ìƒ?´ë©´ (?±ë¡?, ê²€?? ë¶ˆëŸ‰?)
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ¹èÃâ ½Ã°£ ¼³Á¤
+		// ë°°ì¶œ ?œê°„ ?¤ì •
 		Set_OutputTime(IN_szRFID);
 
-		// ÃÖÁ¾ ¼öÀ² ¾÷µ¥ÀÌÆ® (¼ÒÄÏ ±âÁØ)
+		// ìµœì¢… ?˜ìœ¨ ?…ë°?´íŠ¸ (?Œì¼“ ê¸°ì?)
 		if (0 == m_Sockets.at(IN_szRFID).m_stTestResult.m_nNG_Code)
 		{	// Pass
 			IncreasePass_byEqp(IN_FromEqpID, IN_szRFID, Para_Left);
@@ -863,19 +843,16 @@ bool CSocketMonitoring::Unregister_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTST
 		IncreaseYield_Final(IN_szRFID);
 		WM_Update_GUI_Data(IN_szRFID, WM_Socket_Yield);
 
-		// Log ÆÄÀÏ ÀÛ¼º
+		// Log ?Œì¼ ?‘ì„±
 
-		// ºÒ·®ÀÎ°¡? (ºÒ·® Á¦Ç° ÀÌ·Â Ã³¸®)
+		// ë¶ˆëŸ‰?¸ê?? (ë¶ˆëŸ‰ ?œí’ˆ ?´ë ¥ ì²˜ë¦¬)
 
 
 
-		// ¼³ºñ : ·Î´õ
-		// ¼³ºñ À§Ä¡ : ÃÊ±âÈ­
-		// Å¸°Ù ÃÊ±âÈ­
-		// Test Result ÃÊ±âÈ­
-//		Reset_RegisterData(IN_szRFID);
+		// ?¤ë¹„ : ë¡œë”
+		// ?¤ë¹„ ?„ì¹˜ : ì´ˆê¸°??		// ?€ê²?ì´ˆê¸°??		// Test Result ì´ˆê¸°??//		Reset_RegisterData(IN_szRFID);
 
-		// GUI ¾÷µ¥ÀÌÆ®
+		// GUI ?…ë°?´íŠ¸
 // 		uint16_t nFlag = WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult;
 // 		WM_Update_GUI_Data(IN_szRFID, nFlag);
 
@@ -900,7 +877,7 @@ bool CSocketMonitoring::Get_TestResult(__in LPCTSTR IN_szRFID, __out ST_TestResu
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ ¹İÈ¯
+		// ?°ì´??ë°˜í™˜
 		OUT_stTestResult = m_Sockets.at(IN_szRFID).m_stTestResult;
 
 		return true;
@@ -920,7 +897,7 @@ bool CSocketMonitoring::Get_TestResult(__in LPCTSTR IN_szRFID, __out ST_TestResu
 //=============================================================================
 void CSocketMonitoring::Check_UnloadTime(__in LPCTSTR IN_szRFID)
 {
-	// ¹èÃâ ½Ã°£ ¼³Á¤
+	// ë°°ì¶œ ?œê°„ ?¤ì •
 	Set_OutputTime(IN_szRFID);
 }
 
@@ -944,13 +921,13 @@ bool CSocketMonitoring::Set_TestResult(__in LPCTSTR IN_FromEqpID, __in LPCTSTR I
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// µ¥ÀÌÅÍ °»½Å
+		// ?°ì´??ê°±ì‹ 
 		m_Sockets.at(IN_szRFID).Set_TestResult(IN_nNGCode, IN_nPara, IN_nNG_EqpOrder, IN_FromEqpID, IN_nNG_EqpType);
 
 		Save_SocketInfo_TestResult(IN_szRFID);
 
-		// ¼öÀ² ¾÷µ¥ÀÌÆ®
-		if (0 == IN_nNGCode) // ¾çÇ°
+		// ?˜ìœ¨ ?…ë°?´íŠ¸
+		if (0 == IN_nNGCode) // ?‘í’ˆ
 		{
 			IncreasePass_byEqp(IN_FromEqpID, IN_szRFID, IN_nPara);
 		}
@@ -966,7 +943,7 @@ bool CSocketMonitoring::Set_TestResult(__in LPCTSTR IN_FromEqpID, __in LPCTSTR I
 
 		uint16_t nFlag = WM_Socket_TestResult | WM_Socket_Yield;
 
-		// ºÒ·®ÀÌ°í, Àç°Ë»ç Á¦Ç°ÀÌ ¾Æ´Ï¸é fail Ã³¸®
+		// ë¶ˆëŸ‰?´ê³ , ?¬ê????œí’ˆ???„ë‹ˆë©?fail ì²˜ë¦¬
 		if ((0 != IN_nNGCode) && (false == IN_bRework))
 		{
 #ifdef USE_DEBUG_MODE
@@ -982,15 +959,14 @@ bool CSocketMonitoring::Set_TestResult(__in LPCTSTR IN_FromEqpID, __in LPCTSTR I
 			Set_Status(IN_szRFID, (uint8_t)enSocketStatus::SoS_Fail);
 #endif
 
-			//¸ñÀûÁö : ¸®ÅÍ³Ê
-			//Set_TargetEquipment(IN_szRFID, );
+			//ëª©ì ì§€ : ë¦¬í„°??			//Set_TargetEquipment(IN_szRFID, );
 
-			// ºÒ·® Á¦Ç° Á¤º¸ ÀúÀå (DB or ·¹Áö½ºÆ®¸®)
+			// ë¶ˆëŸ‰ ?œí’ˆ ?•ë³´ ?€??(DB or ?ˆì??¤íŠ¸ë¦?
 
 			nFlag |= (WM_Socket_Status);
 		}
 
-		// GUI ¾÷µ¥ÀÌÆ®
+		// GUI ?…ë°?´íŠ¸
 		WM_Update_GUI_Data(IN_szRFID, nFlag);
 
 		return true;
@@ -1045,24 +1021,6 @@ void CSocketMonitoring::Set_SocketTarget(__in LPCTSTR IN_szRFID, __in uint8_t IN
 }
 
 //=============================================================================
-// Method		: Set_SocketTrackIn
-// Access		: public  
-// Returns		: void
-// Parameter	: __in LPCTSTR IN_szRFID
-// Parameter	: __in uint8_t IN_nEqpOrder
-// Parameter	: __in LPCTSTR IN_szEqpID
-// Qualifier	:
-// Last Update	: 2023/7/25 - 21:30
-// Desc.		:
-//=============================================================================
-void CSocketMonitoring::Set_SocketTrackIn(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID)
-{
-	Set_EquipmentTrackIn(IN_szRFID, IN_nEqpOrder, IN_szEqpID);
-
-	WM_Update_GUI_Data(IN_szRFID, WM_Socket_Equipment);
-}
-
-//=============================================================================
 // Method		: Reset_RegisterData
 // Access		: protected  
 // Returns		: void
@@ -1089,14 +1047,10 @@ void CSocketMonitoring::Reset_RegisterData(__in LPCTSTR IN_szRFID)
 		m_Sockets.at(IN_szRFID).Set_Lot(_T(""));
 #endif
 
-		// ·¹Áö½ºÆ®¸® ÀúÀå
-		Save_SocketInfo(IN_szRFID);
+		// ?ˆì??¤íŠ¸ë¦??€??		Save_SocketInfo(IN_szRFID);
 
-		// ¼³ºñ : ·Î´õ
-		// ¼³ºñ À§Ä¡ : ÃÊ±âÈ­
-		// Å¸°Ù ÃÊ±âÈ­
-		// Test Result ÃÊ±âÈ­
-		// GUI ¾÷µ¥ÀÌÆ®
+		// ?¤ë¹„ : ë¡œë”
+		// ?¤ë¹„ ?„ì¹˜ : ì´ˆê¸°??		// ?€ê²?ì´ˆê¸°??		// Test Result ì´ˆê¸°??		// GUI ?…ë°?´íŠ¸
 		//uint16_t nFlag = WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult;
 		WM_Update_GUI_Data(IN_szRFID, WM_Socket_Barcode | WM_Socket_Equipment | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult);
 	}
@@ -1119,8 +1073,7 @@ void CSocketMonitoring::Reset_RegisterData_All()
 		Iter->second.Set_Lot(_T(""));
 #endif
 
-		// ·¹Áö½ºÆ®¸® ÀúÀå
-		Save_SocketInfo(Iter->second.szRFID);
+		// ?ˆì??¤íŠ¸ë¦??€??		Save_SocketInfo(Iter->second.szRFID);
 	}
 
 	//WM_Update_GUI_Data_All(WM_Socket_Barcode | WM_Socket_Equipment | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult);
@@ -1207,47 +1160,6 @@ bool CSocketMonitoring::Write_CSV_File(LPCTSTR IN_szPath)
 	return Write_File(szFile, szData, CSV_HEADER_SOCKETINFO);
 }
 
-//=============================================================================
-// Method		: Is_TrackInSocket
-// Access		: public  
-// Returns		: bool
-// Parameter	: __in LPCTSTR IN_szRFID
-// Parameter	: __in uint8_t IN_nEqpOrder
-// Qualifier	:
-// Last Update	: 2023/7/25 - 21:38
-// Desc.		:
-//=============================================================================
-bool CSocketMonitoring::Is_TrackInSocket(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder)
-{
-	auto result_sock = m_Sockets.find(IN_szRFID);
-	if (result_sock != m_Sockets.end())
-	{
-		if (IN_nEqpOrder == m_Sockets.at(IN_szRFID).m_nEqpOrder)
-			return true;
-	}
-
-	return false;
-}
-
-//=============================================================================
-// Method		: Get_ElapsedTime_TrackIn
-// Access		: public  
-// Returns		: uint32_t
-// Parameter	: __in LPCTSTR IN_szRFID
-// Qualifier	:
-// Last Update	: 2023/7/27 - 22:02
-// Desc.		:
-//=============================================================================
-uint32_t CSocketMonitoring::Get_ElapsedTime_TrackIn(__in LPCTSTR IN_szRFID)
-{
-	auto result_sock = m_Sockets.find(IN_szRFID);
-	if (result_sock != m_Sockets.end())
-	{
-		return m_Sockets.at(IN_szRFID).Get_ElapsedTime_TrackIn();
-	}
-
-	return 0;
-}
 
 #if (USE_XML)
 void CSocketMonitoring::Set_LOTID(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szData){

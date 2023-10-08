@@ -1,4 +1,4 @@
-//*****************************************************************************
+ï»¿//*****************************************************************************
 // Filename	: 	CommonFunction.h
 //
 // Created	:	
@@ -6,7 +6,7 @@
 //
 // Author	:	PiRing
 //	
-// Purpose	:	¿©·¯°¡Áö ±â´ÉµéÀÌ ÇÔ¼öµé ¸ğÀ½
+// Purpose	:	ì—¬ëŸ¬ê°€ì§€ ê¸°ëŠ¥ë“¤ì´ í•¨ìˆ˜ë“¤ ëª¨ìŒ
 //*****************************************************************************
 #ifndef __COMMONFUNCTION_H__
 #define __COMMONFUNCTION_H__
@@ -14,11 +14,11 @@
 #define MAX_LOG_LEN		1024*50
 
 // Macro ----------------------------------------------------------------------
-// ¸®Æ²/ºò ¿£µğ¾ğ ÆÇº° ¸ÅÅ©·Î
+// ë¦¬í‹€/ë¹… ì—”ë””ì–¸ íŒë³„ ë§¤í¬ë¡œ
 //const int iIs_bigendian = 1;
 //#define is_bigendian() ( (*(char*)&iIs_bigendian) == 0 )
 
-//#define CHECK(x,y,n) ( (x > 0 && x < n && y > 0 && y < n) ? 1 : 0)Common/
+//#define CHECK(x,y,n) ( (x > 0 && x < n && y > 0 && y < n) ? 1 : 0)
 #define CHECK_RANGE(x, und, ovr) ( (x >= und && x <= ovr ) ? 1 : 0)
 #define RANGE_CHECK(value, min, max, fail_return_value) { VALIDATE(min<=value && value<=max, return fail_return_value); }
 
@@ -35,13 +35,13 @@ template <class T> inline T GetPrecentage(const T& Numerator, const T&Denominato
 }
 
 
-#define ClearBits(Data, Area, Loc)		((Data) &= ~((area) << (loc)))		// ¿¬¼ÓµÈ bit Clear
-//#define SetBit(Data, Loc)				((Data) |= (0x01 << (loc)))			// ÇÑ bit Set
-#define SetBits(Data, Loc)              ((Data) |= ((area) << (loc)))		// ¿¬¼ÓµÈ bit
-#define InvertBit(Data, Loc)            ((Data) ^= (0x1 << (loc)))			// ÇÑ bit ¹İÀü
-#define InvertBits(Data, Area, Loc)		((Data) ^= ((area) << (loc)))		// ¿¬¼ÓµÈ bit ¹İÀü
-#define CheckBit(Data, Loc)             ((Data) & (0x01 << (loc)))			// ºñÆ® °Ë»ç
-#define ExtractBit(Data, Area, Loc)		(((Data) >> (Loc)) & (Area))		// ºñÆ® ÃßÃâ
+#define ClearBits(Data, Area, Loc)    ((Data) &= ~((area) << (loc)))       // ì—°ì†ëœ bit Clear
+//#define SetBit(Data, Loc)                 ((Data) |= (0x01 << (loc)))           // í•œ bit Set
+#define SetBits(Data, Loc)                ((Data) |= ((area) << (loc)))        // ì—°ì†ëœ bit
+#define InvertBit(Data, Loc)              ((Data) ^= (0x1 << (loc)))             // í•œ bit ë°˜ì „
+#define InvertBits(Data, Area, Loc)    ((Data) ^= ((area) << (loc)))         // ì—°ì†ëœ bit ë°˜ì „
+#define CheckBit(Data, Loc)             ((Data) & (0x01 << (loc)))            // ë¹„íŠ¸ ê²€ì‚¬
+#define ExtractBit(Data, Area, Loc)    (((Data) >> (Loc)) & (Area))         // ë¹„íŠ¸ ì¶”ì¶œ
 
 
 #define SetBit(value,bit)			(value) |= 1 << (bit)
@@ -55,15 +55,15 @@ template <class T> inline T GetPrecentage(const T& Numerator, const T&Denominato
 
 
 //=============================================================================
-// ¹®ÀÚ¿­ Ã³¸®
+// ë¬¸ìì—´ ì²˜ë¦¬
 //=============================================================================
 //-------------------------------------------------------------------
-// Çí½º ¹®ÀÚ¿­À» 10Áø¼ö·Î ¹Ù²Û´Ù.
+// í—¥ìŠ¤ ë¬¸ìì—´ì„ 10ì§„ìˆ˜ë¡œ ë°”ê¾¼ë‹¤.
 //-------------------------------------------------------------------
 int			HexStringToDecimal		(const char *s , int count);
 int			HexStringToDecimal		(LPCTSTR szHex);
 //-------------------------------------------------------------------
-// Çí½º µ¥ÀÌÅ¸¸¦ ¾Æ½ºÅ° ÇüÅÂÀÇ ½ºÆ®¸µÀ¸·Î ¹Ù²Û´Ù.
+// í—¥ìŠ¤ ë°ì´íƒ€ë¥¼ ì•„ìŠ¤í‚¤ í˜•íƒœì˜ ìŠ¤íŠ¸ë§ìœ¼ë¡œ ë°”ê¾¼ë‹¤.
 //-------------------------------------------------------------------
 CString		HexToCString			(LPVOID lpBuff, UINT nBuffSize);
 BOOL		HexToString				(LPCSTR lpInBuff, UINT nInSize, LPSTR lpOutBuff, UINT& nOutSize);
@@ -85,7 +85,7 @@ DWORD		HexCStringToBuffer		(CStringA szHex, BYTE* pOutBuffer, DWORD nBufferSize)
 BOOL HexToString (__in const CHAR* lpInBuff, __in UINT nInSize, __out CHAR* lpOutBuff, __out UINT& nOutSize);
 
 //-------------------------------------------------------------------
-// Null ¹®ÀÚ('\0')°¡ Æ÷ÇÔµÈ µ¥ÀÌÅ¸¸¦ ½ºÆäÀÌ½º ¹®ÀÚ(0x20)·Î º¯°æÇÑ´Ù.
+// Null ë¬¸ì('\0')ê°€ í¬í•¨ëœ ë°ì´íƒ€ë¥¼ ìŠ¤í˜ì´ìŠ¤ ë¬¸ì(0x20)ë¡œ ë³€ê²½í•œë‹¤.
 //-------------------------------------------------------------------
 CString		NullCharToSpaceChar		(LPVOID lpBuff, DWORD dwBuffSize);
 
@@ -93,7 +93,7 @@ char		HexCharzToByte			(char cFirstChar, char cSecondChar);
 BYTE		HexCharToByte			(char cHexChar);
 
 //-------------------------------------------------------------------
-// ÃÊ ´ÜÀ§ÀÇ ¼öÄ¡¸¦ ½Ã°£, ºĞ, ÃÊ ´ÜÀ§ÀÇ ½ºÆ®¸µÀ¸·Î º¯È¯ÇÑ´Ù.
+// ì´ˆ ë‹¨ìœ„ì˜ ìˆ˜ì¹˜ë¥¼ ì‹œê°„, ë¶„, ì´ˆ ë‹¨ìœ„ì˜ ìŠ¤íŠ¸ë§ìœ¼ë¡œ ë³€í™˜í•œë‹¤.
 //-------------------------------------------------------------------
 CString		SecondToTimeString		(DWORD dwSecond);
 CString		MilisecondToTimeString	(DWORD dwMilisecond);
@@ -111,14 +111,14 @@ ULONGLONG	DifferSystemTime_ms		(const SYSTEMTIME& pSr, const SYSTEMTIME& pSl);
 double		DifferSystemTime_sec	(const SYSTEMTIME& pSr, const SYSTEMTIME& pSl);
 
 //-------------------------------------------------------------------
-// ÀÏ¹İ ¼ıÀÚ ½ºÆ®¸µÀ» ÄŞ¸¶°¡ Æ÷ÇÔµÈ ½ºÆ®¸µÀ¸·Î º¯È¯
+// ì¼ë°˜ ìˆ«ì ìŠ¤íŠ¸ë§ì„ ì½¤ë§ˆê°€ í¬í•¨ëœ ìŠ¤íŠ¸ë§ìœ¼ë¡œ ë³€í™˜
 //-------------------------------------------------------------------
 CString		DigitToCommaDigitStr	(long long llDigit);
 
 CString	ConvNumberToFormatString(DOUBLE dData, BYTE byLength, BYTE byPoint);
 
 //-------------------------------------------------------------------
-// °íÁ¤µÈ ±æÀÌÀÇ ½ºÆ®¸µÀ¸·Î º¯È¯
+// ê³ ì •ëœ ê¸¸ì´ì˜ ìŠ¤íŠ¸ë§ìœ¼ë¡œ ë³€í™˜
 //-------------------------------------------------------------------
 //CString	FixedSizeString			(__in CString strSrc, __in INT nSize, __in CHAR chFill = 0x20, __in BOOL bLeftFill = TRUE);
 CStringA	FixedSizeString			(__in LPCSTR szSrc, __in INT nSize, __in CHAR chFill = 0x20, __in BOOL bLeftFill = TRUE);
@@ -127,10 +127,10 @@ BOOL isStringDouble(char *szString);
 
 
 //=============================================================================
-// ÆÄÀÏ / µğ·ºÅä¸® Ã³¸®
+// íŒŒì¼ / ë””ë ‰í† ë¦¬ ì²˜ë¦¬
 //=============================================================================
 //-------------------------------------------------------------------
-// ÆÄÀÏÀÇ ¸¶Áö¸· º¯°æ ½Ã°£À» ¾ò¾î¿Â´Ù.
+// íŒŒì¼ì˜ ë§ˆì§€ë§‰ ë³€ê²½ ì‹œê°„ì„ ì–»ì–´ì˜¨ë‹¤.
 //-------------------------------------------------------------------
 BOOL		GetLastWriteTime		(HANDLE hFile, LPTSTR lpszString, DWORD dwSize);
 BOOL		GetLastWriteTime		(__in LPCTSTR lpszFile, __out SYSTEMTIME& tmFile);
@@ -140,16 +140,16 @@ BOOL		UtilIsDirectoryExists	(LPCTSTR directory);
 int			UtilCreateDirectory		(LPCTSTR directory);
 int			DeleteAllFiles			(LPCTSTR szDir, int recur);
 void		MakeDirectory			(LPCTSTR szPath);
-// µğ·ºÅä¸® °Ë»ç ¹× ÇÏÀ§Æú´õ ÀÚµ¿»ı¼º
+// ë””ë ‰í† ë¦¬ ê²€ì‚¬ ë° í•˜ìœ„í´ë” ìë™ìƒì„±
 void		MakeSubDirectory		(LPCTSTR lpszDirName);
 
 BOOL		Backup_File				(__in LPCTSTR szPath);
 
 //=============================================================================
-// µ¿±âÈ­ Ã³¸®
+// ë™ê¸°í™” ì²˜ë¦¬
 //=============================================================================
 //-------------------------------------------------------------------
-// À©µµ¿ì ¸Ş¼¼Áö Ã³¸®ÇÏ¸é¼­ ´ë±âÇÏ´Â ±â´É
+// ìœˆë„ìš° ë©”ì„¸ì§€ ì²˜ë¦¬í•˜ë©´ì„œ ëŒ€ê¸°í•˜ëŠ” ê¸°ëŠ¥
 //-------------------------------------------------------------------
 void		DoEvents				();
 void		DoEvents				(DWORD dwMiliSeconds);
@@ -160,25 +160,25 @@ void		WaitTerminateHandle		(HANDLE hParam, DWORD dwTimeOut = INFINITE);
 void		WaitForThreadToTerminate(HANDLE hThread, DWORD dwTimeOut = INFINITE);
 BOOL		WaitForTimerIsNull		(HANDLE hTimer, DWORD dwTimeOut = INFINITE);
 //=============================================================================
-// ½Ã½ºÅÛ Ã³¸®
+// ì‹œìŠ¤í…œ ì²˜ë¦¬
 //=============================================================================
 //-------------------------------------------------------------------
-// ÇÑ±Û/¿µ¹® ÀüÈ¯ ±â´É
+// í•œê¸€/ì˜ë¬¸ ì „í™˜ ê¸°ëŠ¥
 //-------------------------------------------------------------------
 //BOOL __fastcall GetHanMode		(void);
 //void __fastcall ToggleHanMode		(void);
 
 //=============================================================================
-// ÇÁ·Î±×·¥ Á¤º¸ ±¸ÇÏ±â
+// í”„ë¡œê·¸ë¨ ì •ë³´ êµ¬í•˜ê¸°
 //=============================================================================
-// ÇÁ·Î±×·¥ ¹öÀü ±¸ÇÏ´Â ÇÔ¼ö
+// í”„ë¡œê·¸ë¨ ë²„ì „ êµ¬í•˜ëŠ” í•¨ìˆ˜
 LPCTSTR		GetVersionInfo			(HMODULE hLib, LPCTSTR lpszEntry);
 CString		GetVersionInfo			(LPCTSTR lpszEntry);
 LPCTSTR		GetProductVersionInfo	();
 CString		FormatVersion			(CString cs);
 
 //=============================================================================
-// IP ÁÖ¼Ò º¯È¯
+// IP ì£¼ì†Œ ë³€í™˜
 //=============================================================================
 BOOL		FormatIP				(LPTSTR pszIPAddr, UINT nSize, DWORD dwAddr);
 CString		ConvIPAddrToString		(DWORD dwAddr);
@@ -187,37 +187,37 @@ CString		GetMyIPAddress			();
 bool		isValidateIP4Address	(const char *s);
 
 //=============================================================================
-// Æ®·¹ÀÌ ¾ÆÀÌÄÜ ÀÜ»ó Á¦°Å
+// íŠ¸ë ˆì´ ì•„ì´ì½˜ ì”ìƒ ì œê±°
 //=============================================================================
 void		EraseTrayIcon			();
-// ÇÁ·Î¼¼½º °­Á¦ Á¾·á
+// í”„ë¡œì„¸ìŠ¤ ê°•ì œ ì¢…ë£Œ
 BOOL		FocredCloseProcess		(LPCTSTR lpszProcessName, LPCTSTR lpszFuncDesc);
 BOOL		NTCreateProcess			(PROCESS_INFORMATION &ProcessInformation, LPCTSTR lpszTargetName, LPSTR lpszCurrentFullPath);
 void		NTExitProcess			(PROCESS_INFORMATION &ProcessInformation);
 void		ForcedExitProcess		(CString strTargetProcName, DWORD dwExceptProcId);
 
 //=============================================================================
-// ³×Æ®¿öÅ© °ü·Ã
+// ë„¤íŠ¸ì›Œí¬ ê´€ë ¨
 //=============================================================================
 CString		GetPingResultCodeString	(ULONG lStatus);
 DWORD		_tinet_addr				(const TCHAR *cp);
 
 //=============================================================================
-// ³¯Â¥ Ã³¸® °ü·Ã
+// ë‚ ì§œ ì²˜ë¦¬ ê´€ë ¨
 //=============================================================================
 UINT getDaysInMonth (UINT nMonth, UINT nYear);
 
 //=============================================================================
-// ÇÑ±Û Ã³¸® °ü·Ã
+// í•œê¸€ ì²˜ë¦¬ ê´€ë ¨
 //=============================================================================
 char* UTF8toANSI(char *pszCode);
 
 //=============================================================================
-// 32bit/64bit °ü·Ã
+// 32bit/64bit ê´€ë ¨
 //=============================================================================
-//32ºñÆ® 64ºñÆ® ÇÁ·Î¼¼½º È®ÀÎ
+//32ë¹„íŠ¸ 64ë¹„íŠ¸ í”„ë¡œì„¸ìŠ¤ í™•ì¸
 BOOL IsWow64();
-//¿î¿µÃ¼Á¦(OS)ÀÇ 32ºñÆ® 64ºñÆ® È®ÀÎ
+//ìš´ì˜ì²´ì œ(OS)ì˜ 32ë¹„íŠ¸ 64ë¹„íŠ¸ í™•ì¸
 BOOL Is64BitWindows();
 
 

@@ -37,7 +37,7 @@ public:
 
 //protected:
 
-	// ¼ÒÄÏ Á¤º¸ (key: RFID)
+	// ?Œì¼“ ?•ë³´ (key: RFID)//
 #ifdef _UNICODE
 	std::map<std::wstring, CSocketInfo_Unit> m_Sockets;
 #else
@@ -45,7 +45,7 @@ public:
 #endif
 
 protected:
-	// ·¹Áö½ºÆ®¸®¿¡ µ¥ÀÌÅÍ ÀúÀå¿ëµµ
+	// ?ˆì??¤íŠ¸ë¦¬ì— ?°ì´???€?¥ìš©??/
 	CRegSocket		m_regSocket;
 
 	uint8_t			m_nLineSocketJIG_Type	= 0;	// H, V
@@ -55,16 +55,16 @@ protected:
 	inline void		WM_Update_GUI_Data		(__in LPCTSTR IN_szRFID, __in uint16_t IN_nFlag);
 	inline void		WM_Update_GUI_Data_All	(__in uint16_t IN_nFlag);
 
-	// ¶óÀÎ Á¤º¸
+	// ?¼ì¸ ?•ë³´//
 	const CLineInfo*	m_pLineInfo			= nullptr;
 
-	// µð¹ö±× Á¤º¸
+	// ?”ë²„ê·??•ë³´//
 	const ST_DebugInfo*	m_pDebugInfo		= nullptr;
 
 	// MES Rework NG Code
-	int16_t				m_nMES_ReworkCode	= 0;	// REWORK Á¦Ç° MES °á°ú ÄÚµå: ¼³ºñ¿¡¼­ ÇØ´çÄÚµå·Î ¸®ÅÏ ÇÒ °æ¿ì REWORK Á¦Ç°À¸·Î ¾çÇ° Ã³¸®
+	int16_t				m_nMES_ReworkCode	= 0;	// REWORK ?œí’ˆ MES ê²°ê³¼ ì½”ë“œ: ?¤ë¹„?ì„œ ?´ë‹¹ì½”ë“œë¡?ë¦¬í„´ ??ê²½ìš° REWORK ?œí’ˆ?¼ë¡œ ?‘í’ˆ ì²˜ë¦¬
 
-	// ÆÄÀÏ or ·¹Áö½ºÆ®¸® Ã³¸®
+	// ?Œì¼ or ?ˆì??¤íŠ¸ë¦?ì²˜ë¦¬//
 	bool	Save_SocketInfo				(__in LPCTSTR IN_szRFID);
 	bool	Save_SocketInfo_Barcode		(__in LPCTSTR IN_szRFID);
 	bool	Save_SocketInfo_Status		(__in LPCTSTR IN_szRFID);
@@ -86,62 +86,62 @@ protected:
 
 public:
 
-	// ÀüÃ¼ µ¥ÀÌÅÍ ÃÊ±âÈ­
+	// ?„ì²´ ?°ì´?? ì´ˆê¸°??/
 	void	Reset						();	
 
-	// Æ¯Á¤ ¼ÒÄÏ µ¥ÀÌÅÍ ÃÊ±âÈ­
+	// ?¹ì • ?Œì¼“ ?°ì´??ì´ˆê¸°??/
 	void	Reset_Socket				(__in LPCTSTR szRFID);	
 
-	// ¼ÒÄÏ ¸ñ·Ï ¾÷µ¥ÀÌÆ® (¼ÒÄÏ µ¥ÀÌÅÍ Ãß°¡)
+	// ?Œì¼“ ëª©ë¡ ?…ë°?´íŠ¸ (?Œì¼“ ?°ì´??ì¶”ê?)//
 #ifdef _UNICODE
 	void	Init_Sockets				(__in const std::vector<std::wstring>* IN_RFIDs);
 #else
 	void	Init_Sockets				(__in const std::vector<std::string>* IN_RFIDs);
 #endif
 
-	// »ý»ê¼ö·® Áõ°¡ (equipment id, socket rfid, pass/fail)
+	// ?ì‚°?˜ëŸ‰ ì¦ê? (equipment id, socket rfid, pass/fail)//
 	void	IncreasePass_byEqp			(__in LPCTSTR szEqpID, __in LPCTSTR szRFID, __in uint8_t IN_nPara);
 	void	IncreaseFail_byEqp			(__in LPCTSTR szEqpID, __in LPCTSTR szRFID, __in uint8_t IN_nPara);
-	// Unload½Ã Unregister ÇÒ ¶§ Ã³¸®
+	// Unload??Unregister ????ì²˜ë¦¬//
 	void	IncreaseYield_Final			(__in LPCTSTR szRFID);
 
-	// ¼ÒÄÏ °¹¼ö
+	// ?Œì¼“ ê°?ˆ˜//
 	size_t	GetCount					() const;
 
-	// ¸ðµç ¼ÒÄÏ »èÁ¦
+	// ëª¨ë“  ?Œì¼“ ?? œ//
 	void	RemoveAll					();
 
-	// ¼ÒÄÏ »ðÀÔ
+	// ?Œì¼“ ?½ìž…//
 	bool	Socket_Insert				(__in CSocketInfo_Unit& IN_stSocket);
 
-	// ¼ÒÄÏ »èÁ¦
+	// ?Œì¼“ ?? œ//
 	void	Socket_Remove				(__in LPCTSTR szRFID);
 
-	// ¼ÒÄÏ ¼öÁ¤
+	// ?Œì¼“ ?˜ì •//
 	void	Socket_Modify				(__in CSocketInfo_Unit* IN_pstSocket);
 
-	// RFID Á¤º¸·Î ¼ÒÄÏ Á¤º¸ ¾ò±â
+	// RFID ?•ë³´ë¡??Œì¼“ ?•ë³´ ?»ê¸°//
 	CSocketInfo_Unit&		GetAt		(__in LPCTSTR szRFID);
 	const CSocketInfo_Unit& GetAt		(__in LPCTSTR szRFID) const;
 
 
 public:
 
-	// Data¸¦ GUI¿¡ Ç¥½ÃÇÏ±â À§ÇØ »ç¿ë
+	// Dataë¥?GUI???œì‹œ?˜ê¸° ?„í•´ ?¬ìš©//
 	void	Set_OwnerHWND				(__in HWND IN_hWnd);
-	// Notify Windows Message ¼³Á¤
+	// Notify Windows Message ?¤ì •//
 	void	Set_WinMsg_UpdateUI			(__in UINT IN_nWM_UpdateUI);
 
 
-	// ÇöÀç »ç¿ë ¼³Á¤µÈ ¼ÒÄÏ JIG Type
+	// ?„ìž¬ ?¬ìš© ?¤ì •???Œì¼“ JIG Type//
 	void	Set_LineSocketJIG_Type		(__in uint8_t IN_nSocketType);
 	uint8_t	Get_LineSocketJIG_Type		() const;
 
-	// ¼ÒÄÏ RFID ±âÁØÀ¸·Î Socket Type°ú Comment°¡ º¯°æµÈ °æ¿ì
+	// ?Œì¼“ RFID ê¸°ì??¼ë¡œ Socket Typeê³?Commentê°€ ë³€ê²½ëœ ê²½ìš°//
 	void	Set_SocketConfig			(__in const CSocketList* IN_pSocketList);
-	// ¼ÒÄÏ Á¤º¸ ¼³Á¤
+	// ?Œì¼“ ?•ë³´ ?¤ì •//
 	void	Set_SocketInfo				(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
-	// ÇÁ·Î±×·¥ ½ÃÀÛ ½Ã ÀúÀåµÈ ¼ÒÄÏ Á¤º¸ ¼³Á¤
+	// ?„ë¡œê·¸ëž¨ ?œìž‘ ???€?¥ëœ ?Œì¼“ ?•ë³´ ?¤ì •//
 	void    Set_Stored_SocketInfo		(__in LPCTSTR IN_szRFID, __in const CSocketInfo_Unit* IN_pSocketInfo);
 
 	void	SetPtr_LineInfo				(__in const CLineInfo* IN_pConfigLine);
@@ -154,31 +154,30 @@ public:
 
 protected:
 
-	// ·Î´õ ÅõÀÔ½Ã°£
+	// ë¡œë” ?¬ìž…?œê°„//
 	void	Set_InputTime				(__in LPCTSTR IN_szRFID);
-	// ¾ð·Î´õ ¹èÃâ ½Ã°£
+	// ?¸ë¡œ??ë°°ì¶œ ?œê°„//
 	void	Set_OutputTime				(__in LPCTSTR IN_szRFID);
 
-	// ¼ÒÄÏÀÇ Á¦Ç° ¹ÙÄÚµå ¼³Á¤
+	// ?Œì¼“???œí’ˆ ë°”ì½”???¤ì •//
 	void	Set_Barcode					(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in bool IN_bRework = false);	
 	
-	// ¼ÒÄÏÀÇ »óÅÂ ¼³Á¤
+	// ?Œì¼“???íƒœ ?¤ì •//
 	void	Set_Status					(__in LPCTSTR IN_szRFID, __in uint8_t IN_nStatus);
 	
-	// Á¦Ç°ÀÇ ÃÖÁ¾ ¾ç/ºÒ ÆÇÁ¤
+	// ?œí’ˆ??ìµœì¢… ??ë¶??ì •//
 	void	Set_Judgment_Final			(__in LPCTSTR IN_szRFID, __in uint8_t IN_nJudge);
 
-	// ¼ÒÄÏÀÌ ÀÖ´Â ¼³ºñ ¼³Á¤
+	// ?Œì¼“???ˆëŠ” ?¤ë¹„ ?¤ì •//
 	void	Set_Equipment				(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szEqpID);
-	void	Set_EquipmentTrackIn(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID);
-
-	// ¼³ºñ³»ÀÇ ¼ÒÄÏ À§Ä¡ (Port, Conveyor) ¼³Á¤ °¡´ÉÇÏ¸é..
+	
+	// ?¤ë¹„?´ì˜ ?Œì¼“ ?„ì¹˜ (Port, Conveyor) ?¤ì • ê°€?¥í•˜ë©?.
 	void	Set_Location				(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szEqpID, __in uint8_t IN_nLocation);
 	
-	// ¼ÒÄÏÀÇ ¸ñÀû ¼³ºñ ¼³Á¤
+	// ?Œì¼“??ëª©ì  ?¤ë¹„ ?¤ì •//
 	void	Set_TargetEquipment			(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID);
 	
-	// Á¦Ç°ÀÇ °Ë»çº° °á°ú ¼³Á¤
+	// ?œí’ˆ??ê²€?¬ë³„ ê²°ê³¼ ?¤ì •//
 	void	Set_Judgment_Tester			(__in LPCTSTR IN_szRFID, __in uint8_t IN_nTester, __in uint8_t IN_nJudge);
 
 	void	Reset_Socket_Yield			(__in LPCTSTR szRFID);
@@ -187,8 +186,8 @@ protected:
 	
 
 public:
-	// Åë½Å ÀÌº¥Æ® Ã³¸® --------------------------------------------------------
-	// ¼ÒÄÏ ÅõÀÔ °¡´É ?
+	// ?µì‹  ?´ë²¤??ì²˜ë¦¬ --------------------------------------------------------
+	// ?Œì¼“ ?¬ìž… ê°€???//
 	bool	Is_ExistSocket				(__in LPCTSTR IN_szRFID);
 	bool	Verify_Socket				(__in LPCTSTR IN_szRFID);
 	bool	Register_Socket				(__in LPCTSTR IN_FromEqpID, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode);
@@ -201,22 +200,17 @@ public:
 	
 	void	Set_SocketLocation			(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szEqpID, __in uint8_t IN_nLocation);
 	void	Set_SocketTarget			(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID);
-	void	Set_SocketTrackIn			(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID);
 
-	// ¼ÒÄÏ µ¥ÀÌÅÍ ÃÊ±âÈ­CTestManager_Device::CTestManager_Device()
+	// ?Œì¼“ ?°ì´??ì´ˆê¸°??/
 	void	Reset_RegisterData			(__in LPCTSTR IN_szRFID);
 	void	Reset_RegisterData_All		();
 	void	Reset_TestResult			(__in LPCTSTR IN_szRFID);
 	void	Reset_Yield					(__in LPCTSTR IN_szRFID);
 	void	Reset_Yield_All				();
 	
-	// ¼ÒÄÏ °á°ú Log
+	// ?Œì¼“ ê²°ê³¼ Log//
 	bool	Write_CSV_File				(__in LPCTSTR IN_szPath);
 	
-	// ÇØ´ç ¼³ºñ¿¡ ¼ÒÄÏÀÌ Æ®·¢ÀÎ Ã³¸®°¡ µÇ¾î ÀÖ´Â°¡?
-	bool	Is_TrackInSocket(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder);
-	uint32_t Get_ElapsedTime_TrackIn(__in LPCTSTR IN_szRFID);
-
 #if (USE_XML)
 protected:
 	void	Set_LOTID					(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szData);

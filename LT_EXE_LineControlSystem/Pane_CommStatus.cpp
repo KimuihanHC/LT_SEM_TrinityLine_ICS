@@ -273,7 +273,6 @@ int CPane_CommStatus::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_bn_Device[nIdx].Create(g_szBnDeviceName_T[m_nLanguage][nIdx], dwStyle | BS_PUSHBUTTON, rectDummy, this, IDC_BN_DEVICE_S + nIdx);
 		m_bn_Device[nIdx].SetFont(&m_Font);
 	}
-
 #if (USE_XML)
 	m_st_RMS.SetStaticStyle(CVGStatic::StaticStyle_Title);
 	m_st_RMS.SetColorStyle(CVGStatic::ColorStyle_DarkGray);
@@ -549,7 +548,6 @@ void CPane_CommStatus::OnBnClicked_Dev(UINT nID)
 			}
 		}
 			break;
-
 #if (USE_XML)
 		case DEV_BN_RMS:
 		{
@@ -721,8 +719,6 @@ void CPane_CommStatus::Add_TCPIP()
 	//AddWindow(nGroupCommStatus, m_bn_Device[DEV_BN_RMS].GetSafeHwnd(), 20);
 	AddWindow(nGroupCommStatus, m_st_EES.GetSafeHwnd(), 20);
 	AddWindow(nGroupCommStatus, m_bn_Device[DEV_BN_SERVER].GetSafeHwnd(), 20);	
-#else
-	int nGroupCommStatus = AddGroup(_T("MES"), FALSE, TRUE, hIcon);
 #endif
 	//
 	//int nGroupCommStatus = AddGroup(_T("MES"), FALSE, TRUE, hIcon);
@@ -896,7 +892,6 @@ void CPane_CommStatus::SetStatus_Login(__in enPermissionMode IN_nAuthority, __in
 		m_st_Device[DevSI_User].SetColorStyle(CVGStatic::ColorStyle_DeepDarkGray);
 	}
 }
-
 //=============================================================================
 // Method		: SetStatus_Production
 // Access		: public  

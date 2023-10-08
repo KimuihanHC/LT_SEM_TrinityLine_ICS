@@ -21,7 +21,7 @@ CLT_Option::CLT_Option()
 {	
 	m_strRegPath_Base = REG_PATH_OPTION_DEFALT;
 
-	m_InsptrType	= enInsptrSysType::Sys_Ics_Trinity_Line;
+	m_InsptrType	= enInsptrSysType::Sys_Dev_Mod_1;
 }
 
 //=============================================================================
@@ -76,12 +76,6 @@ void CLT_Option::SaveOption_Inspector( stOpt_Insp stOption )
 		// 언어 설정
 		reg.WriteDWORD(_T("Language"), (DWORD)m_stOption.Inspector.nLanguage);
 
-		// Auto 모드에서  Manual 모드로 전환하는데 필요한 대기 시간 (Wait time required to switch from Auto mode to Manual mode.)
-		reg.WriteDWORD(_T("Auto_to_Manual_WaitTime"), (DWORD)m_stOption.Inspector.nAutoModeDuration);
-
-		// Auto 모드에서 설비의 통신 끊김 알람
-		//reg.WriteDWORD(_T("Alarm_EqpDiscon_AutoMode"), (DWORD)m_stOption.Inspector.bAlarm_EqpDiscon_AutoMode);
-
 		// Log 경로
 		reg.WriteString(_T("Path_Log"), m_stOption.Inspector.szPath_Log);
 		// Report 경로
@@ -124,14 +118,6 @@ BOOL CLT_Option::LoadOption_Inspector(stOpt_Insp& stOption)
 		if (reg.ReadDWORD(_T("Language"), dwValue))
 			m_stOption.Inspector.nLanguage = (uint8_t)dwValue;
 
-		// Auto 모드에서  Manual 모드로 전환하는데 필요한 대기 시간 (Wait time required to switch from Auto mode to Manual mode.)
-		if (reg.ReadDWORD(_T("Auto_to_Manual_WaitTime"), dwValue))
-			m_stOption.Inspector.nAutoModeDuration = (uint16_t)dwValue;
-
-		// Auto 모드에서 설비의 통신 끊김 알람
-// 		if (reg.ReadDWORD(_T("Alarm_EqpDiscon_AutoMode"), dwValue))
-// 			m_stOption.Inspector.bAlarm_EqpDiscon_AutoMode = (uint8_t)dwValue;
-
 		// Log 경로
 		reg.ReadString(_T("Path_Log"), m_stOption.Inspector.szPath_Log);
 		// Report 경로
@@ -160,16 +146,7 @@ BOOL CLT_Option::LoadOption_Inspector(stOpt_Insp& stOption)
 
 	return TRUE;
 }
-
-//=============================================================================
-// Method		: SaveOption_Server
-// Access		: public  
-// Returns		: void
-// Parameter	: stOpt_Server stOption
-// Qualifier	:
-// Last Update	: 2016/5/18 - 15:50
-// Desc.		:
-//=============================================================================
+#if (20230905)
 void CLT_Option::SaveOption_Server(__in unsigned nType, __in stOpt_Server stOption)
 {
 	CRegistry	reg;
@@ -213,16 +190,6 @@ void CLT_Option::SaveOption_Server(__in unsigned nType, __in stOpt_Server stOpti
 	}
 	reg.Close();
 }
-
-//=============================================================================
-// Method		: LoadOption_Server
-// Access		: public  
-// Returns		: BOOL
-// Parameter	: stOpt_Server & stOption
-// Qualifier	:
-// Last Update	: 2016/5/18 - 15:50
-// Desc.		:
-//=============================================================================
 BOOL CLT_Option::LoadOption_Server( __in unsigned nType, __out stOpt_Server& stOption)
 {
 	CRegistry	reg;
@@ -277,6 +244,7 @@ BOOL CLT_Option::LoadOption_Server( __in unsigned nType, __out stOpt_Server& stO
 
 	return TRUE;
 }
+#endif
 
 //=============================================================================
 // Method		: SaveOption_Misc

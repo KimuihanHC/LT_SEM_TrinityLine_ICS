@@ -17,21 +17,20 @@
 
 
 //---------------------------------------------------------
-// Á¦Ç° ¸ðµ¨ ¼³Á¤ ±¸Á¶Ã¼
-//---------------------------------------------------------
+// ?œí’ˆ ëª¨ë¸ ?¤ì • êµ¬ì¡°ì²?//---------------------------------------------------------
 class CConfig_Model
 {
 public:
 
 	CString			m_szAlias;		// ëª…ì¹­
-	uint8_t			m_nSocketType;	// »ç¿ë ¼ÒÄÏ
-	uint8_t			m_nModelType;	// »ç¿ë Á¦Ç° ¸ðµ¨ ±¸ºÐ
+	uint8_t			m_nSocketType;	// ?¬ìš© ?Œì¼“
+	uint8_t			m_nModelType;	// ?¬ìš© ?Œì¼“
 
-	bool			m_bEnable_TestType[Max_TesterCount];		// °Ë»ç ÁøÇà È°¼ºÈ­ ¿©ºÎ
+	bool			m_bEnable_TestType[Max_TesterCount];		// ê²€??ì§„í–‰ ?œì„±???¬ë?
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
-	bool			m_bEnable_InspType[Max_InspTypeCount];		// °Ë»ç ÁøÇà È°¼ºÈ­ ¿©ºÎ
+	bool			m_bEnable_InspType[Max_InspTypeCount];		// ê²€??ì§„í–‰ ?œì„±???¬ë?
 #endif	// NEW_INSPECTION_TYPE_APPLY
-	//bool			bChecked_TestType[Max_TesterCount];		// È°¼ºÈ­µÈ °Ë»ç Áß °Ë»ç ÁøÇà ¿©ºÎ
+	//bool			bChecked_TestType[Max_TesterCount];		// ?œì„±?”ëœ ê²€??ì¤?ê²€??ì§„í–‰ ?¬ë?
 
 	CConfig_Model()
 	{

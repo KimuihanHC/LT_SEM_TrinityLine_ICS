@@ -10,7 +10,6 @@
 #include "stdafx.h"
 #include "TestManager_EQP_ICS.h"
 #include "Def_Test.h"
-#include "Def_Language_Message.h"
 
 #if (USE_XML)
 #include "xmlArgs.h"
@@ -72,7 +71,6 @@ void CTestManager_EQP_ICS::OnInit_Devicez(__in HWND hWndOwner /*= NULL*/)
 void CTestManager_EQP_ICS::OnMatchingEquipment()
 {
 	auto nEqpCnt = Get_EquipmentCount();
-
 	if (0 < nEqpCnt)
 	{
 		for (auto nIdx = 0; nIdx < nEqpCnt; ++nIdx)
@@ -105,7 +103,6 @@ void CTestManager_EQP_ICS::OnMatchingEquipment()
 				}
 			}
 			break;
-
 			default: // Tester
 			{
 				if (false == m_pIcsComm->CreateRemote((CEqpTester&)Get_Equipment(nIdx)))
@@ -148,22 +145,6 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentConnection(__in uint8_t IN_FromEqp, 
 	}
 	else
 	{
-		if (m_bFlag_CheckEqpConnection)
-		{
-			// Auto 상태인데, 통신이 끊기면 알람을 팝업한다 (2023.03.20)
-			if (enEqpOperatingMode::EOM_Auto == Get_Equipment(IN_FromEqp).Get_OperatingMode())
-			{
-				// 설비와의 통신이 끊겼습니다.
-				CString szMsg;
-				szMsg.Format(_T("%s\r\n Eqp_%02d: %s(%s)"), g_szMessageBox_T[MB_Eqp_Comm_Disconnected][m_stOption.Inspector.nLanguage],
-					IN_FromEqp,
-					Get_Equipment(IN_FromEqp).Get_Alias(),
-					Get_Equipment(IN_FromEqp).Get_EquipmentId());
-
-				LT_MessageBox(szMsg.GetBuffer());
-			}
-		}
-
 		OnLog(_T("[eqp %02d] tcp/ip disconnected"), IN_FromEqp);
 	}
 	
@@ -459,22 +440,8 @@ void CTestManager_EQP_ICS::OnEvent_CheckEmptyEquipment(__in uint8_t IN_FromEqp)
 
 			if (nCheckCount <= nEmptyCount)
 			{
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-				// 검사 포트가 2개 이상인 경우에만 메세지 전송
-				//if (1 < Get_Equipment(IN_FromEqp).Get_TestPortCount())
-				if (Get_EquipmentType(nEmptyCount) == enEquipmentType::Eqp_Distortion)
-				{
-					// 현재 설비로 생산 종료 메세지 전송
-					OnSend_EndOfProduction(IN_FromEqp, true);
-				}
-#else
-				//if (1 < Get_Equipment(IN_FromEqp).Get_TestPortCount())
-				if (Get_Equipment(nEmptyCount).Get_EqpType_UI() != enEquipmentType_UI::EqpUI_HotPixel3port)
-				{
-					// 현재 설비로 생산 종료 메세지 전송
-					OnSend_EndOfProduction(IN_FromEqp, true);
-				}
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+				// 현재 설비로 생산 종료 메세지 전송
+				OnSend_EndOfProduction(IN_FromEqp, true);
 			}
 		}
  		else if (Get_Equipment(IN_FromEqp).IsEmpty_Equipment())
@@ -495,25 +462,6 @@ void CTestManager_EQP_ICS::OnEvent_CheckEmptyEquipment(__in uint8_t IN_FromEqp)
 //=============================================================================
 void CTestManager_EQP_ICS::OnEvent_Loader_RegisterSocket(__in LPCTSTR IN_szRFID)
 {
-#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	if (false == m_stInspInfo.bCheckedRegister)
-	{
-		OnLog(_T("Begin Socket Register Time Check"));
-	}
-	m_stInspInfo.Set_LastRegisterTime();
-
-#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	// 라인 중간에서 수동으로 제거된 소켓인지 판단
-	auto nEqpIdx = Get_Socket(IN_szRFID).m_nTargetEqpOrder;
-	if (Get_Equipment(nEqpIdx).Is_Tester())
-	{
-		Get_Equipment(nEqpIdx).Decrease_ReservedPort(IN_szRFID);
-
-		OnLog(_T("[Loader] Register a socket that has been manually removed. (rfid: %s)"), IN_szRFID);
-	}
-
 	// log (소켓, 제품 바코드)
 	OnLog(_T("[Loader] Register Socket => rfid: %s,  barcode: %s, socket type: %s"),
 		IN_szRFID,
@@ -539,12 +487,6 @@ void CTestManager_EQP_ICS::OnEvent_Loader_RegisterSocket(__in LPCTSTR IN_szRFID)
 //=============================================================================
 void CTestManager_EQP_ICS::OnEvent_Loader_CheckTrackOut(__in LPCTSTR IN_szRFID)
 {
-	if (NULL == IN_szRFID)
-	{
-		OnLog_Err(_T("[Loader] Check Track Out => RFID is NULL"));
-		return;
-	}
-
 	// 로더 투입전 버퍼3의 상태가 없음 -> 제품 있음으로 바뀌면, 배출 승인을 알려준다.
 	OnLog(_T("[Loader] Check Track Out => rfid: %s"),IN_szRFID);
 	OnLog_SocketEvent(IN_szRFID, _T("[Loader] Check Track Out => rfid: %s"), IN_szRFID);
@@ -627,27 +569,6 @@ void CTestManager_EQP_ICS::OnEvent_Loader_TrackOut(__in LPCTSTR IN_szRFID)
 //=============================================================================
 void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in LPCTSTR IN_szRFID)
 {
-	//** 이미 트랙인 처리된 소켓이면 무시한다.
-	if (true == Get_SocketInfo().Is_TrackInSocket(IN_szRFID, IN_FromEqp))
-	{
-		auto nTime = Get_SocketInfo().Get_ElapsedTime_TrackIn(IN_szRFID);
-		if ((0 < nTime) && (nTime <= 900))
-		{
-			OnLog(_T("[eqp %02d] Skip Track In : Already Track In Completed => rfid: %s"), IN_FromEqp, IN_szRFID);
-			return;
-		}
-	}
-
-	// 설비에서 이미 Track In 요청된 소켓이면.. 무시
-	if (true == Get_Equipment(IN_FromEqp).IsTrackInRequest_Socket(IN_szRFID, 900))
-	{
-		OnLog(_T("[eqp %02d] Skip Track In : Already Track In Requested => rfid: %s"), IN_FromEqp, IN_szRFID);
-		return;
-	}
-	else
-	{
-		Get_Equipment(IN_FromEqp).Set_TrackInRequestSocket(IN_szRFID);
-	}
 	// 검사 설비에 소켓이 도착하여, RFID로 투입 승인 요청
 	OnLog(_T("[eqp %02d] Track In (Request Socket) => rfid: %s"), IN_FromEqp, IN_szRFID);
 	OnLog_SocketEvent(IN_szRFID, _T("[eqp %02d] Track In (Request Socket) => rfid: %s"), IN_FromEqp, IN_szRFID);
@@ -657,45 +578,12 @@ void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in 
 	// 2: 승인 (마지막 소켓)
 	// 3: Bypass
 
+
 	// 설비가 알람?
+
+
 	// 설비가 Skip?
 
-
-	// 목적 설비가 현재 설비보다 이전 설비이면 오류 상황.. (2023.08.01)
-	if (Get_Socket(IN_szRFID).m_nTargetEqpOrder < IN_FromEqp)
-	{
-		OnLog_Err(_T("[eqp %02d] Target Equipment Error!!! => rfid: %s, Target eqp: %d, Current eqp: %d"),
-			IN_FromEqp,
-			IN_szRFID,
-			Get_Socket(IN_szRFID).m_nTargetEqpOrder,
-			IN_FromEqp);
-
-		Get_Socket(IN_szRFID).Set_TestResult(-3, 0, IN_FromEqp, Get_EquipmentID(IN_FromEqp));
-
-		Proc_SetSocketTargetEquipment(IN_szRFID, Get_Returner().Get_EqpOrder());
-
-		// 리턴
-		// 서버->설비로 투입 승인 여부 통보
-		OnSend_Accept_SocketTrackIn(IN_FromEqp, IN_szRFID, enAcceptSocket::AS_Bypass, Get_SocketBarcode(IN_szRFID).GetBuffer());
-
-		OnLog(_T("[eqp %02d] Accept Socket Track In (Error) => rfid: %s, flag: %d (%s)"), IN_FromEqp, IN_szRFID, enAcceptSocket::AS_Bypass, g_szAcceptSocket[enAcceptSocket::AS_Bypass]);
-		OnLog_SocketEvent(IN_szRFID, _T("[eqp %02d] Accept Socket Track In (Error) => rfid: %s, flag: %d (%s)"), IN_FromEqp, IN_szRFID, enAcceptSocket::AS_Bypass, g_szAcceptSocket[enAcceptSocket::AS_Bypass]);
-		return;
-	}
-
-
-#ifdef USE_SET_TARGET_EQP_GROUP_TRACK_IN // 2023.03.23
-
-	if (Get_Equipment(IN_FromEqp).Get_EnableEquipment())
-	{
-		// 현재 설비가 스킵인가? // 2023.05.10
-		if (false == Get_Equipment(IN_FromEqp).Get_Skip())
-		{
-			Proc_SetTagetEquipment_Group(IN_szRFID, IN_FromEqp);
-		}
-	}
-
-#endif // USE_SET_TARGET_EQP_GROUP_TRACK_IN
 
 #ifdef USE_TARGET_EQP_DISTANCE
 	// 설비가 그룹 내 첫 설비 이고, 소켓이 far away 상태?  => 그룹 내 목적지 재 설정
@@ -704,8 +592,7 @@ void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in 
 		if (Get_LineInfo().Is_FirstEquipment_inGroup(IN_FromEqp))
 		{
 			// 예약 1 감소
-			//Get_Equipment(IN_FromEqp).Decrease_ReservedPort();
-			Get_Equipment(IN_FromEqp).Decrease_ReservedPort(IN_szRFID);
+			Get_Equipment(IN_FromEqp).Decrease_ReservedPort();
 
 			// 목적 설비 재 설정
 			Proc_SetTagetEquipment_Group(IN_szRFID, Get_EquipmentType(IN_FromEqp));
@@ -713,8 +600,9 @@ void CTestManager_EQP_ICS::OnEvent_Tester_TrackIn(__in uint8_t IN_FromEqp, __in 
 	}
 #endif
 
-	//Get_Equipment(IN_FromEqp);
-	//Get_Socket(IN_szRFID);
+
+	Get_Equipment(IN_FromEqp);
+	Get_Socket(IN_szRFID);
 
 	// 소켓 상태 판단
 	uint8_t nFlag = enAcceptSocket::AS_Error;
@@ -879,82 +767,6 @@ void CTestManager_EQP_ICS::OnEvent_Unloader_TrackIn(__in LPCTSTR IN_szRFID)
 
 	Get_Socket(IN_szRFID).Set_Tacttime(dTacttime);
 
-#ifdef USE_NG_CODE_UPDATE_AT_UNLOAD
-
-	// 불량 정보 업데이트 
-	ST_TestResult* pRe = &Get_Socket(IN_szRFID).m_stTestResult;
-
-	// Log : 불량이 발생한 제품 정보 기록 (제품 바코드, NG 발생 검사: Pass된 검사)	
-	Get_Equipment(pRe->m_nNG_EqpOrder).IncreaseFailInfo(pRe->m_nNG_Code, pRe->m_nNG_Para);
-
-#endif // USE_NG_CODE_UPDATE_AT_UNLOAD
-
-#ifdef USE_EQP_YIELD_UPDATE_AT_UNLOAD
-
-#ifndef USE_NG_CODE_UPDATE_AT_UNLOAD
-	ST_TestResult* pRe = &Get_Socket(IN_szRFID).m_stTestResult;
-#endif
-
-	// 설비별 양품 결과 업데이트
-	for (auto const &element : pRe->m_Eqp_Result)
-	{
-		// 검사가 진행된 설비 체크
-		if (1 == element.m_bTest)
-		{
-			if (0 == element.m_nNGCode)
-			{
-				Get_Equipment(element.m_nEqpOrder).Increase_Yield_Pass(element.m_nPara);
-			}
-			else if (Get_SocketInfo().Get_MES_ReworkCode() == element.m_nNGCode)
-			{
-				continue; // MES rework은 검사를 안해서 검사 결과가 없는게 정상 동작이다.
-			}
-			else // 불량
-			{
-				break;
-			}
-		}
-	}
-
-	// 	for (auto nIdx = 0; pRe->m_Eqp_Result.size(); ++nIdx)
-	// 	{
-	// 		auto eqp = pRe->m_Eqp_Result.at(nIdx);
-	// 
-	// 		// 검사가 진행된 설비 체크
-	// 		if (1 == eqp.m_bTest)
-	// 		{
-	// 			if (0 == eqp.m_nNGCode)
-	// 			{
-	// 				Get_Equipment(eqp.m_nEqpOrder).Increase_Yield_Pass(eqp.m_nPara);
-	// 			}
-	// 			else if (Get_SocketInfo().Get_MES_ReworkCode() == eqp.m_nNGCode)
-	// 			{
-	// 				continue; // MES rework은 검사를 안해서 검사 결과가 없는게 정상 동작이다.
-	// 			}
-	// 			else // 불량
-	// 			{
-	// 				break;
-	// 			}			
-	// 		}
-	// 	}
-
-		// 양/불 체크
-	if (0 == pRe->m_nNG_Code)
-	{
-		// 양품은 설비에서 바로 업데이트
-	}
-	else if (Get_SocketInfo().Get_MES_ReworkCode() == pRe->m_nNG_Code)// MES Rework NG Code 이면...???
-	{
-		;
-	}
-	else
-	{
-		Get_Equipment(pRe->m_nNG_EqpOrder).Increase_Yield_Fail(pRe->m_nNG_Para);
-	}
-
-#endif //USE_EQP_YIELD_UPDATE_AT_UNLOAD
-
-
 	OnReport_Socket(IN_szRFID);
 }
 
@@ -994,12 +806,14 @@ void CTestManager_EQP_ICS::OnEvent_Unloader_UnregisterSocket(__in LPCTSTR IN_szR
 
 	// 제품이 불량인가? (불량이 발생한 검사 설비 ?)
 
-
-
 	// Test Result 초기화
 	Get_SocketInfo().Reset_RegisterData(IN_szRFID);
 	
 }
+
+
+
+
 
 //=============================================================================
 // Method		: Proc_SetSocketTargetEquipment
@@ -1017,8 +831,7 @@ void CTestManager_EQP_ICS::Proc_SetSocketTargetEquipment(__in LPCTSTR IN_szRFID,
 	Get_SocketInfo().Set_SocketTarget(IN_szRFID, IN_nTargetEqpOrder, Get_EquipmentID(IN_nTargetEqpOrder).GetBuffer());
 
 	// *** 소켓의 목적 설비를 설정하면 포트 사용 예약을 설정해야 한다.
-	//if (false == Get_Equipment(IN_nTargetEqpOrder).Increase_ReservedPort())
-	if (false == Get_Equipment(IN_nTargetEqpOrder).Increase_ReservedPort(IN_szRFID))
+	if (false == Get_Equipment(IN_nTargetEqpOrder).Increase_ReservedPort())
 	{
 		;
 	}
@@ -1036,56 +849,9 @@ void CTestManager_EQP_ICS::Proc_SetSocketTargetEquipment(__in LPCTSTR IN_szRFID,
 //=============================================================================
 void CTestManager_EQP_ICS::Proc_SetTagetEquipment_Group(__in LPCTSTR IN_szRFID, __in uint8_t IN_FromEqp)
 {
-#ifdef USE_TARGET_EQP_DISTANCE
-	//uint8_t IN_nTargetEqpOrder = Get_LineInfo().Get_TargetEquipment_inGroup((enEquipmentType)Get_Equipment(IN_FromEqp).Get_EquipmentType());
+	uint8_t IN_nTargetEqpOrder = Get_LineInfo().Get_TargetEquipment_inGroup((enEquipmentType)Get_Equipment(IN_FromEqp).Get_EquipmentType());
 
-	//Get_SocketInfo().Set_SocketTarget(IN_szRFID, IN_nTargetEqpOrder, Get_EquipmentID(IN_nTargetEqpOrder).GetBuffer());
-#endif // USE_TARGET_EQP_DISTANCE
-
-
-	// 설비가 그룹이고 설비가 그룹에서 첫번째 설비?
-	if (Get_LineInfo().Is_FirstEquipment_inGroup(IN_FromEqp))
-	{
-		// 현재 소켓의 대상 설비
-		auto nTargetEqp = Get_Socket(IN_szRFID).m_nTargetEqpOrder;
-
-		// 대상 설비가 현재 설비의 검사와 동일한가?
-		if (Get_EquipmentType(IN_FromEqp) == Get_EquipmentType(nTargetEqp))
-		{
-			// 이전 대상 설비 예약 1 감소
-			Get_Equipment(nTargetEqp).Decrease_ReservedPort(IN_szRFID);
-
-			// 새로운 목적 설비 구하기
-			uint8_t nNew_TargetEqpOrder = Get_LineInfo().Get_TargetEquipment_inGroup((enEquipmentType)Get_Equipment(IN_FromEqp).Get_EquipmentType());
-
-			if (nTargetEqp != nNew_TargetEqpOrder)
-			{
-				// 목적 설비 재 설정
-				Get_SocketInfo().Set_SocketTarget(IN_szRFID, nNew_TargetEqpOrder, Get_EquipmentID(nNew_TargetEqpOrder).GetBuffer());
-			}
-
-			// 새 대상 설비 예약 1 증가
-			if (false == Get_Equipment(nNew_TargetEqpOrder).Increase_ReservedPort(IN_szRFID))
-			{
-				;
-			}
-
-			// 목적 설비의 포트 상태 표시
-			OnLog(_T("[eqp %02d] Group Target Equipment(eqp %02d) Status => port: %d, using: %d, empty: %d, reserved: %d, reserved_over: %d"),
-				IN_FromEqp,
-				nNew_TargetEqpOrder,
-				Get_Equipment(nNew_TargetEqpOrder).Get_PortCount(),
-				//Get_Equipment(nNew_TargetEqpOrder).Check_AvablePortCnt(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_UsingPortCount(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_EmptyPortCount(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_ReservedPortCnt(),
-				Get_Equipment(nNew_TargetEqpOrder).Get_ReservedOverCnt()
-			);
-
-			OnLog(_T("[eqp %02d] Group Set Target Eqp => rfid: %s, target: [eqp %02d]"), IN_FromEqp, IN_szRFID, nNew_TargetEqpOrder);
-			OnLog_SocketEvent(IN_szRFID, _T("[eqp %02d] Group Set Target Eqp => rfid: %s, target: [eqp %02d]"), IN_FromEqp, IN_szRFID, nNew_TargetEqpOrder);
-		}
-	}
+	Get_SocketInfo().Set_SocketTarget(IN_szRFID, IN_nTargetEqpOrder, Get_EquipmentID(IN_nTargetEqpOrder).GetBuffer());
 }
 
 //=============================================================================
@@ -1508,7 +1274,6 @@ void CTestManager_EQP_ICS::OnSend_TimeSync(__in uint8_t IN_nEqpOrder)
 void CTestManager_EQP_ICS::OnSend_UserLevel(__in enPermissionMode IN_nLevel, __in LPCTSTR IN_szUserId)
 {
 	OnLog(_T("[eqp all] OnSend_UserLevel() => level: %d, user id: %s"), IN_nLevel, IN_szUserId);
-
 	if (m_pIcsComm->SendUserLevel(IN_nLevel, IN_szUserId))
 	{
 		OnLog(_T("OnSend_UserLevel() All Equipment : comm succeed"));
@@ -1646,29 +1411,6 @@ void CTestManager_EQP_ICS::OnSend_Model(__in uint8_t IN_nEqpOrder)
 }
 
 //=============================================================================
-// Method		: OnSend_OperationActiveStatus
-// Access		: protected  
-// Returns		: void
-// Parameter	: __in uint8_t IN_nStatus
-// Qualifier	:
-// Last Update	: 2023/3/7 - 14:32
-// Desc.		:
-//=============================================================================
-void CTestManager_EQP_ICS::OnSend_OperationActiveStatus(__in uint8_t IN_nStatus)
-{
-	OnLog(_T("[eqp all] OnSend_OperationActiveStatus() => status: %d"), IN_nStatus);
-
-	if (m_pIcsComm->SendOperationActiveStatus(IN_nStatus))
-	{
-		OnLog(_T("OnSend_OperationActiveStatus() => comm succeed"));
-	}
-	else
-	{
-		OnLog_Err(_T("OnSend_OperationActiveStatus() => comm failed"));
-	}
-}
-
-//=============================================================================
 // Method		: OnSend_Accept_SocketTrackIn
 // Access		: protected  
 // Returns		: void
@@ -1689,8 +1431,6 @@ void CTestManager_EQP_ICS::OnSend_Accept_SocketTrackIn(__in uint8_t IN_nEqpOrder
 		if (m_pIcsComm->SendSocketAccept(Get_EquipmentID(IN_nEqpOrder).GetBuffer(), IN_szRFID, IN_nFlag, IN_szBarcode))
 		{
 			OnLog(_T("[eqp %02d] OnSend_Accept_SocketTrackIn() => comm succeed"), IN_nEqpOrder);
-
-			Get_SocketInfo().Set_SocketTrackIn(IN_szRFID, IN_nEqpOrder, Get_EquipmentID(IN_nEqpOrder).GetBuffer());
 		}
 		else
 		{
@@ -1738,7 +1478,6 @@ void CTestManager_EQP_ICS::OnSend_Accept_SocketTrackOut(__in uint8_t IN_nEqpOrde
 bool CTestManager_EQP_ICS::OnSend_Forced_SocketTrackOut(__in bool IN_bOnOff)
 {
 	OnLog(_T("[eqp all] OnSend_Forced_SocketTrackOut() => OnOff: %d"), IN_bOnOff ? 1 : 0);
-
 	if (m_pIcsComm->SendForceEject(IN_bOnOff))
 	{
 		OnLog(_T("OnSend_Forced_SocketTrackOut() => comm succeed"));
@@ -1853,7 +1592,6 @@ bool CTestManager_EQP_ICS::OnSend_EndOfProduction(__in uint8_t IN_nEqpOrder, __i
 bool CTestManager_EQP_ICS::OnSend_Init()
 {
 	OnLog(_T("[eqp all] OnSend_Init()"));
-
 	if (m_pIcsComm->SendInitialization())
 	{
 		OnLog(_T("[eqp all] OnSend_Init() => comm succeed"));
@@ -1869,7 +1607,6 @@ bool CTestManager_EQP_ICS::OnSend_Init()
 bool CTestManager_EQP_ICS::OnSend_Init(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Init()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendInitialization(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Init() => comm succeed"), IN_nEqpOrder);
@@ -1893,7 +1630,6 @@ bool CTestManager_EQP_ICS::OnSend_Init(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_Reset()
 {
 	OnLog(_T("[eqp all] OnSend_Reset()"));
-
 	if (m_pIcsComm->SendReset())
 	{
 		OnLog(_T("[eqp all] OnSend_Reset() => comm succeed"));
@@ -1909,7 +1645,6 @@ bool CTestManager_EQP_ICS::OnSend_Reset()
 bool CTestManager_EQP_ICS::OnSend_Reset(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Reset()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendReset(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Reset() => comm succeed"), IN_nEqpOrder);
@@ -1933,21 +1668,9 @@ bool CTestManager_EQP_ICS::OnSend_Reset(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_Run()
 {
 	OnLog(_T("[eqp all] OnSend_Run()"));
-
 	if (m_pIcsComm->SendRun())
 	{
 		OnLog(_T("[eqp all] OnSend_Run() => comm succeed"));
-
-#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-		if (false == m_stInspInfo.bCheckedRegister)
-		{
-			OnLog(_T("Begin Socket Register Time Check"));
-		}
-		m_stInspInfo.Set_LastRegisterTime();
-
-#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
-
 		return true;
 	}
 	else
@@ -1960,7 +1683,6 @@ bool CTestManager_EQP_ICS::OnSend_Run()
 bool CTestManager_EQP_ICS::OnSend_Run(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Run()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendRun(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Run() => comm succeed"), IN_nEqpOrder);
@@ -1984,7 +1706,6 @@ bool CTestManager_EQP_ICS::OnSend_Run(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_Stop()
 {
 	OnLog(_T("[eqp all] OnSend_Stop()"));
-
 	if (m_pIcsComm->SendStop())
 	{
 		OnLog(_T("[eqp all] OnSend_Stop() => comm succeed"));
@@ -2000,7 +1721,6 @@ bool CTestManager_EQP_ICS::OnSend_Stop()
 bool CTestManager_EQP_ICS::OnSend_Stop(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_Stop()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendStop(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_Stop() => comm succeed"), IN_nEqpOrder);
@@ -2024,7 +1744,6 @@ bool CTestManager_EQP_ICS::OnSend_Stop(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_BuzzerOff()
 {
 	OnLog(_T("[eqp all] OnSend_BuzzerOff()"));
-
 	if (m_pIcsComm->SendBuzzerOff())
 	{
 		OnLog(_T("[eqp all] OnSend_BuzzerOff() => comm succeed"));
@@ -2040,7 +1759,6 @@ bool CTestManager_EQP_ICS::OnSend_BuzzerOff()
 bool CTestManager_EQP_ICS::OnSend_BuzzerOff(__in uint8_t IN_nEqpOrder)
 {
 	OnLog(_T("[eqp %02d] OnSend_BuzzerOff()"), IN_nEqpOrder);
-
 	if (m_pIcsComm->SendBuzzerOff(Get_EquipmentID(IN_nEqpOrder).GetBuffer()))
 	{
 		OnLog(_T("[eqp %02d] OnSend_BuzzerOff() => comm succeed"), IN_nEqpOrder);
@@ -2065,7 +1783,6 @@ bool CTestManager_EQP_ICS::OnSend_BuzzerOff(__in uint8_t IN_nEqpOrder)
 bool CTestManager_EQP_ICS::OnSend_ShowHide(__in bool bShow)
 {
 	OnLog(_T("[eqp all] OnSend_ShowHide()"));
-
 	if (m_pIcsComm->SendUiVisible(bShow ? SW_SHOW : SW_HIDE))
 	{
 		OnLog(_T("[eqp all] OnSend_ShowHide() => comm succeed"));
@@ -2081,7 +1798,6 @@ bool CTestManager_EQP_ICS::OnSend_ShowHide(__in bool bShow)
 bool CTestManager_EQP_ICS::OnSend_ShowHide(__in uint8_t IN_nEqpOrder, __in bool bShow)
 {
 	OnLog(_T("[eqp %02d] OnSend_ShowHide() => %s"), IN_nEqpOrder, bShow ? _T("Show") : _T("Hide"));
-
 	if (m_pIcsComm->SendUiVisible(Get_EquipmentID(IN_nEqpOrder).GetBuffer(), bShow ? SW_SHOW : SW_HIDE))
 	{
 		OnLog(_T("[eqp %02d] OnSend_ShowHide() => comm succeed"), IN_nEqpOrder);
@@ -2192,85 +1908,9 @@ void CTestManager_EQP_ICS::OnDeleteTimer_UpdateUI()
 	__super::OnDeleteTimer_UpdateUI();
 }
 
-//=============================================================================
-// Method		: OnMonitor_TimeCheck
-// Access		: virtual protected  
-// Returns		: void
-// Qualifier	:
-// Last Update	: 2023/3/7 - 15:32
-// Desc.		:
-//=============================================================================
 void CTestManager_EQP_ICS::OnMonitor_TimeCheck()
 {
-	if (false == m_mTimeMutex.try_lock())
-		return;
-
-	//__super::OnMonitor_TimeCheck();
-
-	// 인라인 가동/비가동 상태 체크 (전체 설비에 소켓이 없으면 비가동, 있으면 가동)
-
-	// 라인 설정이 안되어 있으면 사용하면 안됨 (프로그램 비정상 종료 됨)
-	if (Get_LineInfo().GetCount() <= 0)
-	{
-		m_mTimeMutex.unlock();
-		return;
-	}
-
-	// 서버가 open 되어 있는 경우에만 사용
-	if (false == m_pIcsComm->IsOpened())
-	{
-		m_mTimeMutex.unlock();
-		return;
-	}
-
-	// 로더 에서 리터너 까지 소켓 유/무 체크
-	uint8_t nBegin_eqp = Get_Loader().Get_EqpOrder();
-	uint8_t nEnd_eqp = Get_Returner().Get_EqpOrder();
-
-	uint8_t nActived = enOperationActiveStatus::OAS_Inactive;
-	for (auto nEqpIdx = nBegin_eqp; nEqpIdx < nEnd_eqp; ++nEqpIdx)
-	{
-		// 설비가 비어 있는가?
-		if (false == Get_Equipment(nEqpIdx).IsEmpty_Equipment_AnySocket())
-		{
-			nActived = enOperationActiveStatus::OAS_Active;
-			break;
-		}
-	}
-
-
-	// 활성화 <==> 비활성화 상태가 변경되면  통신 메세지를 전체 설비로 보낸다.
-	if (nActived != Get_LineInfo().Get_ActiveStatus())
-	{
-		Get_LineInfo().Set_ActiveStatus(nActived);
-
-		// 전체 설비에 메세지 전송
-		OnSend_OperationActiveStatus(nActived);
-	}
-
-#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	// 현재 Auto Mode인가?? (로더만 체크??? 소켓 투입모드는 auto?)
-	if (enEqpOperatingMode::EOM_Auto == Get_Loader().Get_OperatingMode())
-	{
-		// 소켓 투입 시간이 체크되었나?
-		if (m_stInspInfo.bCheckedRegister)
-		{
-			// 현재 시간 - 제품 마지막으로 투입된 시간 (분 단위)
-			if ((m_stOption.Inspector.nAutoModeDuration * 60.0) <= m_stInspInfo.Get_LastRegister_ElapsedTime())
-			{
-				OnSend_Stop();  // Manual Mode로 전환
-
-				// 체크 시간 초기화
-				m_stInspInfo.Reset_LastRegisterTime();
-				OnLog(_T("Reset Last Socket Rgister Time"));
-			}
-		}
-	}
-
-#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
-
-	m_mTimeMutex.unlock();
+	__super::OnMonitor_TimeCheck();
 }
 
 //=============================================================================
@@ -2283,73 +1923,47 @@ void CTestManager_EQP_ICS::OnMonitor_TimeCheck()
 //=============================================================================
 void CTestManager_EQP_ICS::OnMonitor_UpdateUI()
 {
-	if (false == m_mUiMutex.try_lock())
-		return;
-
 	//__super::OnMonitor_UpdateUI();
 
-	// 라인 설정이 안되어 있으면 사용하면 안됨 (프로그램 비정상 종료 됨)
-	if (0 < Get_LineInfo().GetCount())
+	
+	// 서버가 open 되어 있는 경우에만 사용
+	if (m_pIcsComm->IsOpened())
 	{
-		// 서버가 open 되어 있는 경우에만 사용
-		if (m_pIcsComm->IsOpened())
+		// 검사 설비의 비어 있음을 체크하여   컨베이어 사용 제어
+		//OnLog(_T("Check Empty Equipment"));
+
+		static const uint8_t nCheckEqpCount = 2;
+
+		// 로더 다음 설비에서 리터너 전 설비까지
+		uint8_t nEnd_eqp = Get_Returner().Get_EqpOrder() - 1;
+
+		uint8_t nEmptyCount = 0;
+		uint8_t nCheckCount = nCheckEqpCount;
+		for (auto nEqpIdx = 0; nEqpIdx < nEnd_eqp; ++nEqpIdx)
 		{
-			// 검사 설비의 비어 있음을 체크하여   컨베이어 사용 제어
-			//OnLog(_T("Check Empty Equipment"));
+			nCheckCount = __min(nEqpIdx, nCheckEqpCount);
 
-			static const uint8_t nCheckEqpCount = 2;
-
-			// 로더 다음 설비에서 리터너 전 설비까지
-			uint8_t nEnd_eqp = Get_Returner().Get_EqpOrder() - 1;
-
-			uint8_t nEmptyCount = 0;
-			uint8_t nCheckCount = nCheckEqpCount;
-			for (auto nEqpIdx = 0; nEqpIdx < nEnd_eqp; ++nEqpIdx)
+			// 설비가 비어 있는가?
+			if (Get_Equipment(nEqpIdx).IsEmpty_Equipment())
 			{
-				nCheckCount = __min(nEqpIdx, nCheckEqpCount);
-
-				// 설비가 비어 있는가?
-				if (Get_Equipment(nEqpIdx).IsEmpty_Equipment())
+				++nEmptyCount;
+			}
+			else
+			{
+				if (Get_Equipment(nEqpIdx).Is_Tester() && Get_Equipment(nEqpIdx).IsLastSocket_onTestPort())
 				{
-					++nEmptyCount;
-				}
-				else
-				{
-					if (Get_Equipment(nEqpIdx).Is_Tester() && Get_Equipment(nEqpIdx).IsLastSocket_onTestPort())
+					if (nCheckCount <= nEmptyCount)
 					{
-						if (nCheckCount <= nEmptyCount)
-						{
-							// 현재 설비로 생산 종료 메세지 전송
-							//OnSend_EndOfProduction(nEqpIdx, true);
-
-							// 설비 구분하여 신호 처리
-							// Trinity : HotPixel 3para
-							// Rivian : Distortion;
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-							// 검사 포트가 2개 이상인 경우에만 메세지 전송
-							//if (1 < Get_Equipment(IN_FromEqp).Get_TestPortCount())
-							if (Get_EquipmentType(nEmptyCount) == enEquipmentType::Eqp_Distortion)
-							{
-								// 현재 설비로 생산 종료 메세지 전송
-								OnSend_EndOfProduction(nEqpIdx, true);
-							}
-#else
-							if (Get_Equipment(nEmptyCount).Get_EqpType_UI() != enEquipmentType_UI::EqpUI_HotPixel3port)
-							{
-								// 현재 설비로 생산 종료 메세지 전송
-								OnSend_EndOfProduction(nEqpIdx, true);
-							}
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-						}
+						// 현재 설비로 생산 종료 메세지 전송
+						OnSend_EndOfProduction(nEqpIdx, true);
 					}
-
-					nEmptyCount = 0;
 				}
+
+				nEmptyCount = 0;
 			}
 		}
 	}
-
-	m_mUiMutex.unlock();
+	
 }
 
 //=============================================================================
@@ -3463,7 +3077,7 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_EQUIPMENT_STATE(__in uint8_t 
 
 		
 		for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_mEES_PortSubStatusCount(); nPort++) {
-
+			/*
 			auto a = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldOperMode();
 			auto b = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldProcessStatus();
 			auto c = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldPortStatus();
@@ -3474,7 +3088,7 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_EQUIPMENT_STATE(__in uint8_t 
 				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldProcessStatus() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus() &&
 				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldPortStatus() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus()) {
 				continue;
-			}
+			}*/
 			auto nPortStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus();
 			auto nProcessStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus();
 			switch (nProcessStatus)
@@ -3514,7 +3128,8 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_EQUIPMENT_STATE(__in uint8_t 
 				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_SUDDENSTOP);
 				break;
 			}
-			if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldEquipmentStatus() != Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus()) {
+			//if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldEquipmentStatus() != Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus()) 
+			{
 				auto Args = Get_Server(nSvr).Create_Report_Equipment_StateArgs(nullptr);
 				auto cntr = Add_Equipment_StateArgs(Get_ServerID(nSvr), *Args);
 				cntr.REPORT.Body.Set_EQUIPMENTID(lt::ToMultiByte(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).Get_EQUIPMENTID()));

@@ -234,11 +234,7 @@ int CWnd_SocketView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_ed_RFID.EnableMask(_T("A-AAAAAA-ddd"), _T("_-______-___"), _T('_'));
 	m_ed_RFID.SetValidChars(NULL);
 	m_ed_RFID.EnableGetMaskedCharsOnly(FALSE);
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-	m_ed_RFID.SetWindowText(_T("A-230114-"));
-#else
-	m_ed_RFID.SetWindowText(_T("H-220215-001"));
-#endif
+	m_ed_RFID.SetWindowText (_T("H-220215-001"));
 
 	return 0;
 }
@@ -436,18 +432,7 @@ void CWnd_SocketView::OnCbnSelendokSocketType()
 			}
 		}
 	}
-#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
-	switch (iSelType)
-	{
-	case enSocketType::Socket_30_FOV:
-		m_ed_RFID.SetWindowText(_T("A-230114-001"));
-		break;
 
-	case enSocketType::Socket_180_FOV:
-		m_ed_RFID.SetWindowText(_T("B-230114-001"));
-		break;
-	}
-#else
 	switch (iSelType)
 	{
 	case enSocketType::Socket_H:
@@ -462,7 +447,6 @@ void CWnd_SocketView::OnCbnSelendokSocketType()
 		m_ed_RFID.SetWindowText(_T("L-220215-001"));
 		break;
 	}
-#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 }
 
 //=============================================================================

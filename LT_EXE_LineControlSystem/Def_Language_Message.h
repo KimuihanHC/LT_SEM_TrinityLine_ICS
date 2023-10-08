@@ -95,7 +95,7 @@ typedef enum
 	MB_NGCount_ResetCount_All,
 	MB_NGCount_RefreshCount,
    
-	MB_Eqp_Comm_Disconnected,
+
 	MB_MaxCount,
 }enLangMessageBox;
 
@@ -535,14 +535,6 @@ static LPCTSTR g_szMessageBox_T[][Lang_MaxCount] =
 
 	//==== Wnd_TesterSelection.cpp ====
 
-
-	//==== TestManager_EQP_ICS.cpp ====
-	{ // MB_Eqp_Comm_Disconnected
-		_T("Auto 상태의 설비(equipment)와 TCP/IP 통신이 끊겼습니다."),								// 한국어
-		_T("TCP/IP communication was lost with the equipment in the Auto state."),				// 영어
-		_T("TCP/IP communication was lost with the equipment in the Auto state."),				// 베트남어
-		_T("与处于自动状态的设备失去了TCP/IP通信. \r\n(TCP/IP communication was lost with the equipment in the Auto state.)"),	// 중국어
-	},
 };
 
 

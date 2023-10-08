@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="(Trinity) Unicode Debug - Debug Mode|x64">
-      <Configuration>(Trinity) Unicode Debug - Debug Mode</Configuration>
+    <ProjectConfiguration Include="EES Unicode Debug - Debug Mode|x64">
+      <Configuration>EES Unicode Debug - Debug Mode</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Unicode Debug - Debug Mode|x64">
@@ -31,7 +31,7 @@
     <SccAuxPath>Svn</SccAuxPath>
     <SccLocalPath>Svn</SccLocalPath>
     <SccProvider>SubversionScc</SccProvider>
-    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'" Label="Configuration">
@@ -54,13 +54,13 @@
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EES Unicode Debug - Debug Mode|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -78,10 +78,10 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='EES Unicode Debug - Debug Mode|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -95,14 +95,14 @@
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='EES Unicode Debug - Debug Mode|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)_$(Platform)_DM_Debug</TargetName>
+    <TargetName>$(ProjectName)_$(Platform)_Debug</TargetName>
     <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)_$(Platform)_DM_Debug</TargetName>
     <OutDir>$(SolutionDir)\_Binary_$(Platform)\</OutDir>
@@ -161,7 +161,7 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binar
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='EES Unicode Debug - Debug Mode|x64'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -169,14 +169,14 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binar
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>./;../Common;../CustomCtrl;../CustomCtrl/VGCtrl;../CommonTest;../CommonTest/ImageProc;../LT_MainUI;../LT_Option;../Include;../Lib_ICS/lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);LTICS_LIB_IMPORTS;USE_XML;</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>4819;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/D "USE_DEBUG_MODE" %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -192,6 +192,7 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binar
       <StackReserveSize>10000000</StackReserveSize>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_based.dll $(SolutionDir)\_Binary_$(Platform)\ /k /y
@@ -199,7 +200,7 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binar
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -350,7 +351,6 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary
     <ClCompile Include="IcsRemoteEquipmentHandler.cpp" />
     <ClCompile Include="IcsRemoteServer.cpp" />
     <ClCompile Include="IcsRemoteServerEes.cpp" />
-    <ClCompile Include="InOutCount.cpp" />
     <ClCompile Include="List_ALID_ListConfig.cpp" />
     <ClCompile Include="List_EESConfig.cpp" />
     <ClCompile Include="List_FailInfo.cpp" />
@@ -393,7 +393,6 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary
     <ClCompile Include="Wnd_Cfg_Server.cpp" />
     <ClCompile Include="Wnd_Cfg_User.cpp" />
     <ClCompile Include="Wnd_FailInfo.cpp" />
-    <ClCompile Include="Wnd_InOutCount.cpp" />
     <ClCompile Include="Wnd_Judgment.cpp" />
     <ClCompile Include="Wnd_ReworkInfo.cpp" />
     <ClCompile Include="Wnd_SettingView.cpp" />
@@ -424,8 +423,8 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary
     <ClCompile Include="Reg_InspInfo.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='EES Unicode Debug - Debug Mode|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode Debug - Debug Mode|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='(Trinity) Unicode Debug - Debug Mode|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Unicode Release - Debug Mode|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -461,7 +460,6 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary
     <ClInclude Include="Def_DebugInfo.h" />
     <ClInclude Include="Def_FailInfo.h" />
     <ClInclude Include="Def_ID_Type.h" />
-    <ClInclude Include="Def_InOutCount.h" />
     <ClInclude Include="Def_Language.h" />
     <ClInclude Include="Def_Language_Message.h" />
     <ClInclude Include="Def_NGCode.h" />
@@ -499,7 +497,6 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary
     <ClInclude Include="IcsRemoteEquipmentHandler.h" />
     <ClInclude Include="IcsRemoteServer.h" />
     <ClInclude Include="IcsRemoteServerEes.h" />
-    <ClInclude Include="InOutCount.h" />
     <ClInclude Include="List_ALID_ListConfig.h" />
     <ClInclude Include="List_EESConfig.h" />
     <ClInclude Include="List_FailInfo.h" />
@@ -542,7 +539,6 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary
     <ClInclude Include="Wnd_Cfg_Server.h" />
     <ClInclude Include="Wnd_Cfg_User.h" />
     <ClInclude Include="Wnd_FailInfo.h" />
-    <ClInclude Include="Wnd_InOutCount.h" />
     <ClInclude Include="Wnd_Judgment.h" />
     <ClInclude Include="Wnd_ReworkInfo.h" />
     <ClInclude Include="Wnd_SettingView.h" />

@@ -35,7 +35,7 @@ CLineInfo::~CLineInfo()
 //=============================================================================
 bool CLineInfo::Compare_PreConfigLine(__in const CConfig_Line* IN_pCConfig_Line)
 {
-	// ±âÁ¸¿¡ ¼³Á¤µÈ ¼³ºñ ±¸¼º°ú »õ·Î¿î ±¸¼ºÀÌ °°ÀºÁö ºñ±³ ÇÑ´Ù.
+	// ê¸°ì¡´???¤ì •???¤ë¹„ êµ¬ì„±ê³??ˆë¡œ??êµ¬ì„±??ê°™ì?ì§€ ë¹„êµ ?œë‹¤.
 	size_t nEqpCnt_Prev = m_EqpList.size();
 	size_t nEqpCnt_New = IN_pCConfig_Line->GetCount();
 
@@ -66,7 +66,7 @@ bool CLineInfo::Compare_PreConfigLine(__in const CConfig_Line* IN_pCConfig_Line)
 //=============================================================================
 bool CLineInfo::IsSkip_EquipmentType(__in enEquipmentType IN_nEqpType)
 {
-	// ÇØ´ç °Ë»çÀÇ ¼³ºñµéÀÌ Skip »óÅÂÀÎÁö È®ÀÎ
+	// ?´ë‹¹ ê²€?¬ì˜ ?¤ë¹„?¤ì´ Skip ?íƒœ?¸ì? ?•ì¸
 	if (Get_FirstEquipment((enEquipmentType)IN_nEqpType).Get_Group())
 	{
 		for (auto nEqpIdx = Get_FirstEquipment((enEquipmentType)IN_nEqpType).Get_EqpOrder(); nEqpIdx < m_EqpList.size(); ++nEqpIdx)
@@ -131,7 +131,7 @@ bool CLineInfo::Write_File(LPCTSTR IN_szPathFile, LPCTSTR IN_szData, LPCTSTR IN_
 		if (!File.Open(szFullPath.GetBuffer(), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite, &e))
 			return false;
 
-		// Çì´õ Ãß°¡
+		// ?¤ë” ì¶”ê?
 		CString szHeader = IN_szHeader;
 		szUnicode = szHeader + szUnicode;
 	}
@@ -429,10 +429,10 @@ uint8_t CLineInfo::Get_TesterCount()
 //=============================================================================
 void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 {
-	// ±âÁ¸ µ¥ÀÌÅÍ¸¦ ¹é¾÷ÇÏ°í º¹¿øÇØ¾ß ÇÏ´Àµ¥.....
+	// ê¸°ì¡´ ?°ì´?°ë? ë°±ì—…?˜ê³  ë³µì›?´ì•¼ ?˜ëŠ??....
 	if (Compare_PreConfigLine(IN_pConfig_Line))
 	{
-		// ¼³ºñ ±¸¼ºÀÌ °°À½ (¹Ù²ï µ¥ÀÌÅÍ¸¸ ¼³Á¤)
+		// ?¤ë¹„ êµ¬ì„±??ê°™ìŒ (ë°”ë€??°ì´?°ë§Œ ?¤ì •)
 		size_t nEqpCnt = m_EqpList.size();
 
 		for (auto nIdx = 0; nIdx < nEqpCnt; ++nIdx)
@@ -443,7 +443,7 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 	}
 	else
 	{
-		// ¼³ºñ ±¸¼ºÀÌ ´Ù¸§ (¼³ºñ ±¸¼ºÀ» ÃÊ±âÈ­ÇÏ°í ´Ù½Ã ¼³Á¤)
+		// ?¤ë¹„ êµ¬ì„±???¤ë¦„ (?¤ë¹„ êµ¬ì„±??ì´ˆê¸°?”í•˜ê³??¤ì‹œ ?¤ì •)
 		RemoveAll();
 		
 		size_t nEqpCnt = IN_pConfig_Line->GetCount();
@@ -484,22 +484,21 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 				CEqpTester* newEqp = new CEqpTester();				
 				*newEqp = IN_pConfig_Line->GetAt(nIdx);
 				newEqp->Set_EqpOrder(nIdx);
-				newEqp->Update_DataSize(); // Port °³¼ö ¼³Á¤ (3 Para °Ë»ç ¼³ºñ ´ëÀÀ)
+				newEqp->Update_DataSize(); // Port ê°œìˆ˜ ?¤ì • (3 Para ê²€???¤ë¹„ ?€??
 				m_EqpList.push_back(newEqp);
 			}
 			break;
 			}
 		}// End of for()
 
-		// °¢°¢ÀÇ ¼³ºñ À¯Çü¿¡ µû¸¥ Ã¹¹øÂ° ¼³ºñ
+		// ê°ê°???¤ë¹„ ? í˜•???°ë¥¸ ì²«ë²ˆì§??¤ë¹„
 		m_TestOrder.clear();
 		for (auto nEqpTypeIdx = 0; nEqpTypeIdx < Max_EqpTypeCount; nEqpTypeIdx++)
 		{
-			// ÃÊ±âÈ­		
-			m_pFstEqp_EqpType[nEqpTypeIdx] = nullptr;
+			// ì´ˆê¸°??			m_pFstEqp_EqpType[nEqpTypeIdx] = nullptr;
 		}// End of for()
 
-		//°Ë»ç ±×·ìÀÇ Ã¹¹øÂ° ¼³ºñ ¼³Á¤
+		// ê²€??ê·¸ë£¹??ì²«ë²ˆì§??¤ë¹„ ?¤ì •
 		for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 		{
 			if (nullptr != m_pFstEqp_EqpType[m_EqpList.at(nEqpIdx)->Get_EquipmentType()])
@@ -508,10 +507,10 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 			}
 		}
 
-		// °Ë»ç ¼ø¼­ ¼³Á¤
+		// ê²€???œì„œ ?¤ì •
 		for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 		{
-			// µî·ÏµÇÁö ¾ÊÀ½ °Ë»ç ÆÇº°
+			// ?±ë¡?˜ì? ?ŠìŒ ê²€???ë³„
 			bool bFind = false;
 			for (auto nOrderIdx = 0; nOrderIdx < m_TestOrder.size(); ++nOrderIdx)
 			{
@@ -524,7 +523,7 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 
 			if (false == bFind)
 			{
-				// Test ¼ø¼­ ¼³Á¤
+				// Test ?œì„œ ?¤ì •
 				if (m_EqpList.at(nEqpIdx)->Is_Tester())
 				{
 					m_TestOrder.push_back(m_EqpList.at(nEqpIdx)->Get_EquipmentType());
@@ -534,7 +533,7 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 		for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 		{
-			// µî·ÏµÇÁö ¾ÊÀ½ °Ë»ç ÆÇº°
+			// ?±ë¡?˜ì? ?ŠìŒ ê²€???ë³„
 			bool bFind = false;
 			for (auto nOrderIdx = 0; nOrderIdx < m_InspectionOrder.size(); ++nOrderIdx)
 			{
@@ -547,7 +546,7 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 
 			if (false == bFind)
 			{
-				// Test ¼ø¼­ ¼³Á¤
+				// Test ?œì„œ ?¤ì •
 				if (m_EqpList.at(nEqpIdx)->Is_Tester())
 				{
 					m_InspectionOrder.push_back(m_EqpList.at(nEqpIdx)->Get_InspectionType());
@@ -556,13 +555,12 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 		}
 #endif	// NEW_INSPECTION_TYPE_APPLY
 
-		// ¼³ºñ À¯Çü¿¡ µû¸¥ ¼³ºñ ±×·ì Ã³¸®
+		// ?¤ë¹„ ? í˜•???°ë¥¸ ?¤ë¹„ ê·¸ë£¹ ì²˜ë¦¬
 		for (auto nEqpTypeIdx = 0; nEqpTypeIdx < Max_EqpTypeCount; nEqpTypeIdx++)
 		{
-			// ÃÊ±âÈ­			
-			m_pEquipment_Group[nEqpTypeIdx].clear();
+			// ì´ˆê¸°??			m_pEquipment_Group[nEqpTypeIdx].clear();
 
-			// ¼³ºñ À¯ÇüÀÇ Ã¹¹øÂ° ¼³ºñ Ã£±â
+			// ?¤ë¹„ ? í˜•??ì²«ë²ˆì§??¤ë¹„ ì°¾ê¸°
 			for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 			{
 				if (m_EqpList.at(nEqpIdx)->Get_EquipmentType() == nEqpTypeIdx)
@@ -677,14 +675,14 @@ void CLineInfo::Set_OperateMode(__in uint8_t IN_nOperateMode)
 //=============================================================================
 bool CLineInfo::IsEndOfProduction(__in uint8_t IN_nEqpOrder)
 {
-	// ÇöÀç ¼³ºñÀÇ ÀÌÀü ¼³ºñ±îÁö ¼³ºñ³»¿¡ ¼ÒÄÏÀÌ ºñ¾î ÀÖ³ª ÆÇ´ÜÇÑ´Ù. (Loader Á¦¿Ü)
+	// ?„ì¬ ?¤ë¹„???´ì „ ?¤ë¹„ê¹Œì? ?¤ë¹„?´ì— ?Œì¼“??ë¹„ì–´ ?ˆë‚˜ ?ë‹¨?œë‹¤. (Loader ?œì™¸)
 	size_t nEqpCnt = m_EqpList.size();
 
 	if (IN_nEqpOrder < nEqpCnt)
 	{
 		for (auto nIdx = 0; nIdx < IN_nEqpOrder; ++nIdx)
 		{
-			// ·Î´õ Á¦¿Ü, °Ë»ç ¼³ºñ¸¸ Ã¼Å©
+			// ë¡œë” ?œì™¸, ê²€???¤ë¹„ë§?ì²´í¬
 			//if (m_EqpList.at(nIdx)->Is_Tester())
 			{
 				if (false == m_EqpList.at(nIdx)->IsEmpty_Equipment())
@@ -741,18 +739,18 @@ void CLineInfo::Set_EndOfProduction(__in bool IN_bEnd)
 //=============================================================================
 // Method		: Get_TargetEquipmentType
 // Access		: public  
-// Returns		: uint8_t							: ¼³ºñ À¯Çü
-// Parameter	: __in enEquipmentType IN_nEqpType	: ¼³ºñ À¯Çü
+// Returns		: uint8_t							: ?¤ë¹„ ? í˜•
+// Parameter	: __in enEquipmentType IN_nEqpType	: ?¤ë¹„ ? í˜•
 // Qualifier	:
 // Last Update	: 2022/2/3 - 15:35
 // Desc.		:
 //=============================================================================
 uint8_t CLineInfo::Get_NextEquipmentType(__in enEquipmentType IN_nEqpType)
 {
-	// ´ÙÀ½ °Ë»ç Ã¼Å©
+	// ?¤ìŒ ê²€??ì²´í¬
 	uint8_t nNextTestOrder = 0;
 	
-	if (Eqp_Loader == IN_nEqpType) // Loader ÀÌ¸é
+	if (Eqp_Loader == IN_nEqpType) // Loader ?´ë©´
 	{
 		if (0 < m_TestOrder.size())
 		{
@@ -763,21 +761,22 @@ uint8_t CLineInfo::Get_NextEquipmentType(__in enEquipmentType IN_nEqpType)
 			return Eqp_Returner;
 		}
 	}	
-	else if (IsTester_byEqpType(IN_nEqpType)) // Tester ÀÌ¸é
+	//else if ((Eqp_Tester_First <= IN_nEqpType) && (IN_nEqpType <= Eqp_Tester_Last)) // Tester ?´ë©´
+	else if (IsTester_byEqpType(IN_nEqpType))
 	{
-		// ÇöÀç °Ë»çÀÇ ¼ø¼­ È®ÀÎ
+		// ?„ì¬ ê²€?¬ì˜ ?œì„œ ?•ì¸
 		bool bFind = false;
 		for (auto nIdx = 0; nIdx < m_TestOrder.size(); ++nIdx)
 		{
 			if (IN_nEqpType == m_TestOrder.at(nIdx))
 			{
-				// ´ÙÀ½ °Ë»ç°¡ ÀÖ´Ù.
+				// ?¤ìŒ ê²€?¬ê? ?ˆë‹¤.
 				if (nIdx + 1 < m_TestOrder.size())
 				{
 					nNextTestOrder = nIdx + 1;
 					bFind = true;
 				}
-				else // ´ÙÀ½ °Ë»ç°¡ ¾ø´Ù. ¸®ÅÍ³Ê·Î ÀÌµ¿
+				else // ?¤ìŒ ê²€?¬ê? ?†ë‹¤. ë¦¬í„°?ˆë¡œ ?´ë™
 				{
 					return Eqp_Returner;
 				}
@@ -786,29 +785,29 @@ uint8_t CLineInfo::Get_NextEquipmentType(__in enEquipmentType IN_nEqpType)
 			}
 		}// end of for()
 
-		// °Ë»ç ¼ø¼­ ¸®½ºÆ®¿¡ ¾ø´Ù.
+		// ê²€???œì„œ ë¦¬ìŠ¤?¸ì— ?†ë‹¤.
 		if (false == bFind)
 		{ 
 			return Eqp_Returner;
 		}
 	}
-	else // Returner & Handler
+	else // Returner
 	{
 		return Eqp_Returner;
 	}
 
-	// ´ÙÀ½ °Ë»çÀÇ ¼³ºñ À¯Çü Ã£±â
+	// ?¤ìŒ ê²€?¬ì˜ ?¤ë¹„ ? í˜• ì°¾ê¸°
 	uint8_t nTestType = 0;
 	uint8_t nReturnEqpType = 0;
 	for (auto nTestOrder = nNextTestOrder; nTestOrder < m_TestOrder.size(); ++nTestOrder)
 	{
-		// °Ë»ç°¡ È°¼ºÈ­ µÇ¾î ÀÖ´Â °æ¿ì¸¸...
+		// ê²€?¬ê? ?œì„±???˜ì–´ ?ˆëŠ” ê²½ìš°ë§?..
 		nTestType = ConvTo_TesterType((enEquipmentType)m_TestOrder.at(nTestOrder));
 		if (m_bEnable_TestType[nTestType])
 		{			
 			nReturnEqpType = m_TestOrder.at(nTestOrder);
 
-			// ÇØ´ç °Ë»ç¿¡ ÇØ´çÇÏ´Â ¼³ºñµéÀÇ Skip »óÅÂ È®ÀÎ
+			// ?´ë‹¹ ê²€?¬ì— ?´ë‹¹?˜ëŠ” ?¤ë¹„?¤ì˜ Skip ?íƒœ ?•ì¸
 			if (false == IsSkip_EquipmentType((enEquipmentType)nReturnEqpType))
 			{
 				return nReturnEqpType;
@@ -835,10 +834,10 @@ uint8_t CLineInfo::Get_NextEquipmentType(__in uint8_t IN_FromEqp)
 //=============================================================================
 uint8_t CLineInfo::Get_PrevEquipmentType(__in enEquipmentType IN_nEqpType)
 {
-	// ÀÌÀü °Ë»ç Ã¼Å©
+	// ?´ì „ ê²€??ì²´í¬
 	uint8_t nPrevTestOrder = 0;
 
-	if (Eqp_Returner == IN_nEqpType) // Loader ÀÌ¸é
+	if (Eqp_Returner == IN_nEqpType) // Loader ?´ë©´
 	{
 		if (0 < m_TestOrder.size())
 		{
@@ -849,21 +848,22 @@ uint8_t CLineInfo::Get_PrevEquipmentType(__in enEquipmentType IN_nEqpType)
 			return Eqp_Loader;
 		}
 	}
-	else if (IsTester_byEqpType(IN_nEqpType)) // Tester ÀÌ¸é
+	//else if ((Eqp_Tester_First <= IN_nEqpType) && (IN_nEqpType <= Eqp_Tester_Last)) // Tester ?´ë©´
+	else if (IsTester_byEqpType(IN_nEqpType))
 	{
-		// ÇöÀç °Ë»çÀÇ ¼ø¼­ È®ÀÎ
+		// ?„ì¬ ê²€?¬ì˜ ?œì„œ ?•ì¸
 		bool bFind = false;
 		for (auto nIdx = (m_TestOrder.size() - 1); 0 <= nIdx; --nIdx)
 		{
 			if (IN_nEqpType == m_TestOrder.at(nIdx))
 			{
-				// ÀÌÀü °Ë»ç°¡ ÀÖ´Ù.
+				// ?´ì „ ê²€?¬ê? ?ˆë‹¤.
 				if (0 <= (nIdx - 1))
 				{
 					nPrevTestOrder = static_cast<uint8_t>(nIdx - 1);
 					bFind = true;
 				}
-				else // ÀÌÀü °Ë»ç°¡ ¾ø´Ù. ·Î´õ·Î ÀÌµ¿
+				else // ?´ì „ ê²€?¬ê? ?†ë‹¤. ë¡œë”ë¡??´ë™
 				{
 					return Eqp_Loader;
 				}
@@ -872,29 +872,29 @@ uint8_t CLineInfo::Get_PrevEquipmentType(__in enEquipmentType IN_nEqpType)
 			}
 		}// end of for()
 
-		// °Ë»ç ¼ø¼­ ¸®½ºÆ®¿¡ ¾ø´Ù.
+		// ê²€???œì„œ ë¦¬ìŠ¤?¸ì— ?†ë‹¤.
 		if (false == bFind)
 		{
 			return Eqp_Loader;
 		}
 	}
-	else // Returner or Handler
+	else // Returner
 	{
 		return Eqp_Loader;
 	}
 
-	// ´ÙÀ½ °Ë»çÀÇ ¼³ºñ À¯Çü Ã£±â
+	// ?¤ìŒ ê²€?¬ì˜ ?¤ë¹„ ? í˜• ì°¾ê¸°
 	uint8_t nTestType = 0;
 	uint8_t nReturnEqpType = 0;
 	for (auto nTestOrder = nPrevTestOrder; 0 <= nTestOrder; --nTestOrder)
 	{
-		// °Ë»ç°¡ È°¼ºÈ­ µÇ¾î ÀÖ´Â °æ¿ì¸¸...
+		// ê²€?¬ê? ?œì„±???˜ì–´ ?ˆëŠ” ê²½ìš°ë§?..
 		nTestType = ConvTo_TesterType((enEquipmentType)m_TestOrder.at(nTestOrder));
 		if (m_bEnable_TestType[nTestType])
 		{
 			nReturnEqpType = m_TestOrder.at(nTestOrder);
 
-			// ÇØ´ç °Ë»ç¿¡ ÇØ´çÇÏ´Â ¼³ºñµéÀÇ Skip »óÅÂ È®ÀÎ
+			// ?´ë‹¹ ê²€?¬ì— ?´ë‹¹?˜ëŠ” ?¤ë¹„?¤ì˜ Skip ?íƒœ ?•ì¸
 			if (false == IsSkip_EquipmentType((enEquipmentType)nReturnEqpType))
 			{
 				return nReturnEqpType;
@@ -923,10 +923,10 @@ uint8_t CLineInfo::Get_PrevEquipmentType(__in uint8_t IN_FromEqp)
 //=============================================================================
 uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __in bool bLoader /*= false*/)
 {
-	// ´ÙÀ½ °Ë»ç Ã¼Å©
+	// ?¤ìŒ ê²€??ì²´í¬
 	uint8_t nNextInspectionOrder = 0;
 
-	if ((InspType_NotInspection == IN_nInspType) && (bReturner)) // Returner ÀÌ¸é
+	if ((InspType_NotInspection == IN_nInspType) && (bLoader)) // Loader ?´ë©´
 	{
 		if (0 < m_InspectionOrder.size())
 		{
@@ -937,21 +937,20 @@ uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __
 			return InspType_NotInspection;
 		}
 	}
-	else if (InspType_NotInspection < IN_nInspType)
-	{
-		// ÇöÀç °Ë»çÀÇ ¼ø¼­ È®ÀÎ
+	else if (InspType_NotInspection < IN_nInspType) // ê²€???¤ë¹„??	{
+		// ?„ì¬ ê²€?¬ì˜ ?œì„œ ?•ì¸
 		bool bFind = false;
 		for (auto nIdx = 0; nIdx < m_InspectionOrder.size(); ++nIdx)
 		{
 			if (IN_nInspType == m_InspectionOrder.at(nIdx))
 			{
-				// ÀÌÀü °Ë»ç°¡ ÀÖ´Ù.
+				// ?¤ìŒ ê²€?¬ê? ?ˆë‹¤.
 				if (nIdx + 1 < m_InspectionOrder.size())
 				{
 					nNextInspectionOrder = nIdx + 1;
 					bFind = true;
 				}
-				else // ÀÌÀü °Ë»ç°¡ ¾ø´Ù. ·Î´õ·Î ÀÌµ¿
+				else // ?¤ìŒ ê²€?¬ê? ?†ë‹¤. ë¦¬í„°?ˆë¡œ ?´ë™
 				{
 					return InspType_NotInspection;
 				}
@@ -960,7 +959,7 @@ uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __
 			}
 		}// end of for()
 
-		// °Ë»ç ¼ø¼­ ¸®½ºÆ®¿¡ ¾ø´Ù.
+		// ê²€???œì„œ ë¦¬ìŠ¤?¸ì— ?†ë‹¤.
 		if (false == bFind)
 		{
 			return InspType_NotInspection;
@@ -971,16 +970,16 @@ uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __
 		return InspType_NotInspection;
 	}
 
-	// ´ÙÀ½ °Ë»çÀÇ ¼³ºñ À¯Çü Ã£±â
+	// ?¤ìŒ ê²€?¬ì˜ ?¤ë¹„ ? í˜• ì°¾ê¸°
 	uint8_t nReturnInspType = 0;
 	for (auto nInspOrder = nNextInspectionOrder; nInspOrder < m_InspectionOrder.size(); ++nInspOrder)
 	{
-		// °Ë»ç°¡ È°¼ºÈ­ µÇ¾î ÀÖ´Â °æ¿ì¸¸...
+		// ê²€?¬ê? ?œì„±???˜ì–´ ?ˆëŠ” ê²½ìš°ë§?..
 		if (m_bEnable_InspType[m_InspectionOrder.at(nInspOrder)])
 		{
 			nReturnInspType = m_InspectionOrder.at(nInspOrder);
 
-			// ÇØ´ç °Ë»ç¿¡ ÇØ´çÇÏ´Â ¼³ºñµéÀÇ Skip »óÅÂ È®ÀÎ
+			// ?´ë‹¹ ê²€?¬ì— ?´ë‹¹?˜ëŠ” ?¤ë¹„?¤ì˜ Skip ?íƒœ ?•ì¸
 			if (false == IsSkip_InspectionType((enInspectionType)nReturnInspType))
 			{
 				return nReturnInspType;
@@ -1087,39 +1086,36 @@ uint8_t CLineInfo::Get_PrevInspectionType(__in uint8_t IN_FromEqp)
 // Returns		: uint8_t					: 0 -> Error 
 // Parameter	: __in enEquipmentType IN_nEqpType
 // Qualifier	:
-// Last Update	: 2023/4/7 - 15:27
+// Last Update	: 2022/2/3 - 19:55
 // Desc.		:
 //=============================================================================
 uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 {
-	// ±×·ì³»ÀÇ ¸ñÀû ¼³ºñ ±¸ÇÏ±â
-	if (m_pEquipment_Group[IN_nEqpType].empty())
+	// ê·¸ë£¹?´ì˜ ëª©ì  ?¤ë¹„ êµ¬í•˜ê¸?	if (m_pEquipment_Group[IN_nEqpType].empty())
 	{
-		// ¼³Á¤µÈ ¼³ºñ°¡ ¾ø´Ù. (Error »óÈ² )
+		// ?¤ì •???¤ë¹„ê°€ ?†ë‹¤. (Error ?í™© )
 		return 0;
 	}
 
-	// ¿ª¼øÀ¸·Î ±¸ÇØ¾ß ÇÑ´Ù... (°Å¸®°¡ ¸Õ ¼³ºñºÎÅÍ ÅõÀÔ)
-	uint32_t	nCheckTime			= 0;	// ½Ã°£ Ã¼Å©¿ë
-	uint32_t	nElapTime			= 0;	// °Ë»ç Æ÷Æ®¿¡ ÅõÀÔµÇ¾î °æ°úµÈ ½Ã°£
-	uint8_t		nTargetEqpOrder		= 0;	// ´ë»ó ¼³ºñ ¼ø¼­
-	uint8_t		nEmptyPortCount		= 0;	// ¼³ºñ¿¡ ºñ¾îÀÖ´Â Æ÷Æ®
-	uint8_t		nMaxEmptyPortCount	= 0;	// 
+	// ??ˆœ?¼ë¡œ êµ¬í•´???œë‹¤...
+	uint32_t nCheckTime = 0;
+	uint32_t nElapTime = 0;
+	uint8_t nTargetEqpOrder = 0;
+	uint8_t nEmptyPortCount = 0;
+	uint8_t nMaxEmptyPortCount = 0;	
 	//-------------------------------------------------------------------------
-	// 1. Æ÷Æ®°¡ ºñ¾î ÀÖ´Â ¼³ºñ ¿ì¼±À¸·Î ¼±ÅÃ
+	// 1. ?¬íŠ¸ê°€ ë¹„ì–´ ?ˆëŠ” ?¤ë¹„ ?°ì„ ?¼ë¡œ ? íƒ
 	//-------------------------------------------------------------------------
 	for (auto Iter = m_pEquipment_Group[IN_nEqpType].rbegin(); Iter != m_pEquipment_Group[IN_nEqpType].rend(); ++Iter)
 	{
-		// ¸ğµÎ SkipÀÌ¸é error;
+		// ëª¨ë‘ Skip?´ë©´ error;
 		if ((*Iter)->Get_Skip())
 		{
 			continue;
 		}
 
-		// ¼³ºñÀÇ ºñ¾îÀÖ´Â Æ÷Æ® ±¸ÇÏ±â
 		nEmptyPortCount = (*Iter)->Get_EmptyPortCount();
-
-		// ºñ¾îÀÖ´Â Æ÷Æ®°¡ ÃÖ´ëÄ¡ÀÌ¸é, ¹Ù·Î eqp¸¦ ¸®ÅÏÇÑ´Ù.
+		// ë¹„ì–´?ˆëŠ” ?¬íŠ¸ê°€ ìµœë?ì¹˜ì´ë©? ë°”ë¡œ eqpë¥?ë¦¬í„´?œë‹¤.
 		if ((*Iter)->Get_ReservablePortCount() == nEmptyPortCount)
 		{
 			TRACE(_T("(%s) : Max Empty Port => target: %d\n"), _T(__FUNCTION__), (*Iter)->Get_EqpOrder());
@@ -1138,88 +1134,55 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 	}
 
 	//-------------------------------------------------------------------------
-	// 2. 3°³ÀÇ Æ÷Æ®ÀÇ »ç¿ë/¿¹¾à »óÅÂ¸¦ Ã¼Å©ÇÏ¿© »ç¿ë/¿¹¾à °³¼ö°¡ ÀûÀº ¼³ºñ ¼±ÅÃ
+	// 2. 3ê°œì˜ ?¬íŠ¸???¬ìš©/?ˆì•½ ?íƒœë¥?ì²´í¬?˜ì—¬ ?¬ìš©/?ˆì•½ ê°œìˆ˜ê°€ ?ì? ?¤ë¹„ ? íƒ
 	//-------------------------------------------------------------------------
 	if (0 < nMaxEmptyPortCount)
 	{
-		// ´ë»ó ¼³ºñ ÈÄº¸µé
+		// ?€???¤ë¹„ ?„ë³´??/
 		std::vector<CEquipment*>	vTargets;
 		for (auto Iter = m_pEquipment_Group[IN_nEqpType].rbegin(); Iter != m_pEquipment_Group[IN_nEqpType].rend(); ++Iter)
 		{
-			if ((*Iter)->Get_Skip())
-			{
-				continue;
-			}
 			if ((*Iter)->Get_EmptyPortCount() == nMaxEmptyPortCount)
 			{
 				vTargets.push_back(*Iter);
 			}
 		}
+
 		//-------------------------------------------------------------------------
-		// Æ÷Æ® ºñ¾îÀÖ´Â °¹¼ö°¡ µ¿ÀÏÇÏ¸é, ÅõÀÔ ½Ã°£À» ºñ±³ÇÏ¿© ¿À·¡µÈ ¼³ºñ¸¦ ¼±ÅÃ
+		// ?¬íŠ¸ ë¹„ì–´?ˆëŠ” ê°?ˆ˜ê°€ ?™ì¼?˜ë©´, ?¬ì… ?œê°„??ë¹„êµ?˜ì—¬ ?¤ë˜???¤ë¹„ë¥?? íƒ//
 		//-------------------------------------------------------------------------
 		if (1 < vTargets.size())
 		{
 			for (auto Iter = vTargets.rbegin(); Iter != vTargets.rend(); ++Iter)
 			{
-				// ¸ğµÎ SkipÀÌ¸é error;
+				// ëª¨ë‘ Skip?´ë©´ error;
 				if ((*Iter)->Get_Skip())
 				{
 					continue;
 				}
 
-				// ÅõÀÔ ½Ã°£ÀÌ °¡Àå ¿À·¡µÈ ¼ÒÄÏÀÌ ÀÖ´Â ¼³ºñ Ã¼Å©
+				// ?¬ì… ?œê°„??ê°€???¤ë˜???Œì¼“???ˆëŠ” ?¤ë¹„ ì²´í¬
 				uint8_t nTestParaCount = (*Iter)->Get_TestPortCount();
-				for (auto nParaIdx = 0; nParaIdx < nTestParaCount; ++nParaIdx)
+				for (auto nIdx = 0; nIdx < nTestParaCount; ++nIdx)
 				{
-					// ÇöÀç Test Para¿¡ ¼ÒÄÏÀÌ ÀÖ¾î¾ß ÇÑ´Ù. (2023.04.10)
-					switch ((*Iter)->Get_PortStatus_byTestPara(nParaIdx).nStatus)
+					nElapTime = (*Iter)->Get_ElapsedTime_InputPara(nIdx);
+					if (nCheckTime < nElapTime)
 					{
-					case enPortStatus::PtS_Exist_Socket:
-					case enPortStatus::PtS_Wait_Out:
-					{
-						nElapTime = (*Iter)->Get_ElapsedTime_InputPara(nParaIdx);
-						if (nCheckTime < nElapTime)
-						{
-							nCheckTime = nElapTime;
-							nTargetEqpOrder = (*Iter)->Get_EqpOrder();
-						}
+						nCheckTime = nElapTime;
+						nTargetEqpOrder = (*Iter)->Get_EqpOrder();
 					}
-					break;
-
-					default:
-						break;
-
-					}
-
-					// 					nElapTime = (*Iter)->Get_ElapsedTime_InputPara(nParaIdx);
-					// 					if (nCheckTime < nElapTime)
-					// 					{
-					// 						nCheckTime = nElapTime;
-					// 						nTargetEqpOrder = (*Iter)->Get_EqpOrder();
-					// 					}
-				} // End of for () °Ë»ç ÆÄ¶ó
-			} // End of for() ¼³ºñ
+				} // End of for () ê²€???Œë¼
+			} // End of for() ?¤ë¹„
 
 			if (0 < nCheckTime)
 			{
-				TRACE(_T("(%s) : Check Time => target: %d, ElapTime: %d\n"), _T(__FUNCTION__), nTargetEqpOrder, nCheckTime);
+				TRACE(_T("(%s) : Check Time => target: %d\n"), _T(__FUNCTION__), nTargetEqpOrder);
 				CString szText;
-				szText.Format(_T("(%s) : Check Time => target: %d, ElapTime: %d"), _T(__FUNCTION__), nTargetEqpOrder, nCheckTime);
+				szText.Format(_T("(%s) : Check Time => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
 				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
 
 				return nTargetEqpOrder;
 			}
-		}
-		else if (1 == vTargets.size())
-		{
-			// ÈÄº¸ ¼³ºñ °¹¼ö°¡ 1°³ÀÌ¸é ¹Ù·Î ¸®ÅÏÇÑ´Ù.
-			TRACE(_T("(%s) : 1 equipment can be reserved => target: %d\n"), _T(__FUNCTION__), nTargetEqpOrder);
-			CString szText;
-			szText.Format(_T("(%s) : 1 equpment can be reserved => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
-			AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-			return nTargetEqpOrder;
 		}
 		else
 		{
@@ -1233,35 +1196,15 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 	}
 
 	//-------------------------------------------------------------------------
-	// 3. 3°³ÀÇ Æ÷Æ®¸¦ ¸ğµÎ »ç¿ëÇÏ´Â °æ¿ì
+	// 3. 3ê°œì˜ ?¬íŠ¸ë¥?ëª¨ë‘ ?¬ìš©?˜ëŠ” ê²½ìš°
 	//-------------------------------------------------------------------------
-#ifdef USE_SET_TARGET_EQP_GROUP_TRACK_IN
-	// °¡±î¿î ¼³ºñ·Î º¸³½´Ù.
-	//nTargetEqpOrder = (*m_pEquipment_Group[IN_nEqpType].begin())->Get_EqpOrder();
-	for (auto Iter = m_pEquipment_Group[IN_nEqpType].begin(); Iter != m_pEquipment_Group[IN_nEqpType].end(); ++Iter)
-	{
-		// ¸ğµÎ SkipÀÌ¸é error;
-		if (false == (*Iter)->Get_Skip())
-		{
-			nTargetEqpOrder = (*Iter)->Get_EqpOrder();
-			break;
-		}
-	}
-
-	TRACE(_T("(%s) : Near Equipment\n"), _T(__FUNCTION__), nTargetEqpOrder);
-	CString szText;
-	szText.Format(_T("(%s) : Near Equipment => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
-	AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-
-#else
-	// ¿¹¾à °¡´ÉÇÑ Æ÷Æ®°¡ ¸ğµÎ »ç¿ëÁßÀÎ °æ¿ì m_nReservedOvered¸¦ »ç¿ëÇÏ¿© ÆÇ´ÜÇÑ´Ù.
+	// ?ˆì•½ ê°€?¥í•œ ?¬íŠ¸ê°€ ëª¨ë‘ ?¬ìš©ì¤‘ì¸ ê²½ìš° m_nReservedOveredë¥??¬ìš©?˜ì—¬ ?ë‹¨?œë‹¤.
 	nTargetEqpOrder = Get_TargetEquipment_inGroup_Over(IN_nEqpType);
 
 	TRACE(_T("(%s) : Check OverReserved\n"), _T(__FUNCTION__), nTargetEqpOrder);
 	CString szText;
 	szText.Format(_T("(%s) : Check OverReserved => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
-	AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
-#endif
+	AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));	
 
 	//return Get_TargetEquipment_inGroup_Over(IN_nEqpType);
 	return nTargetEqpOrder;
@@ -1270,32 +1213,31 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspType)
 {
-	// ±×·ì³»ÀÇ ¸ñÀû ¼³ºñ ±¸ÇÏ±â
-	if (m_pInspection_Group[IN_nInspType].empty())
+	// ê·¸ë£¹?´ì˜ ëª©ì  ?¤ë¹„ êµ¬í•˜ê¸?	if (m_pInspection_Group[IN_nInspType].empty())
 	{
-		// ¼³Á¤µÈ ¼³ºñ°¡ ¾ø´Ù. (Error »óÈ² )
+		// ?¤ì •???¤ë¹„ê°€ ?†ë‹¤. (Error ?í™© )
 		return 0;
 	}
 
-	// ¿ª¼øÀ¸·Î ±¸ÇØ¾ß ÇÑ´Ù...
+	// ??ˆœ?¼ë¡œ êµ¬í•´???œë‹¤...
 	uint32_t nCheckTime = 0;
 	uint32_t nElapTime = 0;
 	uint8_t nTargetEqpOrder = 0;
 	uint8_t nEmptyPortCount = 0;
 	uint8_t nMaxEmptyPortCount = 0;	
 	//-------------------------------------------------------------------------
-	// 1. Æ÷Æ®°¡ ºñ¾î ÀÖ´Â ¼³ºñ ¿ì¼±À¸·Î ¼±ÅÃ
+	// 1. ?¬íŠ¸ê°€ ë¹„ì–´ ?ˆëŠ” ?¤ë¹„ ?°ì„ ?¼ë¡œ ? íƒ
 	//-------------------------------------------------------------------------
 	for (auto Iter = m_pInspection_Group[IN_nInspType].rbegin(); Iter != m_pInspection_Group[IN_nInspType].rend(); ++Iter)
 	{
-		// ¸ğµÎ SkipÀÌ¸é error;
+		// ëª¨ë‘ Skip?´ë©´ error;
 		if ((*Iter)->Get_Skip())
 		{
 			continue;
 		}
 
 		nEmptyPortCount = (*Iter)->Get_EmptyPortCount();
-		// ºñ¾îÀÖ´Â Æ÷Æ®°¡ ÃÖ´ëÄ¡ÀÌ¸é, ¹Ù·Î eqp¸¦ ¸®ÅÏÇÑ´Ù.
+		// ë¹„ì–´?ˆëŠ” ?¬íŠ¸ê°€ ìµœë?ì¹˜ì´ë©? ë°”ë¡œ eqpë¥?ë¦¬í„´?œë‹¤.
 		if ((*Iter)->Get_ReservablePortCount() == nEmptyPortCount)
 		{
 			TRACE(_T("(%s) : Max Empty Port\n"), _T(__FUNCTION__));
@@ -1310,12 +1252,11 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 	}
 
 	//-------------------------------------------------------------------------
-	// 2. 3°³ÀÇ Æ÷Æ®ÀÇ »ç¿ë/¿¹¾à »óÅÂ¸¦ Ã¼Å©ÇÏ¿© »ç¿ë/¿¹¾à °³¼ö°¡ ÀûÀº ¼³ºñ ¼±ÅÃ
+	// 2. 3ê°œì˜ ?¬íŠ¸???¬ìš©/?ˆì•½ ?íƒœë¥?ì²´í¬?˜ì—¬ ?¬ìš©/?ˆì•½ ê°œìˆ˜ê°€ ?ì? ?¤ë¹„ ? íƒ
 	//-------------------------------------------------------------------------
 	if (0 < nMaxEmptyPortCount)
 	{
-		// ´ë»ó ¼³ºñ ÈÄº¸µé	
-		std::vector<CEquipment*>	vTargets;
+		// ?€???¤ë¹„ ?„ë³´??		std::vector<CEquipment*>	vTargets;
 		for (auto Iter = m_pInspection_Group[IN_nInspType].rbegin(); Iter != m_pInspection_Group[IN_nInspType].rend(); ++Iter)
 		{
 			if ((*Iter)->Get_EmptyPortCount() == nMaxEmptyPortCount)
@@ -1325,19 +1266,19 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 		}
 
 		//-------------------------------------------------------------------------
-		// Æ÷Æ® ºñ¾îÀÖ´Â °¹¼ö°¡ µ¿ÀÏÇÏ¸é, ÅõÀÔ ½Ã°£À» ºñ±³ÇÏ¿© ¿À·¡µÈ ¼³ºñ¸¦ ¼±ÅÃ
+		// ?¬íŠ¸ ë¹„ì–´?ˆëŠ” ê°?ˆ˜ê°€ ?™ì¼?˜ë©´, ?¬ì… ?œê°„??ë¹„êµ?˜ì—¬ ?¤ë˜???¤ë¹„ë¥?? íƒ
 		//-------------------------------------------------------------------------
 		if (1 < vTargets.size())
 		{
 			for (auto Iter = vTargets.rbegin(); Iter != vTargets.rend(); ++Iter)
 			{
-				// ¸ğµÎ SkipÀÌ¸é error;
+				// ëª¨ë‘ Skip?´ë©´ error;
 				if ((*Iter)->Get_Skip())
 				{
 					continue;
 				}
 
-				// ÅõÀÔ ½Ã°£ÀÌ °¡Àå ¿À·¡µÈ ¼ÒÄÏÀÌ ÀÖ´Â ¼³ºñ Ã¼Å©
+				// ?¬ì… ?œê°„??ê°€???¤ë˜???Œì¼“???ˆëŠ” ?¤ë¹„ ì²´í¬
 				uint8_t nTestParaCount = (*Iter)->Get_TestPortCount();
 				for (auto nIdx = 0; nIdx < nTestParaCount; ++nIdx)
 				{
@@ -1347,8 +1288,8 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 						nCheckTime = nElapTime;
 						nTargetEqpOrder = (*Iter)->Get_EqpOrder();
 					}
-				} // End of for () °Ë»ç ÆÄ¶ó
-			} // End of for() ¼³ºñ
+				} // End of for () ê²€???Œë¼
+			} // End of for() ?¤ë¹„
 
 			if (0 < nCheckTime)
 			{
@@ -1364,9 +1305,9 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 	}
 
 	//-------------------------------------------------------------------------
-	// 3. 3°³ÀÇ Æ÷Æ®¸¦ ¸ğµÎ »ç¿ëÇÏ´Â °æ¿ì
+	// 3. 3ê°œì˜ ?¬íŠ¸ë¥?ëª¨ë‘ ?¬ìš©?˜ëŠ” ê²½ìš°
 	//-------------------------------------------------------------------------
-	// ¿¹¾à °¡´ÉÇÑ Æ÷Æ®°¡ ¸ğµÎ »ç¿ëÁßÀÎ °æ¿ì m_nReservedOvered¸¦ »ç¿ëÇÏ¿© ÆÇ´ÜÇÑ´Ù.
+	// ?ˆì•½ ê°€?¥í•œ ?¬íŠ¸ê°€ ëª¨ë‘ ?¬ìš©ì¤‘ì¸ ê²½ìš° m_nReservedOveredë¥??¬ìš©?˜ì—¬ ?ë‹¨?œë‹¤.
 	TRACE(_T("(%s) : Check OverReserved\n"), _T(__FUNCTION__));
 	return Get_TargetEquipment_inGroup_Over(IN_nInspType);
 
@@ -1388,18 +1329,18 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup_Over(__in enEquipmentType IN_nEqp
 	uint32_t nElapTime = 0;
 	uint8_t nTargetEqpOrder = 0;
 
-	// ¿¹¾à °¡´ÉÇÑ Æ÷Æ®°¡ ¸ğµÎ »ç¿ëÁßÀÎ °æ¿ì m_nReservedOvered¸¦ »ç¿ëÇÏ¿© ÆÇ´ÜÇÑ´Ù.
+	// ?ˆì•½ ê°€?¥í•œ ?¬íŠ¸ê°€ ëª¨ë‘ ?¬ìš©ì¤‘ì¸ ê²½ìš° m_nReservedOveredë¥??¬ìš©?˜ì—¬ ?ë‹¨?œë‹¤.
 	uint8_t nOverCount = 0;
 	uint8_t nMinOverCount = 0xFF;
 	for (auto Iter = m_pEquipment_Group[IN_nEqpType].rbegin(); Iter != m_pEquipment_Group[IN_nEqpType].rend(); ++Iter)
 	{
-		// ¸ğµÎ SkipÀÌ¸é error;
+		// ëª¨ë‘ Skip?´ë©´ error;
 		if ((*Iter)->Get_Skip())
 		{
 			continue;
 		}
 
-		// m_nReservedOvered Ä«¿îÆ®°¡ °¡Àå ÀûÀº ¼³ºñ ¼±ÅÃ
+		// m_nReservedOvered ì¹´ìš´?¸ê? ê°€???ì? ?¤ë¹„ ? íƒ
 		nOverCount = (*Iter)->Get_ReservedOverCnt();
 		if (nOverCount < nMinOverCount)
 		{
@@ -1418,19 +1359,19 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup_Over(__in enEquipmentType IN_nEqp
 	}
 
 	//-------------------------------------------------------------------------
-	// Æ÷Æ® ºñ¾îÀÖ´Â °¹¼ö°¡ µ¿ÀÏÇÏ¸é, ÅõÀÔ ½Ã°£À» ºñ±³ÇÏ¿© ¿À·¡µÈ ¼³ºñ¸¦ ¼±ÅÃ
+	// ?¬íŠ¸ ë¹„ì–´?ˆëŠ” ê°?ˆ˜ê°€ ?™ì¼?˜ë©´, ?¬ì… ?œê°„??ë¹„êµ?˜ì—¬ ?¤ë˜???¤ë¹„ë¥?? íƒ
 	//-------------------------------------------------------------------------
 	if (1 < vTargets.size())
 	{
 		for (auto Iter = vTargets.rbegin(); Iter != vTargets.rend(); ++Iter)
 		{
-			// ¸ğµÎ SkipÀÌ¸é error;
+			// ëª¨ë‘ Skip?´ë©´ error;
 			if ((*Iter)->Get_Skip())
 			{
 				continue;
 			}
 
-			// ÅõÀÔ ½Ã°£ÀÌ °¡Àå ¿À·¡µÈ ¼ÒÄÏÀÌ ÀÖ´Â ¼³ºñ Ã¼Å©
+			// ?¬ì… ?œê°„??ê°€???¤ë˜???Œì¼“???ˆëŠ” ?¤ë¹„ ì²´í¬
 			uint8_t nTestParaCount = (*Iter)->Get_TestPortCount();
 			for (auto nIdx = 0; nIdx < nTestParaCount; ++nIdx)
 			{
@@ -1474,19 +1415,19 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup_Over(__in enInspectionType IN_nIn
 //=============================================================================
 uint8_t CLineInfo::Get_TargetEquipment(__in uint8_t IN_FromEqp)
 {
-	// ¸ñÀû °Ë»çÀÇ È°¼ºÈ­ Ã¼Å©, ¸ñÀû °Ë»ç³» ¼³ºñµéÀÇ Skip Ã¼Å©
+	// ëª©ì  ê²€?¬ì˜ ?œì„±??ì²´í¬, ëª©ì  ê²€?¬ë‚´ ?¤ë¹„?¤ì˜ Skip ì²´í¬
 	uint8_t nTargetEqpType = Get_NextEquipmentType((enEquipmentType)m_EqpList.at(IN_FromEqp)->Get_EquipmentType());
 
-	// ¼³ºñ À¯ÇüÀÌ Returner ÀÌ¸é
+	// ?¤ë¹„ ? í˜•??Returner ?´ë©´
 	if (Eqp_Returner == nTargetEqpType)
 	{
 		return Get_Returner().Get_EqpOrder();
 	}
 	
-	// °Ë»ç ¼³ºñÀÇ ±×·ì ¿©ºÎ
+	// ê²€???¤ë¹„??ê·¸ë£¹ ?¬ë?
 	if (Get_FirstEquipment((enEquipmentType)nTargetEqpType).Get_Group())
 	{
-		// °Ë»ç ¼³ºñ°¡ ±×·ìÀÎ °æ¿ì
+		// ê²€???¤ë¹„??ê²½ìš°
 		return Get_TargetEquipment_inGroup((enEquipmentType)nTargetEqpType);
 	}
 	else
@@ -1499,19 +1440,18 @@ uint8_t CLineInfo::Get_TargetEquipment(__in uint8_t IN_FromEqp)
 //=============================================================================
 // Method		: Get_FindEqpz_SameTarget
 // Access		: public  
-// Returns		: uint8_t									=> °Ë»öµÈ ¼³ºñ °¹¼ö
-// Parameter	: __in uint16_t IN_nTargetEqp				=> ¸ñÀû ¼³ºñ
-// Parameter	: __out std::vector<uint8_t> & OUT_nEqpz	=> °Ë»öµÈ ¼³ºñµé
-// Qualifier	:
+// Returns		: uint8_t									=> ê²€?‰ëœ ?¤ë¹„ ê°?ˆ˜
+// Parameter	: __in uint16_t IN_nTargetEqp				=> ëª©ì  ?¤ë¹„
+// Parameter	: __out std::vector<uint8_t> & OUT_nEqpz	=> ê²€?‰ëœ ?¤ë¹„??// Qualifier	:
 // Last Update	: 2022/2/17 - 20:57
 // Desc.		:
 //=============================================================================
 uint8_t CLineInfo::Get_FindEqpz_SameTarget(__in uint8_t IN_nTargetEqp, __out std::vector<uint16_t>& OUT_nEqpz)
 {
-	// 0¹øÀº Loader °íÁ¤, 2¹øÂ° ¼³ºñ ÀÌÈÄ¿¡¼­ ¸¸ »ç¿ë
+	// 0ë²ˆì? Loader ê³ ì •, 2ë²ˆì§¸ ?¤ë¹„ ?´í›„?ì„œ ë§??¬ìš©
 	if (1 < IN_nTargetEqp)
 	{
-		uint8_t nCount = 0;
+		uint8_t nCount = 0;;
 
 		bool bWaitOut = false;
 		for (uint8_t nPrevEqp = IN_nTargetEqp - 1; 1 < nPrevEqp; --nPrevEqp)
@@ -1552,13 +1492,13 @@ uint8_t CLineInfo::Get_FindEqpz_SameTarget(__in uint8_t IN_nTargetEqp, __out std
 //=============================================================================
 uint8_t CLineInfo::Get_FindSocketz_SameTarget(__in uint8_t IN_nTargetEqp, __out std::vector<CString>& OUT_Socketz)
 {
-	// 0¹øÀº Loader °íÁ¤, 2¹øÂ° ¼³ºñ ÀÌÈÄ¿¡¼­ ¸¸ »ç¿ë
+	// 0ë²ˆì? Loader ê³ ì •, 2ë²ˆì§¸ ?¤ë¹„ ?´í›„?ì„œ ë§??¬ìš©
 	if (1 < IN_nTargetEqp)
 	{
 		bool bWaitOut = false;
 		for (uint8_t nPrevEqp = IN_nTargetEqp - 1; 1 < nPrevEqp; --nPrevEqp)
 		{
-			// ***** RFID°¡ ¾øÀ¸¸é Crash *****
+			// ***** RFIDê°€ ?†ìœ¼ë©?Crash *****
 			bWaitOut = false;
 			for (uint8_t nPortIdx = enPortIndex_Tester::PtI_T_Test_L; nPortIdx < GetAt(nPrevEqp).Get_PortCount(); ++nPortIdx)
 			{
@@ -1729,51 +1669,3 @@ bool CLineInfo::Get_UseHandler()
 	return false;
 }
 
-//=============================================================================
-// Method		: Reset_ReservedPortCnt
-// Access		: public  
-// Returns		: void
-// Qualifier	:
-// Last Update	: 2023/2/27 - 16:38
-// Desc.		:
-//=============================================================================
-void CLineInfo::Reset_ReservedPortCnt()
-{
-	if (0 < m_EqpList.size())
-	{
-		for (auto nIdx = 0; nIdx < m_EqpList.size(); ++nIdx)
-		{
-			m_EqpList.at(nIdx)->Reset_ReservedPortInfo();
-		}
-	}
-}
-
-void CLineInfo::Set_ReservedTimeout_Second(__in double IN_dSecond)
-{
-	if (0 < m_EqpList.size())
-	{
-		for (auto nIdx = 0; nIdx < m_EqpList.size(); ++nIdx)
-		{
-			m_EqpList.at(nIdx)->Set_ReservedTimeout_Second(IN_dSecond);
-		}
-	}
-}
-
-//=============================================================================
-// Method		: Set_ActiveStatus
-// Access		: public  
-// Returns		: void
-// Parameter	: __in uint8_t IN_nStatus
-// Qualifier	:
-// Last Update	: 2023/3/7 - 15:22
-// Desc.		:
-//=============================================================================
-void CLineInfo::Set_ActiveStatus(__in uint8_t IN_nStatus)
-{
-	m_nActiveStatus = IN_nStatus;
-}
-
-uint8_t CLineInfo::Get_ActiveStatus()
-{
-	return m_nActiveStatus;
-}

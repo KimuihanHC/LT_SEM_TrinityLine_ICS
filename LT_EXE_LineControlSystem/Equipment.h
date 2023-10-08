@@ -28,8 +28,8 @@
 #endif
 #pragma pack(push, 1)
 
-// Æ÷Æ® »óÅÂ ±¸Á¶Ã¼
-// ÄÁº£ÀÌ¾î »óÅÂ ±¸Á¶Ã¼
+// ?¬íŠ¸ ?íƒœ êµ¬ì¡°ì²?
+// ì»¨ë² ?´ì–´ ?íƒœ êµ¬ì¡°ì²?/
 typedef struct _PortStatus
 {
 	uint8_t nStatus = 0;
@@ -74,30 +74,13 @@ typedef struct _AlarmStatus
 {
 	uint32_t	m_nAlarmCode = 0;
 	CString		m_szAlarmInfo;
-
 	_AlarmStatus& operator= (const _AlarmStatus& ref)
 	{
 		m_nAlarmCode = ref.m_nAlarmCode;
 		m_szAlarmInfo = ref.m_szAlarmInfo;
-
 		return *this;
 	};
 }ST_AlarmStatus;
-
-typedef struct _ReservedSocket
-{
-	CString		szRfid;
-	SYSTEMTIME	time;
-
-	_ReservedSocket& operator= (const _ReservedSocket& ref)
-	{
-		szRfid = ref.szRfid;
-		memcpy(&time, &ref.time, sizeof(SYSTEMTIME));
-
-		return *this;
-	};
-}ST_ReservedSocket;
-
 
 #if ADD_SOCKET_EES_XML
 
@@ -135,19 +118,8 @@ typedef enum
 	CP_MaxCount,
 }enChkProduction;
 
-typedef enum
-{
-	OAS_Inactive,
-	OAS_Active,
-	OAS_InitStatus,
-
-	OAS_MaxCount,
-}enOperationActiveStatus;
-
-class CRegEquipment;
-
 //-----------------------------------------------------------------------------
-// ¼³ºñ ¸ğ´ÏÅÍ¸µ Á¤º¸
+// ?¤ë¹„ ëª¨ë‹ˆ?°ë§ ?•ë³´
 //-----------------------------------------------------------------------------
 #if (USE_XML)
 class CEquipment : public CConfig_Eqp , public CCommonModule
@@ -161,8 +133,6 @@ public:
 
 	CEquipment& operator= (const CConfig_Eqp& ref);
 	CEquipment& operator= (const CEquipment& ref);
-
-
 #if (USE_XML)
 	CEquipment& operator= (const CCommonModule& ref);
 #endif	
@@ -170,27 +140,27 @@ protected:
 
 	CRegEquipment*	m_pRegEqp		= nullptr;
 	
-	bool		m_bEnable			= false;	// ¼³ºñ »ç¿ë À¯/¹« (°Ë»çÇ×¸ñ ÁøÇà ¿©ºÎ)
-	bool		m_bSkip				= false;	// ¼³ºñ Skip ¿©ºÎ
+	bool		m_bEnable			= false;	// ?¤ë¹„ ?¬ìš© ??ë¬?(ê²€?¬í•­ëª?ì§„í–‰ ?¬ë?)
+	bool		m_bSkip				= false;	// ?¤ë¹„ Skip ?¬ë?
 	uint8_t		m_nConnection		= 0;		// tcp/ip connection
 	bool		m_bTimeSync			= false;	// time sync
-	bool		m_bVerifyID			= false;	// eqp id ÀÎÁõ (ip address¿Í eqp id ¸ÅÄª °ËÅä)
+	bool		m_bVerifyID			= false;	// eqp id ?¸ì¦ (ip address?€ eqp id ë§¤ì¹­ ê²€??
 
 	// Show / Hide
 
-	uint8_t		m_nOperMode			= 0;		// ¿î¿µ¸ğµå
-	uint8_t		m_nProcessStatus	= 0;		// ¼³ºñ °¡µ¿ »óÅÂ
-	uint8_t		m_bLED_Status		= 0;		// °æ±¤µî, ¹öÀú
-	uint8_t		m_nLanguage			= 0;		// ¾ğ¾î
+	uint8_t		m_nOperMode			= 0;		// ?´ì˜ëª¨ë“œ
+	uint8_t		m_nProcessStatus	= 0;		// ?¤ë¹„ ê°€???íƒœ
+	uint8_t		m_bLED_Status		= 0;		// ê²½ê´‘?? ë²„ì?
+	uint8_t		m_nLanguage			= 0;		// ?¸ì–´
 	uint8_t		m_nModelType		= 0;		// ëª¨ë¸
 
-	// * ¿¹¾àµÈ Port °¹¼ö
-	//  - Æ÷Æ® »óÅÂ°¡ Empty -> ´Ù¸¥ »óÅÂ·Î º¯°æ : ¿¹¾à Port °¹¼ö °¨¼Ò
+	// * ?ˆì•½??Port ê°?ˆ˜
+	//  - ?¬íŠ¸ ?íƒœê°€ Empty -> ?¤ë¥¸ ?íƒœë¡?ë³€ê²?: ?ˆì•½ Port ê°?ˆ˜ ê°ì†Œ
 	uint8_t		m_nReservedPortCnt	= 0;
-	uint8_t		m_nReservedOvered	= 0; // ¿¹¾à ÃÖ´ëÄ¡¸¦ ³Ñ¾î¼­ ¿¹¾àÇÏ´Â °æ¿ì
-	uint8_t		m_nAvablePortCnt	= MAX_RESERVE_COUNT_TESTER; // ½ÇÁ¦ »ç¿ë °¡´ÉÇÑ Port °³¼ö (Disable, Alarm Æ÷Æ® Á¦¿Ü)
+	uint8_t		m_nReservedOvered	= 0; // ?ˆì•½ ìµœë?ì¹˜ë? ?˜ì–´???ˆì•½?˜ëŠ” ê²½ìš°
+	uint8_t		m_nAvablePortCnt	= MAX_RESERVE_COUNT_TESTER; // ?¤ì œ ?¬ìš© ê°€?¥í•œ Port ê°œìˆ˜ (Disable, Alarm ?¬íŠ¸ ?œì™¸)
 
-	// °¡Àå ÃÖ½Å ¾Ë¶÷
+	// ê°€??ìµœì‹  ?ŒëŒ
 	//uint32_t	m_nAlarmCode		= 0;
 	//CString		m_szAlarmInfo;
 
@@ -198,28 +168,16 @@ protected:
 	std::vector<ST_ConveyorStatus>	m_nConveyorStatus;
 	std::vector<ST_AlarmStatus>		m_nAlarmStatus;
 
-	// ¿¹¾àµÈ Æ÷Æ®
-	//std::queue< ST_ReservedSocket>	m_qReservePort;
-
-	std::vector< ST_ReservedSocket>	m_vReservePort;
-	// ¿¹¾àµÈ ¼ÒÄÏÀÇ ½Ã°£ Ã¼Å© 
-	double							m_dReservedTimeoutSec = 3600.0f; // 1½Ã°£
-
-	// »ı»ê·® ¼öÀ²
-	CYield_Equipment				m_Yield_Day;		// ÇÏ·çÄ¡ ¼öÀ² (Sifht º¯°æ ½Ã ÀÚµ¿ ÃÊ±âÈ­)
-	CYield_Equipment				m_Yield_Cumulative;	// ´©Àû ¼öÀ² (¼öµ¿ ÃÊ±âÈ­)
+	// ?ì‚°???˜ìœ¨
+	CYield_Equipment				m_Yield_Day;		// ?˜ë£¨ì¹??˜ìœ¨ (Sifht ë³€ê²????ë™ ì´ˆê¸°??
+	CYield_Equipment				m_Yield_Cumulative;	// ?„ì  ?˜ìœ¨ (?˜ë™ ì´ˆê¸°??
 	
-	// °Ë»ç °á°ú Åëº¸ ¹ŞÀ¸¸é Shift Ã¼Å©ÇÏ¿© Log »ı¼º ¹× ¼öÀ² ÃÊ±âÈ­
+	// ê²€??ê²°ê³¼ ?µë³´ ë°›ìœ¼ë©?Shift ì²´í¬?˜ì—¬ Log ?ì„± ë°??˜ìœ¨ ì´ˆê¸°??
 	bool							m_bAutoReset_Yield	= false;
-	SYSTEMTIME						m_tm_CheckShift;	// ¿ÀÀü 8½Ã Ã¼Å©
+	SYSTEMTIME						m_tm_CheckShift;	// ?¤ì „ 8??ì²´í¬
 
-	// ¼ÒÄÏ Á¤º¸
+	// ?Œì¼“ ?•ë³´
 	CSocketMonitoring*				m_pSocketInfo		= nullptr;
-
-	// ¸¶Áö¸·À¸·Î Track In ¿äÃ»ÇÑ ¼ÒÄÏ Á¤º¸ : RFID, ¿äÃ» ½Ã°£ (2023.08.07)
-	CString							m_szLastTrackIn_RFID;
-	SYSTEMTIME						m_tmLastTrackIn;
-	DWORD							m_nLastTrackIn_Time = 0;
 
 #if TEST
 	ST_EquipmentStateDisplay*		m_pEES_EqpDsp;
@@ -241,15 +199,14 @@ protected:
 	bool			Is_ChangeShift		(__in const SYSTEMTIME* IN_ptmCurrent);
 	bool			Is_ChangeShift		();
 
-	// Tester : ÆÄ¶ó L/R¿¡ ¼ÒÄÏÀÌ ÅõÀÔµÈ ½Ã°£
+	// Tester : ?Œë¼ L/R???Œì¼“???¬ì…???œê°„
 	virtual void	Set_Time_InputPara	(__in uint8_t IN_nPara){};
 	
-	// Port »óÅÂ°¡ PtS_Exist_SocketÀ¸·Î ¹Ù²î¸é ¼ÒÄÏ Á¤º¸¸¦ °»½ÅÇÑ´Ù.
+	//  Port ?íƒœê°€ PtS_Exist_Socket?¼ë¡œ ë°”ë€Œë©´ ?Œì¼“ ?•ë³´ë¥?ê°±ì‹ ?œë‹¤.
 	void			Update_SocketLocation	(__in uint8_t IN_nPortIndex, __in ST_PortStatus* IN_pstPort);
 
 	void			Save_Equipment_Skip			();
 	void			Save_Equipment_Reserve		();
-	void			Save_Equipment_ReserveQueue();
 	void			Save_Equipment_EndProduction();
 	void			Save_Equipment_Shift		();
 	void			Save_Equipment_Port			(__in uint8_t IN_nPortIndex);
@@ -258,59 +215,55 @@ protected:
 	void			Save_Equipment_Yield		();
 	void			Save_Equipment_Tacttime		();
 
-	// »ç¿ë °¡´ÉÇÑ Æ÷Æ® Ã¼Å©
+	// ?¬ìš© ê°€?¥í•œ ?¬íŠ¸ ì²´í¬
 	virtual uint8_t	Check_AvablePortCnt			(__in uint8_t IN_OldStatus, __in uint8_t IN_NewStatus);
 
-	// enPortIndex_Tester => enEqpPara·Î º¯È¯
+	// enPortIndex_Tester => enEqpParaë¡?ë³€??/
 	uint8_t			PortIndex2TestPara			(__in uint8_t IN_nPortIndex);
-	uint8_t			TestPara2PortIndex			(__in uint8_t IN_nTestPara);
-
-	//void			Set_TrackInRequestSocket	(__in LPCTSTR IN_szRFID);
 
 public:
 
-	// ¿À³Ê À©µµ¿ì ÇÚµå
+	// ?¤ë„ˆ ?ˆë„???¸ë“œ
 	void			Set_OwnerHWND		(__in HWND IN_hWnd);
-	// Data¸¦ GUI¿¡ Ç¥½ÃÇÏ±â À§ÇØ »ç¿ë
+	// Dataë¥?GUI???œì‹œ?˜ê¸° ?„í•´ ?¬ìš©
 	void			Set_GUI_HWND		(__in HWND IN_hWnd);
-	// Notify Windows Message ¼³Á¤
+	// Notify Windows Message ?¤ì •
 	void			Set_WinMsg_Notify	(__in UINT IN_nWM_Notify);
 
-	// ¼ÒÄÏ Á¤º¸ Å¬·¡½º Æ÷ÀÎÅÍ ¼³Á¤
+	// ?Œì¼“ ?•ë³´ ?´ë˜???¬ì¸???¤ì •
 	void			SetPtr_SocketInfo	(__in CSocketMonitoring* IN_pSocketInfo);
 
 	// ---------------------------------------------------------------------------
-	// ¼³ºñ Á¾·ù ÆÇ´Ü
+	// ?¤ë¹„ ì¢…ë¥˜ ?ë‹¨
 	// ---------------------------------------------------------------------------
-	virtual bool	Is_Tester			()	const;	// ¼³ºñ°¡ °Ë»ç ¼³ºñÀÎ°¡?
-	virtual bool	Is_Loader			()	const;	// ¼³ºñ°¡ ·Î´õÀÎ°¡?
-	virtual bool	Is_Returner			()	const;	// ¼³ºñ°¡ ¸®ÅÍ³ÊÀÎ°¡?
-	virtual bool	Is_Handler			()	const;	// ¼³ºñ°¡ ¸®ÅÍ³ÊÀÎ°¡?
+	virtual bool	Is_Tester			() const;	// ?¤ë¹„ê°€ ê²€???¤ë¹„?¸ê??
+	virtual bool	Is_Loader			() const;	// ?¤ë¹„ê°€ ë¡œë”?¸ê??
+	virtual bool	Is_Returner			() const;	// ?¤ë¹„ê°€ ë¦¬í„°?ˆì¸ê°€?
+	virtual bool	Is_Handler			() const;	// ?¤ë¹„ê°€ ë¦¬í„°?ˆì¸ê°€?
 
 public:
 	// ---------------------------------------------------------------------------
-	// ¼³ºñ µ¥ÀÌÅÍ Ã³¸®
+	// ?¤ë¹„ ?°ì´??ì²˜ë¦¬
 	// ---------------------------------------------------------------------------
-	// ¼³ºñ ¼ø¼­
+	// ?¤ë¹„ ?œì„œ
 	uint8_t			Get_EqpOrder		();
 	const uint8_t	Get_EqpOrder		() const;
 	void			Set_EqpOrder		(__in uint8_t IN_nEqpOrder);
 
-	// Æ÷Æ® »óÅÂ
+	// ?¬íŠ¸ ?íƒœ
 	size_t			Get_PortCount		() const;
 	virtual void	Set_PortClear		(__in uint8_t IN_nPortIndex);	
 	std::vector<ST_PortStatus>&	Get_PortStatus	();
 	const ST_PortStatus&		Get_PortStatus	(__in uint8_t IN_nPortIndex) const;	
-	const ST_PortStatus&		Get_PortStatus_byTestPara(__in uint8_t IN_nTestPara);
 	virtual void	Set_PortStatus		(__in uint8_t IN_nPortIndex, __in uint8_t IN_nStatus, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in bool IN_bSave = true);
 
-	// ÄÁº£ÀÌ¾î »óÅÂ
+	// ì»¨ë² ?´ì–´ ?íƒœ
 	size_t			Get_ConveyorCount	() const;
 	std::vector<ST_ConveyorStatus>&	Get_ConveyorStatus	();
 	const ST_ConveyorStatus&		Get_ConveyorStatus	(__in uint8_t IN_nConveyorIndex) const;
 	virtual void	Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in uint8_t IN_nStatus, __in uint8_t IN_nExistSocket, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode, __in bool IN_bSave = true);
 
-	// ¼öÀ²
+	// ?˜ìœ¨
 	const CYield_Equipment& Get_Yield_Day		() const;
 	const CYield_Equipment& Get_Yield_Cumulative() const;
 	void	Set_Yield_Day				(__in CYield_Equipment* IN_pYield);
@@ -320,67 +273,58 @@ public:
 	void	Increase_Yield_Pass			(__in uint8_t IN_nPara);
 	void	Increase_Yield_Fail			(__in uint8_t IN_nPara);
 
-	// ¼³ºñ È°¼ºÈ­/ºñÈ°¼ºÈ­
+	// ?¤ë¹„ ?œì„±??ë¹„í™œ?±í™”
 	bool	Get_EnableEquipment			() const;
 	void	Set_EnableEquipment			(__in bool IN_bEnable);
 	
-	// Åë½Å »óÅÂ
+	// ?µì‹  ?íƒœ
 	uint8_t Get_ClientConnection		() const;
 	void	Set_ClientConnection		(__in uint8_t IN_nConStatus);
 	
-	// ¼³ºñ ÀÎÁõ
+	// ?¤ë¹„ ?¸ì¦
 	bool	Get_VerifyEqpConnection		() const;
 	void	Set_VerifyEqpConnection		(__in bool bVerified);
 
-	// °Ë»ç ¿î¿ë ¸ğµå (Equipment Operate Mode)
+	// ê²€???´ìš© ëª¨ë“œ (Equipment Operate Mode)
 	uint8_t Get_OperatingMode			() const;
 	void	Set_OperatingMode			(__in uint8_t IN_nOperMode);
 
-	// ¼³ºñ °¡µ¿ »óÅÂ (Equipment Process Status)
+	// ?¤ë¹„ ê°€???íƒœ (Equipment Process Status)
 	uint8_t Get_ProcessStatus			() const;
 	void	Set_ProcessStatus			(__in uint8_t IN_nStatus);
 	void	Set_ProcessStatus			(__in uint8_t IN_nStatus, __in uint32_t IN_nAlarmCode, __in LPCTSTR IN_szAlarmInfo);
 
-	// ¾Ë¶÷ °¹¼ö
+	// ?ŒëŒ ê°?ˆ˜
 	size_t	Get_AlarmCount				() const;
 	const ST_AlarmStatus&			Get_AlarmStatus_Last() const;
 	std::vector<ST_AlarmStatus>&	Get_AlarmStatus		();
 	const ST_AlarmStatus&			Get_AlarmStatus		(__in uint32_t IN_nIndex) const;
 	//void	Set_AlarmStatus_Last		(__in uint32_t	IN_nAlarmCode, __in LPCTSTR IN_szAlarmInfo);
 
-	// °æ±¤µî »óÅÂ (LED Status)
+	// ê²½ê´‘???íƒœ (LED Status)
 	uint8_t Get_Status_LED				() const;
 	void	Set_Status_LED				(__in uint8_t IN_nLED_Status);
 
-	// ¼³ºñ ¹Ì»ç¿ë ¼³Á¤
+	// ?¤ë¹„ ë¯¸ì‚¬???¤ì •
 	bool	Get_Skip					() const;
 	void	Set_Skip					(__in bool IN_bSkip, __in bool IN_bSave = true);
 
-	// ¼³ºñ¿Í ½Ã°£ µ¿±âÈ­ ¼³Á¤ ¿©ºÎ
+	// ?¤ë¹„?€ ?œê°„ ?™ê¸°???¤ì • ?¬ë?
 	bool	Get_TimeSync				() const;
 	void	Set_TimeSync				(__in bool IN_bTimeSync);
 
-	// Æ÷Æ® ¿¹¾à °¹¼ö
-	void	Reset_ReservedPortInfo		();
+	// ?¬íŠ¸ ?ˆì•½ ê°?ˆ˜
 	uint8_t	Get_ReservedPortCnt			() const;
 	void	Set_ReservedPortCnt			(__in uint8_t IN_nCount, __in bool IN_bSave = true);
-	// ¼ÒÄÏ ÅõÀÔ ¿¹¾à (Å×½ºÅÍ¸¸ »ç¿ë)
-	bool	Increase_ReservedPort();
-	bool	Increase_ReservedPort(__in LPCTSTR IN_szRFID);
-	void	Decrease_ReservedPort();
-	void	Decrease_ReservedPort(__in LPCTSTR IN_szRFID);
+	// ?Œì¼“ ?¬ì… ?ˆì•½ (?ŒìŠ¤?°ë§Œ ?¬ìš©)
+	bool	Increase_ReservedPort		();
+	void	Decrease_ReservedPort		();
 
 	uint8_t	Get_ReservedOverCnt			() const;
 	void	Set_ReservedOverCnt			(__in uint8_t IN_nCount);
 
-	// ¿¹¾àµÈ ¼ÒÄÏµéÀÇ ½Ã°£ Ã¼Å© (¿À·¡µÈ ¼ÒÄÏÀº ¼öµ¿À¸·Î Á¦°Å µÇ¾îÀÖ´Ù ÆÇ´ÜÇÏ¿© ¿¹¾à¿¡¼­ Á¦°ÅÇÑ´Ù.)
-	// ¿¹¾àµÈ ½Ã°£, RFID Ã¼Å© 
-	uint8_t	Check_ReservedSocket();
 
-	// ¿¹¾àµÈ ¼ÒÄÏ Á¤º¸ ±¸ÇÏ±â
-	std::vector<ST_ReservedSocket>&	Get_ReservedInfo();
-
-	// Shift º¯°æ Ã¼Å© ½Ã°£
+	// Shift ë³€ê²?ì²´í¬ ?œê°„
 	const SYSTEMTIME&	Get_CheckShiftTime	() const;
 	void Set_CheckShiftTime				(__in SYSTEMTIME* IN_ptmCheck, __in bool IN_bSave = true);
 
@@ -390,62 +334,59 @@ public:
 
 public:
 
-	// ¾Ë¶÷ »óÅÂÀÎ°¡?
+	// ?ŒëŒ ?íƒœ?¸ê??
 	bool	IsAlarm						();
 
-	// ¼³ºñ°¡ ºñ¾î ÀÖ´Â°¡?
+	// ?¤ë¹„ê°€ ë¹„ì–´ ?ˆëŠ”ê°€?
 	bool	IsEmpty_Equipment			(__in bool bIgnore_EmptySocket = true);
-	bool	IsEmpty_Equipment_AnySocket();
 	bool	IsLastSocket_onTestPort		();
 
-	// ºñ¾î ÀÖ´Â Æ÷Æ® °¹¼ö
-	virtual uint8_t Get_EmptyPortCount	(__in bool bOnlyTestPort = false);
+	// ë¹„ì–´ ?ˆëŠ” ?¬íŠ¸ ê°?ˆ˜
+	virtual uint8_t Get_EmptyPortCount	(__in bool bCount_EmptySocket = true);
 
 	virtual uint8_t Get_EmptyConveyorCount	();
 
-	// »ç¿ë ÁßÀÎ Æ÷Æ® °¹¼ö (Buffer, Test L/R/C)
+	// ?¬ìš© ì¤‘ì¸ ?¬íŠ¸ ê°?ˆ˜ (Buffer, Test L/R/C)
 	virtual uint8_t Get_UsingPortCount	();
 
-	// ÇöÀç ¼³ºñ¿¡¼­ Å×½ºÆ® ÁßÀÎ ¼ÒÄÏ °¹¼ö (Å×½ºÆ® + ¹èÃâ´ë±â)
+	// ?„ì¬ ?¤ë¹„?ì„œ ?ŒìŠ¤??ì¤‘ì¸ ?Œì¼“ ê°?ˆ˜ (?ŒìŠ¤??+ ë°°ì¶œ?€ê¸?
 	uint8_t	Get_TestingCount			();
 
-	// °Ë»ç ¿Ï·á ÈÄ ¹èÃâ ´ë±â ÁßÀÎ ¼ÒÄÏ °¹¼ö
+	// ê²€???„ë£Œ ??ë°°ì¶œ ?€ê¸?ì¤‘ì¸ ?Œì¼“ ê°?ˆ˜
 	virtual uint8_t	Get_WaitOutCount	();
 
-	// ¼³ºñ³»¿¡ Á¸ÀçÇÏ´Â ¼ÒÄÏ °¹¼ö
+	// ?¤ë¹„?´ì— ì¡´ì¬?˜ëŠ” ?Œì¼“ ê°?ˆ˜
 	virtual uint8_t	Get_SocketCount		();
 	
-	// ¼³ºñ³»¿¡ Á¸ÀçÇÏ´Â Á¦Ç°ÀÌ ½Ç¸° ¼ÒÄÏ °¹¼ö
+	// ?¤ë¹„?´ì— ì¡´ì¬?˜ëŠ” ?œí’ˆ???¤ë¦° ?Œì¼“ ê°?ˆ˜
 	virtual uint8_t Get_ProductCount	();
 
 	// check end production
 	bool	Check_EndProduction			();
 
-	// °Ë»ç ¼³ºñ : ÀÌ ¼³ºñ·Î ¼ÒÄÏ ÅõÀÔÀÌ °¡´ÉÇÑ°¡?
+	// ê²€???¤ë¹„ : ???¤ë¹„ë¡??Œì¼“ ?¬ì…??ê°€?¥í•œê°€?
 	virtual uint8_t	 Get_InputAvailabilityStatus	();
 
-	// Tester : ÆÄ¶ó L/R¿¡ ¼ÒÄÏÀÌ ÅõÀÔµÇ¾î °æ°úµÈ ½Ã°£
+	// Tester : ?Œë¼ L/R???Œì¼“???¬ì…?˜ì–´ ê²½ê³¼???œê°„
 	virtual uint32_t Get_ElapsedTime_InputPara		(__in uint8_t IN_nPara);
 
 	// ---------------------------------------------------------------------------
-	// ÀÌº¥Æ® ¿äÃ» Ã³¸®
+	// ?´ë²¤???”ì²­ ì²˜ë¦¬
 	// ---------------------------------------------------------------------------
-	// ¼ÒÄÏ µî·Ï ¿äÃ» (·Îµù) (·Î´õ / ¾ğ·Î´õ)
+	// ?Œì¼“ ?±ë¡ ?”ì²­ (ë¡œë”©) (ë¡œë” / ?¸ë¡œ??
 	bool	Recv_RegisterSocket			(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode);
 	
-	// ¼ÒÄÏ ÅõÀÔ ½ÂÀÎ ¿äÃ» -> ¼ÒÄÏ ÅõÀÔ ½ÂÀÎ (Å×½ºÅÍ)
+	// ?Œì¼“ ?¬ì… ?¹ì¸ ?”ì²­ -> ?Œì¼“ ?¬ì… ?¹ì¸ (?ŒìŠ¤??
 	bool	Recv_ReqAcceptSocket		(__in LPCTSTR IN_szRFID);
 
-	// °Ë»ç °á°ú ÅëÁö (Å×½ºÅÍ) -> ¹èÃâ ½ÂÀÎ
+	// ê²€??ê²°ê³¼ ?µì? (?ŒìŠ¤?? -> ë°°ì¶œ ?¹ì¸
 	bool	Recv_NotifyTestResult		(__in LPCTSTR IN_szRFID, __in int16_t IN_nNGCode, __in uint8_t IN_nPara);
 
-	// °Ë»ç °á°ú ¿äÃ» (·Î´õ / ¾ğ·Î´õ)
+	// ê²€??ê²°ê³¼ ?”ì²­ (ë¡œë” / ?¸ë¡œ??
 	bool	Recv_ReqTestResult			(__in LPCTSTR IN_szRFID, __out ST_TestResult& OUT_stResult);
 	
-	// ¼ÒÄÏ µî·Ï ÇØÁ¦ (¾ğ·Îµù) (·Î´õ / ¾ğ·Î´õ)
+	// ?Œì¼“ ?±ë¡ ?´ì œ (?¸ë¡œ?? (ë¡œë” / ?¸ë¡œ??
 	bool	Recv_UnregisterSocket		(__in LPCTSTR IN_szRFID);
-
-
 
 	// ---------------------------------------------------------------------------
 	// File Log
@@ -455,7 +396,7 @@ protected:
 	CString m_szPath_Report;
 public:
 	void	Set_Path					(__in LPCTSTR IN_szLog, __in LPCTSTR IN_szReport);
-	bool	Report_Yield_Day			(); // ³â/¿ù/eqpid_yield.csv
+	bool	Report_Yield_Day			(); // ????eqpid_yield.csv
 
 	// ---------------------------------------------------------------------------
 	// Fail Info
@@ -466,13 +407,6 @@ protected:
 public:
 	void	SetPtr_FailInfo_Eqp			(__in CFailInfo_Eqp* IN_pFailInfo_Eqp);
 	void	IncreaseFailInfo			(__in int16_t IN_nNGCode, __in uint8_t IN_nPara);
-
-	// ¿¹¾àµÈ ¼ÒÄÏÀÌ ¿À·¡µÇ¾úÀ» °æ¿ì timeout Ã³¸®ÇÏ¸é¼­ ¿¹¾à Á¤º¸¿¡¼­ Á¦°Å ÇÒ ¶§ ºñ±³ ½Ã°£
-	void	Set_ReservedTimeout_Second(__in double IN_dSecond);
-
-	void	Set_TrackInRequestSocket(__in LPCTSTR IN_szRFID);
-	// ¸¶Áö¸·À¸·Î Track In ¿äÃ» Ã³¸®µÈ ¼ÒÄÏ ºñ±³
-	bool	IsTrackInRequest_Socket(__in LPCTSTR IN_szRFID, __in uint32_t IN_nCheckTime = 900);
 
 #if (USE_XML)
 

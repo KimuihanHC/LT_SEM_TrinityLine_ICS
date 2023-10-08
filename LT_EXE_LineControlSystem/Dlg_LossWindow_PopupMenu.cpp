@@ -124,6 +124,11 @@ int CDlg_LossWindow_PopupMenu::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_bn_OK.Create(_T("OK"), WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON | WS_BORDER, rectDummy, this, IDOK);
 	m_bn_OK.SetFont(&m_font_Default);
 
+#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
+	m_bn_CtrlCmd[CC_Reset].SetTextColor(RGB(255, 255, 0));
+#endif
+	//m_bn_CtrlCmd[CC_Run].SetTextColor(RGB(0, 200, 0));
+	//m_bn_CtrlCmd[CC_Stop].SetTextColor(RGB(200, 0, 0));
 	MoveWindow(0, 0, 500, 500);
 	return 0;
 }
