@@ -15,7 +15,6 @@
 
 #include "TestManager_EQP.h"
 
-
 //-----------------------------------------------------------------------------
 // CTestManager_EQP_ICS
 //-----------------------------------------------------------------------------
@@ -39,7 +38,6 @@ protected:
 	//-----------------------------------------------------
 	// 설비 데이터, 통신, GUI 매칭
 	virtual void	OnMatchingEquipment				();
-
 	
 	//-----------------------------------------------------
 	// 설비 이벤트
@@ -78,7 +76,6 @@ protected:
 	// - 소켓 최종 Log 작성 (최종 수율, 불량 제품 이력)
 	void OnEvent_Unloader_UnregisterSocket		(__in LPCTSTR IN_szRFID);
 	
-
 	//-----------------------------------------------------
 	// 
 	//-----------------------------------------------------
@@ -108,11 +105,10 @@ protected:
 	void	OnSend_TimeSync					(__in uint8_t IN_nEqpOrder);									// 시간 동기
 	void	OnSend_UserLevel				(__in enPermissionMode IN_nLevel, __in LPCTSTR IN_szUserId);	// 사용자 등급
 	void	OnSend_UserLevel				(__in uint8_t IN_nEqpOrder, __in enPermissionMode IN_nLevel, __in LPCTSTR IN_szUserId);	// 사용자 등급
-	void	OnSend_UserLevel				(__in _ICS_SERVER_Type In_Type, __in enPermissionMode IN_nLevel, __in LPCTSTR IN_szUserId);//2023.03.15a uhkim
-
 	void	OnSend_Language					(__in uint8_t IN_nLanguage);									// 언어
 	void	OnSend_Language					(__in uint8_t IN_nEqpOrder, __in uint8_t IN_nLanguage);			// 언어
 	void	OnSend_Model					(__in uint8_t IN_nEqpOrder);									// 모델
+	void	OnSend_OperationActiveStatus	(__in uint8_t IN_nStatus);										// 인라인 가동/비가동 상태
 
 	void	OnSend_Accept_SocketTrackIn		(__in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szRFID, __in uint8_t IN_nFlag, __in LPCTSTR IN_szBarcode);	// 소켓 투입 승인
 	void	OnSend_Accept_SocketTrackOut	(__in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szRFID);			// 배출 승인
@@ -134,7 +130,6 @@ protected:
 	bool	OnSend_ShowHide					(__in bool bShow);								// 제어: 핸들러 UI Show/Hide
 	bool	OnSend_ShowHide					(__in uint8_t IN_nEqpOrder, __in bool bShow);	// 제어: 핸들러 UI Show/Hide
 	
-
 	//-----------------------------------------------------	
 	// 검사전 체크 
 	//-----------------------------------------------------
@@ -153,6 +148,8 @@ protected:
 	//virtual void	OnReport_Yield_Socket_Cumulative(__in LPCTSTR IN_szRFID);
 	//virtual void	OnReport_Yield_Eqp_Day			(__in uint8_t IN_nEqpOder);
 	//virtual void	OnReport_Yield_Eqp_Cumulative	(__in uint8_t IN_nEqpOder);
+
+	//virtual void	OnUpdate_InOutCount				(__in bool IN_nIn, __in bool IN_nOut, __in bool IN_nRemove);
 
 	//-----------------------------------------------------
 	// 타이머 
@@ -175,10 +172,13 @@ public:
 
 	// 제어 권한 상태 설정	
 	virtual void	OnSet_PermissionMode			(__in enPermissionMode nAcessMode);
-
-
-#if (USE_XML)
+	//-----------------------------------------------------
+	// Add
+	//-----------------------------------------------------
+#if defined(EES_XML)//20231003
 protected:
+	void	OnSend_UserLevel				(__in _ICS_SERVER_Type In_Type, __in enPermissionMode IN_nLevel, __in LPCTSTR IN_szUserId);
+
 	virtual void	OnMatchingServer();
 protected:
 	//-----------------------------------------------------
@@ -233,66 +233,10 @@ protected:
 	void	OnSend_REPLY_SET_DATETIME				(__in uint8_t IN_nSvrOrder, __in lt::Reply_Set_DateTime_Args::Args&				IN_LPARAM);
 	void	OnSend_REPLY_TERMINAL_MESSAGE			(__in uint8_t IN_nSvrOrder, __in lt::Reply_Terminal_Message_Args::Args&			IN_LPARAM);
 	void	OnSend_REPLY_OPCALL						(__in uint8_t IN_nSvrOrder, __in lt::Reply_Opcall_Args::Args&					IN_LPARAM);
-
 protected:
 	virtual void	OnSet_EESMode(__in enEES_Mode nAcessMode);
-
 protected:
 	bool Get_EquipmentTypeEvent(__in uint8_t  IN_From, __in uint8_t  IN_nPortStatus);
-#endif
-
-#if SOCKET	
-	int  nLoaderPort	[PtI_L_MaxCount];
-	int  nReturnPort	[PtI_R_MaxCount];
-	int  nTestPort		[PtI_T_MaxCount];
-	bool bGetClientConnectionEvent(__in uint8_t IN_From);
-	bool bGetProcessStatusEvent(uint8_t IN_From);
-	bool bGetOperatingModeEvent(uint8_t IN_From);
-	bool bGetPortStatusEvent(uint8_t IN_From,
-		__in uint8_t  IN_nPortStatus);
-	bool bGetPortEquipmentStateEvent(uint8_t IN_From,
-		__in uint8_t  IN_nPortStatus);
-	bool bGetPortLOTIDUseEvent(uint8_t IN_From);
-	bool bGetPortLOTIDUseEvent(
-		__in uint8_t  IN_From,
-		__in uint8_t  IN_nPortStatus);
-
-	bool Get_ServerTypeEvent(__in uint8_t  IN_From,	__in uint8_t  IN_nPortStatus);
-	//
-	virtual void	OnReport_TerminalMessage		(__in lt::Request_Terminal_Message_Args::Args& IN_szData);
-	virtual void	OnReport_OpCall					(__in lt::Request_Opcall_Args::Args& IN_szData);
-	virtual BOOL	GetNtPrivilege();
-
-	bool			bGetSvrEquipmentStateEvent(
-		__in uint8_t IN_From,
-		__in uint8_t IN_nPortStatus);
-#endif
-
-	
-#if TEST
-	protected:
-		void	OnEvent_ServerUNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_ServerREQUEST_UNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_ServerREPLY_UNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data);
-
-		void	OnEvent_ServerREPORT_START_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_ServerREPORT_START_LOT(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_ServerREPORT_END_EVENT(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_ServerREPORT_END_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data);
-	protected:
-		void	OnEvent_EquipmentUNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_EquipmentREPLY_UNITID_READ(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_EquipmentREPORT_START_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_EquipmentREPORT_START_LOT(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_EquipmentREPORT_END_EVENT(__in uint8_t IN_From, __in LPARAM IN_Data);
-		void	OnEvent_EquipmentREPORT_END_PROCESS(__in uint8_t IN_From, __in LPARAM IN_Data);
-	protected:
-		void	OnSend_UNITID_READ(__in uint8_t IN_nSvrOrder, __in ST_xml_UNITID_READ						*IN_LPARAM);
-		void	OnSend_REPLY_UNITID_READ(__in uint8_t IN_nSvrOrder, __in ST_xml_REPLY_UNITID_READ				*IN_LPARAM);
-		void	OnSend_REPORT_START_PROCESS(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_START_PROCESS			*IN_LPARAM);
-		void	OnSend_REPORT_START_LOT(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_START_LOT				*IN_LPARAM);
-		void	OnSend_REPORT_END_EVENT(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_END_EVENT				*IN_LPARAM);
-		void	OnSend_REPORT_END_PROCESS(__in uint8_t IN_nSvrOrder, __in ST_xml_REPORT_END_PROCESS				*IN_LPARAM);
 #endif
 };
 

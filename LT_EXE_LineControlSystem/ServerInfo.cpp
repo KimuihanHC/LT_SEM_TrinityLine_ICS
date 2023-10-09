@@ -540,7 +540,8 @@ void CServerInfo::Set_Config_Line(__in const CConfig_Server* IN_pConfig_Server)
 		// ?¤ë¹„ ? í˜•???°ë¥¸ ?¤ë¹„ ê·¸ë£¹ ì²˜ë¦¬
 		for (auto nEqpTypeIdx = 0; nEqpTypeIdx < SERVER_MAX; nEqpTypeIdx++)
 		{
-			// ì´ˆê¸°??			m_pEquipment_Group[nEqpTypeIdx].clear();
+			// ÃÊ±âÈ­		
+			m_pEquipment_Group[nEqpTypeIdx].clear();
 
 			// ?¤ë¹„ ? í˜•??ì²«ë²ˆì§??¤ë¹„ ì°¾ê¸°
 			for (auto nEqpIdx = 0; nEqpIdx < nSvrCnt; ++nEqpIdx)

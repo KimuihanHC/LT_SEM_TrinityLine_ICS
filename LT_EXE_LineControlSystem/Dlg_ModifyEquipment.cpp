@@ -18,22 +18,23 @@
 #include "Def_Equipment_Type.h"
 #include "Def_Language_Message.h"
 
-
 #define IDC_CB_EQP_TYPE			1201
 #define IDC_BN_VERIFY_LINE		1202
 #define IDC_BN_MODIFY_STEP		1203
 #define IDC_ED_DATA_S			1210
 #define IDC_ED_DATA_E			IDC_ED_DATA_S + MAX_STEP_DATA - 1
-//2023.05.26
+#if defined(EES_XML)//20231003
 #define IDC_ED_EQUIPID_S		4000
 #define IDC_ED_EQUIPID_E		IDC_ED_EQUIPID_S + 99
 #define IDC_ED_PORTID_S			IDC_ED_EQUIPID_E + 1
 #define IDC_ED_PORTID_E			IDC_ED_PORTID_S + 99
-
+#endif
 #define IDC_ED_EQP_ALIAS		3000
 #define IDC_ED_EQP_ID			3001
 #define IDC_IP_ADDRESS			3002
-#define IDC_ED_SUBEQPID			3003
+#if defined(EES_XML)//20231003
+#define IDC_ED_SUBEQPID			3003//20231001
+#endif
 // #define IDC_CB_TESTZONE_CNT		3003
 // #define IDC_CB_BUFF_CNT			3004
 // #define IDC_CB_CONVOYER_CNT		3005
@@ -240,7 +241,6 @@ int CDlg_ModifyEquipment::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_ed_IPAddress.SetValidChars(_T("0123456789."));
 	m_ed_IPAddress.SetWindowText(_T("192.168.0.1"));
 
-
 // 	static LPCTSTR szZoneCount[] =
 // 	{
 // 		_T("0"),
@@ -308,7 +308,7 @@ int CDlg_ModifyEquipment::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		//m_st_EqpItemData[nIdx].ModifyStyle(NULL, WS_BORDER, SWP_FRAMECHANGED);
 	}
 
-	//2023.05.26
+#if defined(EES_XML)//20231003
 	m_st_SubEqpID.SetStaticStyle(CVGStatic::StaticStyle_Default);
 	m_st_SubEqpID.SetColorStyle(CVGStatic::ColorStyle_DarkGray);
 	m_st_SubEqpID.SetColorStyle(CVGStatic::ColorStyle_Black);
@@ -332,7 +332,8 @@ int CDlg_ModifyEquipment::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_st_PortID[nIdx].Create(str, dwStyle | SS_CENTER | SS_CENTERIMAGE, rectDummy, this, IDC_STATIC);
 		m_st_PortID[nIdx].MoveWindow(0, 0, 0, 0);
 	}
-	//
+#endif
+
 	return 0;
 }
 
@@ -397,8 +398,10 @@ void CDlg_ModifyEquipment::OnSize(UINT nType, int cx, int cy)
 	m_bn_OK.MoveWindow(iLeft, iTop, iCtrlWidth, iCtrlHeight);
 	m_bn_Cancel.MoveWindow(iLeftSub, iTop, iCtrlWidth, iCtrlHeight);
 
+#if defined(EES_XML)//20231003
 	nEquip_cx = cx;
 	nEquip_cy = cy;
+#endif	
 }
 
 //=============================================================================
@@ -556,7 +559,8 @@ BOOL CDlg_ModifyEquipment::Get_EquipmentData_UI(__out CConfig_Eqp& OUT_stEquipme
 		LT_MessageBox(g_szMessageBox_T[MB_Line_IpAddr_Blank][m_nLanguage]);
 		return FALSE;
 	}
-//#if SOCKET20230925
+
+#if defined(EES_XML)//20231003
 	m_ed_SubEqpID.GetWindowText(szValue);
 	m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), 0, 0, szValue);	
 	switch (OUT_stEquipment.Get_EqpType_UI())
@@ -587,7 +591,6 @@ BOOL CDlg_ModifyEquipment::Get_EquipmentData_UI(__out CConfig_Eqp& OUT_stEquipme
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_L, 1, szValue);
 			m_ed_PortID[PtI_T_Test_L].GetWindowText(szValue);
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_L, 2, szValue);
-
 			m_ed_EquipID[PtI_T_Test_R].GetWindowText(szValue);
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_R, 1, szValue);
 			m_ed_PortID[PtI_T_Test_R].GetWindowText(szValue);
@@ -598,12 +601,10 @@ BOOL CDlg_ModifyEquipment::Get_EquipmentData_UI(__out CConfig_Eqp& OUT_stEquipme
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_L, 1, szValue);
 			m_ed_PortID[PtI_T_Test_L].GetWindowText(szValue);
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_L, 2, szValue);
-
 			m_ed_EquipID[PtI_T_Test_C].GetWindowText(szValue);
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_C, 1, szValue);
 			m_ed_PortID[PtI_T_Test_C].GetWindowText(szValue);
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_C, 2, szValue);
-
 			m_ed_EquipID[PtI_T_Test_R].GetWindowText(szValue);
 			m_reg.Save_Equipment_ID(OUT_stEquipment.Get_EquipmentId(), PtI_T_Test_R, 1, szValue);
 			m_ed_PortID[PtI_T_Test_R].GetWindowText(szValue);
@@ -612,7 +613,7 @@ BOOL CDlg_ModifyEquipment::Get_EquipmentData_UI(__out CConfig_Eqp& OUT_stEquipme
 		}
 		break;
 	}
-//#endif //SOCKET
+#endif
 	// 검사 항목에 따라서 데이터 범위 체크 해야 함.
 	Verify_Equipment(OUT_stEquipment);
 
@@ -648,7 +649,7 @@ BOOL CDlg_ModifyEquipment::Set_EquipmentData_UI(__in CConfig_Eqp* IN_pstEquipmen
 	//UpdateUI_EquipmentData(IN_pstEquipment->Get_EquipmentType());
 	UpdateUI_EquipmentData(IN_pstEquipment->Get_EqpType_UI());
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	OnEquipSize(IN_pstEquipment, nEquip_cx, nEquip_cy);
 	szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), 0, 0);
 	m_ed_SubEqpID.SetWindowText(szText);
@@ -681,7 +682,6 @@ BOOL CDlg_ModifyEquipment::Set_EquipmentData_UI(__in CConfig_Eqp* IN_pstEquipmen
 			m_ed_EquipID[PtI_T_Test_L].SetWindowText(szText);
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_L, 2);
 			m_ed_PortID[PtI_T_Test_L].SetWindowText(szText);
-
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_R, 1);
 			m_ed_EquipID[PtI_T_Test_R].SetWindowText(szText);
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_R, 2);
@@ -692,18 +692,15 @@ BOOL CDlg_ModifyEquipment::Set_EquipmentData_UI(__in CConfig_Eqp* IN_pstEquipmen
 			m_ed_EquipID[PtI_T_Test_L].SetWindowText(szText);
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_L, 2);
 			m_ed_PortID[PtI_T_Test_L].SetWindowText(szText);
-
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_C, 1);
 			m_ed_EquipID[PtI_T_Test_C].SetWindowText(szText);
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_C, 2);
 			m_ed_PortID[PtI_T_Test_C].SetWindowText(szText);
-
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_R, 1);
 			m_ed_EquipID[PtI_T_Test_R].SetWindowText(szText);
 			szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_EquipmentId(), PtI_T_Test_R, 2);
 			m_ed_PortID[PtI_T_Test_R].SetWindowText(szText);
 			break;
-
 		}
 	}
 	break;
@@ -917,15 +914,14 @@ CConfig_Eqp& CDlg_ModifyEquipment::Get_EquipmentData()
 // Access		: public  
 // Returns		: CConfig_Eqp&
 // Qualifier	:
-// Last Update	: 2023.05.26
+// Last Update	: 2023.10.03
 // Desc.		:
 //=============================================================================
+#if defined(EES_XML)//20231003
 void CDlg_ModifyEquipment::OnEquipSize(__in const CConfig_Eqp* IN_pstEuquipment, int cx, int cy)
 {
-
 	if ((0 == cx) || (0 == cy))
 		return;
-
 	int iSpacing = 5;
 	int iMagin = 20;
 	int iLeft = iMagin;
@@ -941,19 +937,17 @@ void CDlg_ModifyEquipment::OnEquipSize(__in const CConfig_Eqp* IN_pstEuquipment,
 	int iCtrlHeight = (295 < nHeight) ? 25 : static_cast<int>(round((nHeight - 45) / 10));
 	int iLeftSub = 0;
 	int iLeftSub2 = 0;
-
 	// 설비 데이터 항목 조건
 	iLeftSub = iLeft + iStWidth + iSpacing;
 	iLeftSub2 = iLeftSub + iStWidth + iSpacing;
-
 	iTop += iCtrlHeight + iSpacing;
 	iTop += iCtrlHeight + iSpacing;
 	iTop += iCtrlHeight + iSpacing;
 	iTop += iCtrlHeight + iSpacing;
-	//2023.05.26a uhkim
 
 	m_st_SubEqpID.MoveWindow(iLeft, iTop, iStWidth, iCtrlHeight);
 	m_ed_SubEqpID.MoveWindow(iLeftSub, iTop, iStWidth, iCtrlHeight);
+
 	switch (IN_pstEuquipment->Get_EqpType_UI())
 	{
 	case EqpUI_Handler:
@@ -978,9 +972,10 @@ void CDlg_ModifyEquipment::OnEquipSize(__in const CConfig_Eqp* IN_pstEuquipment,
 		m_ed_PortID[PtI_R_Buffer_1].MoveWindow(iLeftSub2, iTop, iStWidth + iStWidth, iCtrlHeight);
 		break;
 	default:
-		{
+	{
 		auto nCount = IN_pstEuquipment->Get_TestPortCount();
-		switch (nCount) {
+		switch (nCount) 
+		{
 		case 2:
 			iTop += iCtrlHeight + iSpacing;
 			m_st_EquipID[PtI_T_Test_L].SetText(g_szPort_Tester[PtI_T_Test_L]);
@@ -988,7 +983,7 @@ void CDlg_ModifyEquipment::OnEquipSize(__in const CConfig_Eqp* IN_pstEuquipment,
 			m_ed_EquipID[PtI_T_Test_L].MoveWindow(iLeftSub, iTop, iStWidth, iCtrlHeight);
 			m_ed_PortID[PtI_T_Test_L].MoveWindow(iLeftSub2, iTop, iStWidth + iStWidth, iCtrlHeight);
 			//iTop += iCtrlHeight + iSpacing;
-			m_st_EquipID[PtI_T_Test_C].MoveWindow(0,0,0,0);
+			m_st_EquipID[PtI_T_Test_C].MoveWindow(0, 0, 0, 0);
 			m_ed_EquipID[PtI_T_Test_C].MoveWindow(0, 0, 0, 0);
 			m_ed_PortID[PtI_T_Test_C].MoveWindow(0, 0, 0, 0);
 			iTop += iCtrlHeight + iSpacing;
@@ -1003,23 +998,20 @@ void CDlg_ModifyEquipment::OnEquipSize(__in const CConfig_Eqp* IN_pstEuquipment,
 			m_st_EquipID[PtI_T_Test_L].MoveWindow(iLeft, iTop, iStWidth, iCtrlHeight);
 			m_ed_EquipID[PtI_T_Test_L].MoveWindow(iLeftSub, iTop, iStWidth, iCtrlHeight);
 			m_ed_PortID[PtI_T_Test_L].MoveWindow(iLeftSub2, iTop, iStWidth + iStWidth, iCtrlHeight);
-
 			iTop += iCtrlHeight + iSpacing;
 			m_st_EquipID[PtI_T_Test_C].SetText(g_szPort_Tester[PtI_T_Test_C]);
 			m_st_EquipID[PtI_T_Test_C].MoveWindow(iLeft, iTop, iStWidth, iCtrlHeight);
 			m_ed_EquipID[PtI_T_Test_C].MoveWindow(iLeftSub, iTop, iStWidth, iCtrlHeight);
 			m_ed_PortID[PtI_T_Test_C].MoveWindow(iLeftSub2, iTop, iStWidth + iStWidth, iCtrlHeight);
-
 			iTop += iCtrlHeight + iSpacing;
 			m_st_EquipID[PtI_T_Test_R].SetText(g_szPort_Tester[PtI_T_Test_R]);
 			m_st_EquipID[PtI_T_Test_R].MoveWindow(iLeft, iTop, iStWidth, iCtrlHeight);
 			m_ed_EquipID[PtI_T_Test_R].MoveWindow(iLeftSub, iTop, iStWidth, iCtrlHeight);
 			m_ed_PortID[PtI_T_Test_R].MoveWindow(iLeftSub2, iTop, iStWidth + iStWidth, iCtrlHeight);
 			break;
-
 		}
-		}		
-		break;
 	}
-
+	break;
+	}
 }
+#endif

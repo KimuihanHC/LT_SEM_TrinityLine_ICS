@@ -10,8 +10,8 @@
 #ifndef FileCrypt_h__
 #define FileCrypt_h__
 
-#include <io.h>				// 파일관련//
-#include <WinCrypt.h>		// 암호화//
+#include <io.h>				// 파일관련.
+#include <WinCrypt.h>		// 암호화.
 #include "Define_HWInfoFile.h"
 
 #define KEYLENGTH				0x00800000
@@ -19,11 +19,11 @@
 #define ENCRYPT_BLOCK_SIZE		8 	
 #define TEXT_CRYPT_PASSWORD		TEXT("Luritech_TDD")
 
+
 static bool EncryptData	(__inout BYTE *pbBuffer, __inout  DWORD* pdwCount, __in DWORD dwBufferLen);
 static BOOL DecryptData	(__inout BYTE *pbBuffer, __in DWORD dwBufferLen, __out DWORD* pdwCount);
 static BOOL WriteHWIFile(__in const ST_HW_INFO_FILE* stHWIFormat, __in LPCTSTR lpFileName);
 static BOOL ReadHWIFile (__out ST_HW_INFO_FILE* stHWIFormat, __in LPCTSTR lpFileName);
-
 static BOOL WriteHWIReg	(__in const ST_HW_INFO_FILE* stHWIFormat);
 static BOOL ReadHWIReg	(__out ST_HW_INFO_FILE* stHWIFormat);
 

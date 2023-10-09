@@ -16,9 +16,10 @@
 #include "VGStatic.h"
 #include "Def_ConfigLine.h"
 
-//2023.05.26
+#if defined(EES_XML)//20231003
 #include "Def_Constant.h"
 #include "RegEquipment.h"
+#endif
 //=============================================================================
 // CDlg_ModifyEquipment 대화 상자입니다.
 //=============================================================================
@@ -82,7 +83,7 @@ protected:
 	CComboBox		m_cb_EquipmentType;
 	CEdit			m_ed_EquipmentId;
 	CMFCMaskedEdit	m_ed_IPAddress;
-	//2023.05.26
+#if defined(EES_XML)//20231003
 	CEdit			m_ed_SubEqpID;
 	CEdit			m_ed_EquipID[100];
 	CEdit			m_ed_PortID[100];
@@ -90,6 +91,7 @@ protected:
 	CVGStatic		m_st_SubEqpID;
 	CVGStatic		m_st_EquipID[100];
 	CVGStatic		m_st_PortID[100];
+#endif
 // 	CComboBox		m_cb_TestZoneCount;
 // 	CComboBox		m_cb_BufferCount;
 // 	CComboBox		m_cb_ConveyorCount;
@@ -129,12 +131,13 @@ public:
 	void			Set_EquipmentData		(__in const CConfig_Eqp* IN_pstEuquipment);
 	CConfig_Eqp&	Get_EquipmentData		();
 
-	//2023.05.26a
+#if defined(EES_XML)//20231003
 public:
 	int				nEquip_cx;
 	int				nEquip_cy;
 	void			OnEquipSize(__in const CConfig_Eqp* IN_pstEuquipment, int cx, int cy);
 	CRegEquipment	m_reg;
+#endif
 };
 
 #endif // Dlg_ModifyEquipment_h__

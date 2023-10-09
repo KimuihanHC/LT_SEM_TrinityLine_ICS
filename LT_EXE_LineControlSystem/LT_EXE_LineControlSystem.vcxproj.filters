@@ -94,26 +94,26 @@
     <Filter Include="ViewWnd_Sub\FailInfo">
       <UniqueIdentifier>{19cb3150-e932-4364-a747-e741ffd7cc41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LineInfo\LD_List">
-      <UniqueIdentifier>{e7c240ff-e857-4588-9564-322cc534c4f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="View_Setting\Cfg_ID">
-      <UniqueIdentifier>{f863983c-cf14-43b3-97ed-94e6b378bf19}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="LineInfo\In-Server">
-      <UniqueIdentifier>{80daafd3-723b-41ea-8985-d2b1ed5bb428}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="LineInfo\server">
-      <UniqueIdentifier>{ecc5a106-3390-467e-abe4-9ca4c65517cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="View_Main\Server">
-      <UniqueIdentifier>{b6d297b0-0396-4dde-8eec-336f78355dd2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="IcsComm\XML">
-      <UniqueIdentifier>{e8cafc3a-0778-41ed-98b1-df360d2795d9}</UniqueIdentifier>
+    <Filter Include="View_Log">
+      <UniqueIdentifier>{cba26dd5-e30b-465c-97e2-b36618532ef9}</UniqueIdentifier>
     </Filter>
     <Filter Include="LineInfo\CommModule">
-      <UniqueIdentifier>{71439c23-a0f5-41ca-b492-ab8960e96152}</UniqueIdentifier>
+      <UniqueIdentifier>{499fbaae-45cd-4a31-940b-ed809e193b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\In-Server">
+      <UniqueIdentifier>{0a4f3485-492e-4d3f-9c2d-6ffce8f66242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Main\Server">
+      <UniqueIdentifier>{b7a4d3b9-67f1-41e1-880f-5fb4d96807f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="View_Setting\Cfg_ID">
+      <UniqueIdentifier>{967dd5cf-4cb2-4294-a201-57c75157a5c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\Server">
+      <UniqueIdentifier>{ae75ce35-70f1-40d2-b6fe-4c2e6a7653cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LineInfo\LD_List">
+      <UniqueIdentifier>{deb857ef-f958-4b22-a5a1-4535e93662a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -357,8 +357,11 @@
     <ClCompile Include="IcsRemoteEquipmentHandler.cpp">
       <Filter>IcsComm</Filter>
     </ClCompile>
-    <ClCompile Include="GdCtrl.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Wnd_InOutCount.cpp">
+      <Filter>View_Log</Filter>
+    </ClCompile>
+    <ClCompile Include="InOutCount.cpp">
+      <Filter>View_Log</Filter>
     </ClCompile>
     <ClCompile Include="IcsCommunicatorEes.cpp">
       <Filter>IcsComm</Filter>
@@ -369,82 +372,22 @@
     <ClCompile Include="IcsRemoteServerEes.cpp">
       <Filter>IcsComm</Filter>
     </ClCompile>
-    <ClCompile Include="List_ServerConfig.cpp">
-      <Filter>View_Setting\Cfg_Line</Filter>
+    <ClCompile Include="CommonModule.cpp">
+      <Filter>LineInfo\CommModule</Filter>
+    </ClCompile>
+    <ClCompile Include="RegCommModule.cpp">
+      <Filter>LineInfo\CommModule</Filter>
     </ClCompile>
     <ClCompile Include="ServerInfo.cpp">
       <Filter>LineInfo\In-Server</Filter>
     </ClCompile>
-    <ClCompile Include="SvrEes.cpp">
-      <Filter>LineInfo\server</Filter>
-    </ClCompile>
-    <ClCompile Include="RegServer.cpp">
-      <Filter>LineInfo\server</Filter>
-    </ClCompile>
     <ClCompile Include="XmlLineServerConfig.cpp">
       <Filter>LineInfo\In-Server</Filter>
-    </ClCompile>
-    <ClCompile Include="Wnd_Cfg_Server.cpp">
-      <Filter>View_Setting</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_ModifyServer.cpp">
-      <Filter>View_Setting\Cfg_Line</Filter>
-    </ClCompile>
-    <ClCompile Include="List_ALID_ListConfig.cpp">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClCompile>
-    <ClCompile Include="Wnd_Cfg_ALID_List.cpp">
-      <Filter>View_Setting</Filter>
-    </ClCompile>
-    <ClCompile Include="Server.cpp">
-      <Filter>LineInfo\server</Filter>
-    </ClCompile>
-    <ClCompile Include="Wnd_Status_Server.cpp">
-      <Filter>View_Main\Server</Filter>
     </ClCompile>
     <ClCompile Include="Wnd_Status_EES.cpp">
       <Filter>View_Main\Server</Filter>
     </ClCompile>
-    <ClCompile Include="Dlg_EESMode_PopupMenu.cpp">
-      <Filter>View_Main\Server</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_TerminalMessage_Popup.cpp">
-      <Filter>View_Main\Server</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_OpCall_Popup.cpp">
-      <Filter>View_Main\Server</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlEESConfig.cpp">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClCompile>
-    <ClCompile Include="List_EESConfig.cpp">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClCompile>
-    <ClCompile Include="Wnd_Cfg_EES.cpp">
-      <Filter>View_Setting</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlALConfig.cpp">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_ModifyAL.cpp">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_ModifyEES.cpp">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClCompile>
-    <ClCompile Include="XmlLossConfig.cpp">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClCompile>
-    <ClCompile Include="Wnd_Cfg_Loss.cpp">
-      <Filter>View_Setting</Filter>
-    </ClCompile>
-    <ClCompile Include="List_LossConfig.cpp">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_ModifyLoss.cpp">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClCompile>
-    <ClCompile Include="Dlg_LossWindow_PopupMenu.cpp">
+    <ClCompile Include="Wnd_Status_Server.cpp">
       <Filter>View_Main\Server</Filter>
     </ClCompile>
     <ClCompile Include="Dlg_EES_RMS.cpp">
@@ -453,11 +396,71 @@
     <ClCompile Include="Dlg_Server.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
-    <ClCompile Include="CommonModule.cpp">
-      <Filter>LineInfo\CommModule</Filter>
+    <ClCompile Include="Dlg_ModifyAL.cpp">
+      <Filter>View_Setting\Cfg_ID</Filter>
     </ClCompile>
-    <ClCompile Include="RegCommModule.cpp">
-      <Filter>LineInfo\CommModule</Filter>
+    <ClCompile Include="Dlg_ModifyEES.cpp">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_ModifyLoss.cpp">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClCompile>
+    <ClCompile Include="List_ALID_ListConfig.cpp">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClCompile>
+    <ClCompile Include="List_EESConfig.cpp">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClCompile>
+    <ClCompile Include="List_LossConfig.cpp">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_ModifyServer.cpp">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClCompile>
+    <ClCompile Include="List_ServerConfig.cpp">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_ALID_List.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_EES.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_Server.cpp">
+      <Filter>View_Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="RegServer.cpp">
+      <Filter>LineInfo\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>LineInfo\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="SvrEes.cpp">
+      <Filter>LineInfo\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlALConfig.cpp">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlEESConfig.cpp">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlLossConfig.cpp">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_EESMode_PopupMenu.cpp">
+      <Filter>View_Main\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_LossWindow_PopupMenu.cpp">
+      <Filter>View_Main\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_OpCall_Popup.cpp">
+      <Filter>View_Main\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_TerminalMessage_Popup.cpp">
+      <Filter>View_Main\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Wnd_Cfg_Loss.cpp">
+      <Filter>View_Setting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -776,14 +779,14 @@
     <ClInclude Include="IcsRemoteEquipmentHandler.h">
       <Filter>IcsComm</Filter>
     </ClInclude>
-    <ClInclude Include="Def.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Wnd_InOutCount.h">
+      <Filter>View_Log</Filter>
     </ClInclude>
-    <ClInclude Include="GdCtrl.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="InOutCount.h">
+      <Filter>View_Log</Filter>
     </ClInclude>
-    <ClInclude Include="Def_ID_Type.h">
-      <Filter>LineInfo\LD_List</Filter>
+    <ClInclude Include="Def_InOutCount.h">
+      <Filter>View_Log</Filter>
     </ClInclude>
     <ClInclude Include="IcsCommunicatorEes.h">
       <Filter>IcsComm</Filter>
@@ -794,83 +797,32 @@
     <ClInclude Include="IcsRemoteServerEes.h">
       <Filter>IcsComm</Filter>
     </ClInclude>
-    <ClInclude Include="List_ServerConfig.h">
-      <Filter>View_Setting\Cfg_Line</Filter>
+    <ClInclude Include="CommonModule.h">
+      <Filter>LineInfo\CommModule</Filter>
     </ClInclude>
-    <ClInclude Include="ServerInfo.h">
-      <Filter>LineInfo\In-Server</Filter>
-    </ClInclude>
-    <ClInclude Include="SvrEes.h">
-      <Filter>LineInfo\server</Filter>
+    <ClInclude Include="RegCommModule.h">
+      <Filter>LineInfo\CommModule</Filter>
     </ClInclude>
     <ClInclude Include="Def_ConfigLineServer.h">
       <Filter>LineInfo\In-Server</Filter>
     </ClInclude>
-    <ClInclude Include="Def_Server_Type.h">
-      <Filter>LineInfo\server</Filter>
-    </ClInclude>
-    <ClInclude Include="Def_ConfigServer.h">
-      <Filter>LineInfo\server</Filter>
-    </ClInclude>
-    <ClInclude Include="RegServer.h">
-      <Filter>LineInfo\server</Filter>
+    <ClInclude Include="ServerInfo.h">
+      <Filter>LineInfo\In-Server</Filter>
     </ClInclude>
     <ClInclude Include="XmlLineServerConfig.h">
       <Filter>LineInfo\In-Server</Filter>
     </ClInclude>
-    <ClInclude Include="Wnd_Cfg_Server.h">
-      <Filter>View_Setting</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_ModifyServer.h">
-      <Filter>View_Setting\Cfg_Line</Filter>
-    </ClInclude>
-    <ClInclude Include="List_ALID_ListConfig.h">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClInclude>
-    <ClInclude Include="Wnd_Cfg_ALID_List.h">
-      <Filter>View_Setting</Filter>
-    </ClInclude>
-    <ClInclude Include="Server.h">
-      <Filter>LineInfo\server</Filter>
+    <ClInclude Include="Wnd_Status_EES.h">
+      <Filter>View_Main\Server</Filter>
     </ClInclude>
     <ClInclude Include="Wnd_Status_Server.h">
       <Filter>View_Main\Server</Filter>
     </ClInclude>
-    <ClInclude Include="Wnd_Status_EES.h">
-      <Filter>View_Main\Server</Filter>
+    <ClInclude Include="Dlg_EES_RMS.h">
+      <Filter>GUI</Filter>
     </ClInclude>
-    <ClInclude Include="Dlg_EESMode_PopupMenu.h">
-      <Filter>View_Main\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_TerminalMessage_Popup.h">
-      <Filter>View_Main\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_OpCall_Popup.h">
-      <Filter>View_Main\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Def_Config_EES.h">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClInclude>
-    <ClInclude Include="Def_Config_ALID.h">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClInclude>
-    <ClInclude Include="Def_Config_ALID_LIST.h">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClInclude>
-    <ClInclude Include="Def_Config_EES_LIST.h">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlEESConfig.h">
-      <Filter>LineInfo\LD_List</Filter>
-    </ClInclude>
-    <ClInclude Include="List_EESConfig.h">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClInclude>
-    <ClInclude Include="Wnd_Cfg_EES.h">
-      <Filter>View_Setting</Filter>
-    </ClInclude>
-    <ClInclude Include="XmlALConfig.h">
-      <Filter>LineInfo\LD_List</Filter>
+    <ClInclude Include="Dlg_Server.h">
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="Dlg_ModifyAL.h">
       <Filter>View_Setting\Cfg_ID</Filter>
@@ -878,41 +830,95 @@
     <ClInclude Include="Dlg_ModifyEES.h">
       <Filter>View_Setting\Cfg_ID</Filter>
     </ClInclude>
+    <ClInclude Include="Dlg_ModifyLoss.h">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClInclude>
+    <ClInclude Include="List_ALID_ListConfig.h">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClInclude>
+    <ClInclude Include="List_EESConfig.h">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClInclude>
+    <ClInclude Include="List_LossConfig.h">
+      <Filter>View_Setting\Cfg_ID</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_ModifyServer.h">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClInclude>
+    <ClInclude Include="List_ServerConfig.h">
+      <Filter>View_Setting\Cfg_Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_ALID_List.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_EES.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Wnd_Cfg_Server.h">
+      <Filter>View_Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_ConfigServer.h">
+      <Filter>LineInfo\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_ConstantServer.h">
+      <Filter>LineInfo\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Server_Type.h">
+      <Filter>LineInfo\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="RegServer.h">
+      <Filter>LineInfo\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>LineInfo\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="SvrEes.h">
+      <Filter>LineInfo\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Config_ALID.h">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Config_ALID_LIST.h">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Config_EES.h">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClInclude>
+    <ClInclude Include="Def_Config_EES_LIST.h">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClInclude>
     <ClInclude Include="Def_Config_Loss.h">
       <Filter>LineInfo\LD_List</Filter>
     </ClInclude>
     <ClInclude Include="Def_Config_Loss_LIST.h">
       <Filter>LineInfo\LD_List</Filter>
     </ClInclude>
+    <ClInclude Include="Def_ID_Type.h">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlALConfig.h">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlEESConfig.h">
+      <Filter>LineInfo\LD_List</Filter>
+    </ClInclude>
     <ClInclude Include="XmlLossConfig.h">
       <Filter>LineInfo\LD_List</Filter>
     </ClInclude>
-    <ClInclude Include="Wnd_Cfg_Loss.h">
-      <Filter>View_Setting</Filter>
-    </ClInclude>
-    <ClInclude Include="List_LossConfig.h">
-      <Filter>View_Setting\Cfg_ID</Filter>
-    </ClInclude>
-    <ClInclude Include="Dlg_ModifyLoss.h">
-      <Filter>View_Setting\Cfg_ID</Filter>
+    <ClInclude Include="Dlg_EESMode_PopupMenu.h">
+      <Filter>View_Main\Server</Filter>
     </ClInclude>
     <ClInclude Include="Dlg_LossWindow_PopupMenu.h">
       <Filter>View_Main\Server</Filter>
     </ClInclude>
-    <ClInclude Include="Dlg_EES_RMS.h">
-      <Filter>GUI</Filter>
+    <ClInclude Include="Dlg_OpCall_Popup.h">
+      <Filter>View_Main\Server</Filter>
     </ClInclude>
-    <ClInclude Include="Def_ConstantServer.h">
-      <Filter>LineInfo\server</Filter>
+    <ClInclude Include="Dlg_TerminalMessage_Popup.h">
+      <Filter>View_Main\Server</Filter>
     </ClInclude>
-    <ClInclude Include="Dlg_Server.h">
-      <Filter>GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="CommonModule.h">
-      <Filter>LineInfo\CommModule</Filter>
-    </ClInclude>
-    <ClInclude Include="RegCommModule.h">
-      <Filter>LineInfo\CommModule</Filter>
+    <ClInclude Include="Wnd_Cfg_Loss.h">
+      <Filter>View_Setting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

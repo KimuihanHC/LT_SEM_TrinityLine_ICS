@@ -35,7 +35,7 @@ CLineInfo::~CLineInfo()
 //=============================================================================
 bool CLineInfo::Compare_PreConfigLine(__in const CConfig_Line* IN_pCConfig_Line)
 {
-	// 기존???�정???�비 구성�??�로??구성??같�?지 비교 ?�다.
+	// 기존에 설정된 설비 구성과 새로운 구성이 같은지 비교 한다.
 	size_t nEqpCnt_Prev = m_EqpList.size();
 	size_t nEqpCnt_New = IN_pCConfig_Line->GetCount();
 
@@ -66,7 +66,7 @@ bool CLineInfo::Compare_PreConfigLine(__in const CConfig_Line* IN_pCConfig_Line)
 //=============================================================================
 bool CLineInfo::IsSkip_EquipmentType(__in enEquipmentType IN_nEqpType)
 {
-	// ?�당 검?�의 ?�비?�이 Skip ?�태?��? ?�인
+	// 해당 검사의 설비들이 Skip 상태인지 확인
 	if (Get_FirstEquipment((enEquipmentType)IN_nEqpType).Get_Group())
 	{
 		for (auto nEqpIdx = Get_FirstEquipment((enEquipmentType)IN_nEqpType).Get_EqpOrder(); nEqpIdx < m_EqpList.size(); ++nEqpIdx)
@@ -131,7 +131,7 @@ bool CLineInfo::Write_File(LPCTSTR IN_szPathFile, LPCTSTR IN_szData, LPCTSTR IN_
 		if (!File.Open(szFullPath.GetBuffer(), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite, &e))
 			return false;
 
-		// ?�더 추�?
+		// 헤더 추가
 		CString szHeader = IN_szHeader;
 		szUnicode = szHeader + szUnicode;
 	}
@@ -429,21 +429,20 @@ uint8_t CLineInfo::Get_TesterCount()
 //=============================================================================
 void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 {
-	// 기존 ?�이?��? 백업?�고 복원?�야 ?�느??....
+	// 기존 데이터를 백업하고 복원해야 하느데.....
 	if (Compare_PreConfigLine(IN_pConfig_Line))
 	{
-		// ?�비 구성??같음 (바�??�이?�만 ?�정)
+		// 설비 구성이 같음 (바뀐 데이터만 설정)
 		size_t nEqpCnt = m_EqpList.size();
 
 		for (auto nIdx = 0; nIdx < nEqpCnt; ++nIdx)
 		{
 			*m_EqpList.at(nIdx) = IN_pConfig_Line->GetAt(nIdx);
 		}
-
 	}
 	else
 	{
-		// ?�비 구성???�름 (?�비 구성??초기?�하�??�시 ?�정)
+		// 설비 구성이 다름 (설비 구성을 초기화하고 다시 설정)
 		RemoveAll();
 		
 		size_t nEqpCnt = IN_pConfig_Line->GetCount();
@@ -484,21 +483,22 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 				CEqpTester* newEqp = new CEqpTester();				
 				*newEqp = IN_pConfig_Line->GetAt(nIdx);
 				newEqp->Set_EqpOrder(nIdx);
-				newEqp->Update_DataSize(); // Port 개수 ?�정 (3 Para 검???�비 ?�??
+				newEqp->Update_DataSize(); // Port 개수 설정 (3 Para 검사 설비 대응)
 				m_EqpList.push_back(newEqp);
 			}
 			break;
 			}
 		}// End of for()
 
-		// 각각???�비 ?�형???�른 첫번�??�비
+		// 각각의 설비 유형에 따른 첫번째 설비
 		m_TestOrder.clear();
 		for (auto nEqpTypeIdx = 0; nEqpTypeIdx < Max_EqpTypeCount; nEqpTypeIdx++)
 		{
-			// 초기??			m_pFstEqp_EqpType[nEqpTypeIdx] = nullptr;
+			// 초기화
+			m_pFstEqp_EqpType[nEqpTypeIdx] = nullptr;
 		}// End of for()
 
-		// 검??그룹??첫번�??�비 ?�정
+		// 검사 그룹의 첫번째 설비 설정
 		for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 		{
 			if (nullptr != m_pFstEqp_EqpType[m_EqpList.at(nEqpIdx)->Get_EquipmentType()])
@@ -507,10 +507,10 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 			}
 		}
 
-		// 검???�서 ?�정
+		// 검사 순서 설정
 		for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 		{
-			// ?�록?��? ?�음 검???�별
+			// 등록되지 않음 검사 판별
 			bool bFind = false;
 			for (auto nOrderIdx = 0; nOrderIdx < m_TestOrder.size(); ++nOrderIdx)
 			{
@@ -523,7 +523,7 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 
 			if (false == bFind)
 			{
-				// Test ?�서 ?�정
+				// Test 순서 설정
 				if (m_EqpList.at(nEqpIdx)->Is_Tester())
 				{
 					m_TestOrder.push_back(m_EqpList.at(nEqpIdx)->Get_EquipmentType());
@@ -533,7 +533,7 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 		for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 		{
-			// ?�록?��? ?�음 검???�별
+			// 등록되지 않음 검사 판별
 			bool bFind = false;
 			for (auto nOrderIdx = 0; nOrderIdx < m_InspectionOrder.size(); ++nOrderIdx)
 			{
@@ -546,7 +546,7 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 
 			if (false == bFind)
 			{
-				// Test ?�서 ?�정
+				// Test 순서 설정
 				if (m_EqpList.at(nEqpIdx)->Is_Tester())
 				{
 					m_InspectionOrder.push_back(m_EqpList.at(nEqpIdx)->Get_InspectionType());
@@ -555,12 +555,13 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 		}
 #endif	// NEW_INSPECTION_TYPE_APPLY
 
-		// ?�비 ?�형???�른 ?�비 그룹 처리
+		// 설비 유형에 따른 설비 그룹 처리
 		for (auto nEqpTypeIdx = 0; nEqpTypeIdx < Max_EqpTypeCount; nEqpTypeIdx++)
 		{
-			// 초기??			m_pEquipment_Group[nEqpTypeIdx].clear();
+			// 초기화
+			m_pEquipment_Group[nEqpTypeIdx].clear();
 
-			// ?�비 ?�형??첫번�??�비 찾기
+			// 설비 유형의 첫번째 설비 찾기
 			for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 			{
 				if (m_EqpList.at(nEqpIdx)->Get_EquipmentType() == nEqpTypeIdx)
@@ -573,9 +574,10 @@ void CLineInfo::Set_Config_Line(__in const CConfig_Line* IN_pConfig_Line)
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 		for (auto nInspTypeIdx = 0; nInspTypeIdx < Max_EqpTypeCount; nInspTypeIdx++)
 		{
-			// 초기??			m_pInspection_Group[nInspTypeIdx].clear();
+			// 초기화
+			m_pInspection_Group[nInspTypeIdx].clear();
 
-			// ?�비 ?�형??첫번�??�비 찾기
+			// 설비 유형의 첫번째 설비 찾기
 			for (auto nEqpIdx = 0; nEqpIdx < nEqpCnt; ++nEqpIdx)
 			{
 				if (m_EqpList.at(nEqpIdx)->Get_InspectionType() == nInspTypeIdx)
@@ -675,14 +677,14 @@ void CLineInfo::Set_OperateMode(__in uint8_t IN_nOperateMode)
 //=============================================================================
 bool CLineInfo::IsEndOfProduction(__in uint8_t IN_nEqpOrder)
 {
-	// ?�재 ?�비???�전 ?�비까�? ?�비?�에 ?�켓??비어 ?�나 ?�단?�다. (Loader ?�외)
+	// 현재 설비의 이전 설비까지 설비내에 소켓이 비어 있나 판단한다. (Loader 제외)
 	size_t nEqpCnt = m_EqpList.size();
 
 	if (IN_nEqpOrder < nEqpCnt)
 	{
 		for (auto nIdx = 0; nIdx < IN_nEqpOrder; ++nIdx)
 		{
-			// 로더 ?�외, 검???�비�?체크
+			// 로더 제외, 검사 설비만 체크
 			//if (m_EqpList.at(nIdx)->Is_Tester())
 			{
 				if (false == m_EqpList.at(nIdx)->IsEmpty_Equipment())
@@ -739,18 +741,18 @@ void CLineInfo::Set_EndOfProduction(__in bool IN_bEnd)
 //=============================================================================
 // Method		: Get_TargetEquipmentType
 // Access		: public  
-// Returns		: uint8_t							: ?�비 ?�형
-// Parameter	: __in enEquipmentType IN_nEqpType	: ?�비 ?�형
+// Returns		: uint8_t							: 설비 유형
+// Parameter	: __in enEquipmentType IN_nEqpType	: 설비 유형
 // Qualifier	:
 // Last Update	: 2022/2/3 - 15:35
 // Desc.		:
 //=============================================================================
 uint8_t CLineInfo::Get_NextEquipmentType(__in enEquipmentType IN_nEqpType)
 {
-	// ?�음 검??체크
+	// 다음 검사 체크
 	uint8_t nNextTestOrder = 0;
 	
-	if (Eqp_Loader == IN_nEqpType) // Loader ?�면
+	if (Eqp_Loader == IN_nEqpType) // Loader 이면
 	{
 		if (0 < m_TestOrder.size())
 		{
@@ -761,22 +763,21 @@ uint8_t CLineInfo::Get_NextEquipmentType(__in enEquipmentType IN_nEqpType)
 			return Eqp_Returner;
 		}
 	}	
-	//else if ((Eqp_Tester_First <= IN_nEqpType) && (IN_nEqpType <= Eqp_Tester_Last)) // Tester ?�면
-	else if (IsTester_byEqpType(IN_nEqpType))
+	else if (IsTester_byEqpType(IN_nEqpType)) // Tester 이면
 	{
-		// ?�재 검?�의 ?�서 ?�인
+		// 현재 검사의 순서 확인
 		bool bFind = false;
 		for (auto nIdx = 0; nIdx < m_TestOrder.size(); ++nIdx)
 		{
 			if (IN_nEqpType == m_TestOrder.at(nIdx))
 			{
-				// ?�음 검?��? ?�다.
+				// 다음 검사가 있다.
 				if (nIdx + 1 < m_TestOrder.size())
 				{
 					nNextTestOrder = nIdx + 1;
 					bFind = true;
 				}
-				else // ?�음 검?��? ?�다. 리터?�로 ?�동
+				else // 다음 검사가 없다. 리터너로 이동
 				{
 					return Eqp_Returner;
 				}
@@ -785,29 +786,29 @@ uint8_t CLineInfo::Get_NextEquipmentType(__in enEquipmentType IN_nEqpType)
 			}
 		}// end of for()
 
-		// 검???�서 리스?�에 ?�다.
+		// 검사 순서 리스트에 없다.
 		if (false == bFind)
 		{ 
 			return Eqp_Returner;
 		}
 	}
-	else // Returner
+	else // Returner & Handler
 	{
 		return Eqp_Returner;
 	}
 
-	// ?�음 검?�의 ?�비 ?�형 찾기
+	// 다음 검사의 설비 유형 찾기
 	uint8_t nTestType = 0;
 	uint8_t nReturnEqpType = 0;
 	for (auto nTestOrder = nNextTestOrder; nTestOrder < m_TestOrder.size(); ++nTestOrder)
 	{
-		// 검?��? ?�성???�어 ?�는 경우�?..
+		// 검사가 활성화 되어 있는 경우만...
 		nTestType = ConvTo_TesterType((enEquipmentType)m_TestOrder.at(nTestOrder));
 		if (m_bEnable_TestType[nTestType])
 		{			
 			nReturnEqpType = m_TestOrder.at(nTestOrder);
 
-			// ?�당 검?�에 ?�당?�는 ?�비?�의 Skip ?�태 ?�인
+			// 해당 검사에 해당하는 설비들의 Skip 상태 확인
 			if (false == IsSkip_EquipmentType((enEquipmentType)nReturnEqpType))
 			{
 				return nReturnEqpType;
@@ -834,10 +835,10 @@ uint8_t CLineInfo::Get_NextEquipmentType(__in uint8_t IN_FromEqp)
 //=============================================================================
 uint8_t CLineInfo::Get_PrevEquipmentType(__in enEquipmentType IN_nEqpType)
 {
-	// ?�전 검??체크
+	// 이전 검사 체크
 	uint8_t nPrevTestOrder = 0;
 
-	if (Eqp_Returner == IN_nEqpType) // Loader ?�면
+	if (Eqp_Returner == IN_nEqpType) // Loader 이면
 	{
 		if (0 < m_TestOrder.size())
 		{
@@ -848,22 +849,21 @@ uint8_t CLineInfo::Get_PrevEquipmentType(__in enEquipmentType IN_nEqpType)
 			return Eqp_Loader;
 		}
 	}
-	//else if ((Eqp_Tester_First <= IN_nEqpType) && (IN_nEqpType <= Eqp_Tester_Last)) // Tester ?�면
-	else if (IsTester_byEqpType(IN_nEqpType))
+	else if (IsTester_byEqpType(IN_nEqpType)) // Tester 이면
 	{
-		// ?�재 검?�의 ?�서 ?�인
+		// 현재 검사의 순서 확인
 		bool bFind = false;
 		for (auto nIdx = (m_TestOrder.size() - 1); 0 <= nIdx; --nIdx)
 		{
 			if (IN_nEqpType == m_TestOrder.at(nIdx))
 			{
-				// ?�전 검?��? ?�다.
+				// 이전 검사가 있다.
 				if (0 <= (nIdx - 1))
 				{
 					nPrevTestOrder = static_cast<uint8_t>(nIdx - 1);
 					bFind = true;
 				}
-				else // ?�전 검?��? ?�다. 로더�??�동
+				else // 이전 검사가 없다. 로더로 이동
 				{
 					return Eqp_Loader;
 				}
@@ -872,29 +872,29 @@ uint8_t CLineInfo::Get_PrevEquipmentType(__in enEquipmentType IN_nEqpType)
 			}
 		}// end of for()
 
-		// 검???�서 리스?�에 ?�다.
+		// 검사 순서 리스트에 없다.
 		if (false == bFind)
 		{
 			return Eqp_Loader;
 		}
 	}
-	else // Returner
+	else // Returner or Handler
 	{
 		return Eqp_Loader;
 	}
 
-	// ?�음 검?�의 ?�비 ?�형 찾기
+	// 다음 검사의 설비 유형 찾기
 	uint8_t nTestType = 0;
 	uint8_t nReturnEqpType = 0;
 	for (auto nTestOrder = nPrevTestOrder; 0 <= nTestOrder; --nTestOrder)
 	{
-		// 검?��? ?�성???�어 ?�는 경우�?..
+		// 검사가 활성화 되어 있는 경우만...
 		nTestType = ConvTo_TesterType((enEquipmentType)m_TestOrder.at(nTestOrder));
 		if (m_bEnable_TestType[nTestType])
 		{
 			nReturnEqpType = m_TestOrder.at(nTestOrder);
 
-			// ?�당 검?�에 ?�당?�는 ?�비?�의 Skip ?�태 ?�인
+			// 해당 검사에 해당하는 설비들의 Skip 상태 확인
 			if (false == IsSkip_EquipmentType((enEquipmentType)nReturnEqpType))
 			{
 				return nReturnEqpType;
@@ -923,10 +923,10 @@ uint8_t CLineInfo::Get_PrevEquipmentType(__in uint8_t IN_FromEqp)
 //=============================================================================
 uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __in bool bLoader /*= false*/)
 {
-	// ?�음 검??체크
+	// 다음 검사 체크
 	uint8_t nNextInspectionOrder = 0;
 
-	if ((InspType_NotInspection == IN_nInspType) && (bLoader)) // Loader ?�면
+	if ((InspType_NotInspection == IN_nInspType) && (bLoader)) // Loader 이면
 	{
 		if (0 < m_InspectionOrder.size())
 		{
@@ -937,20 +937,21 @@ uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __
 			return InspType_NotInspection;
 		}
 	}
-	else if (InspType_NotInspection < IN_nInspType) // 검???�비??	{
-		// ?�재 검?�의 ?�서 ?�인
+	else if (InspType_NotInspection < IN_nInspType) // 검사 설비들
+	{
+		// 현재 검사의 순서 확인
 		bool bFind = false;
 		for (auto nIdx = 0; nIdx < m_InspectionOrder.size(); ++nIdx)
 		{
 			if (IN_nInspType == m_InspectionOrder.at(nIdx))
 			{
-				// ?�음 검?��? ?�다.
+				// 다음 검사가 있다.
 				if (nIdx + 1 < m_InspectionOrder.size())
 				{
 					nNextInspectionOrder = nIdx + 1;
 					bFind = true;
 				}
-				else // ?�음 검?��? ?�다. 리터?�로 ?�동
+				else // 다음 검사가 없다. 리터너로 이동
 				{
 					return InspType_NotInspection;
 				}
@@ -959,7 +960,7 @@ uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __
 			}
 		}// end of for()
 
-		// 검???�서 리스?�에 ?�다.
+		// 검사 순서 리스트에 없다.
 		if (false == bFind)
 		{
 			return InspType_NotInspection;
@@ -970,16 +971,16 @@ uint8_t CLineInfo::Get_NextInspectionType(__in enInspectionType IN_nInspType, __
 		return InspType_NotInspection;
 	}
 
-	// ?�음 검?�의 ?�비 ?�형 찾기
+	// 다음 검사의 설비 유형 찾기
 	uint8_t nReturnInspType = 0;
 	for (auto nInspOrder = nNextInspectionOrder; nInspOrder < m_InspectionOrder.size(); ++nInspOrder)
 	{
-		// 검?��? ?�성???�어 ?�는 경우�?..
+		// 검사가 활성화 되어 있는 경우만...
 		if (m_bEnable_InspType[m_InspectionOrder.at(nInspOrder)])
 		{
 			nReturnInspType = m_InspectionOrder.at(nInspOrder);
 
-			// ?�당 검?�에 ?�당?�는 ?�비?�의 Skip ?�태 ?�인
+			// 해당 검사에 해당하는 설비들의 Skip 상태 확인
 			if (false == IsSkip_InspectionType((enInspectionType)nReturnInspType))
 			{
 				return nReturnInspType;
@@ -1006,10 +1007,10 @@ uint8_t CLineInfo::Get_NextInspectionType(__in uint8_t IN_FromEqp)
 //=============================================================================
 uint8_t CLineInfo::Get_PrevInspectionType(__in enInspectionType IN_nInspType, __in bool bReturner /*= false*/)
 {
-	// ?�전 검??체크
+	// 이전 검사 체크
 	uint8_t nPrevInspectionOrder = 0;
 
-	if ((InspType_NotInspection == IN_nInspType) && (bReturner)) // Returner ?�면
+	if ((InspType_NotInspection == IN_nInspType) && (bReturner)) // Returner 이면
 	{
 		if (0 < m_InspectionOrder.size())
 		{
@@ -1022,19 +1023,19 @@ uint8_t CLineInfo::Get_PrevInspectionType(__in enInspectionType IN_nInspType, __
 	}
 	else if (InspType_NotInspection < IN_nInspType)
 	{
-		// ?�재 검?�의 ?�서 ?�인
+		// 현재 검사의 순서 확인
 		bool bFind = false;
 		for (auto nIdx = (m_InspectionOrder.size() - 1); 0 <= nIdx; --nIdx)
 		{
 			if (IN_nInspType == m_InspectionOrder.at(nIdx))
 			{
-				// ?�전 검?��? ?�다.
+				// 이전 검사가 있다.
 				if (0 <= (nIdx - 1))
 				{
 					nPrevInspectionOrder = static_cast<uint8_t>(nIdx - 1);
 					bFind = true;
 				}
-				else // ?�전 검?��? ?�다. 로더�??�동
+				else // 이전 검사가 없다. 로더로 이동
 				{
 					return InspType_NotInspection;
 				}
@@ -1043,7 +1044,7 @@ uint8_t CLineInfo::Get_PrevInspectionType(__in enInspectionType IN_nInspType, __
 			}
 		}// end of for()
 
-		// 검???�서 리스?�에 ?�다.
+		// 검사 순서 리스트에 없다.
 		if (false == bFind)
 		{
 			return InspType_NotInspection;
@@ -1054,16 +1055,16 @@ uint8_t CLineInfo::Get_PrevInspectionType(__in enInspectionType IN_nInspType, __
 		return InspType_NotInspection;
 	}
 
-	// ?�음 검?�의 ?�비 ?�형 찾기
+	// 다음 검사의 설비 유형 찾기
 	uint8_t nReturnInspType = 0;
 	for (auto nInspOrder = nPrevInspectionOrder; 0 <= nInspOrder; --nInspOrder)
 	{
-		// 검?��? ?�성???�어 ?�는 경우�?..
+		// 검사가 활성화 되어 있는 경우만...
 		if (m_bEnable_InspType[m_InspectionOrder.at(nInspOrder)])
 		{
 			nReturnInspType = m_InspectionOrder.at(nInspOrder);
 
-			// ?�당 검?�에 ?�당?�는 ?�비?�의 Skip ?�태 ?�인
+			// 해당 검사에 해당하는 설비들의 Skip 상태 확인
 			if (false == IsSkip_InspectionType((enInspectionType)nReturnInspType))
 			{
 				return nReturnInspType;
@@ -1086,36 +1087,39 @@ uint8_t CLineInfo::Get_PrevInspectionType(__in uint8_t IN_FromEqp)
 // Returns		: uint8_t					: 0 -> Error 
 // Parameter	: __in enEquipmentType IN_nEqpType
 // Qualifier	:
-// Last Update	: 2022/2/3 - 19:55
+// Last Update	: 2023/4/7 - 15:27
 // Desc.		:
 //=============================================================================
 uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 {
-	// 그룹?�의 목적 ?�비 구하�?	if (m_pEquipment_Group[IN_nEqpType].empty())
+	// 그룹내의 목적 설비 구하기
+	if (m_pEquipment_Group[IN_nEqpType].empty())
 	{
-		// ?�정???�비가 ?�다. (Error ?�황 )
+		// 설정된 설비가 없다. (Error 상황 )
 		return 0;
 	}
 
-	// ??��?�로 구해???�다...
-	uint32_t nCheckTime = 0;
-	uint32_t nElapTime = 0;
-	uint8_t nTargetEqpOrder = 0;
-	uint8_t nEmptyPortCount = 0;
-	uint8_t nMaxEmptyPortCount = 0;	
+	// 역순으로 구해야 한다... (거리가 먼 설비부터 투입)
+	uint32_t	nCheckTime			= 0;	// 시간 체크용.
+	uint32_t	nElapTime			= 0;	// 검사 포트에 투입되어 경과된 시간.
+	uint8_t		nTargetEqpOrder		= 0;	// 대상 설비 순서.
+	uint8_t		nEmptyPortCount		= 0;	// 설비에 비어있는 포트.
+	uint8_t		nMaxEmptyPortCount	= 0;	// 
 	//-------------------------------------------------------------------------
-	// 1. ?�트가 비어 ?�는 ?�비 ?�선?�로 ?�택
+	// 1. 포트가 비어 있는 설비 우선으로 선택
 	//-------------------------------------------------------------------------
 	for (auto Iter = m_pEquipment_Group[IN_nEqpType].rbegin(); Iter != m_pEquipment_Group[IN_nEqpType].rend(); ++Iter)
 	{
-		// 모두 Skip?�면 error;
+		// 모두 Skip이면 error;.
 		if ((*Iter)->Get_Skip())
 		{
 			continue;
 		}
 
+		// 설비의 비어있는 포트 구하기.
 		nEmptyPortCount = (*Iter)->Get_EmptyPortCount();
-		// 비어?�는 ?�트가 최�?치이�? 바로 eqp�?리턴?�다.
+
+		// 비어있는 포트가 최대치이면, 바로 eqp를 리턴한다.
 		if ((*Iter)->Get_ReservablePortCount() == nEmptyPortCount)
 		{
 			TRACE(_T("(%s) : Max Empty Port => target: %d\n"), _T(__FUNCTION__), (*Iter)->Get_EqpOrder());
@@ -1134,14 +1138,19 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 	}
 
 	//-------------------------------------------------------------------------
-	// 2. 3개의 ?�트???�용/?�약 ?�태�?체크?�여 ?�용/?�약 개수가 ?��? ?�비 ?�택
+	// 2. 3개의 포트의 사용/예약 상태를 체크하여 사용/예약 개수가 적은 설비 선택
 	//-------------------------------------------------------------------------
 	if (0 < nMaxEmptyPortCount)
 	{
-		// ?�???�비 ?�보??/
+		// 대상 설비 후보들.
 		std::vector<CEquipment*>	vTargets;
 		for (auto Iter = m_pEquipment_Group[IN_nEqpType].rbegin(); Iter != m_pEquipment_Group[IN_nEqpType].rend(); ++Iter)
 		{
+			if ((*Iter)->Get_Skip())
+			{
+				continue;
+			}
+
 			if ((*Iter)->Get_EmptyPortCount() == nMaxEmptyPortCount)
 			{
 				vTargets.push_back(*Iter);
@@ -1149,42 +1158,72 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 		}
 
 		//-------------------------------------------------------------------------
-		// ?�트 비어?�는 �?��가 ?�일?�면, ?�입 ?�간??비교?�여 ?�래???�비�??�택//
+		// 포트 비어있는 갯수가 동일하면, 투입 시간을 비교하여 오래된 설비를 선택
 		//-------------------------------------------------------------------------
 		if (1 < vTargets.size())
 		{
 			for (auto Iter = vTargets.rbegin(); Iter != vTargets.rend(); ++Iter)
 			{
-				// 모두 Skip?�면 error;
+				// 모두 Skip이면 error;
 				if ((*Iter)->Get_Skip())
 				{
 					continue;
 				}
 
-				// ?�입 ?�간??가???�래???�켓???�는 ?�비 체크
+				// 투입 시간이 가장 오래된 소켓이 있는 설비 체크
 				uint8_t nTestParaCount = (*Iter)->Get_TestPortCount();
-				for (auto nIdx = 0; nIdx < nTestParaCount; ++nIdx)
+				for (auto nParaIdx = 0; nParaIdx < nTestParaCount; ++nParaIdx)
 				{
-					nElapTime = (*Iter)->Get_ElapsedTime_InputPara(nIdx);
-					if (nCheckTime < nElapTime)
+					// 현재 Test Para에 소켓이 있어야 한다. (2023.04.10)
+					switch ((*Iter)->Get_PortStatus_byTestPara(nParaIdx).nStatus)
 					{
-						nCheckTime = nElapTime;
-						nTargetEqpOrder = (*Iter)->Get_EqpOrder();
+					case enPortStatus::PtS_Exist_Socket:
+					case enPortStatus::PtS_Wait_Out:
+					{
+						nElapTime = (*Iter)->Get_ElapsedTime_InputPara(nParaIdx);
+						if (nCheckTime < nElapTime)
+						{
+							nCheckTime = nElapTime;
+							nTargetEqpOrder = (*Iter)->Get_EqpOrder();
+						}
 					}
-				} // End of for () 검???�라
-			} // End of for() ?�비
+						break;
+
+					default:
+						break;
+
+					}
+
+// 					nElapTime = (*Iter)->Get_ElapsedTime_InputPara(nParaIdx);
+// 					if (nCheckTime < nElapTime)
+// 					{
+// 						nCheckTime = nElapTime;
+// 						nTargetEqpOrder = (*Iter)->Get_EqpOrder();
+// 					}
+				} // End of for () 검사 파라
+			} // End of for() 설비
 
 			if (0 < nCheckTime)
 			{
-				TRACE(_T("(%s) : Check Time => target: %d\n"), _T(__FUNCTION__), nTargetEqpOrder);
+				TRACE(_T("(%s) : Check Time => target: %d, ElapTime: %d\n"), _T(__FUNCTION__), nTargetEqpOrder, nCheckTime);
 				CString szText;
-				szText.Format(_T("(%s) : Check Time => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
+				szText.Format(_T("(%s) : Check Time => target: %d, ElapTime: %d"), _T(__FUNCTION__), nTargetEqpOrder, nCheckTime);
 				AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
 
 				return nTargetEqpOrder;
 			}
 		}
-		else
+		else if (1 == vTargets.size())
+		{
+			// 후보 설비 갯수가 1개이면 바로 리턴한다.
+			TRACE(_T("(%s) : 1 equipment can be reserved => target: %d\n"), _T(__FUNCTION__), nTargetEqpOrder);
+			CString szText;
+			szText.Format(_T("(%s) : 1 equpment can be reserved => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
+			AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
+
+			return nTargetEqpOrder;
+		}
+		else 
 		{
 			TRACE(_T("(%s) : Compare Empty Port => target: %d\n"), _T(__FUNCTION__), nTargetEqpOrder);
 			CString szText;
@@ -1196,15 +1235,35 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 	}
 
 	//-------------------------------------------------------------------------
-	// 3. 3개의 ?�트�?모두 ?�용?�는 경우
+	// 3. 3개의 포트를 모두 사용하는 경우
 	//-------------------------------------------------------------------------
-	// ?�약 가?�한 ?�트가 모두 ?�용중인 경우 m_nReservedOvered�??�용?�여 ?�단?�다.
-	nTargetEqpOrder = Get_TargetEquipment_inGroup_Over(IN_nEqpType);
+#ifdef USE_SET_TARGET_EQP_GROUP_TRACK_IN
+	// 가까운 설비로 보낸다.
+	//nTargetEqpOrder = (*m_pEquipment_Group[IN_nEqpType].begin())->Get_EqpOrder();
+	for (auto Iter = m_pEquipment_Group[IN_nEqpType].begin(); Iter != m_pEquipment_Group[IN_nEqpType].end(); ++Iter)
+	{
+		// 모두 Skip이면 error;
+		if (false == (*Iter)->Get_Skip())
+		{
+			nTargetEqpOrder = (*Iter)->Get_EqpOrder();
+			break;
+		}
+	}
 
-	TRACE(_T("(%s) : Check OverReserved\n"), _T(__FUNCTION__), nTargetEqpOrder);
+	TRACE(_T("(%s) : Near Equipment\n"), _T(__FUNCTION__), nTargetEqpOrder);
 	CString szText;
-	szText.Format(_T("(%s) : Check OverReserved => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
-	AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));	
+	szText.Format(_T("(%s) : Near Equipment => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
+	AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));
+
+#else
+	// 예약 가능한 포트가 모두 사용중인 경우 m_nReservedOvered를 사용하여 판단한다.
+ 	nTargetEqpOrder = Get_TargetEquipment_inGroup_Over(IN_nEqpType);
+ 
+ 	TRACE(_T("(%s) : Check OverReserved\n"), _T(__FUNCTION__), nTargetEqpOrder);
+ 	CString szText;
+ 	szText.Format(_T("(%s) : Check OverReserved => target: %d"), _T(__FUNCTION__), nTargetEqpOrder);
+ 	AfxGetApp()->GetMainWnd()->SendMessage(WM_LOGMSG, (WPARAM)szText.GetBuffer(), MAKELPARAM(LOGTYPE_NONE, 0));	
+#endif
 
 	//return Get_TargetEquipment_inGroup_Over(IN_nEqpType);
 	return nTargetEqpOrder;
@@ -1213,31 +1272,32 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enEquipmentType IN_nEqpType)
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspType)
 {
-	// 그룹?�의 목적 ?�비 구하�?	if (m_pInspection_Group[IN_nInspType].empty())
+	// 그룹내의 목적 설비 구하기
+	if (m_pInspection_Group[IN_nInspType].empty())
 	{
-		// ?�정???�비가 ?�다. (Error ?�황 )
+		// 설정된 설비가 없다. (Error 상황 )
 		return 0;
 	}
 
-	// ??��?�로 구해???�다...
+	// 역순으로 구해야 한다...
 	uint32_t nCheckTime = 0;
 	uint32_t nElapTime = 0;
 	uint8_t nTargetEqpOrder = 0;
 	uint8_t nEmptyPortCount = 0;
 	uint8_t nMaxEmptyPortCount = 0;	
 	//-------------------------------------------------------------------------
-	// 1. ?�트가 비어 ?�는 ?�비 ?�선?�로 ?�택
+	// 1. 포트가 비어 있는 설비 우선으로 선택
 	//-------------------------------------------------------------------------
 	for (auto Iter = m_pInspection_Group[IN_nInspType].rbegin(); Iter != m_pInspection_Group[IN_nInspType].rend(); ++Iter)
 	{
-		// 모두 Skip?�면 error;
+		// 모두 Skip이면 error;
 		if ((*Iter)->Get_Skip())
 		{
 			continue;
 		}
 
 		nEmptyPortCount = (*Iter)->Get_EmptyPortCount();
-		// 비어?�는 ?�트가 최�?치이�? 바로 eqp�?리턴?�다.
+		// 비어있는 포트가 최대치이면, 바로 eqp를 리턴한다.
 		if ((*Iter)->Get_ReservablePortCount() == nEmptyPortCount)
 		{
 			TRACE(_T("(%s) : Max Empty Port\n"), _T(__FUNCTION__));
@@ -1252,11 +1312,12 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 	}
 
 	//-------------------------------------------------------------------------
-	// 2. 3개의 ?�트???�용/?�약 ?�태�?체크?�여 ?�용/?�약 개수가 ?��? ?�비 ?�택
+	// 2. 3개의 포트의 사용/예약 상태를 체크하여 사용/예약 개수가 적은 설비 선택
 	//-------------------------------------------------------------------------
 	if (0 < nMaxEmptyPortCount)
 	{
-		// ?�???�비 ?�보??		std::vector<CEquipment*>	vTargets;
+		// 대상 설비 후보들
+		std::vector<CEquipment*>	vTargets;
 		for (auto Iter = m_pInspection_Group[IN_nInspType].rbegin(); Iter != m_pInspection_Group[IN_nInspType].rend(); ++Iter)
 		{
 			if ((*Iter)->Get_EmptyPortCount() == nMaxEmptyPortCount)
@@ -1266,19 +1327,19 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 		}
 
 		//-------------------------------------------------------------------------
-		// ?�트 비어?�는 �?��가 ?�일?�면, ?�입 ?�간??비교?�여 ?�래???�비�??�택
+		// 포트 비어있는 갯수가 동일하면, 투입 시간을 비교하여 오래된 설비를 선택
 		//-------------------------------------------------------------------------
 		if (1 < vTargets.size())
 		{
 			for (auto Iter = vTargets.rbegin(); Iter != vTargets.rend(); ++Iter)
 			{
-				// 모두 Skip?�면 error;
+				// 모두 Skip이면 error;
 				if ((*Iter)->Get_Skip())
 				{
 					continue;
 				}
 
-				// ?�입 ?�간??가???�래???�켓???�는 ?�비 체크
+				// 투입 시간이 가장 오래된 소켓이 있는 설비 체크
 				uint8_t nTestParaCount = (*Iter)->Get_TestPortCount();
 				for (auto nIdx = 0; nIdx < nTestParaCount; ++nIdx)
 				{
@@ -1288,8 +1349,8 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 						nCheckTime = nElapTime;
 						nTargetEqpOrder = (*Iter)->Get_EqpOrder();
 					}
-				} // End of for () 검???�라
-			} // End of for() ?�비
+				} // End of for () 검사 파라
+			} // End of for() 설비
 
 			if (0 < nCheckTime)
 			{
@@ -1305,9 +1366,9 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup(__in enInspectionType IN_nInspTyp
 	}
 
 	//-------------------------------------------------------------------------
-	// 3. 3개의 ?�트�?모두 ?�용?�는 경우
+	// 3. 3개의 포트를 모두 사용하는 경우
 	//-------------------------------------------------------------------------
-	// ?�약 가?�한 ?�트가 모두 ?�용중인 경우 m_nReservedOvered�??�용?�여 ?�단?�다.
+	// 예약 가능한 포트가 모두 사용중인 경우 m_nReservedOvered를 사용하여 판단한다.
 	TRACE(_T("(%s) : Check OverReserved\n"), _T(__FUNCTION__));
 	return Get_TargetEquipment_inGroup_Over(IN_nInspType);
 
@@ -1329,18 +1390,18 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup_Over(__in enEquipmentType IN_nEqp
 	uint32_t nElapTime = 0;
 	uint8_t nTargetEqpOrder = 0;
 
-	// ?�약 가?�한 ?�트가 모두 ?�용중인 경우 m_nReservedOvered�??�용?�여 ?�단?�다.
+	// 예약 가능한 포트가 모두 사용중인 경우 m_nReservedOvered를 사용하여 판단한다.
 	uint8_t nOverCount = 0;
 	uint8_t nMinOverCount = 0xFF;
 	for (auto Iter = m_pEquipment_Group[IN_nEqpType].rbegin(); Iter != m_pEquipment_Group[IN_nEqpType].rend(); ++Iter)
 	{
-		// 모두 Skip?�면 error;
+		// 모두 Skip이면 error;
 		if ((*Iter)->Get_Skip())
 		{
 			continue;
 		}
 
-		// m_nReservedOvered 카운?��? 가???��? ?�비 ?�택
+		// m_nReservedOvered 카운트가 가장 적은 설비 선택
 		nOverCount = (*Iter)->Get_ReservedOverCnt();
 		if (nOverCount < nMinOverCount)
 		{
@@ -1359,19 +1420,19 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup_Over(__in enEquipmentType IN_nEqp
 	}
 
 	//-------------------------------------------------------------------------
-	// ?�트 비어?�는 �?��가 ?�일?�면, ?�입 ?�간??비교?�여 ?�래???�비�??�택
+	// 포트 비어있는 갯수가 동일하면, 투입 시간을 비교하여 오래된 설비를 선택
 	//-------------------------------------------------------------------------
 	if (1 < vTargets.size())
 	{
 		for (auto Iter = vTargets.rbegin(); Iter != vTargets.rend(); ++Iter)
 		{
-			// 모두 Skip?�면 error;
+			// 모두 Skip이면 error;
 			if ((*Iter)->Get_Skip())
 			{
 				continue;
 			}
 
-			// ?�입 ?�간??가???�래???�켓???�는 ?�비 체크
+			// 투입 시간이 가장 오래된 소켓이 있는 설비 체크
 			uint8_t nTestParaCount = (*Iter)->Get_TestPortCount();
 			for (auto nIdx = 0; nIdx < nTestParaCount; ++nIdx)
 			{
@@ -1415,19 +1476,19 @@ uint8_t CLineInfo::Get_TargetEquipment_inGroup_Over(__in enInspectionType IN_nIn
 //=============================================================================
 uint8_t CLineInfo::Get_TargetEquipment(__in uint8_t IN_FromEqp)
 {
-	// 목적 검?�의 ?�성??체크, 목적 검?�내 ?�비?�의 Skip 체크
+	// 목적 검사의 활성화 체크, 목적 검사내 설비들의 Skip 체크
 	uint8_t nTargetEqpType = Get_NextEquipmentType((enEquipmentType)m_EqpList.at(IN_FromEqp)->Get_EquipmentType());
 
-	// ?�비 ?�형??Returner ?�면
+	// 설비 유형이 Returner 이면
 	if (Eqp_Returner == nTargetEqpType)
 	{
 		return Get_Returner().Get_EqpOrder();
 	}
 	
-	// 검???�비??그룹 ?��?
+	// 검사 설비의 그룹 여부
 	if (Get_FirstEquipment((enEquipmentType)nTargetEqpType).Get_Group())
 	{
-		// 검???�비??경우
+		// 검사 설비가 그룹인 경우
 		return Get_TargetEquipment_inGroup((enEquipmentType)nTargetEqpType);
 	}
 	else
@@ -1440,18 +1501,19 @@ uint8_t CLineInfo::Get_TargetEquipment(__in uint8_t IN_FromEqp)
 //=============================================================================
 // Method		: Get_FindEqpz_SameTarget
 // Access		: public  
-// Returns		: uint8_t									=> 검?�된 ?�비 �?��
-// Parameter	: __in uint16_t IN_nTargetEqp				=> 목적 ?�비
-// Parameter	: __out std::vector<uint8_t> & OUT_nEqpz	=> 검?�된 ?�비??// Qualifier	:
+// Returns		: uint8_t									=> 검색된 설비 갯수
+// Parameter	: __in uint16_t IN_nTargetEqp				=> 목적 설비
+// Parameter	: __out std::vector<uint8_t> & OUT_nEqpz	=> 검색된 설비들
+// Qualifier	:
 // Last Update	: 2022/2/17 - 20:57
 // Desc.		:
 //=============================================================================
 uint8_t CLineInfo::Get_FindEqpz_SameTarget(__in uint8_t IN_nTargetEqp, __out std::vector<uint16_t>& OUT_nEqpz)
 {
-	// 0번�? Loader 고정, 2번째 ?�비 ?�후?�서 �??�용
+	// 0번은 Loader 고정, 2번째 설비 이후에서 만 사용
 	if (1 < IN_nTargetEqp)
 	{
-		uint8_t nCount = 0;;
+		uint8_t nCount = 0;
 
 		bool bWaitOut = false;
 		for (uint8_t nPrevEqp = IN_nTargetEqp - 1; 1 < nPrevEqp; --nPrevEqp)
@@ -1492,13 +1554,13 @@ uint8_t CLineInfo::Get_FindEqpz_SameTarget(__in uint8_t IN_nTargetEqp, __out std
 //=============================================================================
 uint8_t CLineInfo::Get_FindSocketz_SameTarget(__in uint8_t IN_nTargetEqp, __out std::vector<CString>& OUT_Socketz)
 {
-	// 0번�? Loader 고정, 2번째 ?�비 ?�후?�서 �??�용
+	// 0번은 Loader 고정, 2번째 설비 이후에서 만 사용
 	if (1 < IN_nTargetEqp)
 	{
 		bool bWaitOut = false;
 		for (uint8_t nPrevEqp = IN_nTargetEqp - 1; 1 < nPrevEqp; --nPrevEqp)
 		{
-			// ***** RFID가 ?�으�?Crash *****
+			// ***** RFID가 없으면 Crash *****
 			bWaitOut = false;
 			for (uint8_t nPortIdx = enPortIndex_Tester::PtI_T_Test_L; nPortIdx < GetAt(nPrevEqp).Get_PortCount(); ++nPortIdx)
 			{
@@ -1667,5 +1729,54 @@ bool CLineInfo::Get_UseHandler()
 	}
 
 	return false;
+}
+
+//=============================================================================
+// Method		: Reset_ReservedPortCnt
+// Access		: public  
+// Returns		: void
+// Qualifier	:
+// Last Update	: 2023/2/27 - 16:38
+// Desc.		:
+//=============================================================================
+void CLineInfo::Reset_ReservedPortCnt()
+{
+	if (0 < m_EqpList.size())
+	{
+		for (auto nIdx = 0; nIdx < m_EqpList.size(); ++nIdx)
+		{
+			m_EqpList.at(nIdx)->Reset_ReservedPortInfo();
+		}
+	}
+}
+
+void CLineInfo::Set_ReservedTimeout_Second(__in double IN_dSecond)
+{
+	if (0 < m_EqpList.size())
+	{
+		for (auto nIdx = 0; nIdx < m_EqpList.size(); ++nIdx)
+		{
+			m_EqpList.at(nIdx)->Set_ReservedTimeout_Second(IN_dSecond);
+		}
+	}
+}
+
+//=============================================================================
+// Method		: Set_ActiveStatus
+// Access		: public  
+// Returns		: void
+// Parameter	: __in uint8_t IN_nStatus
+// Qualifier	:
+// Last Update	: 2023/3/7 - 15:22
+// Desc.		:
+//=============================================================================
+void CLineInfo::Set_ActiveStatus(__in uint8_t IN_nStatus)
+{
+	m_nActiveStatus = IN_nStatus;
+}
+
+uint8_t CLineInfo::Get_ActiveStatus()
+{
+	return m_nActiveStatus;
 }
 

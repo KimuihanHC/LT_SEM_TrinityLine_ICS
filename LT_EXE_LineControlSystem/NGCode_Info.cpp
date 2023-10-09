@@ -159,7 +159,7 @@ bool CNGCode_Info::Save_IniFile(__in LPCTSTR szPath, __in const std::map<int16_t
 	CString szAppName;
 	CString szKeyName;
 
-	// NG Code 목록
+	// NG Code 목록.
 	szAppName = _T("NG_Code_List");
 	szValue.Format(_T("%d"), m_NG_Info.size());
 	WritePrivateProfileString(szAppName, _T("Count"), szValue, szPath);
@@ -172,7 +172,7 @@ bool CNGCode_Info::Save_IniFile(__in LPCTSTR szPath, __in const std::map<int16_t
 		WritePrivateProfileString(szAppName, szKeyName, szValue, szPath);
 	}
 
-	// NG Code 데이터//
+	// NG Code 데이터.
 	for (auto Iter = m_NG_Info.begin(); Iter != m_NG_Info.end(); Iter++)
 	{
 		szAppName.Format(_T("%d"), Iter->first);

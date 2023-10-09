@@ -26,8 +26,10 @@ private:
 
 	CFile		m_fileLog;
 
-	//로그폴더에 현재 작성될 로그폴더이름이 존재하는지 검사//
+	//로그폴더에 현재 작성될 로그폴더이름이 존재하는지 검사
+	
 	BOOL		FindLogFile			();
+
 	void		GetLogFilePath		(CString& strPath);
 	CString		Logfilename			();
 	void		CreateLogFolder		(CString strPath );	

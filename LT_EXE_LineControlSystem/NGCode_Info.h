@@ -24,7 +24,7 @@ public:
 	CNGCode_Info();
 	virtual ~CNGCode_Info();
 
-	// NG Code 데이터//
+	// NG Code 데이터.
 	std::map<int16_t, ST_NGCode>	m_NG_Info;
 
 	// MES rework NG Code

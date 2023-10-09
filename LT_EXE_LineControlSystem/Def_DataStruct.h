@@ -13,6 +13,7 @@
 #include <afxwin.h>
 #include "Def_DataStruct_Cm.h"
 #include "Def_RecipeInfo_Cm.h"
+
 #include "Def_ProductInfo.h"	// -> Equipment
 #include "Def_ConfigLine.h"
 #include "Def_ModelConfig.h"
@@ -24,18 +25,17 @@
 #include "FailInfo.h"
 
 #include "Def_DebugInfo.h"
+#include "Def_InOutCount.h"
 
-#if (USE_XML)
+#pragma pack(push, 1)
+
+#if defined(EES_XML)//20231003
 #include "Def_Config_EES_LIST.h"
 #include "Def_Config_ALID_LIST.h"
 #include "Def_Config_Loss_LIST.h"
 #include "Def_RecipeInfo_Cm.h"
 #include "ServerInfo.h"
 #endif
-
-#pragma pack(push, 1)
-
-
 
 //---------------------------------------------------------
 // 레시피 설정 구조체
@@ -44,7 +44,7 @@ class CRecipeInfo : public CRecipeInfo_Base
 {
 public:
 	CConfig_Line			LineInfo;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 public:
 	CConfig_EES_LIST		EES_Info;
 	CConfig_AL_LIST			AL_Info;
@@ -60,7 +60,7 @@ public:
 	{
 		LineInfo		= ref.LineInfo;
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		EES_Info		= ref.EES_Info;
 		AL_Info			= ref.AL_Info;
 		ServerInfo		= ref.ServerInfo;
@@ -73,7 +73,7 @@ public:
 	{
 		LineInfo.RemoveAll();
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		EES_Info.RemoveAll();
 		AL_Info.RemoveAll();
 		ServerInfo.RemoveAll();
@@ -81,6 +81,7 @@ public:
 #endif
 	};
 };
+
 //---------------------------------------------------------
 // 프로그램에 사용되는 경로
 //---------------------------------------------------------
@@ -94,6 +95,7 @@ typedef struct _tag_ProgramPath
 	CString		szShared;		// NG Code 파일 저장 경로
 	CString		szFailInfo;		// 불량정보 ini 파일 저장 경로
 }ST_ProgramPath, *PST_ProgramPath;
+
 //---------------------------------------------------------
 // 검사 진행 시간 측정용 구조체
 //---------------------------------------------------------
@@ -164,6 +166,7 @@ typedef struct _tag_TestTime //: public ST_TestTime_Base
 typedef struct _tag_SystemInfo : public ST_SystemInfo_Base
 {
 public:
+	
 	CRecipeInfo			SettingInfo;		// 기본 레시피 설정
 	ST_ProgramPath		Path;				// 프로그램 경로 모음
 
@@ -174,9 +177,17 @@ public:
 	
 	ST_TestTime			Tacttime;
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	CServerInfo			ServerInfo;
 #endif
+	ST_InOutCount		InOutCount;			// 소켓 투입/배출/진행 중/제거  카운트
+
+#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
+	bool				bCheckedRegister;
+	SYSTEMTIME			LastRegisterTime;	// 마지막으로 투입된 시간
+	SYSTEMTIME			LocalTime;			// 현재 체크 시간
+#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
+
 	// MES Rework NG Code
 	//int16_t				m_nMES_ReworkCode = 0;	// REWORK 제품 MES 결과 코드: 설비에서 해당코드로 리턴 할 경우 REWORK 제품으로 양품 처리
 
@@ -188,9 +199,12 @@ public:
 		SocketInfo.SetPtr_LineInfo(&LineInfo);
 		LineInfo.SetPtr_DebugMode(&DebugMode);
 		SocketInfo.SetPtr_DebugMode(&DebugMode);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		ServerInfo.SetPtr_DebugMode(&DebugMode);
 #endif
+#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
+		bCheckedRegister	= false;
+#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
 	};
 
 	// 검사기 종류 설정
@@ -202,7 +216,34 @@ public:
 	//------------------------------------------------------------------
 	// 검사 정보 갱신
 	//------------------------------------------------------------------
+#ifdef USE_AUTO_TO_MANUAL_AUTOCHANGE
+	void Set_LastRegisterTime()
+	{
+		GetLocalTime(&LastRegisterTime);
 
+		if (false == bCheckedRegister)
+		{
+			bCheckedRegister = true;
+		}
+	}
+
+	SYSTEMTIME& Get_LastRegisterTime()
+	{
+		return LastRegisterTime;
+	}
+
+	double Get_LastRegister_ElapsedTime()
+	{
+		GetLocalTime(&LocalTime);
+
+		return CompareSystemTime(&LocalTime, &LastRegisterTime);
+	}
+
+	void Reset_LastRegisterTime()
+	{
+		bCheckedRegister = false;
+	}
+#endif // USE_AUTO_TO_MANUAL_AUTOCHANGE
 	
 }ST_SystemInfo, *PST_InspectionInfo;
 

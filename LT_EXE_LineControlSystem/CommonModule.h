@@ -18,7 +18,7 @@
 
 //#include "Equipment.h"
 //#include "Server.h"
-#include "xmlArgs.h"
+#include "Xml/xmlArgs.h"
 
 
 #pragma once

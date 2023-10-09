@@ -18,6 +18,7 @@ static LPCTSTR g_szLogType[] =
 	_T("  Equipment Alarm Log"),	// Tab_Alarm	
 	_T("  Socket Load Log"),		// Tab_Load
 	_T("  Socket Unload Log"),		// Tab_Unload
+	_T("  Socket In, Out Count"),	// Tab_InOut_Count
 };
 
 static LPCTSTR g_szLogType_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
@@ -27,6 +28,9 @@ static LPCTSTR g_szLogType_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
 		_T("  설비 알람 로그"),			// Tab_Alarm	
 		_T("  소켓 투입 로그"),			// Tab_Load
 		_T("  소켓 배출 로그"),			// Tab_Unload
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("  투입, 배출 집계"),			// Tab_InOut_Count
+#endif
 	},
 
 	// 영어
@@ -34,6 +38,9 @@ static LPCTSTR g_szLogType_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
 		_T("  Equipment Alarm Log"),	// Tab_Alarm	
 		_T("  Socket Load Log"),		// Tab_Load
 		_T("  Socket Unload Log"),		// Tab_Unload
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("  In, Out Counting"),		// Tab_InOut_Count
+#endif
 	},
 
 	// 베트남어
@@ -41,13 +48,19 @@ static LPCTSTR g_szLogType_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
 		_T("  Equipment Alarm Log"),	// Tab_Alarm	
 		_T("  Socket Load Log"),		// Tab_Load
 		_T("  Socket Unload Log"),		// Tab_Unload
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("  In, Out Counting"),		// Tab_InOut_Count
+#endif
 	},
 
 	// 중국어
 	{
-		_T("  设备报警记录"),			// Tab_Alarm	
-		_T("  插口投入记录"),			// Tab_Load
-		_T("  插口导出记录"),			// Tab_Unload
+		_T("  设备报警记录"),				// Tab_Alarm	
+		_T("  插口投入记录"),				// Tab_Load
+		_T("  插口导出记录"),				// Tab_Unload
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("  In, Out Counting"),		// Tab_InOut_Count
+#endif
 	}
 };
 
@@ -58,9 +71,9 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
 		_T("알람"),		// Tab_Alarm
 		_T("로드"),		// Tab_Load
 		_T("언로드 "),	// Tab_Unload
-		//2023.05.01a
-		_T("터미널메세지"),		// Tab_Load
-		_T("오피콜"),	// Tab_Unload
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("투입 집계"),	// Tab_InOut_Count
+#endif
 	},
 
 	// 영어
@@ -68,10 +81,9 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
 		_T("Alarm"),	// Tab_Alarm
 		_T("Load"),		// Tab_Load
 		_T("Unload"),	// Tab_Unload
-
-		//2023.05.01a
-		_T("Terminal Message"),		// Tab_Load
-		_T("Opcall"),	// Tab_Unload
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("In Count"),	// Tab_InOut_Count
+#endif
 	},
 
 	// 베트남어
@@ -79,9 +91,9 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
 		_T("Alarm"),	// Tab_Alarm
 		_T("Load"),		// Tab_Load
 		_T("Unload"),	// Tab_Unload
-		//2023.05.01a
-		_T("Terminal Message"),		// Tab_Load
-		_T("Opcall"),	// Tab_Unload
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("In Count"),	// Tab_InOut_Count
+#endif
 	},
 
 	// 중국어
@@ -89,9 +101,9 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_LogView::Tab_MaxCount] =
 		_T("警报"),		// Tab_Alarm
 		_T("投入"),		// Tab_Load
 		_T("导出"),		// Tab_Unload
-		//2023.05.01a
-		_T("Terminal Message"),		// Tab_Load
-		_T("Opcall"),	// Tab_Unload		
+#ifdef USE_IN_OUT_COUNT_UI
+		_T("In Count"),	// Tab_InOut_Count
+#endif
 	},
 };
 
@@ -290,29 +302,20 @@ int CWnd_LogView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	//2023.05.01a uhkim [Log]
-	if (!m_ed_Log_TerminalMessage.Create(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, rectDummy, this, nWndID++))
+	if (!m_wnd_InOutCount.Create(NULL, _T("In Out Count"), dwStyle, rectDummy, this, nWndID++))
 	{
-		TRACE0("출력 창을 만들지 못했습니다.\n");
+		TRACE0("InOutCount 창을 만들지 못했습니다.\n");
 		return -1;
 	}
-
-	if (!m_ed_Log_OpCall.Create(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, rectDummy, this, nWndID++))
-	{
-		TRACE0("출력 창을 만들지 못했습니다.\n");
-		return -1;
-	}
-	//
 
 	UINT nTabIndex = 0;
 
 	m_pwndTab.push_back(&m_ed_Log_Alarm);
 	m_pwndTab.push_back(&m_ed_Log_Load);
 	m_pwndTab.push_back(&m_ed_Log_Unload);
-
-	//2023.05.01a uhkim [Log]
-	m_pwndTab.push_back(&m_ed_Log_TerminalMessage);
-	m_pwndTab.push_back(&m_ed_Log_OpCall);
+#ifdef USE_IN_OUT_COUNT_UI
+	m_pwndTab.push_back(&m_wnd_InOutCount);
+#endif
 
 
 	for (auto nIdx = 0; nIdx < Tab_MaxCount; nIdx++)
@@ -388,10 +391,11 @@ void CWnd_LogView::OnSize(UINT nType, int cx, int cy)
 	m_ed_Log_Alarm.MoveWindow(iLeft, iTop, iHalfWidth, iHalfHeight);
 	m_ed_Log_Load.MoveWindow(iLeft, iTop, iHalfWidth, iHalfHeight);
 	m_ed_Log_Unload.MoveWindow(iLeft, iTop, iHalfWidth, iHalfHeight);
-	//2023.05.01a 
-	m_ed_Log_TerminalMessage.MoveWindow(iLeft, iTop, iHalfWidth, iHalfHeight);
-	m_ed_Log_OpCall.MoveWindow(iLeft, iTop, iHalfWidth, iHalfHeight);
-	//
+
+#ifdef USE_IN_OUT_COUNT_UI
+	m_wnd_InOutCount.MoveWindow(iLeft, iTop, iHalfWidth, iHalfHeight);
+#endif // USE_IN_OUT_COUNT_UI
+
 	MoveWindow_Tab(cx - m_nTabWidth, 0, m_nTabWidth, cy);
 }
 
@@ -537,9 +541,6 @@ void CWnd_LogView::OnLanguage(uint8_t IN_nLanguage)
 	m_st_Log_All.SetFont(&m_font_Default);
 	m_st_Log_Error.SetFont(&m_font_Default);
 	m_st_Log_Tab.SetFont(&m_font_Default);
-	
-	//2023.05.02a uhkim
-
 	for (auto nIdx = 0; nIdx < Tab_MaxCount; nIdx++)
 	{
 		m_rb_Tab[nIdx].SetFont(&m_font_Default);
@@ -562,6 +563,50 @@ void CWnd_LogView::OnLanguage(uint8_t IN_nLanguage)
 		}
 
 		m_bn_Keyboard.SetWindowText(g_szCtrlText_T[m_nLanguage][Txt_Keyboard]);
+	}
+}
+
+//=============================================================================
+// Method		: Set_PermissionMode
+// Access		: public  
+// Returns		: void
+// Parameter	: __in enPermissionMode IN_PermissionMode
+// Qualifier	:
+// Last Update	: 2023/3/15 - 16:50
+// Desc.		:
+//=============================================================================
+void CWnd_LogView::Set_PermissionMode(__in enPermissionMode IN_PermissionMode)
+{
+	switch (IN_PermissionMode)
+	{
+	case enPermissionMode::Permission_Operator:
+	case enPermissionMode::Permission_Engineer:
+	{
+#ifdef USE_IN_OUT_COUNT_UI
+		// 버튼 감추기	
+		m_rb_Tab[Tab_InOut_Count].ShowWindow(SW_HIDE);
+
+		// Log UI 바꾸기
+		if (BST_CHECKED == m_rb_Tab[Tab_InOut_Count].GetCheck())
+		{
+			m_rb_Tab[Tab_InOut_Count].SetCheck(BST_CHECKED);
+			OnTabSelect(IDC_RB_FIRST);
+		}
+#endif
+	}
+	break;
+
+	case enPermissionMode::Permission_Administrator:
+	{
+#ifdef USE_IN_OUT_COUNT_UI
+		// 버튼 보이기
+		m_rb_Tab[Tab_InOut_Count].ShowWindow(SW_SHOW);
+#endif
+	}
+	break;
+
+	default:
+		break;
 	}
 }
 
@@ -666,20 +711,15 @@ void CWnd_LogView::Log_NGInfo(__in LPCTSTR lpszLog)
 }
 
 //=============================================================================
-// Method		: Log_TerminalMessage
+// Method		: Set_InOutCount
 // Access		: public  
 // Returns		: void
-// Parameter	: LPCTSTR lpszLog
-// Parameter	: bool bError
+// Parameter	: __in const ST_InOutCount * IN_pCount
 // Qualifier	:
-// Last Update	: 2023.05.02
+// Last Update	: 2023/3/15 - 16:40
 // Desc.		:
 //=============================================================================
-void CWnd_LogView::Log_TerminalMessage(__in LPCTSTR lpszLog)
+void CWnd_LogView::Set_InOutCount(__in const ST_InOutCount* IN_pCount)
 {
-	m_ed_Log_TerminalMessage.AddText(lpszLog, clrLoggerColor[LOGTYPE_NONE]);
-}
-void CWnd_LogView::Log_OpCall(__in LPCTSTR lpszLog)
-{
-	m_ed_Log_OpCall.AddText(lpszLog, clrLoggerColor[LOGTYPE_NONE]);
+	m_wnd_InOutCount.Update_CountInfo(IN_pCount);
 }

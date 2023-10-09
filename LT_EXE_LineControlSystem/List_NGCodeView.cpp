@@ -18,15 +18,15 @@ typedef enum
 	TSH_NG_Section,			// NG 구분 
 	TSH_Retry_Mode,			// Retry Mode
 	TSH_RetryCnt,			// Retry Cnt
-	TSH_Move_Retry,			// ?�동 Retry
+	TSH_Move_Retry,			// 이동 Retry
 	TSH_Reset,				// Reset
-	TSH_AlarmCnt,			// ?�속 NG ?�람 ??/
+	TSH_AlarmCnt,			// 연속 NG 알람 수.
 	TSH_Description,		// Description
 
 	TSH_MaxCol,
 }enTestStepHeader;
 
-// ?�더
+// 헤더
 static const TCHAR*	g_lpszHeader[] =
 {
 	_T("No"),				// TSH_No
@@ -55,7 +55,7 @@ const int	iListAglin[] =
 	LVCFMT_LEFT,	 // TSH_Description
 };
 
-// 540 기�?
+// 540 기준
 const int	iHeaderWidth[] =
 {
 	40, 	// TSH_No
@@ -334,7 +334,7 @@ void CList_NGCodeView::Set_NG_Info(__in int nItem, __in const ST_NGCode* IN_pNG_
 	szText.Format(_T("%d"), IN_pNG_Code->m_nRetryCnt);
 	SetItemText(nItem, TSH_RetryCnt, szText);
 
-	// ?�동 Retry
+	// 이동 Retry
 	szText.Format(_T("%d"), IN_pNG_Code->m_nMove_Retry);
 	SetItemText(nItem, TSH_Move_Retry, szText);
 
@@ -342,7 +342,8 @@ void CList_NGCodeView::Set_NG_Info(__in int nItem, __in const ST_NGCode* IN_pNG_
 	szText.Format(_T("%d"), IN_pNG_Code->m_nReset);
 	SetItemText(nItem, TSH_Reset, szText);
 
-	// ?�속 NG ?�람 ??	szText.Format(_T("%d"), IN_pNG_Code->m_nAlarmCnt);
+	// 연속 NG 알람 수
+	szText.Format(_T("%d"), IN_pNG_Code->m_nAlarmCnt);
 	SetItemText(nItem, TSH_AlarmCnt, szText);
 
 	// Description
@@ -377,7 +378,7 @@ void CList_NGCodeView::Add_Item(const __in ST_NGCode* IN_pNG_Code)
 
 	Set_NG_Info(iNewCount, IN_pNG_Code);
 
-	// ?�면??보이�??�기
+	// 화면에 보이게 하기
 	EnsureVisible(iNewCount, TRUE);
 	ListView_SetItemState(GetSafeHwnd(), iNewCount, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
 }

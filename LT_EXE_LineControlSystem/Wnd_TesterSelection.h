@@ -15,10 +15,11 @@
 #include "Wnd_BaseView.h"
 #include "Def_ModelConfig.h"
 #include "Def_ConfigLine.h"
-#include "Def_ConfigLineServer.h"
 #include "VGStatic.h"
 
-#define		USE_AUTO_SEL_MODELTYPE
+#if defined(EES_XML)//20231003
+#include "Def_ConfigLineServer.h"
+#endif
 
 //-----------------------------------------------------------------------------
 // CWnd_TesterSelection
@@ -83,8 +84,6 @@ public:
 	virtual void	OnLanguage			(__in uint8_t IN_nLanguage);
 
 	void	Set_Config_Line				(__in const CConfig_Line* IN_pConfig_Line);
-	//2023.03.21a uhkim
-	void	Set_Config_Server			(__in const CConfig_Server * IN_pConfig_Server);
 
 	// 모델 데이터 설정
 	void	Set_Configuration			(__in CConfig_Model& IN_ModelConfig);	
@@ -95,8 +94,9 @@ public:
 	// 권한 설정
 	void	Set_PermissionMode			(__in enPermissionMode IN_PermissionMode);
 
-	//2023.03.09a uhkim					
-	//void	Set_Config_Server				(__in const CConfig_Server* IN_pConfig_Server);
+#if defined(EES_XML)//20231003
+	void	Set_Config_Server			(__in const CConfig_Server * IN_pConfig_Server);
+#endif
 };
 
 #endif // Wnd_TesterSelection_h__

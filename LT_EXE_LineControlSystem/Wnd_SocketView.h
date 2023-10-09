@@ -130,10 +130,10 @@ public:
 	void	OnUpdate_SocketData_All			(__in uint16_t nFlag);
 
 	void	SetPath_Report					(__in LPCTSTR IN_szReportPath);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 public:
 	void	Update_SocketStatus_LOTID		(__in LPCTSTR IN_szRFID);
-#endif
+#endif	
 };
 
 #endif // Wnd_SocketView_h__

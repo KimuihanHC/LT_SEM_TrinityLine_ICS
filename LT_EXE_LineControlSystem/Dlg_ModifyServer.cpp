@@ -555,7 +555,7 @@ BOOL CDlg_ModifyServer::Get_EquipmentData_UI(__out CConfig_Svr& OUT_stEquipment)
 		LT_MessageBox(g_szMessageBox_T[MB_Line_IpAddr_Blank][m_nLanguage]);
 		return FALSE;
 	}
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_ed_SubEqpID.GetWindowText(szValue);
 	m_reg.Save_Equipment_ID(OUT_stEquipment.Get_ServerId(), 0, 0, szValue);
 	switch (OUT_stEquipment.Get_SvrType_UI())
@@ -603,9 +603,8 @@ BOOL CDlg_ModifyServer::Set_EquipmentData_UI(__in CConfig_Svr* IN_pstEquipment)
 	//UpdateUI_EquipmentData(IN_pstEquipment->Get_EquipmentType());
 	UpdateUI_EquipmentData(IN_pstEquipment->Get_SvrType_UI());
 
-	//2023.05.26
 	OnEquipSize(IN_pstEquipment, nEquip_cx, nEquip_cy);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	szText = m_reg.Load_Equipment_ID(IN_pstEquipment->Get_ServerId(), 0, 0);
 	m_ed_SubEqpID.SetWindowText(szText);
 	switch (IN_pstEquipment->Get_SvrType_UI())

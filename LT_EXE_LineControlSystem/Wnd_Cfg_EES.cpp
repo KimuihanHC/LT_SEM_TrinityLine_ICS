@@ -960,7 +960,7 @@ void CWnd_Cfg_EES::Apply_EESInfo()
 		return;
 	}
 	// Recipe 데이터 불러오기
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	GetOwner()->SendNotifyMessage(WM_CHANGED_SETTING_INFO, (WPARAM)m_szPath_Default.GetBuffer(), WM_Setting_EES);
 #endif
 	LT_MessageBox(g_szMessageBox_T[MB_Common_SaveFile_Succeed][m_nLanguage]);

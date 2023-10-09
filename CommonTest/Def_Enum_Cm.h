@@ -149,7 +149,7 @@ typedef enum
 
 }_ConstVar;
 
-#if	(USE_XML)
+#if defined(EES_XML)//20231003
 typedef enum {
 	ICS_SERVER_MODULE,
 	ICS_SERVER_EES,
@@ -163,6 +163,6 @@ static LPCTSTR strLogName[] = {
 };
 #endif
 
-// Access 모드 설정값
+
 #endif // Def_Enum_Cm_h__
 

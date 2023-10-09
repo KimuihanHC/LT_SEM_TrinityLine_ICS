@@ -34,7 +34,7 @@ typedef enum
 	WM_Setting_Alarm,		// 
 	WM_Setting_NGCode,		// 
 	WM_Setting_Debug,
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	WM_Setting_EES,
 	WM_Setting_ALARMID,
 	WM_Setting_Sever,
@@ -59,16 +59,16 @@ typedef enum
 
 	WM_EqpNotify_Skip,					// 
 	WM_EqpNotify_TimeSync,				// 
+
 	WM_EqpNotify_Yield,					// 
 	WM_EqpNotify_Production,
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	WM_EqpNotify_EQUIPMENTSTATE,
 	WM_EqpNotify_EQUIPMENTSTATEDISPLAY,
 	WM_EqpNotify_RGBDISPLAY,
 	WM_EqpNotify_LOTID,
-#endif
+#endif	
 }WM_Eqp_Nofity_Para;
-
 
 #define		WM_EVENT_LOADER_RESISTER_SOCKET		WM_USER + 602
 #define		WM_EVENT_LOADER_CHEKCK_TRACKOUT		WM_USER + 603
@@ -109,13 +109,11 @@ typedef enum
 	WM_SvrNotify_OperatingMode,			// 설비의 운영 모드 통지
 	WM_SvrNotify_ProcessStatus,			// 설비 상태 통지
 	WM_SvrNotify_SocketRequest,			// 소켓 승인 요청
-
 	WM_SvrNotify_Skip,					// 
 	WM_SvrNotify_TimeSync,				// 
-
 	WM_SvrNotify_Yield,					// 
 	WM_SvrNotify_Production,
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	WM_SvrNotify_EQUIPMENTSTATE,
 	WM_SvrNotify_EQUIPMENTSTATEDISPLAY,
 	WM_SvrNotify_RGBDISPLAY,
@@ -127,8 +125,7 @@ typedef enum
 	WM_SvrNotify_RMS,
 #endif
 }WM_Svr_Nofity_Para;
-
-#if (USE_XML) 
+#if defined(EES_XML)//20231003
 //=============================================================================
 // WM_EVENT_SERVER(TC -> ICS)
 //=============================================================================
@@ -238,11 +235,10 @@ typedef enum
 	WM_Socket_Target		= 0x0010,
 	WM_Socket_Yield			= 0x0020,
 	WM_Socket_TestResult	= 0x0040,
-#if (USE_XML) 
+#if defined(EES_XML)//20231003
 	WM_Socket_LOTID			= 0x0040,
 #endif
 }WM_Socket_Update_Para;
-
 
 
 

@@ -220,7 +220,7 @@ LRESULT CWnd_Status_Equipment::OnWmEquipmentNotify(WPARAM wParam, LPARAM lParam)
 	case WM_EqpNotify_Production:
 		Set_Production((bool)LOWORD(lParam), (uint8_t)HIWORD(lParam));
 		break;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	case WM_EqpNotify_EQUIPMENTSTATE:
 		Set_EqpNotify_EQUIPMENTSTATE((lt::Report_Equipment_State_Args::Args*)lParam);
 		break;
@@ -281,9 +281,11 @@ void CWnd_Status_Equipment::MoveWindow_Status(int x, int y, int nWidth, int nHei
 	m_st_IpAddress.MoveWindow(iLeft, iTop, iWidth, m_nCtrl_Height);
 	iTop += m_nCtrl_Height - 1;
 	m_st_OperMode.MoveWindow(iLeft, iTop, iWidth, m_nCtrl_Height);
-	
+#if defined(EES_XML)//20231003
 	iTop += (m_nCtrl_Height/2) + iSpacing;
-
+#else	
+	iTop += m_nCtrl_Height + iSpacing;
+#endif	
 	m_nTop_Status = iTop;
 }
 
@@ -602,9 +604,9 @@ void CWnd_Status_Equipment::SetPtr_EquipmentInfo(__in uint8_t IN_nEqpNo, const C
 	{
 		m_wnd_Yield.Set_EqpLoader(true);
 	}
-
+#if defined(EES_XML)//20231003
 	auto test = m_pEquipmentStatus->Get_mEES_PortSubStatus();
-	
+#endif
 	// 설비 순서
 	m_nEqpOrder = IN_nEqpNo;
 
@@ -748,8 +750,10 @@ void CWnd_Status_Equipment::Set_VerifyEqpConnection(__in bool bVerified)
 #ifdef USE_NO_VERIFY_EQPID
 	return;
 #endif
+
 	if (bVerified)
 	{
+		//m_st_EqpName.SetBackColor_COLORREF(RGB(197, 224, 180));
 		m_st_EqpName.SetBackColor_COLORREF(RGB(150, 255, 150));
 	}
 	else
@@ -1090,10 +1094,10 @@ void CWnd_Status_Equipment::Set_ConveyorStatus(__in uint8_t IN_nConveyorIndex, _
 
 }
 
-#if (USE_XML)
-void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATE(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA){
+#if defined(EES_XML)//20231003
+void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATE(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA)
+{
 	if (m_pEquipmentStatus->Is_Loader())	{
-
 	}
 	if (m_pEquipmentStatus->Is_Tester())	{
 		CString EQUIPMENTSTATE;
@@ -1119,9 +1123,9 @@ void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATE(__in CVGStatic* IN_nPort, LPCTS
 		}
 	}
 }
-void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATEDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA){
+void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATEDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA)
+{
 	if (m_pEquipmentStatus->Is_Loader())	{
-
 	}
 	if (m_pEquipmentStatus->Is_Tester())	{
 		CString EQUIPMENTSTATEDISPLAY;
@@ -1129,9 +1133,9 @@ void CWnd_Status_Equipment::SetUI_EQUIPMENTSTATEDISPLAY(__in CVGStatic* IN_nPort
 		IN_nPort->SetText(EQUIPMENTSTATEDISPLAY);
 	}
 }
-void CWnd_Status_Equipment::SetUI_RGBDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA){
+void CWnd_Status_Equipment::SetUI_RGBDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA)
+{
 	if (m_pEquipmentStatus->Is_Loader())	{
-
 	}
 	if (m_pEquipmentStatus->Is_Tester())	{
 		CString EQUIPMENTSTATEDISPLAY;
@@ -1140,14 +1144,13 @@ void CWnd_Status_Equipment::SetUI_RGBDISPLAY(__in CVGStatic* IN_nPort, LPCTSTR I
 		IN_nPort->SetBackColor_COLORREF(dw);
 	}
 }
-void CWnd_Status_Equipment::Set_EqpNotify_EQUIPMENTSTATE(__in lt::Report_Equipment_State_Args::Args * IN_DATA) {
-
+void CWnd_Status_Equipment::Set_EqpNotify_EQUIPMENTSTATE(__in lt::Report_Equipment_State_Args::Args * IN_DATA) 
+{
 }
 COLORREF CWnd_Status_Equipment::Get_Color(__in CString lParam) {
 	COLORREF clr;
 	CString csRet;
 	int nRgb[3];
-
 	lParam.TrimLeft();
 	lParam.TrimRight();
 	//1
@@ -1162,97 +1165,16 @@ COLORREF CWnd_Status_Equipment::Get_Color(__in CString lParam) {
 	nRgb[1] = _ttoi(csRet);
 	lParam = lParam.Mid(iPos + 1);
 	lParam.TrimLeft();
-
 	iPos = lParam.GetLength();
 	csRet.Format(_T("%s."), lParam.Left(iPos));
 	nRgb[2] = _ttoi(csRet);
-
 	clr = RGB(nRgb[0], nRgb[1], nRgb[2]);
 	return clr;
 }
 void CWnd_Status_Equipment::Set_EqpNotify_EQUIPMENTSTATEDISPLAY(CCommonModule * N_DATA){
-
 }
 void CWnd_Status_Equipment::Set_EqpNotify_RGBDISPLAY(__in  lt::Request_Equipment_State_Display_Args::Args& IN_DATA){
-
 }
-
 void CWnd_Status_Equipment::Set_EquipmentID(__in CEquipment* IN_Data) {
 }
-
 #endif
-//=============================================================================
-// Method		: SetBaseDataConfig
-// Access		: public  
-// Returns		: void
-// Parameter	: __inOut CServer* IN_pServer
-// Qualifier	:
-// Last Update	: 2023.05.08 - 17:51
-// Desc.		:
-//=============================================================================
-#if SOCKET
-void CWnd_Status_Equipment::SetBaseDataConfig(CEquipment* IN_pEquipment) {
-
-	CString			szTemp;
-	ST_BaseDataID	m_BaseDataID;
-	//EqpID
-	//szTemp.Format(_T("%s"), IN_pEquipment->Get_EquipmentId());
-	//IN_pEquipment->Set_SValues(SV_EQUIPMENT_ID, szTemp);
-	//m_BaseDataID.EQUIPMENTID = szTemp;
-
-	//Type
-	szTemp.Format(_T("%s"), g_szEqpTypeName[IN_pEquipment->Get_EquipmentType()]);
-	//IN_pEquipment->Set_SValues(SV_TYPE, szTemp);
-	m_BaseDataID.TYPE = szTemp;
-
-	//IP Adress
-	DWORD dwAddress = ntohl(IN_pEquipment->Get_IP_Address());
-	szTemp.Format(_T("%d.%d.%d.%d"), FOURTH_IPADDRESS(dwAddress), THIRD_IPADDRESS(dwAddress), SECOND_IPADDRESS(dwAddress), FIRST_IPADDRESS(dwAddress));
-	//IN_pEquipment->Set_SValues(SV_IPADRESS, szTemp);
-	m_BaseDataID.IPADDRESS = szTemp;
-
-	//subEqpID
-	szTemp.Format(_T("%s"), IN_pEquipment->Get_SubEqpID());
-	//IN_pEquipment->Set_SValues(SV_SUBEQPID, szTemp);
-	m_BaseDataID.SUBEQPID = szTemp;
-
-	//EES Mode
-	szTemp.Format(_T("%s"), g_sEES_Mode[EES_OFFLINE]);
-	//IN_pEquipment->Set_SValues(SV_EES_MODE, szTemp);
-	m_BaseDataID.EESMODE = szTemp;
-
-	//ONLINESTATE
-	szTemp.Format(_T("%s"), g_szOnLine_State[ONLINESTATE_OFFLINE]);
-	//IN_pEquipment->Set_SValues(SV_ONLINESTATE, szTemp);
-	m_BaseDataID.ONLINESTATE = szTemp;
-
-	//Order
-	szTemp.Format(_T("%d"), IN_pEquipment->Get_EqpOrder());
-	//IN_pEquipment->Set_SValues(SV_ORDER, szTemp);
-	m_BaseDataID.ORDER = szTemp;
-
-	//ALIAS
-	szTemp.Format(_T("%s"), IN_pEquipment->Get_Alias());
-	//IN_pEquipment->Set_SValues(SV_ALIAS, szTemp);
-	m_BaseDataID.ALIAS = szTemp;
-
-	IN_pEquipment->GetXmlEes().SetBaseData(&m_BaseDataID);
-}
-#endif	//#if SOCKET
-
-#if ADD_SOCKET_EES_XML
-
-//=============================================================================
-// Method		: Set_SvrNotify_LOSSWINDOW
-// Access		: virtual public  
-// Returns		: void
-// Parameter	: __in uint8_t IN_nConveyorIndex
-// Parameter	: __in uint8_t IN_nStatus
-// Parameter	: __in uint8_t IN_nExistSocket
-// Qualifier	:
-// Last Update	: 2023.04.19
-// Desc.		:
-//=============================================================================
-
-
-#endif	//#if ADD_SOCKET_EES_XML

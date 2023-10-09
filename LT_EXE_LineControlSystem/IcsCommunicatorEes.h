@@ -50,7 +50,7 @@ public:
 	CIcsRemoteServer * GetRemote(lt::ConstStringT equipmentId);
 	void RemoveRemote(const CServer & server);
 	void RemoveRemotes();
-#if (USE_XML)
+#if defined(EES_XML)
 	//Online State.
 	bool SendReplyLinkTestMassage(__in lt::Reply_Link_Test_Args::Args  & pInData);
 	bool SendReplyLinkTestMassage(__in lt::ConstStringT equipmentId, __in lt::Reply_Link_Test_Args::Args  & pInData);

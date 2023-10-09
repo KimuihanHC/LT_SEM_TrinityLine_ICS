@@ -33,7 +33,7 @@ CPageOption::CPageOption( LPCTSTR lpszCaption /*= NULL*/ )
 
 	hLocal = NULL;
 
-	m_InsptrType	= enInsptrSysType::Sys_Dev_Mod_1;
+	m_InsptrType	= enInsptrSysType::Sys_Ics_Trinity_Line;
 
 	SetDlgTemplate();
 	InitTemplate();
@@ -47,7 +47,7 @@ CPageOption::CPageOption(UINT nIDTemplate, UINT nIDCaption /*= 0*/) : CMFCProper
 
 	hLocal = NULL;
 
-	m_InsptrType = enInsptrSysType::Sys_Dev_Mod_1;
+	m_InsptrType = enInsptrSysType::Sys_Ics_Trinity_Line;
 
 // 	SetDlgTemplate();
 // 	InitTemplate();

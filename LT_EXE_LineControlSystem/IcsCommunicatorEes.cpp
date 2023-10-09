@@ -480,7 +480,7 @@ lt::uint32 CIcsCommunicatorEes::InvokeRemote(TypeRemote1 * remotePtr,
 
 	return (_remotePtr->*fn)(std::forward<TypeArgs>(args)...);
 }
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 bool CIcsCommunicatorEes::SendReplyLinkTestMassage(__in lt::Reply_Link_Test_Args::Args  & pInData){
 	auto result = InvokeRemote(&CIcsRemoteServer::SendReplyLinkTestMassage,
 		pInData);

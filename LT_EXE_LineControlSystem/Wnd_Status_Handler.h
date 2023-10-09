@@ -44,7 +44,7 @@ protected:
 	virtual void Popup_SubMenu();
 
 public:
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 //=============================================================================
 // Add
 //=============================================================================
@@ -54,6 +54,7 @@ protected:
 public:
 	virtual void	Set_EquipmentID(__in CEquipment* IN_Data);
 #endif // SOCKET
+
 };
 
 #endif // Wnd_Status_Handler_h__

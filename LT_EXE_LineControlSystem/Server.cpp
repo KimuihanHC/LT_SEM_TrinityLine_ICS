@@ -1305,7 +1305,7 @@ bool CServer::Is_EES() const
 {
 	return (enServerType::SERVER_EES == Get_ServerType());
 }
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 //=============================================================================
 // Method		: Set_RequestLinkTest
 // Access		: public  
@@ -2063,8 +2063,5 @@ void CServer::Increase_Yield_Fail(__in uint8_t IN_nPara)
 	//2023.03.28
 	//WM_Notify_Server(WM_SvrNotify_Yield, (LPARAM)&m_Yield_Day);
 }*/
-#if (USE_XML)
-
-#endif
 
 

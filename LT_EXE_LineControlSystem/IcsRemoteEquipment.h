@@ -64,6 +64,9 @@ public:
 	// UI 화면 제어
 	lt::uint32 SendUiVisible(int cmdShow);
 
+	// 인라인 가동/비가동
+	lt::uint32 SendOperationActiveStatus(lt::uint32 status);
+
 	// 소켓 투입 승인
 	lt::uint32 SendSocketAccept(lt::ConstStringT rfid,
 								lt::uint32 flag,
@@ -75,12 +78,6 @@ public:
 	// 강제 배출
 	lt::uint32 SendForceEject(bool onOff);
 
-	/*
-	void	SetSValue(__in uint32_t nSVID, LPCTSTR IN_SValue);
-	CString GetSValue(__in uint32_t nSVID);
-
-	uint32_t GetSVID(uint32_t nSVID);
-	*/
 protected:
 	virtual lt::CIcsRemote & GetRemote() = 0;
 	virtual const lt::CIcsRemote & GetRemote() const = 0;
@@ -122,6 +119,7 @@ private:
 	void OnPortStatusRequestEvent(PortStatusRequestEventArgs & eventArgs);
 	void OnConveyorStatusEvent(ConveyorStatusEventArgs & eventArgs);
 	void OnConveyorStatusRequestEvent(ConveyorStatusRequestEventArgs & eventArgs);
+
 private:
 	CEquipment & m_equipment;
 

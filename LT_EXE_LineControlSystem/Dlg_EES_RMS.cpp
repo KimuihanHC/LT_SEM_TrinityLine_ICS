@@ -285,7 +285,7 @@ void CDlg_EES_RMS::OnAuthoritySelect(UINT nID)
 {
 	UINT nTabIndex = nID - IDC_RB_AUTHORITY_FST;
 	m_nEES = (enEES_Mode)nTabIndex;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	AfxGetApp()->GetMainWnd()->SendMessage(WM_EVENT_REPORT_RMS_MODE, 0, (LPARAM)m_nEES);
 #endif 
 	OnOK();

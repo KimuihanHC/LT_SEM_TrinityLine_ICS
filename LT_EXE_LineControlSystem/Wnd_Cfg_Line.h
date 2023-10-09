@@ -76,8 +76,9 @@ protected:
 	afx_msg void	OnBnClickedBnClearList		();
 	afx_msg void	OnBnClickedBnVerifyLine		();
 	afx_msg void	OnBnClickedBnApply			();
+#if defined(EES_XML)//20231003
 	afx_msg void	OnCbnSelendokSvrType		();
-
+#endif
 
 	CFont			m_font_Default;
 	CFont			m_Font;
@@ -87,7 +88,6 @@ protected:
 	CMFCButton			m_bn_Apply;
 
 	// 설비 목록
-	//2023.02.13 추가 LineInfo
 	CList_LineConfig	m_lc_LineInfo;
 	CMFCButton			m_bn_VerifyLineConfig;
 	//CMFCButton			m_bn_ModifyEquipment;	// 선택한 항목 수정	
@@ -98,7 +98,6 @@ protected:
 	// 검사기 항목 ---------------------------------------------------
 	CVGStatic		m_st_EqpItemData[EID_MaxEnum];	
 	
-	//CComboBox		m_cb_ServerType;	//추가 옵션.
 	CEdit			m_ed_EqpAlias;
 	CComboBox		m_cb_EquipmentType;
 	CEdit			m_ed_EquipmentId;
@@ -149,6 +148,8 @@ protected:
 
 	// 루프 begin -> end 구조가 정상인지 판단
 	bool	Verify_EquipmentSequence	(__in const CConfig_Line* IN_pLineInfo);
+
+	
 
 public:
 

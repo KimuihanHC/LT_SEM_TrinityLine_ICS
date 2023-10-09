@@ -17,20 +17,21 @@
 
 
 //---------------------------------------------------------
-// ?�품 모델 ?�정 구조�?//---------------------------------------------------------
+// 제품 모델 설정 구조체
+//---------------------------------------------------------
 class CConfig_Model
 {
 public:
 
 	CString			m_szAlias;		// 명칭
-	uint8_t			m_nSocketType;	// ?�용 ?�켓
-	uint8_t			m_nModelType;	// ?�용 ?�켓
+	uint8_t			m_nSocketType;	// 사용 소켓
+	uint8_t			m_nModelType;	// 사용 제품 모델 구분
 
-	bool			m_bEnable_TestType[Max_TesterCount];		// 검??진행 ?�성???��?
+	bool			m_bEnable_TestType[Max_TesterCount];		// 검사 진행 활성화 여부
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
-	bool			m_bEnable_InspType[Max_InspTypeCount];		// 검??진행 ?�성???��?
+	bool			m_bEnable_InspType[Max_InspTypeCount];		// 검사 진행 활성화 여부
 #endif	// NEW_INSPECTION_TYPE_APPLY
-	//bool			bChecked_TestType[Max_TesterCount];		// ?�성?�된 검??�?검??진행 ?��?
+	//bool			bChecked_TestType[Max_TesterCount];		// 활성화된 검사 중 검사 진행 여부
 
 	CConfig_Model()
 	{

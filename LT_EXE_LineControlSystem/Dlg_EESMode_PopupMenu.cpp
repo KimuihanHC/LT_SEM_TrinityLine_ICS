@@ -109,11 +109,6 @@ int CDlg_EESMode_PopupMenu::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_bn_CtrlCmd[nIdx].SetFont(&m_font_Default);
 	}
 
-#ifndef USE_DISABLE_NOT_USE_EQUIPMENT_CONTROL
-	m_bn_CtrlCmd[CC_Reset].SetTextColor(RGB(255, 255, 0));
-#endif
-	//m_bn_CtrlCmd[CC_Run].SetTextColor(RGB(0, 200, 0));
-	//m_bn_CtrlCmd[CC_Stop].SetTextColor(RGB(200, 0, 0));
 	return 0;
 }
 

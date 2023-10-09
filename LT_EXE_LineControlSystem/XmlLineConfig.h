@@ -29,7 +29,7 @@ protected:
 
 	void	Backup_File				(__in LPCTSTR szPath);
 
-	// version Check : 구버???�일???�어 ????처리
+	// version Check : 구버전 파일을 읽어 올 때 처리
 	uint8_t Convert_EquipmentType	(__in int IN_iVer, __in uint8_t IN_nEqpType_Old);
 	uint8_t Convert_EqpType_UI		(__in int IN_iVer, __in uint8_t IN_nEqpTypeUI_Old);
 
@@ -57,13 +57,11 @@ public:
 	BOOL	SaveXML_ModelInfo		(__in LPCTSTR szPath, __in const CConfig_Model* IN_pModelInfo);
 
 	
-	// ?�시??처리?�도
+	// 레시피 처리용도
 	BOOL	LoadXML_LineModelInfo	(__in LPCTSTR szPath, __out CConfig_Line& OUT_stLineInfo, __out CConfig_Model& OUT_stModelInfo);
 	BOOL	SaveXML_LineModelInfo	(__in LPCTSTR szPath, __in const CConfig_Line* IN_pLineInfo, __in const CConfig_Model* IN_pModelInfo);
 
-	//?�버 ?�?�용.
-	//BOOL	LoadXML_LineServer(__in LPCTSTR szPath, __out CConfig_Line& OUT_stLineInfo);
-	//BOOL	SaveXML_LineServer(__in LPCTSTR szPath, __in const CConfig_Line* IN_pLineInfo);
+
 	
 
 };

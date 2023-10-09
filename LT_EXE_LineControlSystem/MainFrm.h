@@ -7,11 +7,12 @@
 //	
 // Purpose	: 
 //*****************************************************************************
-// MainFrm.h : CMainFrame ?�래?�의 ?�터?�이??
+// MainFrm.h : CMainFrame 클래스의 인터페이스
 //
+
 #pragma once
 
-#if (SET_INSPECTOR == SYS_DEV_MOD_1)
+#if (SET_INSPECTOR == SYS_ICS_TRINITY_LINE) || (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 #include "View_MainCtrl_ICS.h"
 #else
 #include "View_MainCtrl.h"
@@ -41,12 +42,12 @@ public:
 protected: 
 	DECLARE_DYNAMIC(CMainFrame)
 
-	// ?�정?�입?�다.
+	// 재정의입니다.
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 
-	// 구현?�니??
+	// 구현입니다.
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -54,9 +55,9 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // 컨트�?모음???�함??멤버?�니??
+protected:  // 컨트롤 모음이 포함된 멤버입니다.
 
-#if (SET_INSPECTOR == SYS_DEV_MOD_1)
+#if (SET_INSPECTOR == SYS_ICS_TRINITY_LINE) || (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 	CView_MainCtrl_ICS	m_wndView_MainCtrl;
 #else
 	CView_MainCtrl		m_wndView_MainCtrl;
@@ -64,7 +65,7 @@ protected:  // 컨트�?모음???�함??멤버?�니??
 
 	ST_MONITORINFO		m_infoMonitor;
 
-	// ?�성??메시지 �??�수.
+	// 생성된 메시지 맵 함수.
 protected:
 	afx_msg int		OnCreate			(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void	OnSetFocus			(CWnd *pOldWnd);
@@ -92,7 +93,7 @@ protected:
 	afx_msg LRESULT	OnWM_LineCtrlCmd		(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_EqpCtrlCmd			(WPARAM wParam, LPARAM lParam);
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 protected:
 	afx_msg LRESULT	OnSet_CONNECTION		(WPARAM wParam, LPARAM lParam);
 protected:
@@ -103,51 +104,30 @@ protected:
 	afx_msg LRESULT OnWM_Svr_REQUEST_LINK_TEST(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REPLY_LINK_TEST(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REPORT_ONLINE_STATE(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT	OnWM_Svr_REPORT_USER_CHANGE(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REQUEST_USER_CHANGE(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REPLY_USER_COMMAND(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT	OnWM_Svr_REPORT_EQUIPMENT_STATE(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REQUEST_EQUIPMENT_STATE_DISPLAY(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REPLY_EQUIPMENT_STATE_DISPLAY(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT	OnWM_Svr_REPORT_LOSS_STATE(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REQUEST_LOSS_WINDOW(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT	OnWM_Svr_REPLY_LOSS_WINDOW(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT OnWM_Svr_REPORT_ALARM_STATE(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnWM_Svr_REQUEST_ALARM_LIST(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnWM_Svr_REPLY_ALARM_LIST(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT OnWM_Svr_REPORT_RMS_MODE(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT OnWM_Svr_REQUEST_SET_DATETIME(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnWM_Svr_REPLY_SET_DATETIME(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT OnWM_Svr_REQUEST_TERMINAL_MESSAGE(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnWM_Svr_REPLY_TERMINAL_MESSAGE(WPARAM wParam, LPARAM lParam);
-
 	afx_msg LRESULT OnWM_Svr_REQUEST_OPCALL_MESSAGE(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnWM_Svr_REPLY_OPCALL(WPARAM wParam, LPARAM lParam);
 #endif
-#if TEST
-	afx_msg LRESULT OnWM_Svr_UNITID_READ(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnWM_Svr_REQUEST_UNITID_READ(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT	OnWM_Svr_REPLY_UNITID_READ(WPARAM wParam, LPARAM lParam);
-
-	afx_msg LRESULT OnWM_Svr_REPORT_START_PROCESS(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT	OnWM_Svr_REPORT_START_LOT(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnWM_Svr_REPORT_END_EVENT(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT	OnWM_Svr_REPORT_END_PROCESS(WPARAM wParam, LPARAM lParam);
-#endif	//TEST
-
-//=============================================================================
-
 	DECLARE_MESSAGE_MAP()
 
 	int				MakeTabViewBar		();	
-	void			OnAdd_Log				(LPCTSTR lpszLog, BOOL bError = FALSE, BYTE bySubLog = 0);
+	void			OnAdd_Log			(LPCTSTR lpszLog, BOOL bError = FALSE, BYTE bySubLog = 0);
 	void			AddLogProgramInfo	();
 
 
@@ -169,18 +149,18 @@ private:
 	CNTLinksBar			m_wndLinksBar;
 	CPane_CommStatus	m_wndDeviceStatus;
 
-	void				SetupMemoryBitmapSize(const CSize& sz);
+	void			SetupMemoryBitmapSize(const CSize& sz);
 
 	UINT				m_nTabView;
 
 	CString				m_strExecutedAppTime;
-	// ?�로그램 ?�작 ????
+	// 프로그램 시작 할 때.
 	void			InitProgram			();
 
-	// ?�로그램 종료 ????
+	// 프로그램 종료 할 때.
 	void			ExitProgram			();
 
-	// ?��???비정??종료 감시 ?�로그램???�행 ?�킴.	
+	// 외부의 비정상 종료 감시 프로그램을 실행 시킴.	
 	PROCESS_INFORMATION	m_ProcessInfo;
 	BOOL			RunWatchProgram		();
 	void			CloseWatchProgram	();
@@ -190,40 +170,17 @@ private:
 
 	void			OnSet_PermissionMode(__in enPermissionMode nAcessMode, __in bool bInit = false);
 
+public:
+#if defined(EES_XML)//20231003
 //=============================================================================================
 //Add
 //=============================================================================================
-#if (USE_XML)
 private:
 	void			OnSet_RMSMode(__in enEES_Mode nAcessMode, __in bool bInit = false);
 public:
-	void SetSystemTimePrivilege();
+	void			SetSystemTimePrivilege();
 #endif
-#if TEST
-	using ssaTransationIDCntr = lt::StdMapContainer<CStringA, ST_TransactionID *>::Map;
-	ssaTransationIDCntr * ssaTransationIDBufferCntr = nullptr;
-	lt::StdMutex * m_pssaTransationIDBufferCntrMutex = nullptr;
-
-	using LPARAMCntr = lt::StdSequenceContainer<LPARAM >::Vector;
-	LPARAMCntr * m_pLPARAMCntr = nullptr;
-	lt::StdMutex * m_pLPARAMCntrMutex = nullptr;
-
-public:	
-
-	ST_TransactionID * CreateTransactionID(CStringA cstr);
-	CStringA CreateTransactionID();
-	void SetTransactionID(CStringA command, ST_TransactionID *data);
-	ST_TransactionID * GetTransactionID(CStringA command) const;
-	bool bGetTransactionID(CStringA command) const;
-	void ClearTransactionID(CStringA command);
-
-	void AddLPARAM(LPARAM PARA);
-	void RemoveLPARAM(LPARAM PARA);
-	bool FindLPARAM(LPARAM PARA);
-#endif
-
 //=============================================================================
 };
 
-extern CMainFrame* MainFrame;
 

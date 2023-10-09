@@ -21,7 +21,7 @@ CLT_Option::CLT_Option()
 {	
 	m_strRegPath_Base = REG_PATH_OPTION_DEFALT;
 
-	m_InsptrType	= enInsptrSysType::Sys_Dev_Mod_1;
+	m_InsptrType	= enInsptrSysType::Sys_Ics_Trinity_Line;
 }
 
 //=============================================================================
@@ -76,6 +76,12 @@ void CLT_Option::SaveOption_Inspector( stOpt_Insp stOption )
 		// 언어 설정
 		reg.WriteDWORD(_T("Language"), (DWORD)m_stOption.Inspector.nLanguage);
 
+		// Auto 모드에서  Manual 모드로 전환하는데 필요한 대기 시간 (Wait time required to switch from Auto mode to Manual mode.)
+		reg.WriteDWORD(_T("Auto_to_Manual_WaitTime"), (DWORD)m_stOption.Inspector.nAutoModeDuration);
+
+		// Auto 모드에서 설비의 통신 끊김 알람
+		//reg.WriteDWORD(_T("Alarm_EqpDiscon_AutoMode"), (DWORD)m_stOption.Inspector.bAlarm_EqpDiscon_AutoMode);
+
 		// Log 경로
 		reg.WriteString(_T("Path_Log"), m_stOption.Inspector.szPath_Log);
 		// Report 경로
@@ -118,6 +124,14 @@ BOOL CLT_Option::LoadOption_Inspector(stOpt_Insp& stOption)
 		if (reg.ReadDWORD(_T("Language"), dwValue))
 			m_stOption.Inspector.nLanguage = (uint8_t)dwValue;
 
+		// Auto 모드에서  Manual 모드로 전환하는데 필요한 대기 시간 (Wait time required to switch from Auto mode to Manual mode.)
+		if (reg.ReadDWORD(_T("Auto_to_Manual_WaitTime"), dwValue))
+			m_stOption.Inspector.nAutoModeDuration = (uint16_t)dwValue;
+
+		// Auto 모드에서 설비의 통신 끊김 알람
+// 		if (reg.ReadDWORD(_T("Alarm_EqpDiscon_AutoMode"), dwValue))
+// 			m_stOption.Inspector.bAlarm_EqpDiscon_AutoMode = (uint8_t)dwValue;
+
 		// Log 경로
 		reg.ReadString(_T("Path_Log"), m_stOption.Inspector.szPath_Log);
 		// Report 경로
@@ -146,14 +160,23 @@ BOOL CLT_Option::LoadOption_Inspector(stOpt_Insp& stOption)
 
 	return TRUE;
 }
-#if (20230905)
-void CLT_Option::SaveOption_Server(__in unsigned nType, __in stOpt_Server stOption)
+#if !(EES_XML)//20231003
+//=============================================================================
+// Method		: SaveOption_Server
+// Access		: public  
+// Returns		: void
+// Parameter	: stOpt_Server stOption
+// Qualifier	:
+// Last Update	: 2016/5/18 - 15:50
+// Desc.		:
+//=============================================================================
+void CLT_Option::SaveOption_Server(stOpt_Server stOption)
 {
 	CRegistry	reg;
 	CString		strRegPath = m_strRegPath_Base + _T("\\Server");
 	CString		strValue;
 
-	m_stOption.Server[nType] = stOption;
+	m_stOption.Server = stOption;
 
 	if (!reg.VerifyKey(HKEY_CURRENT_USER, strRegPath))
 	{
@@ -163,34 +186,29 @@ void CLT_Option::SaveOption_Server(__in unsigned nType, __in stOpt_Server stOpti
 	if (reg.Open(HKEY_CURRENT_USER, strRegPath))
 	{
 		// 설비 코드
-		switch (nType) {
-		case  ICS_SERVER_MODULE:
-			// 설비 코드
-			reg.WriteString(_T("EquipmentID"), m_stOption.Server[nType].szEquipmentID);
+		reg.WriteString(_T("EquipmentID"), m_stOption.Server.szEquipmentID);
 
-			// 서버 주소
-			reg.WriteDWORD(_T("IP_Address"), m_stOption.Server[nType].Address.dwAddress);
-			reg.WriteDWORD(_T("IP_Port"), m_stOption.Server[nType].Address.dwPort);
+		// 서버 주소
+		reg.WriteDWORD(OPT_KEY_IP_ADDRESS, m_stOption.Server.Address.dwAddress);
+		reg.WriteDWORD(OPT_KEY_IP_PORT, m_stOption.Server.Address.dwPort);
 
-			// MES 경로
-			reg.WriteString(_T("Path_Log"), m_stOption.Server[nType].szPath_Log);
-			break;
-		case  ICS_SERVER_EES:
-			// 설비 코드
-			reg.WriteString(_T("EquipmentID_EES"), m_stOption.Server[nType].szEquipmentID);
-
-			// 서버 주소
-			reg.WriteDWORD(_T("IP_Address_EES"), m_stOption.Server[nType].Address.dwAddress);
-			reg.WriteDWORD(_T("IP_Port_EES"), m_stOption.Server[nType].Address.dwPort);
-
-			// MES 경로
-			reg.WriteString(_T("Path_Log_EES"), m_stOption.Server[nType].szPath_Log);
-			break;
-		}
+		// MES 경로
+		reg.WriteString(_T("Path_Log"), m_stOption.Server.szPath_Log);
 	}
+
 	reg.Close();
 }
-BOOL CLT_Option::LoadOption_Server( __in unsigned nType, __out stOpt_Server& stOption)
+
+//=============================================================================
+// Method		: LoadOption_Server
+// Access		: public  
+// Returns		: BOOL
+// Parameter	: stOpt_Server & stOption
+// Qualifier	:
+// Last Update	: 2016/5/18 - 15:50
+// Desc.		:
+//=============================================================================
+BOOL CLT_Option::LoadOption_Server(stOpt_Server& stOption)
 {
 	CRegistry	reg;
 	CString		strRegPath = m_strRegPath_Base + _T("\\Server");
@@ -200,37 +218,18 @@ BOOL CLT_Option::LoadOption_Server( __in unsigned nType, __out stOpt_Server& stO
 	if (reg.Open(HKEY_CURRENT_USER, strRegPath))
 	{
 		// 설비 코드
-		switch (nType) {
-		case  ICS_SERVER_MODULE:
-			reg.ReadString(_T("EquipmentID"), m_stOption.Server[nType].szEquipmentID);
+		reg.ReadString(_T("EquipmentID"), m_stOption.Server.szEquipmentID);
 
-			// 서버 주소
-			if (reg.ReadDWORD(_T("IP_Address"), dwValue))
-				m_stOption.Server[nType].Address.dwAddress = dwValue;
-			if (reg.ReadDWORD(_T("IP_Port"), dwValue))
-				m_stOption.Server[nType].Address.dwPort = dwValue;
+		// 서버 주소
+ 		if (reg.ReadDWORD(OPT_KEY_IP_ADDRESS, dwValue))
+ 			m_stOption.Server.Address.dwAddress = dwValue;
+ 		if (reg.ReadDWORD(OPT_KEY_IP_PORT, dwValue))
+ 			m_stOption.Server.Address.dwPort = dwValue;
 
-			// MES 경로
-			if (FALSE == reg.ReadString(_T("Path_Log"), m_stOption.Server[nType].szPath_Log))
-			{
-				m_stOption.Server[nType].szPath_Log = _T("C:\\Server_Log\\");
-			}
-			break;			
-		case ICS_SERVER_EES:
-			reg.ReadString(_T("EquipmentID_EES"), m_stOption.Server[nType].szEquipmentID);
-
-			// 서버 주소
-			if (reg.ReadDWORD(_T("IP_Address_EES"), dwValue))
-				m_stOption.Server[nType].Address.dwAddress = dwValue;
-			if (reg.ReadDWORD(_T("IP_Port_EES"), dwValue))
-				m_stOption.Server[nType].Address.dwPort = dwValue;
-
-			// MES 경로
-			if (FALSE == reg.ReadString(_T("Path_Log_EES"), m_stOption.Server[nType].szPath_Log))
-			{
-				m_stOption.Server[nType].szPath_Log = _T("C:\\Server_Log\\");
-			}
-			break;
+		// MES 경로
+		if (FALSE == reg.ReadString(_T("Path_Log"), m_stOption.Server.szPath_Log))
+		{
+			m_stOption.Server.szPath_Log = _T("C:\\Server_Log\\");
 		}
 	}
 	else
@@ -240,7 +239,7 @@ BOOL CLT_Option::LoadOption_Server( __in unsigned nType, __out stOpt_Server& stO
 
 	reg.Close();
 
-	stOption = m_stOption.Server[nType];
+	stOption = m_stOption.Server;
 
 	return TRUE;
 }
@@ -322,10 +321,13 @@ BOOL CLT_Option::LoadOption_Misc(stOpt_Misc& stOption)
 void CLT_Option::SaveOption_All( stLT_Option stOption )
 {
 	SaveOption_Inspector	(stOption.Inspector);
+#if defined(EES_XML)//20231003
 	for (int i = 0; i < ICS_SERVER_MAX; i++) {
 		SaveOption_Server(i, stOption.Server[i]);
 	}
-	
+#else
+	SaveOption_Server		(stOption.Server);
+#endif
 	SaveOption_Misc			(stOption.Misc);
 }
 
@@ -343,9 +345,13 @@ BOOL CLT_Option::LoadOption_All( stLT_Option& stOption )
 	BOOL bReturn = TRUE;
 
 	bReturn &= LoadOption_Inspector		(stOption.Inspector);
+#if defined(EES_XML)//20231003
 	for (int i = 0; i < ICS_SERVER_MAX; i++) {
 		bReturn &= LoadOption_Server(i, stOption.Server[i]);
 	}
+#else
+	bReturn &= LoadOption_Server		(stOption.Server);
+#endif
 	bReturn &= LoadOption_Misc			(stOption.Misc);
 
 	return bReturn;
@@ -364,3 +370,103 @@ void CLT_Option::SetInspectorType(__in enInsptrSysType nInsptrType)
 {
 	m_InsptrType = nInsptrType;
 }
+
+#if defined(EES_XML)//20231003
+void CLT_Option::SaveOption_Server(__in unsigned nType, __in stOpt_Server stOption)
+{
+	CRegistry	reg;
+	CString		strRegPath = m_strRegPath_Base + _T("\\Server");
+	CString		strValue;
+
+	m_stOption.Server[nType] = stOption;
+
+	if (!reg.VerifyKey(HKEY_CURRENT_USER, strRegPath))
+	{
+		reg.CreateKey(HKEY_CURRENT_USER, strRegPath);
+	}
+
+	if (reg.Open(HKEY_CURRENT_USER, strRegPath))
+	{
+		// 설비 코드
+		switch (nType) {
+		case  ICS_SERVER_MODULE:
+			// 설비 코드
+			reg.WriteString(_T("EquipmentID"), m_stOption.Server[nType].szEquipmentID);
+
+			// 서버 주소
+			reg.WriteDWORD(_T("IP_Address"), m_stOption.Server[nType].Address.dwAddress);
+			reg.WriteDWORD(_T("IP_Port"), m_stOption.Server[nType].Address.dwPort);
+
+			// MES 경로
+			reg.WriteString(_T("Path_Log"), m_stOption.Server[nType].szPath_Log);
+			break;
+		case  ICS_SERVER_EES:
+			// 설비 코드
+			reg.WriteString(_T("EquipmentID_EES"), m_stOption.Server[nType].szEquipmentID);
+
+			// 서버 주소
+			reg.WriteDWORD(_T("IP_Address_EES"), m_stOption.Server[nType].Address.dwAddress);
+			reg.WriteDWORD(_T("IP_Port_EES"), m_stOption.Server[nType].Address.dwPort);
+
+			// MES 경로
+			reg.WriteString(_T("Path_Log_EES"), m_stOption.Server[nType].szPath_Log);
+			break;
+		}
+	}
+	reg.Close();
+}
+BOOL CLT_Option::LoadOption_Server(__in unsigned nType, __out stOpt_Server& stOption)
+{
+	CRegistry	reg;
+	CString		strRegPath = m_strRegPath_Base + _T("\\Server");
+	DWORD		dwValue = 0;
+	CString		strValue;
+
+	if (reg.Open(HKEY_CURRENT_USER, strRegPath))
+	{
+		// 설비 코드
+		switch (nType) {
+		case  ICS_SERVER_MODULE:
+			reg.ReadString(_T("EquipmentID"), m_stOption.Server[nType].szEquipmentID);
+
+			// 서버 주소
+			if (reg.ReadDWORD(_T("IP_Address"), dwValue))
+				m_stOption.Server[nType].Address.dwAddress = dwValue;
+			if (reg.ReadDWORD(_T("IP_Port"), dwValue))
+				m_stOption.Server[nType].Address.dwPort = dwValue;
+
+			// MES 경로
+			if (FALSE == reg.ReadString(_T("Path_Log"), m_stOption.Server[nType].szPath_Log))
+			{
+				m_stOption.Server[nType].szPath_Log = _T("C:\\Server_Log\\");
+			}
+			break;
+		case ICS_SERVER_EES:
+			reg.ReadString(_T("EquipmentID_EES"), m_stOption.Server[nType].szEquipmentID);
+
+			// 서버 주소
+			if (reg.ReadDWORD(_T("IP_Address_EES"), dwValue))
+				m_stOption.Server[nType].Address.dwAddress = dwValue;
+			if (reg.ReadDWORD(_T("IP_Port_EES"), dwValue))
+				m_stOption.Server[nType].Address.dwPort = dwValue;
+
+			// MES 경로
+			if (FALSE == reg.ReadString(_T("Path_Log_EES"), m_stOption.Server[nType].szPath_Log))
+			{
+				m_stOption.Server[nType].szPath_Log = _T("C:\\Server_Log\\");
+			}
+			break;
+		}
+	}
+	else
+	{
+		return FALSE;
+	}
+
+	reg.Close();
+
+	stOption = m_stOption.Server[nType];
+
+	return TRUE;
+}
+#endif

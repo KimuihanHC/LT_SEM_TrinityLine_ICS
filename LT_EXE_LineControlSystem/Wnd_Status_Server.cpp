@@ -15,7 +15,7 @@
 #include "Def_Server_Type.h"
 #include "Dlg_EESMode_PopupMenu.h"
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 #include "Pane_CommStatus.h"
 #include "Util/StringUtil.hpp"
 #endif
@@ -509,7 +509,7 @@ void CWnd_Status_Server::Set_ClientConnection(__in uint8_t IN_nConStatus)
 		szText.Format(_T("Svr. %s"),  szClientConnectionText);
 		SetText_Title(szText.GetBuffer());
 		szText.Format(_T("%d"), (IN_nConStatus + 1));
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		m_pServerStatus->Get_DEFINEDATA().Set_ONLINESTATE(lt::ToMultiByte(g_szOnLine_State[ONLINESTATE_OFFLINE]));
 		m_pServerStatus->Get_DEFINEDATA().Set_EESMODE(lt::ToMultiByte(g_sEES_Mode[EES_OFFLINE]));
 		mPane_CommStatus->m_st_RMS.SetText(g_sEES_Mode_UI[EES_OFFLINE]);
@@ -526,7 +526,7 @@ void CWnd_Status_Server::Set_ClientConnection(__in uint8_t IN_nConStatus)
 		szText.Format(_T("Svr. %s"), szClientConnectionText);
 		SetText_Title(szText.GetBuffer());
 		szText.Format(_T("%d"), (IN_nConStatus + 1));
-#if (USE_XML)				
+#if defined(EES_XML)//20231003			
 		mPane_CommStatus->m_st_EES.SetColorStyle(CVGStatic::ColorStyle_Green);		
 		m_pServerStatus->Get_DEFINEDATA().Set_ONLINESTATE(lt::ToMultiByte(g_szOnLine_State[ONLINESTATE_ONLINE]));
 

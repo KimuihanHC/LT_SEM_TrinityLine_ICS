@@ -26,7 +26,7 @@ CRegCommModule::~CRegCommModule()
 
 bool CRegCommModule::Save_Equipment_ID(__in const CEquipment* IN_pEquipment)
 {
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
 	CString		szRegPath;
 	CString		szKey;
@@ -62,7 +62,7 @@ bool CRegCommModule::Save_Equipment_ID(__in const CEquipment* IN_pEquipment)
 
 bool CRegCommModule::Load_Equipment_ID(__in LPCTSTR IN_szEqpID, __out CEquipment& OUT_Equipment)
 {
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
 	CString		szRegPath;
 	CString		szKey;
@@ -109,7 +109,7 @@ bool CRegCommModule::Load_Equipment_ID(__in LPCTSTR IN_szEqpID, __out CEquipment
 
 bool CRegCommModule::Save_Equipment_ID(__in const CServer* IN_pServer)
 {
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
 	CString		szRegPath;
 	CString		szKey;
@@ -142,7 +142,7 @@ bool CRegCommModule::Save_Equipment_ID(__in const CServer* IN_pServer)
 }
 bool CRegCommModule::Load_Equipment_ID(__in LPCTSTR IN_szSvrID, __out CServer& OUT_Server)
 {
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
 	CString		szRegPath;
 	CString		szKey;
@@ -186,7 +186,7 @@ bool CRegCommModule::Load_Equipment_ID(__in LPCTSTR IN_szSvrID, __out CServer& O
 
 bool CRegCommModule::Save_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_nPortIndex, __in uint8_t Type, LPCTSTR IN_Data)
 {
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
 	CString		szRegPath;
 	CString		szKey;
@@ -227,7 +227,7 @@ bool CRegCommModule::Save_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_
 CString CRegCommModule::Load_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_nPortIndex, __in uint8_t Type)
 {
 	CString		szValue;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	CRegistry*	m_pReg = new CRegistry(HKEY_CURRENT_USER);
 	CString		szRegPath;
 	CString		szKey;

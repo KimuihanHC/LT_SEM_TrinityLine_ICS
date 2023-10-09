@@ -32,7 +32,7 @@ protected:
 	CString		m_szRegModulePath;
 
 public:
-//#if (USE_XML)
+
 	bool	Save_Equipment_ID(__in const CEquipment* IN_pEquipment);
 	bool	Load_Equipment_ID(__in LPCTSTR IN_szEqpID, __out CEquipment& OUT_Equipment);
 	bool	Save_Equipment_ID(__in const CServer* IN_pServer);
@@ -40,6 +40,6 @@ public:
 
 	bool	Save_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_nPortIndex, __in uint8_t Type, LPCTSTR IN_Data);
 	CString	Load_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_nPortIndex, __in uint8_t Type);
-//#endif
+
 };
 #endif // RegCommModule_h__

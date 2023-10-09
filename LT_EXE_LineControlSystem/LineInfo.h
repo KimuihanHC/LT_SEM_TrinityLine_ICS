@@ -5,7 +5,7 @@
 //
 // Author	:	piring
 //	
-// Purpose	:	 ?�인???�비?�의 ?�이??처리//
+// Purpose	:	 라인의 설비들의 데이터 처리
 //*****************************************************************************
 #ifndef LineInfo_h__
 #define LineInfo_h__
@@ -44,40 +44,43 @@ public:
 
 protected:
 
-	// 검?�기??구성 ?�보//
+	// 검사기들 구성 정보.
 	std::vector<CEquipment*>	m_EqpList;
 
-	// ?�비 종류�??�작 ?�비
+	// 설비 종류별 시작 설비.
 	CEquipment*					m_pFstEqp_EqpType[Max_EqpTypeCount] = { nullptr, };
-	// ?�비 종류�?그룹//
+	// 설비 종류별 그룹.
 	std::vector<CEquipment*>	m_pEquipment_Group[Max_EqpTypeCount];
 
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
-	// 검???�비 그룹, �?검???�비 그룹 별도�?체크
+	// 검사 설비 그룹, 비 검사 설비 그룹 별도로 체크
 	std::vector<CEquipment*>	m_pInspection_Group[Max_InspTypeCount];
 #endif	// NEW_INSPECTION_TYPE_APPLY
 
-	// 검???�서 <Equipment Type> : Loader, Returner ?�외??검?�의 ?�서
+	// 검사 순서 <Equipment Type> : Loader, Returner 제외한 검사의 순서.
 	std::vector<uint8_t>		m_TestOrder;
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
-	// 검???�서 <Inspection Type> : Loader, Returner ?�외??검?�의 ?�서
+	// 검사 순서 <Inspection Type> : Loader, Returner 제외한 검사의 순서
 	std::vector<uint8_t>		m_InspectionOrder;
 #endif	// NEW_INSPECTION_TYPE_APPLY
 
-	// ?�영 모드 (auto, manual)
+	// 운영 모드 (auto, manual)
 	uint8_t						m_OperateMode		= 0;	
 	//uint8_t						m_nLanguage			= enLanguage::Lang_English;
 
-	// ?�산 (종료) 모드
+	// 생산 (종료) 모드
 	bool						m_bEndOfProduction	= false;
 
-	// ?�버�??�보
+	// 라인의 가동/비가동 상태
+	uint8_t						m_nActiveStatus		= OAS_InitStatus;
+
+	// 디버그 정보
 	const ST_DebugInfo*			m_pDebugInfo		= nullptr;
 
-	// ?�전 ?�비 구성�??�재 ?�로???�비 구성??같�?지 비교 (같으�? true)
+	// 이전 설비 구성과 현재 새로운 설비 구성이 같은지 비교 (같으면: true).
 	bool	Compare_PreConfigLine		(__in const CConfig_Line* IN_pCConfig_Line);
 
-	// ?�비 ?�형???�당?�는 모든 ?�비가 Skip?�로 ?�정?�어 ?�나?
+	// 설비 유형에 해당하는 모든 설비가 Skip으로 설정되어 있나?.
 	inline bool IsSkip_EquipmentType	(__in enEquipmentType IN_nEqpType);
 
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
@@ -88,14 +91,14 @@ protected:
 
 
 public:	
-	// ?�텝 �?��
+	// 스텝 갯수.
 	size_t				GetCount			() const;
 	void				RemoveAll			();
 	CEquipment&			GetAt				(__in uint16_t IN_nIdx);
 	const CEquipment&	GetAt				(__in uint16_t IN_nIdx) const;
 	int					Get_EquipmentIndex	(__in LPCTSTR IN_szEqpId);
 
-	// ?�비?�형??첫번�??�비 구하�?/
+	// 설비유형의 첫번째 설비 구하기.
 	CEquipment&			Get_FirstEquipment	(__in enEquipmentType IN_nEqpType);
 	const CEquipment&	Get_FirstEquipment	(__in enEquipmentType IN_nEqpType) const;
 	CEquipment&			Get_LastEquipment	(__in enEquipmentType IN_nEqpType);
@@ -129,12 +132,6 @@ public:
 
 	uint8_t	Get_TesterCount					();
 
-	//2023.01.27a uhkim
-	//size_t					GetSvrCount() const;
-	//void					SvrRemoveAll();
-	//CEquipment&				GetSvrAt(__in uint16_t IN_nIdx);
-	//const CEquipment&		GetSvrAt(__in uint16_t IN_nIdx) const;
-	//int						Get_ServerIndex(__in LPCTSTR IN_szEqpId);
 public:
 
 	void	Set_Config_Line				(__in const CConfig_Line* IN_pConfig_Line);
@@ -147,56 +144,67 @@ public:
 	void	Set_OperateMode				(__in uint8_t IN_nOperateMode);
 
 
-	// ?�산 종료 ?�태?��?? (?�품 ?�착?????�계 ?�비?�이 비어 ?�나 체크)
+	// 생산 종료 상태인가? (제품 도착시 앞 단계 설비들이 비어 있나 체크)
 	bool	IsEndOfProduction			(__in uint8_t IN_nEqpOrder);
 
 	bool	Get_EndOfProduction			() const;
 	void	Set_EndOfProduction			(__in bool IN_bEnd);	// 0: start, 1: end
 
-	// ?�어 ?�정
+	// 언어 설정
 	//uint8_t	Get_Language				() const;
 	//void	Set_Language				(__in uint8_t IN_nLanguage);
 
-	// 목적 검??찾기 (?�비 ?�형 반환)
+	// 목적 검사 찾기 (설비 유형 반환).
 	uint8_t	Get_NextEquipmentType		(__in enEquipmentType IN_nEqpType);
 	uint8_t	Get_NextEquipmentType		(__in uint8_t IN_FromEqp);
 	uint8_t	Get_PrevEquipmentType		(__in enEquipmentType IN_nEqpType);
 	uint8_t	Get_PrevEquipmentType		(__in uint8_t IN_FromEqp);
-	// 목적 ?�비 찾기 그룹 ??/
-	uint8_t Get_TargetEquipment_inGroup	(__in enEquipmentType IN_nEqpType);
+	// 목적 설비 찾기 그룹 내.
+	uint8_t Get_TargetEquipment_inGroup	(__in enEquipmentType IN_nEqpType);	
 	uint8_t Get_TargetEquipment_inGroup_Over(__in enEquipmentType IN_nEqpType);
 
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
-	// 목적 검??찾기 (검???�형 반환)
+	// 목적 검사 찾기 (검사 유형 반환)
 	uint8_t	Get_NextInspectionType		(__in enInspectionType IN_nInspType, __in bool bLoader = false);
 	uint8_t	Get_NextInspectionType		(__in uint8_t IN_FromEqp);
 	uint8_t	Get_PrevInspectionType		(__in enInspectionType IN_nInspType, __in bool bReturner = false);
 	uint8_t	Get_PrevInspectionType		(__in uint8_t IN_FromEqp);
-	// 목적 ?�비 찾기 그룹 ??	uint8_t Get_TargetEquipment_inGroup	(__in enInspectionType IN_nInspType);
+	// 목적 설비 찾기 그룹 내
+	uint8_t Get_TargetEquipment_inGroup	(__in enInspectionType IN_nInspType);
 	uint8_t Get_TargetEquipment_inGroup_Over(__in enInspectionType IN_nInspType);
 
 
 #endif	// NEW_INSPECTION_TYPE_APPLY
 
 
-	// 목적 ?�비 찾기
+	// 목적 설비 찾기.
 	uint8_t Get_TargetEquipment			(__in uint8_t IN_FromEqp);
 	
-	// 목적 ?�비�??�정???�단계의 ?�비??찾기
+	// 목적 설비로 설정된 앞단계의 설비들 찾기.
 	uint8_t	Get_FindEqpz_SameTarget		(__in uint8_t IN_nTargetEqp, __out std::vector<uint16_t>& OUT_nEqpz);
 	uint8_t	Get_FindSocketz_SameTarget	(__in uint8_t IN_nTargetEqp, __out std::vector<CString>& OUT_Socketz);
 
-	// ?�율 ?�??/
+	// 수율 저장.
 	bool	Write_CSV_File				(__in LPCTSTR IN_szPath);
 
-	// ?�율 초기??/
+	// 수율 초기화.
 	void	Reset_EquipmentYield_All	();
 
-	// 검??그룹??첫번�??�비?��??
+	// 검사 그룹의 첫번째 설비인가?
 	bool	Is_FirstEquipment_inGroup	(__in uint8_t IN_nEqp);
 
-	// ?�인 구성???�들?��? ?�는가?
+	// 라인 구성에 핸들러가 있는가?
 	bool	Get_UseHandler				();
+
+
+	// 설비별 예약 포트 초기화 (중간에 소켓을 수동으로 제거하는 경우에 예약 포트 계산에 문제가 발생함)
+	void	Reset_ReservedPortCnt		();
+	// 예약된 소켓이 오래되었을 경우 timeout 처리하면서 예약 정보에서 제거 할 때 비교 시간
+	void	Set_ReservedTimeout_Second	(__in double IN_dSecond);
+
+	// 라인의 가동/비가동 상태.
+	void	Set_ActiveStatus			(__in uint8_t IN_nStatus);
+	uint8_t	Get_ActiveStatus			();
 
 };
 

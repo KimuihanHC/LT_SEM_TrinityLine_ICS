@@ -11,22 +11,19 @@
 #include "TestManager_Device.h"
 #include "CommonFunction.h"
 
-#if (USE_XML) || USE_TEST
+#if defined(EES_XML)//20231003
 #include "Pane_CommStatus.h"
-CTestManager_Device* mTestManager_Device;
 #endif
 
 CTestManager_Device::CTestManager_Device()
 {
 	//OnInitialize();
 	m_pIcsComm = &CIcsCommunicator::GetInstance();
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_pIcsServer = &CIcsCommunicatorEes::GetInstance();
 #endif
-#if (USE_XML) || USE_TEST
-	mTestManager_Device = this;
-#endif
 }
+
 
 CTestManager_Device::~CTestManager_Device()
 {
@@ -36,13 +33,16 @@ CTestManager_Device::~CTestManager_Device()
 	if (m_pIcsComm->IsOpened())
 	{
 		m_pIcsComm->Close();
-	}	
-#if (USE_XML)
+	}
+#if defined(EES_XML)//20231003
 	if (m_pIcsServer->IsOpened())
 	{		
 		m_pIcsServer->Close();
 	}
-#endif
+#endif	
+//	delete m_pIcsComm;
+
+
 	TRACE(_T("<<< End ~CTestManager_Device >>> \n"));
 }
 
@@ -62,10 +62,13 @@ BOOL CTestManager_Device::OnLoad_Option()
 
 	stOption.SetRegistryPath(REG_PATH_OPTION_BASE);
 	bReturn &= stOption.LoadOption_Inspector(m_stOption.Inspector);
+#if defined(EES_XML)//20231003
 	for (int i = 0; i < ICS_SERVER_MAX; i++) {		
 		bReturn &= stOption.LoadOption_Server(i, m_stOption.Server[i]);
 	}
-	//bReturn &= stOption.LoadOption_Server(m_stOption.Server);
+#else		
+	bReturn &= stOption.LoadOption_Server(m_stOption.Server);
+#endif
 	//bReturn &= stOption.LoadOption_Misc(m_stOption.Misc);
 	
 	return bReturn;
@@ -91,48 +94,30 @@ void CTestManager_Device::OnInit_Devicez(HWND hWndOwner /*= NULL*/)
 // Access		: virtual protected  
 // Returns		: void
 // Qualifier	:
-// Last Update	: 2023/3/07 - 10:47
+// Last Update	: 2021/1/29 - 14:39
 // Desc.		:
 //=============================================================================
-void CTestManager_Device::OnConnect_Devicez(int nIn)
+#if !(EES_XML)//20231003
+void CTestManager_Device::OnConnect_Devicez()
 {
 	OnShow_SplashScreen(TRUE, _T("Starting Server"));
-
+	
 	CString szText;
-	switch (nIn) {
-	case ICS_SERVER_MODULE:
-		szText = ConvIPAddrToString(m_stOption.Server[ICS_SERVER_MODULE].Address.dwAddress);
-		if (m_pIcsComm->Open(szText.GetBuffer(), static_cast<lt::ushort>(m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort)))
-		{
-			OnLog(_T("Sever Starting.. (port: %d)"), m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort);
+	szText = ConvIPAddrToString(m_stOption.Server.Address.dwAddress);
 
-			OnSetStatus_Server(COMM_STATUS_CONNECT);
-		}
-		else
-		{
-			OnLog_Err(_T("Sever Start failed!! (port: %d)"), m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort);
+	if (m_pIcsComm->Open(szText.GetBuffer(), static_cast<lt::ushort>(m_stOption.Server.Address.dwPort)))
+	{
+		OnLog(_T("Sever Starting.. (port: %d)"), m_stOption.Server.Address.dwPort);
 
-			OnSetStatus_Server(COMM_STATUS_NOTCONNECTED);
-		}
-		break;
-#if (USE_XML)
-	case ICS_SERVER_EES:
-		szText = ConvIPAddrToString(m_stOption.Server[ICS_SERVER_EES].Address.dwAddress);
-		if (m_pIcsServer->Open(szText.GetBuffer(), static_cast<lt::ushort>(m_stOption.Server[ICS_SERVER_EES].Address.dwPort)))
-		{		
-			mPane_CommStatus->m_st_EES.SetText(g_szSocket_StateUI[SOCKETSTATE_OPEN]);
-			mPane_CommStatus->m_st_EES.SetText(g_szSocket_StateUI[SOCKETSTATE_OPEN]);
-			OnLog(_T("Sever Starting.. (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);			
-		}
-		else
-		{
-			OnLog_Err(_T("Sever Start failed!! (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);
-		}
-		break;
-#endif
+		OnSetStatus_Server(COMM_STATUS_CONNECT);
 	}
-	//
-	//
+	else
+	{
+		OnLog_Err(_T("Sever Start failed!! (port: %d)"), m_stOption.Server.Address.dwPort);
+
+		OnSetStatus_Server(COMM_STATUS_NOTCONNECTED);
+	}
+
 	//OnShow_SplashScreen(FALSE);
 }
 
@@ -141,33 +126,22 @@ void CTestManager_Device::OnConnect_Devicez(int nIn)
 // Access		: virtual protected  
 // Returns		: void
 // Qualifier	:
-// Last Update	: 2023/03/07 - 10:47
+// Last Update	: 2021/1/29 - 14:39
 // Desc.		:
 //=============================================================================
-void CTestManager_Device::OnDisconnect_Devicez(int nIn)
+void CTestManager_Device::OnDisconnect_Devicez()
 {
 	OnShow_SplashScreen(TRUE, _T("Close Server"));
-	switch (nIn) {
-	case ICS_SERVER_MODULE:
-		if (m_pIcsComm != nullptr) {
-			OnLog(_T("Server Closing.. (port: %d)"), m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort);
-			m_pIcsComm->Close();
-		}
-		break;
-#if (USE_XML)
-	case ICS_SERVER_EES:
-		if (m_pIcsServer != nullptr) {
-			OnLog(_T("Server Closing.. (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);			
-			mPane_CommStatus->m_st_EES.SetText(g_szSocket_StateUI[SOCKETSTATE_CLOSE]);
-			m_pIcsServer->Close();
-		}
-		break;
-#endif
-	}
+
+	OnLog(_T("Sever Closing.. (port: %d)"), m_stOption.Server.Address.dwPort);
+	m_pIcsComm->Close();
+	
 
 	OnSetStatus_Server(COMM_STATUS_NOTCONNECTED);
+	
 	//OnShow_SplashScreen(FALSE);
 }
+#endif
 //=============================================================================
 // Method		: OnInitialize
 // Access		: virtual public  
@@ -190,10 +164,83 @@ void CTestManager_Device::OnInitialize()
 // Last Update	: 2016/9/28 - 20:10
 // Desc.		:
 //=============================================================================
-void CTestManager_Device::OnFinalize(){
+void CTestManager_Device::OnFinalize()
+{
 
 }
-#if (USE_XML)
+
+#if defined(EES_XML)//20231003
+//=============================================================================
+// Method		: OnConnect_Devicez
+// Access		: virtual protected  
+// Returns		: void
+// Qualifier	:
+// Last Update	: 2023/3/07 - 10:47
+// Desc.		:
+//=============================================================================
+void CTestManager_Device::OnConnect_Devicez(int nIn)
+{
+	OnShow_SplashScreen(TRUE, _T("Starting Server"));
+	CString szText;
+	switch (nIn) {
+	case ICS_SERVER_MODULE:
+		szText = ConvIPAddrToString(m_stOption.Server[ICS_SERVER_MODULE].Address.dwAddress);
+		if (m_pIcsComm->Open(szText.GetBuffer(), static_cast<lt::ushort>(m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort)))
+		{
+			OnLog(_T("Sever Starting.. (port: %d)"), m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort);
+			OnSetStatus_Server(COMM_STATUS_CONNECT);
+		}
+		else
+		{
+			OnLog_Err(_T("Sever Start failed!! (port: %d)"), m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort);
+			OnSetStatus_Server(COMM_STATUS_NOTCONNECTED);
+		}
+		break;
+
+	case ICS_SERVER_EES:
+		szText = ConvIPAddrToString(m_stOption.Server[ICS_SERVER_EES].Address.dwAddress);
+		if (m_pIcsServer->Open(szText.GetBuffer(), static_cast<lt::ushort>(m_stOption.Server[ICS_SERVER_EES].Address.dwPort)))
+		{		
+			mPane_CommStatus->m_st_EES.SetText(g_szSocket_StateUI[SOCKETSTATE_OPEN]);
+			mPane_CommStatus->m_st_EES.SetText(g_szSocket_StateUI[SOCKETSTATE_OPEN]);
+			OnLog(_T("Sever Starting.. (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);			
+		}
+		else
+		{
+			OnLog_Err(_T("Sever Start failed!! (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);
+		}
+		break;
+	}
+}
+//=============================================================================
+// Method		: OnDisconnect_Devicez
+// Access		: virtual protected  
+// Returns		: void
+// Qualifier	:
+// Last Update	: 2023/03/07 - 10:47
+// Desc.		:
+//=============================================================================
+void CTestManager_Device::OnDisconnect_Devicez(int nIn)
+{
+	OnShow_SplashScreen(TRUE, _T("Close Server"));
+	switch (nIn) {
+	case ICS_SERVER_MODULE:
+		if (m_pIcsComm != nullptr) {
+			OnLog(_T("Server Closing.. (port: %d)"), m_stOption.Server[ICS_SERVER_MODULE].Address.dwPort);
+			m_pIcsComm->Close();
+		}
+		break;
+	case ICS_SERVER_EES:
+		if (m_pIcsServer != nullptr) {
+			OnLog(_T("Server Closing.. (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);			
+			mPane_CommStatus->m_st_EES.SetText(g_szSocket_StateUI[SOCKETSTATE_CLOSE]);
+			m_pIcsServer->Close();
+		}
+		break;
+	}
+	OnSetStatus_Server(COMM_STATUS_NOTCONNECTED);
+}
+
 lt::Link_Test_Args::Args CTestManager_Device::Add_Link_TestArgs(
 	__in lt::ConstStringT equipmentId, lt::Request_Link_Test_Args::Args & Args) {
 	lt::XUUID ID;
@@ -340,7 +387,6 @@ lt::Equipment_State_Args::Args CTestManager_Device::Add_Equipment_StateArgs(
 void CTestManager_Device::RemoveEquipmentStateProcedure(__in lt::ConstStringT equipmentId, lt::XUUID ID) {
 	m_pIcsServer->GetRemote(equipmentId)->GetRemoteEes().RemoveEquipmentStateProcedure(ID);
 }
-
 lt::Alarm_State_Args::Args CTestManager_Device::Add_Alarm_StateArgs(
 	__in lt::ConstStringT equipmentId,
 	lt::Report_Alarm_State_Args::Args & Args) {
@@ -361,7 +407,6 @@ lt::Alarm_State_Args::Args CTestManager_Device::Add_Alarm_StateArgs(
 void CTestManager_Device::RemoveAlarmStateProcedure(__in lt::ConstStringT equipmentId, lt::XUUID ID) {
 	m_pIcsServer->GetRemote(equipmentId)->GetRemoteEes().RemoveAlarmStateProcedure(ID);
 }
-
 lt::Alarm_List_Args::Args CTestManager_Device::Add_Alarm_ListArgs(
 	__in lt::ConstStringT equipmentId,
 	lt::Request_Alarm_List_Args::Args & Args) {
@@ -399,8 +444,6 @@ lt::Alarm_List_Args::Args CTestManager_Device::Add_Alarm_ListArgs(
 void CTestManager_Device::RemoveAlarmListProcedure(__in lt::ConstStringT equipmentId, lt::XUUID ID) {
 	m_pIcsServer->GetRemote(equipmentId)->GetRemoteEes().RemoveAlarmListProcedure(ID);
 }
-
-
 lt::Set_DateTime_Args::Args CTestManager_Device::Add_Set_DateTimeArgs(
 	__in lt::ConstStringT equipmentId,
 	lt::Request_Set_DateTime_Args::Args & Args) {

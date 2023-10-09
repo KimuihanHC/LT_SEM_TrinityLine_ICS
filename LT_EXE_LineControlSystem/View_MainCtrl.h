@@ -31,10 +31,11 @@ typedef enum _enumSubView
 }enumSubView;
 
 //=============================================================================
-// CView_MainCtrl �?//=============================================================================
+// CView_MainCtrl 창
+//=============================================================================
 class CView_MainCtrl : public CWnd
 {
-// ?�성?�니??
+// 생성입니다.
 public:
 	CView_MainCtrl();
 	virtual ~CView_MainCtrl();
@@ -52,11 +53,12 @@ protected:
 	
 	virtual BOOL	PreCreateWindow			(CREATESTRUCT& cs);
 
-	// 배경??처리??/
+	// 배경색 처리용.
 	CBrush				m_brBkgr;
 
 	//-----------------------------------------------------
-	// 차일???�도??구분??	//-----------------------------------------------------	
+	// 차일드 윈도우 구분용
+	//-----------------------------------------------------	
 	UINT					m_nWndIndex;
 	CWnd*					m_pWndPtr[SUBVIEW_MAX];
 
@@ -65,25 +67,29 @@ protected:
 	CWnd_SettingView		m_wndSettingView;
 	CWnd_LogView			m_wndLogView;
 
-	// ?�신 ?�태 ?�시 Pane???�인??/
+	// 통신 상태 표시 Pane의 포인터.
 	CWnd*					m_pwndCommPane				= nullptr;
 
-	CView_MonitoringData	m_ViewSub;			// Sub ?�도??
+	CView_MonitoringData	m_ViewSub;			// Sub 윈도우
 
-	ST_MONITORINFO			m_infoMonitor;		// 모니???�보 구조�?	
+
+	ST_MONITORINFO			m_infoMonitor;		// 모니터 정보 구조체
+	
 	uint8_t					m_nLanguage					= 1;
 
 	//-----------------------------------------------------
-	// 초기 ?�정 관??	//-----------------------------------------------------
-	// ?�성?�에??초기?????�팅
+	// 초기 설정 관련
+	//-----------------------------------------------------
+	// 생성자에서 초기화 할 세팅
 	virtual void	OnInit_ConstructionSetting			(){};
-	// Window ?�성 ???�팅
+	// Window 생성 후 세팅
 	virtual void	OnInit_UISetting					(){};
-	// 주�??�치??기본 ?�정
+	// 주변장치들 기본 설정
 	virtual void	OnInit_DeviceSetting				(){};
 	
 	//-----------------------------------------------------
-	// Sub ?�도???�정 관??	//-----------------------------------------------------
+	// Sub 윈도우 설정 관련
+	//-----------------------------------------------------
 	void			Create_SubWindows			();
 	virtual void	ShowWindow_SubMonitoring	(__in BOOL bShow);
 
@@ -93,26 +99,27 @@ protected:
 public: 
 //=============================================================================
 	
-	// ?�도??배경???�정???�수
+	// 윈도우 배경색 설정용 함수
 	void			SetBackgroundColor			(__in COLORREF color, __in BOOL bRepaint = TRUE);
 
-	// 차일???�도???�환 ???�용
+	// 차일드 윈도우 전환 시 사용
 	virtual UINT	SwitchWindow				(__in UINT nIndex);
-	// ?�치 ?�신 ?�태 ?�시 ?�도???�인???�정
+	// 장치 통신 상태 표시 윈도우 포인터 설정
 	virtual void	SetCommPanePtr				(__in CWnd* pwndCommPane);
 	
-	// ?�션??변�??�었??경우 ?�시 UI???�이?��? ?�팅?�기 ?�한 ?�수
+	// 옵션이 변경 되었을 경우 다시 UI나 데이터를 세팅하기 위한 함수
 	virtual void	ReloadOption				(){};
 
-	// ?�로그램 로딩 ?�난 ???�동 처리�??�한 ?�수
+	// 프로그램 로딩 끝난 후 자동 처리를 위한 함수
 	virtual void	InitStartProgress			(){};	
-	// ?�로그램 종료??처리?�야 ??기능?�을 처리?�는 ?�수
+	// 프로그램 종료시 처리해야 할 기능들을 처리하는 함수
 	virtual void	FinalExitProgress			(){};
 	
 	//--------------------- TEST --------------------------
 	virtual void	Test_Process				(__in UINT nTestNo) = 0;
 	//--------------------- TEST --------------------------
-	
+		
+
 };
 
 #endif // View_MainCtrl_h__

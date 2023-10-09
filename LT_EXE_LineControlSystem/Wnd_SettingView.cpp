@@ -14,7 +14,7 @@
 #include "CommonFunction.h"
 #include "Def_Language.h"
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 #include "Def_ConstantServer.h"
 #endif
 
@@ -27,16 +27,17 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 		_T("사용자"),		//Tab_User
 		_T("NG 코드"),		//Tab_NGCode
 		//_T("Alarm"),		//Tab_Alarm
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		_T("SERVER"),		//SERVER
 		_T("EES"),			//EES
 		_T("ALID"),			//ALID
 		_T("Loss"),			//Loss
-#endif
+#endif		
 #ifdef USE_DEBUG_MODE
 		_T("디버그"),		//Tab_DebugMode
 #endif
 	},
+
 	// 영어
 	{
 		_T("Line"),			//Tab_Line
@@ -44,16 +45,17 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 		_T("User"),			//Tab_User
 		_T("NGCode"),		//Tab_NGCode
 		//_T("Alarm"),		//Tab_Alarm
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		_T("SERVER"),		//SERVER
 		_T("EES"),			//EES
 		_T("ALID"),			//ALID
 		_T("Loss"),			//Loss
-#endif
+#endif				
 #ifdef USE_DEBUG_MODE
 		_T("Debug"),		//Tab_DebugMode
 #endif
 	},
+
 	// 베트남어
 	{
 		_T("Line"),			//Tab_Line
@@ -61,16 +63,17 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 		_T("User"),			//Tab_User
 		_T("NGCode"),		//Tab_NGCode
 		//_T("Alarm"),		//Tab_Alarm
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		_T("SERVER"),		//SERVER
 		_T("EES"),			//EES
 		_T("ALID"),			//ALID
 		_T("Loss"),			//Loss
-#endif
+#endif				
 #ifdef USE_DEBUG_MODE
 		_T("Debug"),		//Tab_DebugMode
 #endif
 	},
+
 	// 중국어
 	{
 		_T("生产线"),		//Tab_Line
@@ -78,12 +81,12 @@ static LPCTSTR g_szTabName_T[Lang_MaxCount][CWnd_SettingView::Tab_MaxCount] =
 		_T("用户"),			//Tab_User
 		_T("NG码"),			//Tab_NGCode
 		//_T("警报"),		//Tab_Alarm
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		_T("SERVER"),		//SERVER
 		_T("EES"),			//EES
 		_T("ALID"),			//ALID
 		_T("Loss"),			//Loss
-#endif
+#endif				
 #ifdef USE_DEBUG_MODE
 		_T("调试"),			//Tab_DebugMode
 #endif
@@ -232,35 +235,32 @@ int CWnd_SettingView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	//m_wnd_Alarm.SetOwner(GetOwner());
 	//m_wnd_Alarm.Create(NULL, _T("Alarm"), dwStyle /*| WS_BORDER*/, rectDummy, this, nWndID++);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_wnd_ServerCfg.SetOwner(GetOwner());
 	m_wnd_ServerCfg.Create(NULL, _T("SERVER"), dwStyle /*| WS_BORDER*/, rectDummy, this, nWndID++);
 	
 	m_wnd_EES.SetOwner(GetOwner());
 	m_wnd_EES.Create(NULL, _T("EES"), dwStyle /*| WS_BORDER*/, rectDummy, this, nWndID++);
-
 	m_wnd_ALID.SetOwner(GetOwner());
 	m_wnd_ALID.Create(NULL, _T("ALID"), dwStyle /*| WS_BORDER*/, rectDummy, this, nWndID++);
-
 	m_wnd_LossCfg.SetOwner(GetOwner());
 	m_wnd_LossCfg.Create(NULL, _T("LOSS"), dwStyle /*| WS_BORDER*/, rectDummy, this, nWndID++);	
 #endif
 	m_wnd_Debug.SetOwner(GetOwner());
 	m_wnd_Debug.Create(NULL, _T("Debug Mode"), dwStyle /*| WS_BORDER*/, rectDummy, this, nWndID++);
-	
+
 
 	m_pwndTab.push_back(&m_wnd_LineCfg);
 	m_pwndTab.push_back(&m_wnd_Socket);
 	m_pwndTab.push_back(&m_wnd_User);
 	m_pwndTab.push_back(&m_wnd_NGCode);
 	//m_pwndTab.push_back(&m_wnd_Alarm);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_pwndTab.push_back(&m_wnd_ServerCfg);
 	m_pwndTab.push_back(&m_wnd_EES);
 	m_pwndTab.push_back(&m_wnd_ALID);
 	m_pwndTab.push_back(&m_wnd_LossCfg);
-#endif
-
+#endif	
 #ifdef USE_DEBUG_MODE
 	m_pwndTab.push_back(&m_wnd_Debug);
 #endif
@@ -280,6 +280,7 @@ int CWnd_SettingView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_frame_Tab.SetBackColor_COLORREF(RGB(30, 30, 30));
 	m_frame_Tab.Create(_T(""), dwStyle, rectDummy, this, IDC_STATIC);
+
 
 	Set_TabWindow(0);
 
@@ -315,14 +316,14 @@ void CWnd_SettingView::OnSize(UINT nType, int cx, int cy)
 	m_wnd_User.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
 	m_wnd_NGCode.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
 	//m_wnd_Alarm.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_wnd_ServerCfg.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
 	m_wnd_EES.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
 	m_wnd_ALID.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
 	m_wnd_LossCfg.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
 #endif
 	m_wnd_Debug.MoveWindow(10, 10, iWidth - m_nTabWidth, iHeight);
-
+	
 
 	MoveWindow_Tab(cx - m_nTabWidth, 0, m_nTabWidth, cy);
 
@@ -473,12 +474,12 @@ void CWnd_SettingView::OnLanguage(uint8_t IN_nLanguage)
 	m_wnd_User.OnLanguage(IN_nLanguage);
 	m_wnd_NGCode.OnLanguage(IN_nLanguage);
 	//m_wnd_Alarm.OnLanguage(IN_nLanguage);
-#if (USE_XML)
-	m_wnd_ServerCfg.OnLanguage(IN_nLanguage);	//2023.03.06a uhkim
-	m_wnd_EES.OnLanguage(IN_nLanguage);			//2023.02.24a uhkim
-	m_wnd_ALID.OnLanguage(IN_nLanguage);		//2023.03.09a uhkim
-	m_wnd_LossCfg.OnLanguage(IN_nLanguage);		//2023.03.09a uhkim
-#endif
+#if defined(EES_XML)//20231003
+	m_wnd_ServerCfg.OnLanguage(IN_nLanguage);
+	m_wnd_EES.OnLanguage(IN_nLanguage);
+	m_wnd_ALID.OnLanguage(IN_nLanguage);
+	m_wnd_LossCfg.OnLanguage(IN_nLanguage);
+#endif	
 	m_wnd_Debug.OnLanguage(IN_nLanguage);
 
 	// CharSet 변경
@@ -529,15 +530,13 @@ void CWnd_SettingView::Set_PermissionMode(__in enPermissionMode IN_PermissionMod
 	m_wnd_User.Set_PermissionMode(IN_PermissionMode);
 	m_wnd_NGCode.Set_PermissionMode(IN_PermissionMode);
 	//m_wnd_Alarm.Set_PermissionMode(IN_PermissionMode);
-#if (USE_XML)
-	m_wnd_ServerCfg.Set_PermissionMode(IN_PermissionMode);	//2023.03.06a uhkim
-	m_wnd_EES.Set_PermissionMode(IN_PermissionMode);		//2023.03.06a uhkim
-	//m_wnd_ALID.Set_PermissionMode(IN_PermissionMode);		//2023.03.09a uhkim
-	m_wnd_LossCfg.Set_PermissionMode(IN_PermissionMode);	//2023.03.09a uhkim
-#endif
+#if defined(EES_XML)//20231003
+	m_wnd_ServerCfg.Set_PermissionMode(IN_PermissionMode);
+	m_wnd_EES.Set_PermissionMode(IN_PermissionMode);
+	//m_wnd_ALID.Set_PermissionMode(IN_PermissionMode);
+	m_wnd_LossCfg.Set_PermissionMode(IN_PermissionMode);
+#endif	
 	m_wnd_Debug.Set_PermissionMode(IN_PermissionMode);
-
-
 }
 
 //=============================================================================
@@ -629,6 +628,7 @@ void CWnd_SettingView::UpdateUI_NGCodeInfo()
 {
 
 }
+
 //=============================================================================
 // Method		: Init_RecipeView
 // Access		: public  
@@ -639,10 +639,10 @@ void CWnd_SettingView::UpdateUI_NGCodeInfo()
 //=============================================================================
 void CWnd_SettingView::Init_RecipeView()
 {
-
+	
 }
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 void CWnd_SettingView::SetPath_EES_Info(LPCTSTR szSV_Path){
 	if (NULL != szSV_Path)	{
 		CString szFullPath;
@@ -650,7 +650,6 @@ void CWnd_SettingView::SetPath_EES_Info(LPCTSTR szSV_Path){
 		m_wnd_EES.Set_FileFullPath(szFullPath);
 	}
 }
-
 void CWnd_SettingView::SetPath_ServerInfo(__in LPCTSTR szLineInfoPath){
 	if (NULL != szLineInfoPath)	{
 		m_szLineInfoPath = szLineInfoPath;

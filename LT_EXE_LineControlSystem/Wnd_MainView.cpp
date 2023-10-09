@@ -15,15 +15,14 @@
 #include "resource.h"
 #include "Dlg_ChkPassword.h"
 
+#if defined(EES_XML)
+#include "Pane_CommStatus.h"
+#endif
 
 #define IDC_BN_START_INIT	2001
 #define IDC_BN_START_FINAL	2002
 #define IDC_BN_LOAD_INITIAL	2003
 
-#if (USE_XML)
-#include "Pane_CommStatus.h"
-CWnd_MainView * mWnd_MainView;
-#endif
 
 //=============================================================================
 // CWnd_MainView
@@ -66,10 +65,6 @@ CWnd_MainView::CWnd_MainView()
 
 	m_PermissionMode		= Permission_Operator;
 	m_pstSysInfo	= NULL;
-
-#if (USE_XML)
-	mWnd_MainView = this;
-#endif
 }
 
 CWnd_MainView::~CWnd_MainView()
@@ -113,11 +108,12 @@ int CWnd_MainView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	UINT nWindowsID = 100;
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_wndSvrEES.Create(_T("STATIC"), _T(""), WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, rectDummy, this, nWindowsID++);
 #endif
 
 #ifndef USE_DYNAMIC_WND_CREATE
+
 	m_wndEqpHandler.Create(_T("STATIC"), _T(""), WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, rectDummy, this, nWindowsID++);
 	m_wndEqpLoader.Create(_T("STATIC"), _T(""), WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, rectDummy, this, nWindowsID++);
 	m_wndEqpReturner.Create(_T("STATIC"), _T(""), WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, rectDummy, this, nWindowsID++);
@@ -129,6 +125,7 @@ int CWnd_MainView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 			TRACE0("Failed to create CWnd_Status_Equipment\n");
 		}
 	}
+
 #endif
 
 	m_wndTestSelect.SetOwner(GetParent());
@@ -210,10 +207,7 @@ void CWnd_MainView::MoveWindow_Equipment(UINT nEquipmentIdx, int x, int y, int n
 	int nMagrin = 5;
 	int nSpacing = 5;
 	int nLeft = x;
-	int nTop = y;
-#if (USE_XML)
-	if (m_bUseEES) { m_nMaxCol = 15; }
-#endif
+	int nTop = y;	
 	int nUnitWidth = (nWidth - (nSpacing * (m_nMaxCol - 1))) / m_nMaxCol;
 
 #ifdef USE_EQP_TACTTIME
@@ -222,15 +216,6 @@ void CWnd_MainView::MoveWindow_Equipment(UINT nEquipmentIdx, int x, int y, int n
 	int nUnitHeight = 520;// 320;
 #endif
 
-#if (USE_XML)
-	if (m_bUseEES) {
-		m_wndSvrEES.MoveWindow(nLeft, nTop, nUnitWidth, nUnitHeight);
-		nLeft += nUnitWidth + nSpacing;
-	}
-	else {
-		m_wndSvrEES.MoveWindow(0, 0, 0, 0);
-	}
-#endif
 	// Handler
 	if (m_bUseHandler)
 	{
@@ -322,15 +307,6 @@ void CWnd_MainView::MoveWindow_EquipmentEx(UINT nEquipmentIdx, int x, int y, int
 	int nUnitHeight		= 700;//320;
 	int nLoaderWidth	= 1910 - ((nUnitWidth + nSpacing) * 5);
 
-#if (USE_XML)
-	if (m_bUseEES) {
-		m_wndSvrEES.MoveWindow(nLeft, nTop, nUnitWidth, nUnitHeight);
-		nLeft += nUnitWidth + nSpacing;
-	}
-	else {
-		m_wndSvrEES.MoveWindow(0, 0, 0, 0);
-	}
-#endif
 	// Handler
 	if (m_bUseHandler)
 	{
@@ -462,7 +438,7 @@ void CWnd_MainView::Init_EquipmentUI_List()
 		size_t nCount = m_pstSysInfo->LineInfo.GetCount();
 		nCount = (nCount <= MAX_EQUIPMENT_COUNT) ? nCount : MAX_EQUIPMENT_COUNT;
 
-		m_nMaxCol = __max(m_nMinCol, nCount + 1);
+		m_nMaxCol = static_cast<uint8_t>(__max(m_nMinCol, nCount + 1));
 
 		if (0 < nCount)
 		{
@@ -516,9 +492,9 @@ void CWnd_MainView::Init_EquipmentUI_List()
 		{
 			for (auto nIdx = 0; nIdx < nCount; ++nIdx)
 			{
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 				m_pstSysInfo->LineInfo.GetAt(nIdx).Set_DEFINEDATA(m_pstSysInfo->LineInfo.GetAt(nIdx));
-#endif
+#endif				
 				m_pwndEquipmentList.at(nIdx)->SetPtr_EquipmentInfo(nIdx, &m_pstSysInfo->LineInfo.GetAt(nIdx));
 
 				if (m_pstSysInfo->LineInfo.GetAt(nIdx).Is_Tester())
@@ -530,9 +506,9 @@ void CWnd_MainView::Init_EquipmentUI_List()
 						m_pwndEquipmentList.at(nIdx)->Set_EnableEquipment(m_pstSysInfo->LineInfo.m_bEnable_TestType[nTesterType]);
 					}
 				}
-#if (USE_XML)				
+#if defined(EES_XML)//20231003
 				m_pwndEquipmentList.at(nIdx)->Set_EquipmentID(&m_pstSysInfo->LineInfo.GetAt(nIdx));
-#endif
+#endif				
 			}
 		}
 
@@ -547,6 +523,7 @@ void CWnd_MainView::Init_EquipmentUI_List()
 		}
 	}
 }
+
 //=============================================================================
 // Method		: OnLanguage
 // Access		: virtual public  
@@ -604,15 +581,15 @@ void CWnd_MainView::Set_PermissionMode(enPermissionMode IN_PermissionMode)
 	{
 		m_pwndEquipmentList.at(nIdx)->Set_PermissionMode(IN_PermissionMode);
 	}
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	for (auto nIdx = 0; nIdx < m_pwndServerList.size(); ++nIdx)
 	{
 		m_pwndServerList.at(nIdx)->Set_PermissionMode(IN_PermissionMode);
-		//2023.09.03
 		mPane_CommStatus->m_pwndServerList.at(nIdx)->Set_PermissionMode(IN_PermissionMode);
 	}
-#endif
+#endif	
 }
+
 //=============================================================================
 // Method		: Get_EquipmentHWND
 // Access		: public  
@@ -626,6 +603,8 @@ HWND CWnd_MainView::Get_EquipmentHWND(__in uint8_t IN_nEqpOrder)
 {
 	return m_pwndEquipmentList.at(IN_nEqpOrder)->GetSafeHwnd();
 }
+
+
 //=============================================================================
 // Method		: Update_LineInfo
 // Access		: public  
@@ -641,9 +620,9 @@ void CWnd_MainView::Update_LineInfo()
 		m_wndTestSelect.Set_Configuration(m_pstSysInfo->LineInfo);
 		m_wndTestSelect.Set_Config_Line(&m_pstSysInfo->SettingInfo.LineInfo);
 	}
+
 	Init_EquipmentUI_List();
 }
-
 
 //=============================================================================
 // Method		: UpdateUI_EnableEquipment
@@ -667,7 +646,7 @@ void CWnd_MainView::UpdateUI_EnableEquipment(__in uint8_t IN_nEqpNo, __in bool I
 	}
 }
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 HWND CWnd_MainView::Get_ServerHWND(__in uint8_t IN_nSvrOrder)
 {
 	return m_pwndServerList.at(IN_nSvrOrder)->GetSafeHwnd();
@@ -681,12 +660,9 @@ void CWnd_MainView::Init_ServerUI_List()
 		m_pwndServerList.clear();
 		//
 		m_bUseEES = false;
-
 		size_t nCount = m_pstSysInfo->ServerInfo.GetCount();
 		nCount = (nCount <= MAX_EQUIPMENT_COUNT) ? nCount : MAX_EQUIPMENT_COUNT;
-
 		m_nMaxCol = __max(m_nMinCol, nCount + 1);
-
 		if (0 < nCount)
 		{
 			uint8_t nTesterIdx = 0;
@@ -703,15 +679,12 @@ void CWnd_MainView::Init_ServerUI_List()
 					
 				}
 				break;
-
 				}
 			}
 		}
-
 #ifdef USE_DYNAMIC_WND_CREATE
 		// 기존 UI 제거
 		RemoveAll_EquipmentUI();
-
 		auto nCount = 10;//= m_pstSysInfo->RecipeInfo.LineInfo.GetCount();
 		for (auto nIdx = 0; nIdx < nCount; ++nIdx)
 		{
@@ -719,7 +692,6 @@ void CWnd_MainView::Init_ServerUI_List()
 			Create_EquipmentUI(&m_pstSysInfo->SettingInfo.LineInfo.GetAt(nIdx), CRect(0, 0, 0, 0));
 		}
 #else
-
 		if (0 < nCount)
 		{
 			for (auto nIdx = 0; nIdx < nCount; ++nIdx)
@@ -728,7 +700,6 @@ void CWnd_MainView::Init_ServerUI_List()
 				m_pwndServerList.at(nIdx)->SetPtr_EquipmentInfo(nIdx, &m_pstSysInfo->ServerInfo.GetAt(nIdx));
 				//2023.09.03
 				mPane_CommStatus->m_pwndServerList.at(nIdx)->SetPtr_EquipmentInfo(nIdx, &m_pstSysInfo->ServerInfo.GetAt(nIdx));
-
 				if (m_pstSysInfo->ServerInfo.GetAt(nIdx).Is_EES())
 				{
 					//int8_t nTesterType = ConvTo_TesterType(static_cast<enEquipmentType>(m_pstSysInfo->LineInfo.GetAt(nIdx).m_nEquipmentType));

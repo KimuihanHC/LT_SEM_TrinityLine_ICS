@@ -35,13 +35,13 @@ template <class T> inline T GetPrecentage(const T& Numerator, const T&Denominato
 }
 
 
-#define ClearBits(Data, Area, Loc)    ((Data) &= ~((area) << (loc)))       // 연속된 bit Clear
-//#define SetBit(Data, Loc)                 ((Data) |= (0x01 << (loc)))           // 한 bit Set
-#define SetBits(Data, Loc)                ((Data) |= ((area) << (loc)))        // 연속된 bit
-#define InvertBit(Data, Loc)              ((Data) ^= (0x1 << (loc)))             // 한 bit 반전
-#define InvertBits(Data, Area, Loc)    ((Data) ^= ((area) << (loc)))         // 연속된 bit 반전
-#define CheckBit(Data, Loc)             ((Data) & (0x01 << (loc)))            // 비트 검사
-#define ExtractBit(Data, Area, Loc)    (((Data) >> (Loc)) & (Area))         // 비트 추출
+#define ClearBits(Data, Area, Loc)		((Data) &= ~((area) << (loc)))		// 연속된 bit Clear
+//#define SetBit(Data, Loc)				((Data) |= (0x01 << (loc)))			// 한 bit Set
+#define SetBits(Data, Loc)              ((Data) |= ((area) << (loc)))		// 연속된 bit
+#define InvertBit(Data, Loc)            ((Data) ^= (0x1 << (loc)))			// 한 bit 반전
+#define InvertBits(Data, Area, Loc)		((Data) ^= ((area) << (loc)))		// 연속된 bit 반전
+#define CheckBit(Data, Loc)             ((Data) & (0x01 << (loc)))			// 비트 검사
+#define ExtractBit(Data, Area, Loc)		(((Data) >> (Loc)) & (Area))		// 비트 추출
 
 
 #define SetBit(value,bit)			(value) |= 1 << (bit)

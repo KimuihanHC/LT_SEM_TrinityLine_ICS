@@ -79,7 +79,7 @@ int CWnd_Status_Loader::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_st_Conveyor[nIdx].Create(g_szLd_Conveyor[nIdx], dwStyle /*| WS_BORDER*/ | SS_CENTER, rectDummy, this, IDC_STATIC);
 	}
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_st_SubEqpID.SetFont_Gdip(L"Arial", 7.0F);
 	m_st_SubEqpID.Create(_T(" "), dwStyle /*| WS_BORDER*/ | SS_CENTER, rectDummy, this, IDC_STATIC);
 	for (auto nIdx = 0; nIdx < PtI_L_MaxCount; ++nIdx)
@@ -87,7 +87,7 @@ int CWnd_Status_Loader::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_st_EquipmentID[nIdx].SetFont_Gdip(L"Arial", 7.0F);
 		m_st_EquipmentID[nIdx].Create(_T(" "), dwStyle /*| WS_BORDER*/ | SS_CENTER, rectDummy, this, IDC_STATIC);
 	}
-#endif	
+#endif		
 	// 타이틀바, 외곽선
 	if (__super::OnCreate(lpCreateStruct) == -1)
 		return -1;
@@ -216,13 +216,8 @@ void CWnd_Status_Loader::MoveWindow_Loader(int x, int y, int nWidth, int nHeight
 	m_st_Conveyor[CvI_L_Buffer_3].MoveWindow(iLeft, iTop, iCvWidth + 1, m_nCtrl_Height);
 	iLeft += iCvWidth;
 	m_st_Port[PtI_L_Buffer_3].MoveWindow(iLeft, iTop, m_nPort_Width, m_nCtrl_Height);
-#if (ADD_SOCKET_EES_XML)
-	iLeft = iSpacing;
-	iTop = (y + iSpacing + iSpacing);
-	m_st_SubEqpID.MoveWindow(iLeft, iTop, nWidth, m_nCtrl_Height);
-	iTop += (m_nCtrl_Height - 1);
-	m_st_EquipmentID[CvI_R_Buffer_1].MoveWindow(iLeft, iTop, nWidth, m_nCtrl_Height);
-#endif
+	
+
 }
 
 void CWnd_Status_Loader::Init_Loader()
@@ -320,7 +315,8 @@ void CWnd_Status_Loader::Set_ConveyorStatus(__in uint8_t IN_nConveyorIndex, __in
 
 	}
 }
-#if (USE_XML)
+
+#if defined(EES_XML)//20231003
 //=============================================================================
 // Method		: MoveWindow_EES
 // Access		: protected  

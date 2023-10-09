@@ -53,8 +53,6 @@ protected:
 	CVGStatic		m_st_Port[PtI_T_MaxCount];
 	CVGStatic		m_st_Conveyor[CvI_T_MaxCount];
 
-
-
 	virtual void Init_Tester();
 
 	virtual void Popup_SubMenu();
@@ -88,20 +86,9 @@ public:
 	//=============================================================================
 	// Add
 	//=============================================================================
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 public:
 	virtual void	Set_EqpNotify_EQUIPMENTSTATE(__in lt::Report_Equipment_State_Args::Args * IN_DATA);
-#endif
-#if ADD_SOCKET_EES_XML
-public:
-	//COLORREF			Get_Color(__in CString lParam);
-
-	virtual void	Set_EqpNotify_EQUIPMENTSTATEDISPLAY	(__in lt::Reply_Equipment_State_Display_Args::Args& IN_DATA);
-	virtual void	Set_EqpNotify_RGBDISPLAY			(__in  lt::Request_Equipment_State_Display_Args::Args&  IN_DATA);
-	//2023.05.25a uhkim
-	//virtual void	SetPtr_EquipmentInfo(__in uint8_t IN_nEqpNo, const CEquipment* IN_pEquipment);
-#endif	//ADD_SOCKET_EES_XML
-#if (USE_XML) 
 protected:
 	CVGStatic		m_st_SubEqpID;
 	CVGStatic		m_st_EquipmentID[PtI_T_MaxCount];
@@ -109,7 +96,7 @@ protected:
 	CVGStatic		m_st_EquipMentStateDisplay[PtI_T_MaxCount];// IDLE,
 public:
 	virtual void	Set_EquipmentID(__in CEquipment* IN_Data);
-#endif
+#endif	
 };
 
 #endif // Wnd_Status_Tester_h__

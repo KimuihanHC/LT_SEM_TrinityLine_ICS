@@ -24,7 +24,7 @@ CIcsRemoteServer::CIcsRemoteServer(CServer & server)
 			m_Server.Get_Alias()).c_str()
 	);
 	m_pLogger->Attach(*m_pDebugLogDispatcher);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	m_pRequestLinkTestEventListener =
 		new Request_Link_Test_EventListener(this, &CIcsRemoteServer::OnRequestLinkTestEvent);
 	m_pRequestUserCommandEventListener =
@@ -46,7 +46,7 @@ CIcsRemoteServer::CIcsRemoteServer(CServer & server)
 
 CIcsRemoteServer::~CIcsRemoteServer()
 {
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	delete m_pRequestLinkTestEventListener;
 	delete m_pRequestUserCommandEventListener;
 	delete m_pRequestEquipmentStateEventListener;
@@ -75,7 +75,7 @@ bool CIcsRemoteServer::operator!=(const lt::ICommunicator * commPtr) const{
 
 lt::ICommunicator * CIcsRemoteServer::Attach(lt::ICommunicator * commPtr)
 {
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	GetRemoteEes().GetRequestLinkTestEventNotifier() +=
 		m_pRequestLinkTestEventListener;
 	GetRemoteEes().GetRequestUserCommandEventNotifier() +=
@@ -118,7 +118,7 @@ lt::ICommunicator * CIcsRemoteServer::Detach()
 
 	GetServer().Set_ClientConnection(IsConnected());
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	GetRemoteEes().GetRequestLinkTestEventNotifier() -=
 		m_pRequestLinkTestEventListener;
 	GetRemoteEes().GetRequestUserCommandEventNotifier() -=
@@ -159,7 +159,7 @@ lt::CLogger & CIcsRemoteServer::GetLogger(){
 lt::ILoggable & CIcsRemoteServer::GetLogger() const{
 	return *m_pLogger;}
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 //=============================================================================
 // Method		: SendReplyLinkTestMassage
 // Access		: protected  
@@ -338,7 +338,7 @@ lt::uint32 CIcsRemoteServer::SendReportEndProcessMassage(__in ST_xml_REPORT_END_
 #endif
 
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 void CIcsRemoteServer::OnRequestLinkTestEvent(Request_Link_Test_EventArgs & eventArgs){
 	auto & args = eventArgs.GetArgs();
 	auto & reqArgs = args.GetTypedArgs();

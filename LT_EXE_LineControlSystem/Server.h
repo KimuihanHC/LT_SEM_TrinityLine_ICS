@@ -21,7 +21,7 @@
 #include <vector>
 
 
-#include "xmlArgs.h"
+#include "Xml/xmlArgs.h"
 #include "IcsRemoteServerEes.h"
 #include "CommonModule.h"
 
@@ -215,7 +215,7 @@ public:
 
 public:
 	virtual bool					Is_EES() const;	// ?�버 종류.
-#if (USE_XML)
+#if defined(EES_XML)
 //Event
 public:
 	//LinkTest.

@@ -307,10 +307,12 @@ int CWnd_Cfg_Server::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//2023.02.13a uhkim [선택 옵션]
 	m_cb_ServerType.Create(dwStyle | CBS_DROPDOWNLIST | WS_VSCROLL, rectDummy, this, IDC_CB_SVR_TYPE);
 	m_cb_ServerType.SetFont(&m_Font);
+#if defined(EES_XML)//20231003
 	for (auto nIdx = 0; nIdx < _ICS_SERVER_Type::ICS_SERVER_MAX; nIdx++)
 	{
 		m_cb_ServerType.AddString(strLogName[nIdx]);
 	}
+#endif
 	m_cb_ServerType.SetCurSel(0);
 	//
 	//---------------------------------------------------------------
@@ -1273,7 +1275,7 @@ void CWnd_Cfg_Server::Apply_ServerInfo()
 	}
 
 	// Recipe 데이터 불러오기
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	GetOwner()->SendNotifyMessage(WM_CHANGED_SETTING_INFO, (WPARAM)m_szPath_Default.GetBuffer(), WM_Setting_Sever);
 #endif
 	//LT_MessageBox(_T("The file has been saved successfully."));

@@ -9,12 +9,10 @@
 #include "IcsRemoteEquipmentTester.h"
 #include "IcsRemoteEquipmentReturner.h"
 #include "IcsRemoteEquipmentHandler.h"
-
 #include "EqpLoader.h"
 #include "EqpTester.h"
 #include "EqpReturner.h"
 #include "EqpHandler.h"
-
 #include "Def_Equipment_Type.h"
 #include "Event/EventMfnListener.hpp"
 #include "Enumerator/Enumerator.hpp"
@@ -25,15 +23,14 @@
 #include <future>
 
 CIcsCommunicator::CIcsCommunicator()
-{	
+{
 	// Logger
 	m_pDebugLogDispatcher =
 		new lt::CDebugLogDispatcher(_T("ICS_SERVER"), lt::LogFilter::Detail);
 	m_pLogDispatcher = new lt::CLogDispatcher();
 	m_pLogger = new lt::CLogger();
 	m_pLogAddedEventListener =
-		new LogAddedEventListener(this, &CIcsCommunicator
-			::OnLogAddedEvent);
+		new LogAddedEventListener(this, &CIcsCommunicator::OnLogAddedEvent);
 
 	static_cast<lt::ILogDispatcher *>(*m_pDebugLogDispatcher)->Dispatch(
 		lt::LogLevel::None,
@@ -57,7 +54,6 @@ CIcsCommunicator::CIcsCommunicator()
 	m_pServer->GetRemoteDisconnectedEventNotifier() +=
 		m_pRemoteDisconnectedEventListener;
 
-
 	// Remote
 	m_pRemoteCntr = new RemoteCntr();
 	m_pRemoteCntrMutex = new lt::StdRecursiveMutex();
@@ -67,6 +63,7 @@ CIcsCommunicator::~CIcsCommunicator()
 {
 	// Remote
 	//RemoveRemotes();
+
 	delete m_pRemoteCntr;
 	delete m_pRemoteCntrMutex;
 
@@ -100,6 +97,7 @@ CIcsCommunicator::~CIcsCommunicator()
 CIcsCommunicator & CIcsCommunicator::GetInstance()
 {
 	static CIcsCommunicator instance;
+
 	return instance;
 }
 
@@ -426,9 +424,8 @@ bool CIcsCommunicator::InvokeRemote(lt::uint32 (TypeRemote::*fn)(TypeArgs... arg
 
 	std::map<lt::ConstStringT, std::future<lt::uint32>> cntr;
 
-	
 	for(auto & ref : *m_pRemoteCntr)
-	{		
+	{
 		cntr.emplace(ref.first,
 					 std::async(std::launch::async,
 								&CIcsCommunicator::InvokeRemote<
@@ -519,6 +516,7 @@ bool CIcsCommunicator::SendTimeSync()
 			.SetLogLevel(lt::LogLevel::Error)
 			+= _T("CIcsRemoteEquipment::SendTimeSync() failed");
 	}
+
 	return result;
 }
 
@@ -823,6 +821,42 @@ bool CIcsCommunicator::SendUiVisible(lt::ConstStringT equipmentId,
 				equipmentId,
 				cmdShow,
 				result);
+
+	return false;
+}
+
+bool CIcsCommunicator::SendOperationActiveStatus(lt::uint32 status)
+{
+	auto result = InvokeRemote(&CIcsRemoteEquipment::SendOperationActiveStatus,
+							   status);
+
+	if (!result)
+	{
+		GetLogger()
+			.SetLogLevel(lt::LogLevel::Error)
+			.AddLog(_T("CIcsRemoteEquipment::SendOperationActiveStatus(%d) failed"),
+				status);
+	}
+
+	return result;
+}
+
+bool CIcsCommunicator::SendOperationActiveStatus(lt::ConstStringT equipmentId,
+												 lt::uint32 status)
+{
+	auto result = InvokeRemote(equipmentId,
+							   &CIcsRemoteEquipment::SendOperationActiveStatus,
+							   status);
+
+	if (result == ICS_COMM_OK)
+		return true;
+
+	GetLogger()
+		.SetLogLevel(lt::LogLevel::Error)
+		.AddLog(_T("%s CIcsRemoteEquipment::SendOperationActiveStatus(%d) failed %d"),
+			equipmentId,
+			status,
+			result);
 
 	return false;
 }

@@ -16,29 +16,12 @@
 
 #pragma once
 
-// ?�비 ?�??: version 1.0 (?�환???��? ?�해 ?�용)
-typedef enum
-{
-	Eqp_V1_Loader,			// 0
-	Eqp_V1_Returner,		// 1
-	Eqp_V1_ColorCal,		// 2 
-	Eqp_V1_SFR_CL_46,		// 3 : SFR ?�각
-	Eqp_V1_SFR_MultiCL_83,	// 4 : 83
-	Eqp_V1_SFR_MultiCL_180,	// 5 : 180
-	Eqp_V1_HotPixel,		// 6
-	Eqp_V1_StrayLight,		// 7 Ghost & Flare
-	Eqp_V1_Distortion,		// 8
-	Eqp_V1_SFR_MultiCL,		// 9 : SFR 광각
-	Eqp_V1_HotPixel3port,	// 10 : Hot Pixel 3 Para
-	Eqp_V1_ServerEes,		// 11 : Hot Pixel 3 Para
-
-	Max_EqpV1TypeCount,
-}enEquipmentType_ver_1;
-
-
+// ==================================================================
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+// ==================================================================
 
 //-------------------------------------------------------------------
-// ?�비 ?�??: version 2.0
+// 설비 타입 : version 2.0
 //-------------------------------------------------------------------
 typedef enum
 {	
@@ -47,18 +30,17 @@ typedef enum
 	Eqp_Returner,		// 2
 
 	Eqp_ColorCal,		// 3 
-	Eqp_SFR_CL_46,		// 4 : SFR ?�각
-	Eqp_SFR_MultiCL_83,	// 5 : 83
-	Eqp_SFR_MultiCL_180,// 6 : 180
+	Eqp_SFR_CL,			// 4 : SFR 협각
 	Eqp_SFR_MultiCL,	// 7 : SFR 광각
 	Eqp_HotPixel,		// 8
-	//Eqp_HotPixel3port,	// 10 : Hot Pixel 3 Para
-	Eqp_StrayLight,		// 9 Ghost & Flare
+	Eqp_StrayLight,		// 9 
 	Eqp_Distortion,		// 10
-	Eqp_EEPROM,			// 11 : ?�약
+	Eqp_EEPROM,			// 11 : 예약
+
 	Max_EqpTypeCount,
 	Eqp_Tester_First	= Eqp_ColorCal,
-	Eqp_Tester_Last		= Eqp_EEPROM,		
+	Eqp_Tester_Last		= Eqp_EEPROM,
+
 }enEquipmentType;
 
 static LPCTSTR g_szEqpTypeName[] =
@@ -68,12 +50,183 @@ static LPCTSTR g_szEqpTypeName[] =
 	_T("Returner"),
 
 	_T("Color Calibration"),
-	_T("SFR CL 46"),		// ?�각
+	_T("SFR CL"),			// 협각
+	_T("SFR Multi CL"),		// 광각
+	_T("Hot Pixel"),
+	_T("Stray Light"),
+	_T("Intrinsic Cal."),
+	_T("EEPROM"),
+	nullptr
+};
+
+static LPCTSTR g_szEqpTypeInitial[] =
+{
+	_T("Hlr"),
+	_T("Loa"),
+	_T("Ret"),
+	_T("CCa"),
+	_T("SCL"),
+	_T("SMC"),
+	_T("Hot"),
+	_T("GnF"),
+	_T("Cal"),
+	_T("E2P"),
+	nullptr
+};
+
+//-------------------------------------------------------------------
+// UI 설정 및 상세 설정용 설비 타입
+//-------------------------------------------------------------------
+typedef enum
+{	
+	EqpUI_Handler,			//  0
+	EqpUI_Loader,			//  1
+	EqpUI_Returner,			//  2
+							    
+	EqpUI_ColorCal,			//  3 
+	EqpUI_SFR_CL,			//  4 : SFR 협각
+	EqpUI_SFR_MultiCL,		//  7 : SFR 광각
+	EqpUI_HotPixel,			//  8
+	EqpUI_StrayLight,		// 10 : Ghost & Flare
+	EqpUI_Distortion,		// 11
+	EqpUI_EEPROM,			// 12 : 예약
+
+	Max_EqpTypeUICount,
+}enEquipmentType_UI;
+
+static LPCTSTR g_szEqpTypeName_UI[] =
+{
+	_T("Handler"),
+	_T("Loader Machine"),
+	_T("Returner"),
+
+	_T("Color Calibration"),
+	_T("SFR CL"),			// 협각
+	_T("SFR Multi CL"),		// 광각 83 & 180
+	_T("Hot Pixel"),
+	_T("Stray Light"),
+	_T("Intrinsic Cal."),
+	_T("EEPROM"),
+	nullptr
+};
+
+static LPCTSTR g_szEqpTypeUI_Initial[] =
+{
+	_T("Hlr"),
+	_T("Loa"),
+	_T("Ret"),
+	_T("CCa"),
+	_T("SCL"),
+	_T("SMC"),
+	_T("Hot"),
+	_T("GnF"),
+	_T("Cal"),
+	_T("E2P"),
+	nullptr
+};
+
+//-------------------------------------------------------------------
+// 검사 설비 타입
+//-------------------------------------------------------------------
+typedef enum
+{
+	Tester_ColorCal,		// 0
+	Tester_SFR_CL,			// 1 : 협각
+	Tester_SFR_MultiCL,		// 4 : 광각
+	Tester_HotPixel,		// 5
+	Tester_StrayLight,		// 7 Ghost & Flare
+	Tester_Distortion,		// 8
+	Tester_EEPROM,
+	Max_TesterCount,
+}enTesterType;
+
+static LPCTSTR g_szTesterTypeName[] =
+{
+	_T("Color Calibration"),
+	_T("SFR CL"),			// 협각
+	_T("SFR Multi CL"),		// 광각
+	_T("Hot Pixel"),
+	_T("Stray Light"),
+	_T("Intrinsic Cal."),
+	_T("EEPROM"),
+	nullptr
+};
+
+static LPCTSTR g_szTesterTypeInitial[] =
+{
+	_T("CCa"),
+	_T("SCL"),
+	_T("SMC"),
+	_T("Hot"),
+	_T("GnF"),
+	_T("Cal"),
+	_T("E2P"),
+	nullptr
+};
+
+// ==================================================================
+#else // 기본 Trinity Line 
+// ==================================================================
+
+// 설비 타입 : version 1.0 (호환성 유지 위해 사용).
+typedef enum
+{
+	Eqp_V1_Loader,			// 0
+	Eqp_V1_Returner,		// 1
+	Eqp_V1_ColorCal,		// 2 
+	Eqp_V1_SFR_CL_46,		// 3 : SFR 협각
+	Eqp_V1_SFR_MultiCL_83,	// 4 : 83
+	Eqp_V1_SFR_MultiCL_180,	// 5 : 180
+	Eqp_V1_HotPixel,		// 6
+	Eqp_V1_StrayLight,		// 7 Ghost & Flare
+	Eqp_V1_Distortion,		// 8
+	Eqp_V1_SFR_MultiCL,		// 9 : SFR 광각
+	Eqp_V1_HotPixel3port,	// 10 : Hot Pixel 3 Para
+#if defined(EES_XML)//20231003
+	Eqp_V1_ServerEes,		// 11 : Server_EES
+#endif
+	Max_EqpV1TypeCount,
+}enEquipmentType_ver_1;
+
+
+
+//-------------------------------------------------------------------
+// 설비 타입 : version 2.0
+//-------------------------------------------------------------------
+typedef enum
+{	
+	Eqp_Handler,		// 0
+	Eqp_Loader,			// 1
+	Eqp_Returner,		// 2
+
+	Eqp_ColorCal,		// 3 
+	Eqp_SFR_CL_46,		// 4 : SFR 협각
+	Eqp_SFR_MultiCL_83,	// 5 : 83
+	Eqp_SFR_MultiCL_180,// 6 : 180
+	Eqp_SFR_MultiCL,	// 7 : SFR 광각
+	Eqp_HotPixel,		// 8
+	Eqp_StrayLight,		// 9 Ghost & Flare
+	Eqp_Distortion,		// 10
+	Eqp_EEPROM,			// 11 : 예약
+
+	Max_EqpTypeCount,
+	Eqp_Tester_First	= Eqp_ColorCal,
+	Eqp_Tester_Last		= Eqp_EEPROM,
+
+}enEquipmentType;
+
+static LPCTSTR g_szEqpTypeName[] =
+{
+	_T("Handler"),
+	_T("Loader Machine"),
+	_T("Returner"),
+
+	_T("Color Calibration"),
+	_T("SFR CL 46"),		// 협각
 	_T("SFR Multi CL 83"),	// 광각 83
 	_T("SFR Multi CL 180"),	// 광각 180
 	_T("SFR Multi CL"),		// 광각 83 & 180
 	_T("Hot Pixel"),
-	//_T("Hop Pixel 3 Para"),
 	_T("Stray Light"),
 	_T("Distortion"),
 	_T("EEPROM"),
@@ -91,7 +244,6 @@ static LPCTSTR g_szEqpTypeInitial[] =
 	_T("S180"),
 	_T("SMC"),
 	_T("Hot"),
-	//_T("HP3"),
 	_T("GnF"),
 	_T("Dis"),
 	_T("E2P"),
@@ -99,7 +251,7 @@ static LPCTSTR g_szEqpTypeInitial[] =
 };
 
 //-------------------------------------------------------------------
-// UI ?�정 �??�세 ?�정
+// UI 설정 및 상세 설정용 설비 타입
 //-------------------------------------------------------------------
 typedef enum
 {	
@@ -108,7 +260,7 @@ typedef enum
 	EqpUI_Returner,			//  2
 							    
 	EqpUI_ColorCal,			//  3 
-	EqpUI_SFR_CL_46,		//  4 : SFR ?�각
+	EqpUI_SFR_CL_46,		//  4 : SFR 협각
 	EqpUI_SFR_MultiCL_83,	//  5 : 83
 	EqpUI_SFR_MultiCL_180,	//  6 : 180
 	EqpUI_SFR_MultiCL,		//  7 : SFR 광각
@@ -116,9 +268,10 @@ typedef enum
 	EqpUI_HotPixel3port,	//  9 : Hot Pixel 3 Para
 	EqpUI_StrayLight,		// 10 : Ghost & Flare
 	EqpUI_Distortion,		// 11
-	EqpUI_EEPROM,			// 12 : ?�약
-	EqpUI_Ees,			//2023.01.05a Test//2023.01.26a uhkim ?�용 ?�함
-
+	EqpUI_EEPROM,			// 12 : 예약
+#if defined (EES_XML)//20231001
+	EqpUI_Ees,				// 13 : Server_EES	
+#endif
 	Max_EqpTypeUICount,
 }enEquipmentType_UI;
 
@@ -129,7 +282,7 @@ static LPCTSTR g_szEqpTypeName_UI[] =
 	_T("Returner"),
 
 	_T("Color Calibration"),
-	_T("SFR CL 46"),		// ?�각
+	_T("SFR CL 46"),		// 협각
 	_T("SFR Multi CL 83"),	// 광각 83
 	_T("SFR Multi CL 180"),	// 광각 180
 	_T("SFR Multi CL"),		// 광각 83 & 180
@@ -160,16 +313,16 @@ static LPCTSTR g_szEqpTypeUI_Initial[] =
 };
 
 //-------------------------------------------------------------------
-// 검???�비 ?�??//-------------------------------------------------------------------
+// 검사 설비 타입
+//-------------------------------------------------------------------
 typedef enum
 {
 	Tester_ColorCal,		// 0
-	Tester_SFR_CL_46,		// 1 : ?�각
+	Tester_SFR_CL_46,		// 1 : 협각
 	Tester_SFR_MultiCL_83,	// 2 : 광각
 	Tester_SFR_MultiCL_180,	// 3 : 광각
 	Tester_SFR_MultiCL,		// 4 : 광각
 	Tester_HotPixel,		// 5
-	//Tester_HotPixel3port,	// 6 : Hot Pixel 3 Para
 	Tester_StrayLight,		// 7 Ghost & Flare
 	Tester_Distortion,		// 8
 	Tester_EEPROM,
@@ -179,12 +332,11 @@ typedef enum
 static LPCTSTR g_szTesterTypeName[] =
 {
 	_T("Color Calibration"),
-	_T("SFR CL 46"),		// ?�각
+	_T("SFR CL 46"),		// 협각
 	_T("SFR Multi CL 83"),// 광각 83
 	_T("SFR Multi CL 180"),	// 광각 180
 	_T("SFR Multi CL"),// 광각 83 & 180
 	_T("Hot Pixel"),
-	//_T("Hop Pixel 3 Para"),
 	_T("Stray Light"),
 	_T("Distortion"),
 	_T("EEPROM"),
@@ -199,15 +351,15 @@ static LPCTSTR g_szTesterTypeInitial[] =
 	_T("S180"),
 	_T("SMC"),
 	_T("Hot"),
-	//_T("HP3"),
 	_T("GnF"),
 	_T("Dis"),
 	_T("E2P"),
 	nullptr
 };
+
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 //-------------------------------------------------------------------
-// 검??종류
+// 검사 종류
 //-------------------------------------------------------------------
 typedef enum
 {
@@ -241,12 +393,6 @@ static LPCTSTR g_szInspectionTypeName[] =
 // 4. Equipment 번호
 // ex) TLine_01_Loader_01
 
-
-
-static int8_t ConvTo_TesterType(__in enEquipmentType IN_nEqpType)
-{
-	return  static_cast<int8_t>(IN_nEqpType - Eqp_Tester_First);
-};
 
 #ifdef 	NEW_INSPECTION_TYPE_APPLY
 static int8_t ConvTo_InspectionType(__in enEquipmentType IN_nEqpType)
@@ -294,6 +440,15 @@ static int8_t ConvTo_InspectionType(__in enEquipmentType IN_nEqpType)
 };
 #endif	// NEW_INSPECTION_TYPE_APPLY
 
+//===================================================================
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+//===================================================================
+
+static int8_t ConvTo_TesterType(__in enEquipmentType IN_nEqpType)
+{
+	return  static_cast<int8_t>(IN_nEqpType - Eqp_Tester_First);
+};
+
 static int8_t ConvTo_EquipmentType(__in enTesterType IN_nTesterType)
 {
 	return  static_cast<int8_t>(IN_nTesterType + Eqp_Tester_First);
@@ -305,8 +460,7 @@ static bool IsTester_byEqpType(__in uint8_t IN_nEqpType)
 };
 
 
-#define		LOADER_EQP_ORDER		0
-#define		FIRST_TESTER_EQP_ORDER	1
+
 
 
 

@@ -18,7 +18,7 @@
 #include "CommonFunction.h"
 #include "Def_Language_Message.h"
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 #include "resource.h"
 #include "Pane_CommStatus.h"
 #endif
@@ -277,7 +277,7 @@ BOOL CDlg_Server::OnInitDialog()
 void CDlg_Server::OnAuthoritySelect(UINT nID)
 {
 	UINT nTabIndex = nID - IDC_RB_AUTHORITY_FST;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	AfxGetApp()->GetMainWnd()->SendMessage(WM_EVENT_SERVER_CONNECTION, 0, (LPARAM)nTabIndex);
 #endif
 }
@@ -285,7 +285,7 @@ void CDlg_Server::OnAuthoritySelect(UINT nID)
 void CDlg_Server::OnAuthorityRMSSelect(UINT nID)
 {
 	UINT nTabIndex = nID - IDC_RB_AUTHORITY_0;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	AfxGetApp()->GetMainWnd()->SendMessage(WM_EVENT_REPORT_RMS_MODE, 0, (LPARAM)nTabIndex);
 #endif
 }

@@ -79,7 +79,7 @@ public:
 	void		Update_NGCount			(__in int16_t IN_nNGCode);
 
 	// 검사 파라 설정
-	void		Set_ParaCount			(__in uint8_t IN_nCount);
+	void		Set_ParaCount			(__in uint8_t IN_nCount, __in bool IN_bOver10Eqp = false);
 
 	// 검사 Para 열의 너비 조정
 	void		Adjust_ColumnWidth		(__in int IN_nWidth);

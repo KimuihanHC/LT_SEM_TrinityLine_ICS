@@ -234,7 +234,11 @@ int CWnd_SocketView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_ed_RFID.EnableMask(_T("A-AAAAAA-ddd"), _T("_-______-___"), _T('_'));
 	m_ed_RFID.SetValidChars(NULL);
 	m_ed_RFID.EnableGetMaskedCharsOnly(FALSE);
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+	m_ed_RFID.SetWindowText(_T("A-230114-"));
+#else
 	m_ed_RFID.SetWindowText (_T("H-220215-001"));
+#endif
 
 	return 0;
 }
@@ -433,6 +437,18 @@ void CWnd_SocketView::OnCbnSelendokSocketType()
 		}
 	}
 
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+	switch (iSelType)
+	{
+	case enSocketType::Socket_30_FOV:
+		m_ed_RFID.SetWindowText(_T("A-230114-001"));
+		break;
+
+	case enSocketType::Socket_180_FOV:
+		m_ed_RFID.SetWindowText(_T("B-230114-001"));
+		break;
+	}
+#else
 	switch (iSelType)
 	{
 	case enSocketType::Socket_H:
@@ -447,6 +463,7 @@ void CWnd_SocketView::OnCbnSelendokSocketType()
 		m_ed_RFID.SetWindowText(_T("L-220215-001"));
 		break;
 	}
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 }
 
 //=============================================================================
@@ -1016,10 +1033,10 @@ void CWnd_SocketView::OnUpdate_SocketData(__in uint16_t nFlag, __in LPCTSTR szRF
 
 	if (0 < (nFlag & WM_Socket_TestResult))
 		Update_SocketStatus_TestResult(szRFID);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	if (0 < (nFlag & WM_Socket_LOTID))
 		Update_SocketStatus_LOTID(szRFID);
-#endif
+#endif	
 }
 
 void CWnd_SocketView::OnUpdate_SocketData_All(__in uint16_t nFlag)
@@ -1052,7 +1069,7 @@ void CWnd_SocketView::SetPath_Report(__in LPCTSTR IN_szReportPath)
 }
 
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 void CWnd_SocketView::Update_SocketStatus_LOTID(__in LPCTSTR IN_szRFID){
 	if (m_pstSocketInfo)	{
 		uint8_t nType = m_pstSocketInfo->GetAt(IN_szRFID).nSocketType;

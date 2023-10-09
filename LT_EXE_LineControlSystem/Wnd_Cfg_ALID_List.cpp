@@ -1116,7 +1116,7 @@ void CWnd_Cfg_ALID_List::Apply_SVInfo()
 	}
 
 	// Recipe 데이터 불러오기
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	GetOwner()->SendNotifyMessage(WM_CHANGED_SETTING_INFO, (WPARAM)m_szPath_Default.GetBuffer(), WM_Setting_ALARMID);
 #endif
 	//LT_MessageBox(_T("The file has been saved successfully."));

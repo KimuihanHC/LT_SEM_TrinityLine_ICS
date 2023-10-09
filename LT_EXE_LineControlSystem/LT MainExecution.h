@@ -25,6 +25,8 @@ public:
 public:
 	virtual BOOL InitInstance();
 
+// 구현입니다.
+
 public:
 	//UINT  m_nAppLook;
 	BOOL  m_bHiColorIcons;
@@ -35,7 +37,6 @@ public:
 
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
-
 
 private:
 	// data members

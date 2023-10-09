@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "Wnd_FailInfo.h"
 #include "Def_Language_Message.h"
+#include "CommonFunction.h"
 
 enum enCtrlText
 {
@@ -189,7 +190,7 @@ void CWnd_FailInfo::OnSize(UINT nType, int cx, int cy)
 	if ((cx == 0) && (cy == 0))
 		return;
 
-	int iMargin			= 5;
+	int iMargin			= 0;
  	int iSpacing		= 5;
  	int iCateSpacing	= 10;
 
@@ -308,9 +309,13 @@ void CWnd_FailInfo::OnBnClicked_Save_CSV()
 			}
 
 			// 테스트 코드
-// 			CString szImageFile;
-// 			szImageFile.Format(_T("%s\\NGCount.bmp"), Picker.GetPathName());
-// 			WindowCapture(GetSafeHwnd(), szImageFile);
+			Delay(100);
+			SYSTEMTIME tmLocal;
+			GetLocalTime(&tmLocal);
+ 			CString szImageFile;
+ 			szImageFile.Format(_T("%s\\NGCount_%04d%02d%02d_%02d%02d%02d.bmp"), Picker.GetPathName(), tmLocal.wYear, tmLocal.wMonth, tmLocal.wDay, tmLocal.wHour, tmLocal.wMinute, tmLocal.wSecond);
+ 			//WindowCapture(GetSafeHwnd(), szImageFile);
+			WindowCapture(GetOwner(), szImageFile);
 		}
 	}
 	else
@@ -347,7 +352,8 @@ void CWnd_FailInfo::Init_FailInfoUI_List()
 			m_lc_FailInfoList[nCount].Set_NGCountList(&m_pFailInfo->Get_Equipment(nEqpIdx));
 
 			// 리스트 컨트롤의 검사 para 개수 설정
-			m_lc_FailInfoList[nCount].Set_ParaCount(m_pFailInfo->Get_Equipment(nEqpIdx).Get_TestPortCount());
+			//m_lc_FailInfoList[nCount].Set_ParaCount(m_pFailInfo->Get_Equipment(nEqpIdx).Get_TestPortCount());
+			m_lc_FailInfoList[nCount].Set_ParaCount(m_pFailInfo->Get_Equipment(nEqpIdx).Get_TestPortCount(), (10 < m_pFailInfo->Get_EquipmentCount()));
 
 
 			// 설비 순서, 설비 id를 UI에 표시
@@ -406,9 +412,15 @@ void CWnd_FailInfo::Reset_Count_All()
 		// 리셋 전에 자동으로 CSV 저장
 		if (m_pFailInfo)
 		{
-			if (m_pFailInfo->Write_CSV_File_Default())
+			CString szReturnPath;
+			SYSTEMTIME tmReturn;
+			if (m_pFailInfo->Write_CSV_File_Default(szReturnPath, tmReturn))
 			{
 				// 저장에 성공
+				//Delay(100);
+				CString szImageFile;
+				szImageFile.Format(_T("%s\\NGCount_%04d%02d%02d_%02d%02d%02d.bmp"), szReturnPath.GetBuffer(), tmReturn.wYear, tmReturn.wMonth, tmReturn.wDay, tmReturn.wHour, tmReturn.wMinute, tmReturn.wSecond);
+				WindowCapture(GetOwner(), szImageFile);
 			}
 			else
 			{
@@ -599,6 +611,7 @@ bool CWnd_FailInfo::WindowCapture(__in HWND hTargetWnd, __in LPCTSTR lpszFilePat
 		return FALSE;
 
 	hOldBitmap = (HBITMAP)SelectObject(hMemDC, hBitmap);
+
 	if (!::PrintWindow(hTargetWnd, hMemDC, 0))
 		bSuccess = FALSE;
 	else
@@ -616,7 +629,26 @@ bool CWnd_FailInfo::WindowCapture(__in HWND hTargetWnd, __in LPCTSTR lpszFilePat
 	::ReleaseDC(m_hWnd, hDC);
 
 	return bSuccess;
+}
 
+void CWnd_FailInfo::WindowCapture(__in CWnd* pTargetWnd, __in LPCTSTR lpszFilePath)
+{
+	CRect rcClient;
+	//GetOwner()->GetWindowRect(&rcClient);
+	pTargetWnd->GetWindowRect(&rcClient);
+
+	HDC hdcSrc = ::GetWindowDC(NULL);
+	const int BitpPx = GetDeviceCaps(hdcSrc, BITSPIXEL);
+
+	CImage image;
+	if (image.Create(rcClient.Width(), rcClient.Height(), BitpPx, 1) == TRUE)
+	{
+		BitBlt(image.GetDC(), 0, 0, rcClient.Width(), rcClient.Height(), hdcSrc, rcClient.left, rcClient.top, SRCCOPY);
+		image.Save(lpszFilePath);
+		image.ReleaseDC();
+	}
+
+	::ReleaseDC(NULL, hdcSrc);
 }
 
 //=============================================================================
@@ -730,4 +762,42 @@ HWND CWnd_FailInfo::Get_FailInfoList_HWND(uint8_t IN_nIndex)
 void CWnd_FailInfo::Update_FailInfo()
 {
  	Init_FailInfoUI_List();
+}
+
+//=============================================================================
+// Method		: Reset_NGCount_All
+// Access		: public  
+// Returns		: bool
+// Qualifier	:
+// Last Update	: 2023/7/18 - 14:45
+// Desc.		:
+//=============================================================================
+bool CWnd_FailInfo::Reset_NGCount_All()
+{
+	bool bReturn = true;
+	// 리셋 전에 자동으로 CSV 저장
+	if (m_pFailInfo)
+	{
+		CString szReturnPath;
+		SYSTEMTIME tmReturn;
+		if (m_pFailInfo->Write_CSV_File_Default(szReturnPath, tmReturn))
+		{
+			// 저장에 성공
+			CString szImageFile;
+			szImageFile.Format(_T("%s\\NGCount_%04d%02d%02d_%02d%02d%02d.bmp"), szReturnPath.GetBuffer(), tmReturn.wYear, tmReturn.wMonth, tmReturn.wDay, tmReturn.wHour, tmReturn.wMinute, tmReturn.wSecond);
+			WindowCapture(GetOwner(), szImageFile);
+		}
+		else
+		{
+			// 저장에 실패
+			bReturn = false;
+
+			//LT_MessageBox(_T("Failed to save .csv file."));
+			LT_MessageBox(g_szMessageBox_T[MB_NGCount_Save_Failed_CSV][m_nLanguage]);
+		}
+
+		m_pFailInfo->Reset_Count_All();
+	}
+
+	return bReturn;
 }

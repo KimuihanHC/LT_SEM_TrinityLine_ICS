@@ -4,7 +4,7 @@
 #include "Comm/IcsRemoteEes.h"
 #include "Event/IcsCommEventEes.h"
 #include "Comm/IcsCommError.h"
-#include "xmlArgs.h"
+#include "Xml/xmlArgs.h"
 
 #include "TypeDecl.h"
 
@@ -39,7 +39,7 @@ public:
 	lt::ICommunicator * Detach();
 	bool IsConnected() const;
 	const CConfig_Svr & GetConfig() const;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	//Link State.
 	lt::uint32 SendReplyLinkTestMassage(__in lt::Reply_Link_Test_Args::Args pInData);
 	//Online State	
@@ -84,7 +84,7 @@ protected:
 private:
 	CServer & GetServer();
 	const CServer & GetServer() const;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	// Remote
 	using Request_Link_Test_EventArgs =
 		lt::Request_Link_Test_EventArgs<lt::CIcsRemoteEes>;
@@ -117,7 +117,7 @@ private:
 	CServer & m_Server;
 	lt::CDebugLogDispatcher * m_pDebugLogDispatcher = nullptr;
 	lt::CLogger * m_pLogger = nullptr;
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	using Request_Link_Test_EventListener =
 		lt::CEventMfnListener<CIcsRemoteServer, Request_Link_Test_EventArgs>;
 	using Request_User_Command_EventListener =

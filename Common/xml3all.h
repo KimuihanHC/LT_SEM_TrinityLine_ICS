@@ -34,8 +34,7 @@ typedef struct
 	char RDate[20];
 	} XML_VERSION_INFO;
 
-
-typedef enum class XML_ERROR	//2023.01.16a
+typedef enum XML_ERROR
 	{
 	OK = 0L,
 	INVALIDARG = -1,
@@ -44,8 +43,7 @@ typedef enum class XML_ERROR	//2023.01.16a
 	INVALIDIDX = -4
 	};
 
-//typedef enum XML_PARSE
-typedef enum class XML_PARSE	//2023.01.16a
+typedef enum XML_PARSE
 	{
 	OK = 0L,
 	OPENFAILED = -1,
@@ -2201,7 +2199,7 @@ inline int _vscprintf(const char *format, va_list argptr)
 		for (auto& n : cx)
 		{
 			string e = XMLContent::trim(n->Serialize());
-			//v += Format("%s%s\r\n",padd.c_str(),e.c_str()); // Content ???�에 붙음
+			//v += Format("%s%s\r\n",padd.c_str(),e.c_str()); // Content 앞,뒤에 붙음
 			v += Format("%s",e.c_str());
 		}
 

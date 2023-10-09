@@ -229,7 +229,8 @@ void CWnd_TesterSelection::OnSize(UINT nType, int cx, int cy)
 	//int iTestCount	= (0 < m_TestOrder.size()) ? (int)m_TestOrder.size() : Max_TesterCount;
 	//int iCtrlWidth	= (cx - (iMagrin * 2) - (iSpacing * (iTestCount - 1))) / iTestCount;
 	int iCtrlWidth	= (cx - (iMagrin * 2) - (iSpacing * (Max_TesterCount - 1))) / Max_TesterCount;
-	int iComboWidth = 200;
+	int iCbStWidth	= 200;
+	int iComboWidth = 260;
 	//int iLongWidth  = iCtrlWidth + iSpacing + iCtrlWidth;
 	int iLongWidth = 480;
 
@@ -237,8 +238,8 @@ void CWnd_TesterSelection::OnSize(UINT nType, int cx, int cy)
 	iLeft += iLongWidth + iSpacing;
 
 	// 소켓
-	m_st_SocketType.MoveWindow(iLeft, iTop, iComboWidth, iCtrlHeight);
-	iLeft += iComboWidth + iSpacing;
+	m_st_SocketType.MoveWindow(iLeft, iTop, iCbStWidth, iCtrlHeight);
+	iLeft += iCbStWidth + iSpacing;
 	m_cb_SocketType.MoveWindow(iLeft, iTop, iComboWidth, iCtrlHeight);
 
 	// 적용
@@ -248,8 +249,8 @@ void CWnd_TesterSelection::OnSize(UINT nType, int cx, int cy)
 	// 모델
 	iLeft = iMagrin + iLongWidth + iSpacing;
 	iTop += iCtrlHeight + iSpacing;
-	m_st_ModelType.MoveWindow(iLeft, iTop, iComboWidth, iCtrlHeight);
-	iLeft += iComboWidth + iSpacing;
+	m_st_ModelType.MoveWindow(iLeft, iTop, iCbStWidth, iCtrlHeight);
+	iLeft += iCbStWidth + iSpacing;
 	m_cb_ModelType.MoveWindow(iLeft, iTop, iComboWidth, iCtrlHeight);
 
 	iLeft		= iMagrin;
@@ -351,7 +352,6 @@ void CWnd_TesterSelection::OnBnClickedBnApply()
 	{
 		int nSocketType = m_cb_SocketType.GetCurSel();
 
-#ifdef USE_AUTO_SEL_MODELTYPE
 		int nModelType = -1;
 
 		CString szText;
@@ -363,9 +363,6 @@ void CWnd_TesterSelection::OnBnClickedBnApply()
 				nModelType = nIdx;
 			}
 		}
-#else
-		int nModelType = m_cb_ModelType.GetCurSel();
-#endif
 
 		m_pConfigModel->m_nSocketType = nSocketType;
 		m_pConfigModel->m_nModelType = nModelType;
@@ -392,10 +389,9 @@ void CWnd_TesterSelection::Rebatch_TestButton()
 	int		iLeft = 10;
 	uint8_t nTestType = 0;
 	CRect	rc;
+
 	GetClientRect(rc);
-	//2022.12.29a uhkim
-	if (0 != (int)m_TestOrder.size())
-	  m_iTest_Width = (rc.Width() - 20 - (10 * ((int)m_TestOrder.size() - 1))) / (int)m_TestOrder.size();
+	m_iTest_Width = (rc.Width() - 20 - (10 * ((int)m_TestOrder.size() - 1))) / (int)m_TestOrder.size();
 
 	// 검사 타입 체크 버튼 숨기기
 	for (auto nIdx = 0; nIdx < Max_TesterCount; ++nIdx)
@@ -433,13 +429,9 @@ void CWnd_TesterSelection::SetUI_Configuration(__in const CConfig_Model* IN_pMod
 		Update_SocketType(true);
 
 		// 모델
-#ifdef USE_AUTO_SEL_MODELTYPE
 		int iSel = m_cb_ModelType.FindString(0, g_szModelType[IN_pModelConfig->m_nModelType]);
 		m_cb_ModelType.SetCurSel(iSel);
 		Update_ModelType(iSel);
-#else
-		m_cb_ModelType.SetCurSel(IN_pModelConfig->m_nModelType);
-#endif
 
 		for (auto nIdx = 0; nIdx < Max_TesterCount; ++nIdx)
 		{
@@ -462,6 +454,68 @@ void CWnd_TesterSelection::Update_SocketType(__in bool IN_bUpdateModel)
 {
 	int iSel = m_cb_SocketType.GetCurSel();
 
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+	if (0 <= iSel)
+	{
+		switch ((enSocketType)iSel)
+		{
+		case enSocketType::Socket_30_FOV:	// SFR 협각
+			m_chk_TesterType[Tester_Distortion].SetCheck(BST_UNCHECKED); // 8M 30도 모델은 Distortion 단독 설비 사용
+			if (Permission_Operator != m_PermissionMode)
+			{
+				m_chk_TesterType[Tester_SFR_CL].EnableWindow(TRUE);				
+			}
+			m_chk_TesterType[Tester_SFR_MultiCL].EnableWindow(FALSE);
+			m_chk_TesterType[Tester_Distortion].EnableWindow(FALSE);
+			break;
+
+		case enSocketType::Socket_180_FOV:	// SFR 광각
+			m_chk_TesterType[Tester_SFR_CL].SetCheck(BST_UNCHECKED);			
+			if (Permission_Operator != m_PermissionMode)
+			{
+				m_chk_TesterType[Tester_SFR_MultiCL].EnableWindow(TRUE);
+				m_chk_TesterType[Tester_Distortion].EnableWindow(TRUE);
+			}
+			m_chk_TesterType[Tester_SFR_CL].EnableWindow(FALSE);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	if (IN_bUpdateModel)
+	{
+		if (0 <= iSel)
+		{
+			m_cb_ModelType.ResetContent();
+
+			switch ((enSocketType)iSel)
+			{
+			case enSocketType::Socket_30_FOV:	// SFR 협각
+				m_cb_ModelType.AddString(g_szModelType[Model_8M_30FOV]);
+				//m_cb_ModelType.AddString(g_szModelType[Model_3M_180FOV]);
+
+				break;
+
+			case enSocketType::Socket_180_FOV:	// SFR 광각
+				//m_cb_ModelType.AddString(g_szModelType[Model_8M_30FOV]);
+				m_cb_ModelType.AddString(g_szModelType[Model_3M_180FOV_SIDE]);
+				m_cb_ModelType.AddString(g_szModelType[Model_3M_180FOV_FRONT]);
+				m_cb_ModelType.AddString(g_szModelType[Model_3M_180FOV_REAR]);
+				break;
+
+			default:
+				break;
+			}
+
+			m_cb_ModelType.SetCurSel(0);
+
+			Update_ModelType(iSel);
+		}
+	}
+
+#else
 	if (0 <= iSel)
 	{
 		switch ((enSocketType)iSel)
@@ -508,8 +562,6 @@ void CWnd_TesterSelection::Update_SocketType(__in bool IN_bUpdateModel)
 		}
 	}
 
-#ifdef USE_AUTO_SEL_MODELTYPE
-
 	if (IN_bUpdateModel)
 	{
 		if (0 <= iSel)
@@ -544,8 +596,7 @@ void CWnd_TesterSelection::Update_SocketType(__in bool IN_bUpdateModel)
 		}
 	}
 
-#endif
-
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 }
 
 //=============================================================================
@@ -559,7 +610,6 @@ void CWnd_TesterSelection::Update_SocketType(__in bool IN_bUpdateModel)
 //=============================================================================
 void CWnd_TesterSelection::Update_ModelType(__in uint8_t IN_nSocketType)
 {
-#ifdef USE_AUTO_SEL_MODELTYPE
 	int nType = -1;
 	CString szText;
 	m_cb_ModelType.GetWindowText(szText);
@@ -570,6 +620,66 @@ void CWnd_TesterSelection::Update_ModelType(__in uint8_t IN_nSocketType)
 			nType = nIdx;
 		}
 	}
+
+#if (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
+	switch ((enModelType)nType)
+	{
+		//-----------------------------------------------------
+	case Model_8M_30FOV:	// SFR 협각 (Socket_H 인 경우)
+		switch ((enSocketType)IN_nSocketType)
+		{
+		case enSocketType::Socket_30_FOV:	// 협각
+		{
+			if (Permission_Operator != m_PermissionMode)
+			{
+				m_chk_TesterType[Tester_SFR_CL].SetCheck(BST_CHECKED);
+				m_chk_TesterType[Tester_SFR_CL].EnableWindow(TRUE);
+			}
+
+			m_chk_TesterType[Tester_SFR_MultiCL].SetCheck(BST_UNCHECKED);
+			m_chk_TesterType[Tester_SFR_MultiCL].EnableWindow(FALSE);
+
+			m_chk_TesterType[Tester_Distortion].SetCheck(BST_UNCHECKED);
+			m_chk_TesterType[Tester_Distortion].EnableWindow(FALSE);
+
+		}
+			break;
+
+		case enSocketType::Socket_180_FOV:	// 광각
+			break;
+		}
+
+		break;
+
+		//-----------------------------------------------------
+	case Model_3M_180FOV_SIDE:	// SFR 광각 H, V
+	case Model_3M_180FOV_FRONT:	// SFR 광각 H, V
+	case Model_3M_180FOV_REAR:	// SFR 광각 H, V
+		switch ((enSocketType)IN_nSocketType)
+		{
+		case enSocketType::Socket_30_FOV:	// SFR 협각
+			break;
+
+		case enSocketType::Socket_180_FOV:	// SFR 광각
+		{
+			m_chk_TesterType[Tester_SFR_CL].SetCheck(BST_UNCHECKED);
+			m_chk_TesterType[Tester_SFR_CL].EnableWindow(FALSE);
+			if (Permission_Operator != m_PermissionMode)
+			{
+				m_chk_TesterType[Tester_SFR_MultiCL].SetCheck(BST_CHECKED);
+				m_chk_TesterType[Tester_SFR_MultiCL].EnableWindow(TRUE);
+
+				m_chk_TesterType[Tester_Distortion].SetCheck(BST_CHECKED);
+				m_chk_TesterType[Tester_Distortion].EnableWindow(TRUE);
+			}
+		}
+			break;
+		}
+
+		break;
+	}
+
+#else
 
 	switch ((enModelType)nType)
 	{
@@ -718,37 +828,7 @@ void CWnd_TesterSelection::Update_ModelType(__in uint8_t IN_nSocketType)
 		break;
 	}
 
-#else
-
-	int iSel = m_cb_ModelType.GetCurSel();
-
-	if (0 <= iSel)
-	{
-		switch ((enModelType)iSel)
-		{
-		case Model_46:	// SFR 협각 H (Socket_H 인 경우)
-			m_chk_TesterType[Tester_SFR_CL].EnableWindow(TRUE);
-			m_chk_TesterType[Tester_SFR_MultiCL_V].EnableWindow(FALSE);
-			m_chk_TesterType[Tester_SFR_MultiCL_H].EnableWindow(FALSE);
-			break;
-
-		case Model_83:	// SFR 광각 H, V
-			m_chk_TesterType[Tester_SFR_CL].EnableWindow(FALSE);
-			m_chk_TesterType[Tester_SFR_MultiCL_V].EnableWindow(TRUE);
-			m_chk_TesterType[Tester_SFR_MultiCL_H].EnableWindow(TRUE);
-
-			break;
-
-		case Model_180:	// SFR 광각 H, V
-			m_chk_TesterType[Tester_SFR_CL].EnableWindow(FALSE);
-			m_chk_TesterType[Tester_SFR_MultiCL_V].EnableWindow(TRUE);
-			m_chk_TesterType[Tester_SFR_MultiCL_H].EnableWindow(TRUE);
-
-			break;
-		}
-	}
-
-#endif
+#endif // (SET_INSPECTOR == SYS_ICS_RIVIAN_LINE)
 
 }
 
@@ -839,41 +919,6 @@ void CWnd_TesterSelection::Set_Config_Line(const CConfig_Line * IN_pConfig_Line)
 	Rebatch_TestButton();
 }
 
-//2023.03.21a uhkim
-void CWnd_TesterSelection::Set_Config_Server(const CConfig_Server * IN_pConfig_Server)
-{
-	// 각각의 설비 유형에 따른 첫번째 설비
-	m_TestOrder.clear();
-
-	// 검사 순서 설정
-	for (auto nEqpIdx = 0; nEqpIdx < IN_pConfig_Server->GetCount(); ++nEqpIdx)
-	{
-		// 등록되지 않음 검사 판별
-		bool bFind = false;
-		for (auto nOrderIdx = 0; nOrderIdx < m_TestOrder.size(); ++nOrderIdx)
-		{
-			if (m_TestOrder.at(nOrderIdx) == IN_pConfig_Server->GetAt(nEqpIdx).Get_ServerType())
-			{
-				bFind = true;
-				break;
-			}
-		}
-
-		if (false == bFind)
-		{
-			// Test 순서 설정
-			/*if ((Eqp_Tester_First <= IN_pConfig_Line->GetAt(nEqpIdx).Get_EquipmentType()) &&
-				(IN_pConfig_Line->GetAt(nEqpIdx).Get_EquipmentType() <= Eqp_Tester_Last))*/
-			if (IsTester_byEqpType(IN_pConfig_Server->GetAt(nEqpIdx).Get_ServerType()))
-			{
-				m_TestOrder.push_back(IN_pConfig_Server->GetAt(nEqpIdx).Get_ServerType());
-			}
-		}
-	}
-
-	Rebatch_TestButton();
-}
-
 //=============================================================================
 // Method		: Set_Configuration
 // Access		: public  
@@ -953,12 +998,43 @@ void CWnd_TesterSelection::Set_PermissionMode(__in enPermissionMode IN_Permissio
 		
 		Update_SocketType(false);
 
-#ifdef USE_AUTO_SEL_MODELTYPE
 		Update_ModelType(m_cb_SocketType.GetCurSel());
-#endif
 		break;
 
 	default:
 		break;
 	}
 }
+
+#if defined(EES_XML)//20231003
+void CWnd_TesterSelection::Set_Config_Server(const CConfig_Server * IN_pConfig_Server)
+{
+	// 각각의 설비 유형에 따른 첫번째 설비
+	m_TestOrder.clear();
+	// 검사 순서 설정
+	for (auto nEqpIdx = 0; nEqpIdx < IN_pConfig_Server->GetCount(); ++nEqpIdx)
+	{
+		// 등록되지 않음 검사 판별
+		bool bFind = false;
+		for (auto nOrderIdx = 0; nOrderIdx < m_TestOrder.size(); ++nOrderIdx)
+		{
+			if (m_TestOrder.at(nOrderIdx) == IN_pConfig_Server->GetAt(nEqpIdx).Get_ServerType())
+			{
+				bFind = true;
+				break;
+			}
+		}
+		if (false == bFind)
+		{
+			// Test 순서 설정
+			/*if ((Eqp_Tester_First <= IN_pConfig_Line->GetAt(nEqpIdx).Get_EquipmentType()) &&
+				(IN_pConfig_Line->GetAt(nEqpIdx).Get_EquipmentType() <= Eqp_Tester_Last))*/
+			if (IsTester_byEqpType(IN_pConfig_Server->GetAt(nEqpIdx).Get_ServerType()))//20231003
+			{
+				m_TestOrder.push_back(IN_pConfig_Server->GetAt(nEqpIdx).Get_ServerType());
+			}
+		}
+	}
+	//Rebatch_TestButton();
+}
+#endif

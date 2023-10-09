@@ -29,9 +29,9 @@ typedef enum
 	TSH_Yield_Total,	// Total
 	TSH_Yield_Pass,		// Pass 
 	TSH_Yield_Fail,		// Fail
-	//2023.04.24a uhkim
+#if defined(EES_XML)//202310
 	TSH_LOTID,			// LOTID
-
+#endif
 	TSH_MaxCol,
 }enTestStepHeader;
 
@@ -55,8 +55,9 @@ static const TCHAR* g_lpszHeader_T[Lang_MaxCount][TSH_MaxCol] =
 		_T("전체"),					// TSH_Cnt_Total
 		_T("양품"),					// TSH_Cnt_Pass
 		_T("불량"),					// TSH_Cnt_Fail
-
+#if defined(EES_XML)//202310		
 		_T("LOT"),					// TSH_LOTID
+#endif		
 	},
 
 	// 영어
@@ -76,8 +77,9 @@ static const TCHAR* g_lpszHeader_T[Lang_MaxCount][TSH_MaxCol] =
 		_T("Total"),				// TSH_Cnt_Total
 		_T("Pass "),				// TSH_Cnt_Pass
 		_T("Fail"),					// TSH_Cnt_Fail
-
+#if defined(EES_XML)//202310		
 		_T("LOT"),					// TSH_LOTID
+#endif			
 	},
 
 	// 베트남어
@@ -97,8 +99,9 @@ static const TCHAR* g_lpszHeader_T[Lang_MaxCount][TSH_MaxCol] =
 		_T("Total"),				// TSH_Cnt_Total
 		_T("Pass "),				// TSH_Cnt_Pass
 		_T("Fail"),					// TSH_Cnt_Fail
-
+#if defined(EES_XML)//202310		
 		_T("LOT"),					// TSH_LOTID
+#endif			
 	},
 
 	// 중국어
@@ -118,8 +121,9 @@ static const TCHAR* g_lpszHeader_T[Lang_MaxCount][TSH_MaxCol] =
 		_T("总计"),					// TSH_Cnt_Total
 		_T("过关 "),					// TSH_Cnt_Pass
 		_T("失败"),					// TSH_Cnt_Fail
-
+#if defined(EES_XML)//202310		
 		_T("LOT"),					// TSH_LOTID
+#endif			
 	},
 };
 
@@ -140,8 +144,9 @@ const int	iListAglin[] =
 	LVCFMT_CENTER,	 // TSH_Cnt_Total
 	LVCFMT_CENTER,	 // TSH_Cnt_Pass
 	LVCFMT_CENTER,	 // TSH_Cnt_Fail
-
-	LVCFMT_CENTER,	// TSH_LOTID
+#if defined(EES_XML)//202310		
+	LVCFMT_CENTER,	 // TSH_LOTID
+#endif		
 };
 
 // 540 기준
@@ -162,8 +167,9 @@ const int	iHeaderWidth[] =
 	 80,	// TSH_Cnt_Total
 	 80,	// TSH_Cnt_Pass
 	 80,	// TSH_Cnt_Fail
-
+#if defined(EES_XML)//202310		
 	 80,	// TSH_LOTID
+#endif		 
 };
 
 IMPLEMENT_DYNAMIC(CList_SocketInfo, CListCtrl)
@@ -496,7 +502,7 @@ void CList_SocketInfo::Set_SocketData(__in int nItem, __in const CSocketInfo_Uni
 	// Fail
 	szText.Format(_T("%d"), IN_pSocket->m_Yield.dwFail);
 	SetItemText(nItem, TSH_Yield_Fail, szText);
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 	szText.Format(_T("%s"), IN_pSocket->m_LotID);
 	SetItemText(nItem, TSH_LOTID, szText);
 #endif
@@ -940,7 +946,7 @@ int CList_SocketInfo::Find_Socket(__in LPCTSTR IN_szRFID)
 
 	return nRow;
 }
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 void CList_SocketInfo::Update_Socket_LOTID(__in int nRow, __in const CSocketInfo_Unit* IN_pSocket)
 {
 	Set_SocketData_LOTID(nRow, IN_pSocket);
@@ -950,10 +956,8 @@ void CList_SocketInfo::Set_SocketData_LOTID(__in int nItem, __in const CSocketIn
 	ASSERT(GetSafeHwnd());
 	if (NULL == IN_pSocket)
 		return;
-
 	if (GetItemCount() <= nItem)
 		return;
-
 	CString szText;
 	
 	szText.Format(_T("%s"), IN_pSocket->m_LotID);

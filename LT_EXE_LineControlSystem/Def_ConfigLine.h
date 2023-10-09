@@ -10,7 +10,6 @@
 #ifndef Def_LineConfig_h__
 #define Def_LineConfig_h__
 
-
 #pragma once
 
 #include <afxwin.h>
@@ -20,7 +19,8 @@
 #include "Def_ConfigEquipment.h"
 
 //-----------------------------------------------------------------------------
-// ?�인??검?�기 구성 ?�정??구조�?//-----------------------------------------------------------------------------
+// 라인의 검사기 구성 설정용 구조체.
+//-----------------------------------------------------------------------------
 class CConfig_Line
 {
 public:
@@ -35,25 +35,29 @@ public:
 	{
 		EqpList.clear();
 		EqpList = ref.EqpList;
+
 		return *this;
 	};
 
-	// ?�텝 �?��
+	// 스텝 갯수.
 	size_t GetCount() const
 	{
 		return EqpList.size();
 	};
-	// 모든 ?�텝 ??��
+
+	// 모든 스텝 삭제.
 	virtual void RemoveAll()
 	{
 		EqpList.clear();
 	};
-	// ?�텝 추�?
+
+	// 스텝 추가.
 	virtual void Eqp_Add(__in CConfig_Eqp IN_stTestStep)
 	{
 		EqpList.push_back(IN_stTestStep);
 	};
-	// ?�텝 ?�입
+
+	// 스텝 삽입.
 	virtual void Eqp_Insert(__in uint16_t IN_nIdx, __in CConfig_Eqp IN_stTestStep)
 	{
 		if (0 < EqpList.size())
@@ -61,7 +65,8 @@ public:
 			EqpList.insert(EqpList.begin() + IN_nIdx, IN_stTestStep);
 		}
 	};
-	// ?�텝 ??��
+
+	// 스텝 삭제.
 	virtual void Eqp_Remove(__in uint16_t IN_nIdx)
 	{
 		if (0 < EqpList.size())
@@ -69,7 +74,8 @@ public:
 			EqpList.erase(EqpList.begin() + IN_nIdx);
 		}
 	};
-	// ?�텝 ?�정
+
+	// 스텝 수정.
 	virtual void Eqp_Modify(__in uint16_t IN_nIdx, __in CConfig_Eqp IN_stTestStep)
 	{
 		if (0 < EqpList.size())
@@ -77,12 +83,13 @@ public:
 			EqpList.at(IN_nIdx) = IN_stTestStep;
 		}
 	};
-	// ?�텝 ?�로 ?�동
+
+	// 스텝 위로 이동
 	virtual void Eqp_Up(__in uint16_t IN_nIdx)
 	{
 		if (0 < EqpList.size())
 		{
-			// 0�??�덱?�는 ?�로 ?�동 불�?
+			// 0번 인덱스는 위로 이동 불가
 			if ((0 < IN_nIdx) && (1 < EqpList.size()))
 			{
 				CConfig_Eqp stStep = EqpList.at(IN_nIdx);
@@ -92,19 +99,20 @@ public:
 			}
 		}
 	};
-	// ?�텝 ?�래�??�동
+
+	// 스텝 아래로 이동.
 	virtual void Eqp_Down(__in uint16_t IN_nIdx)
 	{
 		if (0 < EqpList.size())
 		{
-			// 마�?�??�덱?�는 ?�래�??�동 불�?
+			// 마지막 인덱스는 아래로 이동 불가.
 			if ((IN_nIdx < (EqpList.size() - 1)) && (1 < EqpList.size()))
 			{
 				CConfig_Eqp stStep = EqpList.at(IN_nIdx);
 
 				EqpList.erase(EqpList.begin() + IN_nIdx);
 
-				// 변경되???�치가 최하?�이�? Insert ?�??Add ?�용
+				// 변경되는 위치가 최하단이면, Insert 대신 Add 사용.
 				if ((IN_nIdx + 1) < (EqpList.size()))
 				{
 					EqpList.insert(EqpList.begin() + IN_nIdx, stStep);
@@ -116,15 +124,18 @@ public:
 			}
 		}
 	};
+
 	virtual CConfig_Eqp& GetAt(__in uint16_t IN_nIdx)
 	{
 		return EqpList.at(IN_nIdx);
 	}
+
 	virtual const CConfig_Eqp& GetAt(__in uint16_t IN_nIdx) const
 	{
 		return EqpList.at(IN_nIdx);
 	}
-	// Eqp id�?Eqp type 구하�?/
+
+	// Eqp id로 Eqp type 구하기.
 	bool Get_EquipmentType(__in LPCTSTR IN_szEqpID, __out uint8_t& OUT_nEqpType)
 	{
 		for (auto nIdx = 0; nIdx < EqpList.size(); ++nIdx)
@@ -138,7 +149,8 @@ public:
 
 		return false;
 	};
-	// ?�비 ?�서�?Eqp id 구하�?/
+
+	// 설비 순서로 Eqp id 구하기.
 	bool Get_EquipmentID(__in uint8_t IN_LineOrder, __out CString& OUT_szEqpID)
 	{
 		if (IN_LineOrder < EqpList.size())
@@ -149,7 +161,8 @@ public:
 
 		return false;
 	};
-	// ?�비 ?�?�으�??�인???�일 ?�비 개수 구하�?/
+
+	// 설비 타입으로 라인의 동일 설비 개수 구하기.
 	uint8_t Get_EquipmentCount(__in uint8_t nEquipmentType)
 	{
 		uint8_t nCount = 0;
@@ -164,7 +177,8 @@ public:
 
 		return nCount;
 	};
-	// Eqp ID�??�인???�일 ?�비 개수 구하�?/
+
+	// Eqp ID로 라인의 동일 설비 개수 구하기.
 	uint8_t Get_EquipmentCount(__in LPCTSTR IN_szEqpID)
 	{
 		uint8_t nEquipmentType = 0;
@@ -183,6 +197,11 @@ public:
 // 	{
 // 		return EqpList.at(IN_nIdx).nItem_ID;
 // 	}
+
 	
+
+
 }; // CConfig_Line
+
+
 #endif // Def_LineConfig_h__

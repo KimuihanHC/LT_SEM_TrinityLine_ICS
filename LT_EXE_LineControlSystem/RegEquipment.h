@@ -9,11 +9,13 @@
 //*****************************************************************************
 #ifndef RegEquipment_h__
 #define RegEquipment_h__
+
+
 #pragma once
 
 #include <stdint.h>
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 #include "RegCommModule.h"
 #endif
 
@@ -22,7 +24,7 @@ class CEquipment;
 //-----------------------------------------------------------------------------
 // CRegEquipment
 //-----------------------------------------------------------------------------
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 class CRegEquipment : public CRegCommModule
 #else 
 class CRegEquipment
@@ -40,14 +42,15 @@ public:
 	void	Set_RegistryPath			(__in LPCTSTR lpszRegPath);
 	CString	Get_RegistryPath			() const;
 
-	// ?��??�트�??�스 체크?�여 ?�으�??�성
+	// 레지스트리 패스 체크하여 없으면 생성.
 	bool	Check_RegistryPath			(__in LPCTSTR IN_szEqpID);
 
-	// ?��??�트리에 ?�켓?�보 ?�??/
+	// 레지스트리에 소켓정보 저장.
 	bool	Save_Equipment				(__in const CEquipment* IN_pEquipment);
 	
 	bool	Set_Equipment_Skip			(__in const CEquipment* IN_pEquipment);
 	bool	Set_Equipment_Reserve		(__in const CEquipment* IN_pEquipment);
+	bool	Set_Equipment_ReserveQueue	(__in const CEquipment* IN_pEquipment);
 	bool	Set_Equipment_EndProduction	(__in const CEquipment* IN_pEquipment);
 	bool	Set_Equipment_Shift			(__in const CEquipment* IN_pEquipment);
 
@@ -59,9 +62,12 @@ public:
 	bool	Set_Equipment_Yield			(__in const CEquipment* IN_pEquipment);
 
 
-	// ?��??�트리에 ?�?�된 ?�켓 ?�보 가?�오�?/
+	// 레지스트리에 저장된 소켓 정보 가져오기.
 	bool	Load_Equipment				(__in LPCTSTR IN_szEqpID, __out CEquipment& OUT_Equipment);
 	bool	Load_Yield					(__in LPCTSTR IN_szEqpID, __out CEquipment& OUT_Equipment);
 
+	
 };
+
+
 #endif // RegEquipment_h__

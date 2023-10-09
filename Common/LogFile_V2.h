@@ -60,13 +60,13 @@ public:
 		m_szSubPath = szSubPath;
 	};
 
-	// Log 파일명 접두사 설정//
+	// Log 파일명 접두사 설정
 	void		SetLogFileName_Prefix	(__in LPCTSTR lpszLogName)
 	{
 		m_szLogFilename_Prefix = lpszLogName;
 	};
 
-	// 추가 파일 확장자 지정 (기본 .log)//
+	// 추가 파일 확장자 지정 (기본 .log)
 	void		SetFileExt				(__in LPCTSTR lpszExt)
 	{
 		if (NULL != lpszExt)
@@ -86,7 +86,7 @@ public:
 	void		LogWrite				(__in LPCTSTR szLog, __in LPCTSTR szSubPath, __in LPCTSTR szFilename);
 
 
-	// 현재 저장되는 로그 파일의 패스를 반환//
+	// 현재 저장되는 로그 파일의 패스를 반환
 	CString		GetLogPath()
 	{
 		return m_szLogPath;

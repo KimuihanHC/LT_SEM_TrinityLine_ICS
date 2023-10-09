@@ -22,7 +22,7 @@
 //#include "Wnd_Cfg_Alarm.h"
 #include "Wnd_Cfg_Debug.h"
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 #include "Wnd_Cfg_EES.h"
 #include "Wnd_Cfg_ALID_List.h"
 #include "Wnd_Cfg_Server.h"
@@ -46,12 +46,13 @@ public:
 		Tab_Socket,
 		Tab_User,
 		Tab_NGCode,
-#if (USE_XML)
-		Tab_SERVER,			//2023.03.06	uhkim
-		Tab_EES,			//2023.02.21a	2023.04.21a uhkim
-		Tab_ALID_List,		//2023.02.21a	uhkim
-		Tab_Loss,			//2023.02.21a	uhkim
-#endif
+		//Tab_Alarm,
+#if defined(EES_XML)//20231003
+		Tab_SERVER,
+		Tab_EES,
+		Tab_ALID_List,
+		Tab_Loss,
+#endif		
 #ifdef USE_DEBUG_MODE
 		Tab_DebugMode,
 #endif
@@ -87,6 +88,7 @@ protected:
 	CWnd_Cfg_Socket			m_wnd_Socket;
 	CWnd_Cfg_User			m_wnd_User;
 	CWnd_Cfg_NGCode			m_wnd_NGCode;
+	//CWnd_Cfg_Alarm			m_wnd_Alarm;
 	CWnd_Cfg_Debug			m_wnd_Debug;
 	
 	CMFCButton				m_bn_Keyboard;
@@ -100,12 +102,13 @@ public:
 
 	virtual void	OnLanguage				(__in uint8_t IN_nLanguage);
 
+	// 권한 설정
 	void		Set_PermissionMode			(__in enPermissionMode IN_PermissionMode);
 
 	void		SetPath_LineInfo			(__in LPCTSTR szLineInfoPath);
 	void		SetPath_Socket				(__in LPCTSTR szSocketPath);
 	void		SetPath_Shared				(__in LPCTSTR szSharedPath);
-
+	
 	void		UpdateUI_LineInfo			(__in const CConfig_Line* IN_pConfigLine);
 
 	void		UpdateUI_SocketInfo			();
@@ -113,9 +116,10 @@ public:
 	void		UpdateUI_AlarmInfo			();
 	void		UpdateUI_NGCodeInfo			();
 
-	void		Init_RecipeView();
-	//Add
-#if (USE_XML)
+
+	void		Init_RecipeView				();
+	
+#if defined(EES_XML)//20231003
 protected:
 	CWnd_Cfg_Server			m_wnd_ServerCfg;
 	CWnd_Cfg_EES			m_wnd_EES;

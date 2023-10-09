@@ -4,7 +4,6 @@
 #include "Event/IcsCommEvent.h"
 #include "Def_Enum_Cm.h"
 
-
 namespace lt
 {
 	class CDebugLogDispatcher;
@@ -14,7 +13,6 @@ namespace lt
 	class CLogger;
 	class ILoggable;
 	class CIcsTcpServer;
-
 	class CIcsRemote;
 	class CIcsRemoteLoUnloader;
 	class CIcsRemoteTester;
@@ -32,7 +30,6 @@ class CEqpReturner;
 class CEqpHandler;
 class CEquipment;
 class CIcsRemoteEquipment;
-
 
 class CIcsCommunicator final
 {
@@ -98,6 +95,11 @@ public:
 	bool SendUiVisible(lt::ConstStringT equipmentId,
 					   int cmdShow);
 
+	// 인라인 가동/비가동
+	bool SendOperationActiveStatus(lt::uint32 status);
+	bool SendOperationActiveStatus(lt::ConstStringT equipmentId,
+								   lt::uint32 status);
+
 	// 소켓 투입 승인
 	bool SendSocketAccept(lt::ConstStringT equipmentId,
 						  lt::ConstStringT rfid,
@@ -140,11 +142,10 @@ private:
 
 	bool AttachRemoteComm(lt::ConstStringT address, lt::ICommunicator & comm);
 	bool DetachRemoteComm(const lt::ICommunicator & comm);
-	
+
 	template<typename TypeRemote, typename... TypeArgs>
 	bool InvokeRemote(lt::uint32 (TypeRemote::*fn)(TypeArgs... args),
 					  TypeArgs... args);
-
 	template<typename TypeRemote, typename... TypeArgs>
 	lt::uint32 InvokeRemote(lt::ConstStringT equipmentId,
 							lt::uint32 (TypeRemote::*fn)(TypeArgs... args),

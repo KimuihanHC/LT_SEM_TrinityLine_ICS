@@ -35,18 +35,18 @@ protected:
 	virtual void			AdjustLayout		();
 	virtual void			SetPropListFont		();
 	virtual void			InitPropList		();
-
-	//2023.01.26a uhkim 추가 서버
-	stOpt_Server				m_stOption[ICS_SERVER_MAX];
-	//stOpt_Server				m_stOption;
-	//2023.01.26a uhkim 추가 서버
-	//stOpt_Server				Get_Option			();
-	void						Get_Option();
-	//void						Set_Option			(stOpt_Server stOption);
-	void						Set_Option			();
+#if defined(EES_XML)//20231003	
+	stOpt_Server			m_stOption[ICS_SERVER_MAX];
+	void 					Get_Option			(int nIn);
+	void					Set_Option			();
+#else
+	stOpt_Server			m_stOption;
+	stOpt_Server			Get_Option			();
+	void					Set_Option			(stOpt_Server stOption);
+#endif
 
 public:
-
+			
 	virtual void			SaveOption			();
 	virtual void			LoadOption			();
 };

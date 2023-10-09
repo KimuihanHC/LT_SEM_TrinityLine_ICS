@@ -73,8 +73,11 @@ void CSocketMonitoring::WM_Update_GUI_Data(__in LPCTSTR IN_szRFID, __in uint16_t
 	if (Is_ExistSocket(IN_szRFID))
 	{
 		if (m_hWndOwner)
-		{
+		{			
 			::SendNotifyMessage(m_hWndOwner, WM_UPDATE_SOCKET_DATA, (WPARAM)IN_nFlag, (LPARAM)m_Sockets.at(IN_szRFID).szRFID.GetBuffer());
+
+			// 쓰레드로 처리하자.
+			//::SendMessage(m_hWndOwner, WM_UPDATE_SOCKET_DATA, (WPARAM)IN_nFlag, (LPARAM)m_Sockets.at(IN_szRFID).szRFID.GetBuffer());
 		}
 	}
 }
@@ -153,7 +156,7 @@ bool CSocketMonitoring::Save_SocketInfo_OutputTime(__in LPCTSTR IN_szRFID)
 // Parameter	: __in LPCTSTR IN_szRFID
 // Qualifier	:
 // Last Update	: 2021/12/23 - 16:00
-// Desc.		: ?��??�트리에 ?�?�된 ?�켓 ?�태 불러?�기
+// Desc.		: 레지스트리에 저장된 소켓 상태 불러오기
 //=============================================================================
 bool CSocketMonitoring::Load_SocketInfo(__in LPCTSTR IN_szRFID)
 {
@@ -164,12 +167,12 @@ bool CSocketMonitoring::Load_SocketInfo(__in LPCTSTR IN_szRFID)
 		auto result_sock = m_Sockets.find(IN_szRFID);
 		if (result_sock != m_Sockets.end())
 		{
-			// ?�이??갱신
+			// 데이터 갱신
 			m_Sockets.at(IN_szRFID) = stSocket;
 		}
 		else
 		{
-			// ?�이??추�? ?�입
+			// 데이터 추가 삽입
 			m_Sockets.insert({ IN_szRFID, stSocket });
 		}
 
@@ -195,7 +198,7 @@ bool CSocketMonitoring::Write_File(LPCTSTR IN_szPathFile, LPCTSTR IN_szData, LPC
 		if (!File.Open(szFullPath.GetBuffer(), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite, &e))
 			return false;
 
-		// ?�더 추�?
+		// 헤더 추가
 		CString szHeader = IN_szHeader;
 		szUnicode = szHeader + szUnicode;
 	}
@@ -222,7 +225,8 @@ bool CSocketMonitoring::Write_File(LPCTSTR IN_szPathFile, LPCTSTR IN_szData, LPC
 // Returns		: void
 // Qualifier	:
 // Last Update	: 2021/12/23 - 10:38
-// Desc.		: ?�체 ?�이?? 초기??//=============================================================================
+// Desc.		: 전체 데이터  초기화
+//=============================================================================
 void CSocketMonitoring::Reset()
 {
 	for (auto Iter = m_Sockets.begin(); Iter != m_Sockets.end(); Iter++)
@@ -231,7 +235,7 @@ void CSocketMonitoring::Reset()
 	}
 };
 
-// ?�정 ?�켓 ?�이??초기??
+// 특정 소켓 데이터 초기화.
 void CSocketMonitoring::Reset_Socket(__in LPCTSTR szRFID)
 {
 	//m_Sockets.at(szRFID).Reset();
@@ -249,7 +253,7 @@ void CSocketMonitoring::Reset_Socket(__in LPCTSTR szRFID)
 // Parameter	: __in const std::vector<std::wstring> * IN_RFIDs
 // Qualifier	:
 // Last Update	: 2022/2/20 - 13:48
-// Desc.		: ?�켓 목록 ?�데?�트 (?�켓 ?�이??추�?)
+// Desc.		: 소켓 목록 업데이트 (소켓 데이터 추가)
 //=============================================================================
 #ifdef _UNICODE
 void CSocketMonitoring::Init_Sockets(__in const std::vector<std::wstring>* IN_RFIDs)
@@ -314,7 +318,7 @@ void CSocketMonitoring::IncreaseYield_Final(__in LPCTSTR szRFID)
 	}
 }
 
-// ?�켓 �?��
+// 소켓 갯수
 //=============================================================================
 // Method		: GetCount
 // Access		: public  
@@ -328,13 +332,13 @@ size_t CSocketMonitoring::GetCount() const
 	return m_Sockets.size();
 };
 
-// 모든 ?�켓 ??��
+// 모든 소켓 삭제
 void CSocketMonitoring::RemoveAll()
 {
 	m_Sockets.clear();
 };
 
-// ?�켓 ?�입
+// 소켓 삽입
 bool CSocketMonitoring::Socket_Insert(__in CSocketInfo_Unit& IN_stSocket)
 {
 	auto Ret = m_Sockets.insert({ IN_stSocket.szRFID.GetBuffer(), IN_stSocket });
@@ -342,7 +346,7 @@ bool CSocketMonitoring::Socket_Insert(__in CSocketInfo_Unit& IN_stSocket)
 	return Ret.second;
 };
 
-// ?�켓 ??��
+// 소켓 삭제
 void CSocketMonitoring::Socket_Remove(__in LPCTSTR szRFID)
 {
 	if (0 < m_Sockets.size())
@@ -351,7 +355,7 @@ void CSocketMonitoring::Socket_Remove(__in LPCTSTR szRFID)
 	}
 };
 
-// ?�켓 ?�정
+// 소켓 수정
 void CSocketMonitoring::Socket_Modify(__in CSocketInfo_Unit* IN_pstSocket)
 {
 	if (0 < m_Sockets.size())
@@ -444,10 +448,10 @@ void CSocketMonitoring::Set_SocketInfo(__in LPCTSTR IN_szRFID, __in const CSocke
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID) = *IN_pSocketInfo;
 
-		// ?��??�트�?갱신(??)
+		// 레지스트리 갱신(??)
 		Save_SocketInfo(IN_szRFID);
 	}
 }
@@ -459,10 +463,10 @@ void CSocketMonitoring::Set_Stored_SocketInfo(__in LPCTSTR IN_szRFID, __in const
 	{
 		CConfig_Socket CfgSocket = m_Sockets.at(IN_szRFID);
 
-		// ?��??�트리에 ?�?�된 ?�켓 ?�이???�정
+		// 레지스트리에 저장된 소켓 데이터 설정
 		m_Sockets.at(IN_szRFID) = *IN_pSocketInfo;
 
-		// ?�정???�켓 ?�보 (Config Socket)�??�시 ?�정
+		// 설정된 소켓 정보 (Config Socket)를 다시 설정
 		m_Sockets.at(IN_szRFID) = CfgSocket;
 	}
 }
@@ -519,10 +523,10 @@ void CSocketMonitoring::Set_InputTime(__in LPCTSTR IN_szRFID)
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_InputTime();
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
 		Save_SocketInfo_InputTime(IN_szRFID);
 	}
 }
@@ -532,10 +536,10 @@ void CSocketMonitoring::Set_OutputTime(__in LPCTSTR IN_szRFID)
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_OutputTime();
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
 		Save_SocketInfo_OutputTime(IN_szRFID);
 	}
 }
@@ -556,10 +560,10 @@ void CSocketMonitoring::Set_Barcode(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBa
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_Barcode(IN_szBarcode, IN_bRework);
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
 		Save_SocketInfo_Barcode(IN_szRFID);
 	}
 }
@@ -569,23 +573,24 @@ void CSocketMonitoring::Set_Status(__in LPCTSTR IN_szRFID, __in uint8_t IN_nStat
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_Status(IN_nStatus);
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
 		Save_SocketInfo_Status(IN_szRFID);
 	}
 }
 
 void CSocketMonitoring::Set_Judgment_Final(__in LPCTSTR IN_szRFID, __in uint8_t IN_nJudge)
 {
-	// 최종 검??진행 ??...
+	// 최종 검사 진행 후....
 
 
-	// 목적지 -> 리터??	
-	// Status ?�데?�트
+	// 목적지 -> 리터너
 	
-	// ?�체 ?�율 ?�데?�트
+	// Status 업데이트
+	
+	// 전체 수율 업데이트
 
 
 }
@@ -595,10 +600,25 @@ void CSocketMonitoring::Set_Equipment(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_sz
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_Equipment(IN_szEqpID);
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
+		Save_SocketInfo_Equipment(IN_szRFID);
+	}
+}
+
+void CSocketMonitoring::Set_EquipmentTrackIn(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID)
+{
+	auto result_sock = m_Sockets.find(IN_szRFID);
+	if (result_sock != m_Sockets.end())
+	{
+		// 데이터 갱신
+		m_Sockets.at(IN_szRFID).Set_TrackInTime();
+		m_Sockets.at(IN_szRFID).Set_Equipment(IN_szEqpID);
+		m_Sockets.at(IN_szRFID).Set_EquipmentOrder(IN_nEqpOrder);
+
+		// 레지스트리에 저장(?)
 		Save_SocketInfo_Equipment(IN_szRFID);
 	}
 }
@@ -608,10 +628,10 @@ void CSocketMonitoring::Set_Location(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szE
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_Location_inEqp(IN_szEqpID, IN_nLocation);
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
 		Save_SocketInfo_Location(IN_szRFID);
 	}
 }
@@ -621,11 +641,11 @@ void CSocketMonitoring::Set_TargetEquipment(__in LPCTSTR IN_szRFID, __in uint8_t
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_TargetEqpOrder(IN_nEqpOrder);
 		m_Sockets.at(IN_szRFID).Set_TargetEquipment(IN_szEqpID);
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
 		Save_SocketInfo_Target(IN_szRFID);
 	}
 }
@@ -635,14 +655,14 @@ void CSocketMonitoring::Set_Judgment_Tester(__in LPCTSTR IN_szRFID, __in uint8_t
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_Judgment_Tester(IN_nTester, IN_nJudge);
 
 
-		// ?�율 계산
+		// 수율 계산
 
 
-		// ?��??�트리에 ?�???)
+		// 레지스트리에 저장(?)
 		//Save_ProductInfo(IN_szRFID);
 	}
 }
@@ -695,7 +715,7 @@ bool CSocketMonitoring::Is_ExistSocket(__in LPCTSTR IN_szRFID)
 	}
 	else
 	{
-		//2023.04.23a uhkim [Test]
+#if defined(EES_XML)//20231003
 		int i = 0;
 		wstring RFID(IN_szRFID);
 		for (auto Iter = m_Sockets.begin(); Iter != m_Sockets.end(); Iter++) {
@@ -703,6 +723,7 @@ bool CSocketMonitoring::Is_ExistSocket(__in LPCTSTR IN_szRFID)
 				return true;
 			}
 		}
+#endif
 		return false;
 	}
 }
@@ -737,19 +758,19 @@ bool CSocketMonitoring::Verify_Socket(LPCTSTR IN_szRFID)
 //=============================================================================
 bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR IN_szRFID, __in LPCTSTR IN_szBarcode)
 {
-	// 로더 -> ?�버�??�신
+	// 로더 -> 서버로 통신
 
-	// ?�상?�면 (?�록?�어?�나?, 검?��? 종료 ?�태 ?��??, Socket Type???�재 ?�정�?같�?가?
+	// 정상이면 (등록되어있나?, 검사가 종료 상태 인가?, Socket Type이 현재 설정과 같은가?
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�재 ?�정???�켓 ?�?�과 로더?�서 ?�록?�려???�켓 ?�?�이 ?�름
+		// 현재 설정된 소켓 타입과 로더에서 등록하려는 소켓 타입이 다름
 		if (m_nLineSocketJIG_Type != m_Sockets.at(IN_szRFID).nSocketType)
 		{
 			return false;
 		}
 
-		// Unregister ???�태?��??
+		// Unregister 된 상태인가?
 		if (enSocketStatus::SoS_Ready == m_Sockets.at(IN_szRFID).m_nStatus)
 		{
 			;
@@ -760,13 +781,13 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 		}
 
 
-		// ?�켓 ?�이??초기??(?)
+		// 소켓 데이터 초기화 (?)
 		Reset_RegisterData(IN_szRFID);
 
-		// ?�입 ?�간 ?�정
+		// 투입 시간 설정
 		Set_InputTime(IN_szRFID);
 
-		// ?�켓 �??�품 ?�록
+		// 소켓 및 제품 등록
 #ifdef USE_DEBUG_MODE
 
 		Set_Barcode(IN_szRFID, IN_szBarcode);
@@ -775,7 +796,7 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 		Set_Barcode(IN_szRFID, IN_szBarcode);
 #endif // USE_DEBUG_MODE
 
-		// ?�켓 ?�태 : ?�상 (?�품 ?�으�?Bypass)
+		// 소켓 상태 : 정상 (제품 없으면 Bypass)
 		if (0 < _tcslen(IN_szBarcode))
 		{
 			Set_Status(IN_szRFID, (uint8_t)enSocketStatus::SoS_Pass);
@@ -796,10 +817,10 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 #endif // USE_DEBUG_MODE
 		}
 		
-		// ?�켓???�는 ?�비 ?�정
+		// 소켓이 있는 설비 설정
 		Set_Equipment(IN_szRFID, IN_FromEqpID);
 		
-		// GUI ?�데?�트
+		// GUI 업데이트
 		//uint16_t nFlag = WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Equipment;
 		WM_Update_GUI_Data(IN_szRFID, WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Equipment);
 
@@ -821,16 +842,16 @@ bool CSocketMonitoring::Register_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR 
 //=============================================================================
 bool CSocketMonitoring::Unregister_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTSTR IN_szRFID)
 {
-	// 로더(?�로?? -> ?�버�??�신
+	// 로더(언로드) -> 서버로 통신
 
-	// ?�상?�면 (?�록?, 검?? 불량?)
+	// 정상이면 (등록?, 검사? 불량?)
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// 배출 ?�간 ?�정
+		// 배출 시간 설정
 		Set_OutputTime(IN_szRFID);
 
-		// 최종 ?�율 ?�데?�트 (?�켓 기�?)
+		// 최종 수율 업데이트 (소켓 기준)
 		if (0 == m_Sockets.at(IN_szRFID).m_stTestResult.m_nNG_Code)
 		{	// Pass
 			IncreasePass_byEqp(IN_FromEqpID, IN_szRFID, Para_Left);
@@ -843,16 +864,19 @@ bool CSocketMonitoring::Unregister_Socket(__in LPCTSTR IN_FromEqpID, __in LPCTST
 		IncreaseYield_Final(IN_szRFID);
 		WM_Update_GUI_Data(IN_szRFID, WM_Socket_Yield);
 
-		// Log ?�일 ?�성
+		// Log 파일 작성
 
-		// 불량?��?? (불량 ?�품 ?�력 처리)
+		// 불량인가? (불량 제품 이력 처리)
 
 
 
-		// ?�비 : 로더
-		// ?�비 ?�치 : 초기??		// ?��?초기??		// Test Result 초기??//		Reset_RegisterData(IN_szRFID);
+		// 설비 : 로더
+		// 설비 위치 : 초기화
+		// 타겟 초기화
+		// Test Result 초기화
+//		Reset_RegisterData(IN_szRFID);
 
-		// GUI ?�데?�트
+		// GUI 업데이트
 // 		uint16_t nFlag = WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult;
 // 		WM_Update_GUI_Data(IN_szRFID, nFlag);
 
@@ -877,7 +901,7 @@ bool CSocketMonitoring::Get_TestResult(__in LPCTSTR IN_szRFID, __out ST_TestResu
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??반환
+		// 데이터 반환
 		OUT_stTestResult = m_Sockets.at(IN_szRFID).m_stTestResult;
 
 		return true;
@@ -897,7 +921,7 @@ bool CSocketMonitoring::Get_TestResult(__in LPCTSTR IN_szRFID, __out ST_TestResu
 //=============================================================================
 void CSocketMonitoring::Check_UnloadTime(__in LPCTSTR IN_szRFID)
 {
-	// 배출 ?�간 ?�정
+	// 배출 시간 설정
 	Set_OutputTime(IN_szRFID);
 }
 
@@ -921,13 +945,13 @@ bool CSocketMonitoring::Set_TestResult(__in LPCTSTR IN_FromEqpID, __in LPCTSTR I
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
 	{
-		// ?�이??갱신
+		// 데이터 갱신
 		m_Sockets.at(IN_szRFID).Set_TestResult(IN_nNGCode, IN_nPara, IN_nNG_EqpOrder, IN_FromEqpID, IN_nNG_EqpType);
 
 		Save_SocketInfo_TestResult(IN_szRFID);
 
-		// ?�율 ?�데?�트
-		if (0 == IN_nNGCode) // ?�품
+		// 수율 업데이트
+		if (0 == IN_nNGCode) // 양품
 		{
 			IncreasePass_byEqp(IN_FromEqpID, IN_szRFID, IN_nPara);
 		}
@@ -943,7 +967,7 @@ bool CSocketMonitoring::Set_TestResult(__in LPCTSTR IN_FromEqpID, __in LPCTSTR I
 
 		uint16_t nFlag = WM_Socket_TestResult | WM_Socket_Yield;
 
-		// 불량?�고, ?��????�품???�니�?fail 처리
+		// 불량이고, 재검사 제품이 아니면 fail 처리
 		if ((0 != IN_nNGCode) && (false == IN_bRework))
 		{
 #ifdef USE_DEBUG_MODE
@@ -959,14 +983,15 @@ bool CSocketMonitoring::Set_TestResult(__in LPCTSTR IN_FromEqpID, __in LPCTSTR I
 			Set_Status(IN_szRFID, (uint8_t)enSocketStatus::SoS_Fail);
 #endif
 
-			//목적지 : 리터??			//Set_TargetEquipment(IN_szRFID, );
+			//목적지 : 리터너
+			//Set_TargetEquipment(IN_szRFID, );
 
-			// 불량 ?�품 ?�보 ?�??(DB or ?��??�트�?
+			// 불량 제품 정보 저장 (DB or 레지스트리)
 
 			nFlag |= (WM_Socket_Status);
 		}
 
-		// GUI ?�데?�트
+		// GUI 업데이트
 		WM_Update_GUI_Data(IN_szRFID, nFlag);
 
 		return true;
@@ -1021,6 +1046,24 @@ void CSocketMonitoring::Set_SocketTarget(__in LPCTSTR IN_szRFID, __in uint8_t IN
 }
 
 //=============================================================================
+// Method		: Set_SocketTrackIn
+// Access		: public  
+// Returns		: void
+// Parameter	: __in LPCTSTR IN_szRFID
+// Parameter	: __in uint8_t IN_nEqpOrder
+// Parameter	: __in LPCTSTR IN_szEqpID
+// Qualifier	:
+// Last Update	: 2023/7/25 - 21:30
+// Desc.		:
+//=============================================================================
+void CSocketMonitoring::Set_SocketTrackIn(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder, __in LPCTSTR IN_szEqpID)
+{
+	Set_EquipmentTrackIn(IN_szRFID, IN_nEqpOrder, IN_szEqpID);
+
+	WM_Update_GUI_Data(IN_szRFID, WM_Socket_Equipment);
+}
+
+//=============================================================================
 // Method		: Reset_RegisterData
 // Access		: protected  
 // Returns		: void
@@ -1043,14 +1086,18 @@ void CSocketMonitoring::Reset_RegisterData(__in LPCTSTR IN_szRFID)
 		m_Sockets.at(IN_szRFID).Reset_TestResult();
 		//m_Sockets.at(IN_szRFID).Reset_TestTime();
 
-#if (USE_XML)
+		// 레지스트리 저장
+		Save_SocketInfo(IN_szRFID);
+
+#if defined(EES_XML)//20231003
 		m_Sockets.at(IN_szRFID).Set_Lot(_T(""));
 #endif
 
-		// ?��??�트�??�??		Save_SocketInfo(IN_szRFID);
-
-		// ?�비 : 로더
-		// ?�비 ?�치 : 초기??		// ?��?초기??		// Test Result 초기??		// GUI ?�데?�트
+		// 설비 : 로더
+		// 설비 위치 : 초기화
+		// 타겟 초기화
+		// Test Result 초기화
+		// GUI 업데이트
 		//uint16_t nFlag = WM_Socket_Barcode | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult;
 		WM_Update_GUI_Data(IN_szRFID, WM_Socket_Barcode | WM_Socket_Equipment | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult);
 	}
@@ -1069,11 +1116,12 @@ void CSocketMonitoring::Reset_RegisterData_All()
 		Iter->second.Reset_TestResult();
 		//Iter->second.Reset_TestTime();
 
-#if (USE_XML)
+#if defined(EES_XML)//20231003
 		Iter->second.Set_Lot(_T(""));
 #endif
 
-		// ?��??�트�??�??		Save_SocketInfo(Iter->second.szRFID);
+		// 레지스트리 저장
+		Save_SocketInfo(Iter->second.szRFID);
 	}
 
 	//WM_Update_GUI_Data_All(WM_Socket_Barcode | WM_Socket_Equipment | WM_Socket_Status | WM_Socket_Target | WM_Socket_TestResult);
@@ -1160,8 +1208,49 @@ bool CSocketMonitoring::Write_CSV_File(LPCTSTR IN_szPath)
 	return Write_File(szFile, szData, CSV_HEADER_SOCKETINFO);
 }
 
+//=============================================================================
+// Method		: Is_TrackInSocket
+// Access		: public  
+// Returns		: bool
+// Parameter	: __in LPCTSTR IN_szRFID
+// Parameter	: __in uint8_t IN_nEqpOrder
+// Qualifier	:
+// Last Update	: 2023/7/25 - 21:38
+// Desc.		:
+//=============================================================================
+bool CSocketMonitoring::Is_TrackInSocket(__in LPCTSTR IN_szRFID, __in uint8_t IN_nEqpOrder)
+{
+	auto result_sock = m_Sockets.find(IN_szRFID);
+	if (result_sock != m_Sockets.end())
+	{
+		if (IN_nEqpOrder == m_Sockets.at(IN_szRFID).m_nEqpOrder)
+			return true;
+	}
 
-#if (USE_XML)
+	return false;
+}
+
+//=============================================================================
+// Method		: Get_ElapsedTime_TrackIn
+// Access		: public  
+// Returns		: uint32_t
+// Parameter	: __in LPCTSTR IN_szRFID
+// Qualifier	:
+// Last Update	: 2023/7/27 - 22:02
+// Desc.		:
+//=============================================================================
+uint32_t CSocketMonitoring::Get_ElapsedTime_TrackIn(__in LPCTSTR IN_szRFID)
+{
+	auto result_sock = m_Sockets.find(IN_szRFID);
+	if (result_sock != m_Sockets.end())
+	{
+		return m_Sockets.at(IN_szRFID).Get_ElapsedTime_TrackIn();
+	}
+
+	return 0;
+}
+
+#if defined(EES_XML)//20231003
 void CSocketMonitoring::Set_LOTID(__in LPCTSTR IN_szRFID, __in LPCTSTR IN_szData){
 	auto result_sock = m_Sockets.find(IN_szRFID);
 	if (result_sock != m_Sockets.end())
@@ -1180,16 +1269,14 @@ bool CSocketMonitoring::Register_SocketLotID(LPCTSTR IN_szRFID, __in uint32_t IN
 		auto result_sock = m_Sockets.find(IN_szRFID);
 		if (result_sock != m_Sockets.end())
 		{
-			// ?�재 ?�정???�켓 ?�?�과 로더?�서 ?�록?�려???�켓 ?�?�이 ?�름
+			// ?�재 ?�정???�켓 ?�?�과 로더?�서 ?�록?�려???�켓 ?�?�이 ?�름
 			if (m_nLineSocketJIG_Type != m_Sockets.at(IN_szRFID).nSocketType)
 			{
 				return false;
 			}
-
-			// Unregister ???�태?��??
+			// Unregister ???�태?��??
 			if (enSocketStatus::SoS_Ready == m_Sockets.at(IN_szRFID).m_nStatus)
 			{
-
 			}
 			if (m_Sockets.at(IN_szRFID).IsEmpty_Barcode())
 			{
