@@ -119,7 +119,7 @@ class CRegEquipment;
 // 설비 모니터링 정보
 //-----------------------------------------------------------------------------
 #if defined(EES_XML)//20231003
-class CEquipment : public CConfig_Eqp , public CCommonModule
+class CEquipment : public CCommonModule,	public CConfig_Eqp
 #else
 class CEquipment : public CConfig_Eqp
 #endif

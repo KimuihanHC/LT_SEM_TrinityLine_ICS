@@ -291,7 +291,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);EES_XML;</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -368,7 +367,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);EES_XML;</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

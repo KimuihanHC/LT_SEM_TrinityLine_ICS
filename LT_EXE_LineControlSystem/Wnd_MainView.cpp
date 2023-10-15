@@ -16,7 +16,8 @@
 #include "Dlg_ChkPassword.h"
 
 #if defined(EES_XML)
-#include "Pane_CommStatus.h"
+//#include "Pane_CommStatus.h"
+CWnd_MainView* mWnd_MainView;
 #endif
 
 #define IDC_BN_START_INIT	2001
@@ -65,6 +66,9 @@ CWnd_MainView::CWnd_MainView()
 
 	m_PermissionMode		= Permission_Operator;
 	m_pstSysInfo	= NULL;
+#if defined(EES_XML)
+	mWnd_MainView = this;
+#endif
 }
 
 CWnd_MainView::~CWnd_MainView()
@@ -585,7 +589,7 @@ void CWnd_MainView::Set_PermissionMode(enPermissionMode IN_PermissionMode)
 	for (auto nIdx = 0; nIdx < m_pwndServerList.size(); ++nIdx)
 	{
 		m_pwndServerList.at(nIdx)->Set_PermissionMode(IN_PermissionMode);
-		mPane_CommStatus->m_pwndServerList.at(nIdx)->Set_PermissionMode(IN_PermissionMode);
+		//mPane_CommStatus->m_pwndServerList.at(nIdx)->Set_PermissionMode(IN_PermissionMode);
 	}
 #endif	
 }
@@ -656,7 +660,7 @@ void CWnd_MainView::Init_ServerUI_List()
 	if (nullptr != m_pstSysInfo)
 	{
 		//2023.09.03
-		mPane_CommStatus->m_pwndServerList.clear();
+		//mPane_CommStatus->m_pwndServerList.clear();
 		m_pwndServerList.clear();
 		//
 		m_bUseEES = false;
@@ -674,7 +678,7 @@ void CWnd_MainView::Init_ServerUI_List()
 				{
 					//2023.09.03
 					//m_bUseEES = true;
-					mPane_CommStatus->m_pwndServerList.push_back(dynamic_cast<CWnd_Status_Server*>(&m_wndSvrEES));
+					//mPane_CommStatus->m_pwndServerList.push_back(dynamic_cast<CWnd_Status_Server*>(&m_wndSvrEES));
 					m_pwndServerList.push_back(dynamic_cast<CWnd_Status_Server*>(&m_wndSvrEES));
 					
 				}
@@ -696,10 +700,10 @@ void CWnd_MainView::Init_ServerUI_List()
 		{
 			for (auto nIdx = 0; nIdx < nCount; ++nIdx)
 			{
-				m_pstSysInfo->ServerInfo.GetAt(nIdx).Set_DEFINEDATA(m_pstSysInfo->ServerInfo.GetAt(nIdx));				
+				m_pstSysInfo->ServerInfo.GetAt(nIdx).Set_DEFINEDATA(m_pstSysInfo->ServerInfo.GetAt(nIdx));					
 				m_pwndServerList.at(nIdx)->SetPtr_EquipmentInfo(nIdx, &m_pstSysInfo->ServerInfo.GetAt(nIdx));
 				//2023.09.03
-				mPane_CommStatus->m_pwndServerList.at(nIdx)->SetPtr_EquipmentInfo(nIdx, &m_pstSysInfo->ServerInfo.GetAt(nIdx));
+				//mPane_CommStatus->m_pwndServerList.at(nIdx)->SetPtr_EquipmentInfo(nIdx, &m_pstSysInfo->ServerInfo.GetAt(nIdx));
 				if (m_pstSysInfo->ServerInfo.GetAt(nIdx).Is_EES())
 				{
 					//int8_t nTesterType = ConvTo_TesterType(static_cast<enEquipmentType>(m_pstSysInfo->LineInfo.GetAt(nIdx).m_nEquipmentType));
@@ -708,12 +712,12 @@ void CWnd_MainView::Init_ServerUI_List()
 					{
 						m_pwndServerList.at(nIdx)->Set_EnableEquipment(m_pstSysInfo->ServerInfo.m_bEnable_TestType[nEesType]);
 						//2023.09.03
-						mPane_CommStatus->m_pwndServerList.at(nIdx)->Set_EnableEquipment(m_pstSysInfo->ServerInfo.m_bEnable_TestType[nEesType]);
+						//mPane_CommStatus->m_pwndServerList.at(nIdx)->Set_EnableEquipment(m_pstSysInfo->ServerInfo.m_bEnable_TestType[nEesType]);
 					}
 				}			
 				m_pwndServerList.at(nIdx)->Set_EquipmentID(&m_pstSysInfo->ServerInfo.GetAt(nIdx));
 				//2023.09.03
-				mPane_CommStatus->m_pwndServerList.at(nIdx)->Set_EquipmentID(&m_pstSysInfo->ServerInfo.GetAt(nIdx));
+				//mPane_CommStatus->m_pwndServerList.at(nIdx)->Set_EquipmentID(&m_pstSysInfo->ServerInfo.GetAt(nIdx));
 			}
 		}
 #endif
@@ -728,11 +732,13 @@ void CWnd_MainView::Init_ServerUI_List()
 }
 void CWnd_MainView::Update_ServerInfo()
 {
+	/*20231010
 	if (m_pstSysInfo)
 	{
 		m_wndTestSelect.Set_Configuration(m_pstSysInfo->ServerInfo);
 		m_wndTestSelect.Set_Config_Server(&m_pstSysInfo->SettingInfo.ServerInfo);
 	}
+	*/
 	Init_ServerUI_List();
 }
 #endif

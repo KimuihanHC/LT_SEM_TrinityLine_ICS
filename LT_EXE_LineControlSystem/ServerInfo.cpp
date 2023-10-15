@@ -468,6 +468,7 @@ void CServerInfo::Set_Config_Line(__in const CConfig_Server* IN_pConfig_Server)
 				*newSvr = IN_pConfig_Server->GetAt(nIdx);
 				newSvr->Set_SvrOrder(nIdx);
 				m_SvrList.push_back(newSvr);
+				
 			}
 			break;
 			}

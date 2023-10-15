@@ -44,7 +44,12 @@ public:
 
 		return *this;
 	};
+	CSvrEes& operator= (const CCommonModule& ref)
+	{
+		CCommonModule::operator=(ref);
 
+		return *this;
+	};
 public:
 
 };

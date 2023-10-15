@@ -122,5 +122,7 @@ public:
 	void									Update_ServerInfo();
 #endif
 };
-
+#if defined(EES_XML)//20231003
+extern CWnd_MainView* mWnd_MainView;
+#endif
 #endif // Wnd_MainView_h__

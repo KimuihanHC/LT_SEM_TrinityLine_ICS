@@ -232,7 +232,7 @@ void CTestManager_Device::OnDisconnect_Devicez(int nIn)
 		break;
 	case ICS_SERVER_EES:
 		if (m_pIcsServer != nullptr) {
-			OnLog(_T("Server Closing.. (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);			
+			OnLog(_T("Server Closing.. (port: %d)"), m_stOption.Server[ICS_SERVER_EES].Address.dwPort);
 			mPane_CommStatus->m_st_EES.SetText(g_szSocket_StateUI[SOCKETSTATE_CLOSE]);
 			m_pIcsServer->Close();
 		}

@@ -24,6 +24,7 @@ CEqpTester::CEqpTester()
 	}
 #if defined(EES_XML)//20231003
 	assign_mEES_PortSubStatus(PtI_T_MaxCount, {});
+	auto test =  Get_mEES_PortSubStatusCount();//20231012
 	assign_EquipmentIDStatus(PtI_T_MaxCount, {});
 #endif	
 
@@ -82,10 +83,11 @@ void CEqpTester::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 	//__super::Set_PortStatus(IN_nPortIndex, IN_nStatus, IN_szRFID, IN_szBarcode);
 
 #if defined(EES_XML)//20231003
-	if (IN_nPortIndex < Get_mEES_PortSubStatusCount()) {
-		Get_mEES_PortSubStatus(IN_nPortIndex).Set_nPortStatus(IN_nStatus);
-		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szRfid(IN_szRFID);
-		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szBarcode(IN_szBarcode);
+	if (IN_nPortIndex < Get_mEES_PortSubStatusCount()) 
+	{		
+		Set_mEES_PortSubStatus(IN_nPortIndex).Set_nPortStatus(IN_nStatus);
+		Set_mEES_PortSubStatus(IN_nPortIndex).Set_szRfid(IN_szRFID);
+		Set_mEES_PortSubStatus(IN_nPortIndex).Set_szBarcode(IN_szBarcode);
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL);
 	}
 #endif

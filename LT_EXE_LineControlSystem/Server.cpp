@@ -31,6 +31,7 @@ CServer& CServer::operator=(const CConfig_Svr& ref)
 CServer& CServer::operator=(const CServer& ref)
 {
 	CConfig_Svr::operator=(ref);
+	CCommonModule::operator=(ref);
 
 	m_bEnable = ref.m_bEnable;
 	m_bSkip = ref.m_bSkip;
@@ -67,6 +68,7 @@ CServer& CServer::operator=(const CCommonModule& ref)
 	CCommonModule::operator=(ref);
 	return *this;
 }
+
 void CServer::Init_ServerType_UI()
 {
 	__super::Init_ServerType_UI();
@@ -1432,12 +1434,17 @@ void CServer::Set_REPLY_OPCALL_MESSAGE(__in lt::Reply_Opcall_Args::Args *  IN_Da
 }
 void CServer::Set_DEFINEDATA(CServer & Data) {
 	CString			szTemp;
-	Get_DEFINEDATA().Set_EQUIPMENTID(lt::ToMultiByte(Data.Get_ServerId()));
+	lt::StdStringA EQUIPMENTID = lt::ToMultiByte(Data.Get_ServerId());
+	Get_DEFINEDATA().Set_EQUIPMENTID(EQUIPMENTID);
+
 	DWORD dwAddress = ntohl(Data.Get_IP_Address());
 	szTemp.Format(_T("%d.%d.%d.%d"), FOURTH_IPADDRESS(dwAddress), THIRD_IPADDRESS(dwAddress), SECOND_IPADDRESS(dwAddress), FIRST_IPADDRESS(dwAddress));
-	Get_DEFINEDATA().Set_IPADDRESS(lt::ToMultiByte(szTemp));
-	Get_DEFINEDATA().Set_SUBEQPID(lt::ToMultiByte(Data.Get_SubEqpID()));
+	lt::StdStringA IP = lt::ToMultiByte(szTemp);
+	Get_DEFINEDATA().Set_IPADDRESS(IP);
+	lt::StdStringA SUBEQPID = lt::ToMultiByte(Data.Get_SubEqpID());
+	Get_DEFINEDATA().Set_SUBEQPID(SUBEQPID);
 }
+
 #endif	//SOCKET
 #if TEST
 void CServer::Set_UINTID_READ(__in ST_xml_UNITID_READ * IN_Data)

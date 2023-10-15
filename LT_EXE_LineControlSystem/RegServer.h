@@ -33,14 +33,19 @@ public:
 	CString	Get_RegistryPath			() const;
 
 	// ?ˆì??¤íŠ¸ë¦??¨ìŠ¤ ì²´í¬?˜ì—¬ ?†ìœ¼ë©??ì„±
+
 	bool	Check_RegistryPath			(__in LPCTSTR IN_szEqpID);
 #if SOCKET
 	// ?ˆì??¤íŠ¸ë¦¬ì— ?Œì¼“?•ë³´ ?€??/
+
 	bool	Save_Equipment				(__in const CServer* IN_pEquipment);	
 	bool	Set_Equipment_Skip			(__in const CServer* IN_pEquipment);
 #endif//SOCKET
+
 	bool	Set_Equipment_Reserve		(__in const CServer* IN_pEquipment);
+
 #if SOCKET
+
 	bool	Set_Equipment_EndProduction	(__in const CServer* IN_pEquipment);
 	bool	Set_Equipment_Shift			(__in const CServer* IN_pEquipment);
 
@@ -53,9 +58,10 @@ public:
 
 
 	// ?ˆì??¤íŠ¸ë¦¬ì— ?€?¥ëœ ?Œì¼“ ?•ë³´ ê°€?¸ì˜¤ê¸?/
+
 	bool	Load_Equipment				(__in LPCTSTR IN_szEqpID, __out CServer& OUT_Equipment);
 	bool	Load_Yield					(__in LPCTSTR IN_szEqpID, __out CServer& OUT_Equipment);
-T
+#endif//SOCKE
 	//-----------------------------------------------------------------------------
 	// Add
 	//-----------------------------------------------------------------------------	
@@ -65,7 +71,7 @@ public:
 
 	bool	Save_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_nPortIndex, __in uint8_t Type, LPCTSTR IN_Data);
 	CString	Load_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_nPortIndex, __in uint8_t Type);
-#endif//SOCKE
+
 
 };
 

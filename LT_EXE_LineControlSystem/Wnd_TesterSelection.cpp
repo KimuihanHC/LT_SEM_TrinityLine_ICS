@@ -1035,6 +1035,6 @@ void CWnd_TesterSelection::Set_Config_Server(const CConfig_Server * IN_pConfig_S
 			}
 		}
 	}
-	//Rebatch_TestButton();
+	Rebatch_TestButton();
 }
 #endif

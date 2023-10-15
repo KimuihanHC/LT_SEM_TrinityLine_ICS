@@ -866,9 +866,6 @@ void CDlg_ModifyServer::OnEquipSize(__in const CConfig_Svr* IN_pstEuquipment, in
 	{
 	case SERVER_UI_EES:
 		iTop += iCtrlHeight + iSpacing;
-#if SOCKET
-		m_st_EquipID[PtI_EES_0].SetText(g_szPort_Loader[PtI_EES_0]);
-#endif
 		m_st_EquipID[PtI_EES_0].MoveWindow(iLeft, iTop, iStWidth, iCtrlHeight);
 		m_ed_EquipID[PtI_EES_0].MoveWindow(iLeftSub, iTop, iStWidth, iCtrlHeight);
 		m_ed_PortID[PtI_EES_0].MoveWindow(iLeftSub2, iTop, iStWidth + iStWidth, iCtrlHeight);

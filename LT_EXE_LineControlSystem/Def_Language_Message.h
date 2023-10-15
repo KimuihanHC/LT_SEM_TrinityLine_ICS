@@ -16,7 +16,7 @@
 #pragma once
 
 // warning C4566: 해결용
-//#pragma execution_character_set("utf-8")	//20231003
+#pragma execution_character_set("utf-8")	//20231003
 
 // Common (File, Apply)
 

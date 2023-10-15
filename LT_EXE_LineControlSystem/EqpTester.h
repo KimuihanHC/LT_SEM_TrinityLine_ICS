@@ -43,7 +43,14 @@ public:
 
 		return *this;
 	};
+#if defined (EES_XML)
+	CEqpTester& operator= (const CCommonModule& ref)
+	{
+		CCommonModule::operator=(ref);
 
+		return *this;
+	};
+#endif
 protected:
 
 	virtual void Init_EquipmentType_UI();

@@ -658,19 +658,19 @@ void CWnd_Status_Tester::Set_ConveyorStatus(__in uint8_t IN_nConveyorIndex, __in
 //=============================================================================
 void CWnd_Status_Tester::Set_EqpNotify_EQUIPMENTSTATE(__in lt::Report_Equipment_State_Args::Args * IN_DATA)
 {
-	CString EQUIPMENTID;
-	CString EQUIPMENTSTATE;
-	CString SUBEQPID;
-	//CString PORTID(IN_DATA->Body.PORTID);	//2023.06.22
-	
-	for (int nPORTID = 0; nPORTID < m_pEquipmentStatus->Get_EquipmentIDCount(); nPORTID++) {
-		if (nPORTID < m_pEquipmentStatus->Get_mEES_PortSubStatusCount()) {
-			auto EQUIPMENTID = m_pEquipmentStatus->Get_EquipmentIDStatus(nPORTID).Get_EQUIPMENTID();
-			auto sEQUIPMENTID = lt::ToTypeChar(IN_DATA->Body.Get_EQUIPMENTID()).c_str();
-			if (sEQUIPMENTID == EQUIPMENTID) {
+	for (int nPORTID = 0; nPORTID < m_pEquipmentStatus->Get_EquipmentIDCount(); nPORTID++) 
+	{
+		if (nPORTID < m_pEquipmentStatus->Get_mEES_PortSubStatusCount()) 
+		{
+			CString EQUIPMENTID = m_pEquipmentStatus->Get_EquipmentIDStatus(nPORTID).Get_EQUIPMENTID();
+			CString sEQUIPMENTID = lt::ToTypeChar(IN_DATA->Body.Get_EQUIPMENTID()).c_str();
+			if (EQUIPMENTID.GetLength() <= 0) {
+				continue;
+			}
+			if (!EQUIPMENTID.Compare(sEQUIPMENTID)) {
 				CVGStatic * staic = &m_st_EquipMentState[nPORTID];
-				auto EquipmentStatus = m_pEquipmentStatus->Get_mEES_PortSubStatus(nPORTID).Get_nEquipmentStatus();
-				SetUI_EQUIPMENTSTATE(staic, g_szPortStatus[EquipmentStatus]);
+				uint8_t EquipmentStatus = m_pEquipmentStatus->Get_mEES_PortSubStatus(nPORTID).Get_nEquipmentStatus();
+				SetUI_EQUIPMENTSTATE(staic, g_szEquipment_State[EquipmentStatus]);
 			}
 		}
 	}

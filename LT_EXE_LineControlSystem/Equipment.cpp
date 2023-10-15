@@ -549,12 +549,10 @@ void CEquipment::Set_PortStatus(__in uint8_t IN_nPortIndex, __in uint8_t IN_nSta
 {
 #if defined(EES_XML)//20231003
 	if (IN_nPortIndex < Get_mEES_PortSubStatusCount()){
-		//Get_mEES_PortSubStatus(IN_nPortIndex).Set_nOldPortStatus(Get_mEES_PortSubStatus(IN_nPortIndex).Get_nPortStatus());
-		Get_mEES_PortSubStatus(IN_nPortIndex).Set_nPortStatus(IN_nStatus);
-		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szRfid(IN_szRFID);
-		Get_mEES_PortSubStatus(IN_nPortIndex).Set_szBarcode(IN_szBarcode);
+		Set_mEES_PortSubStatus(IN_nPortIndex).Set_nPortStatus(IN_nStatus);
+		Set_mEES_PortSubStatus(IN_nPortIndex).Set_szRfid(IN_szRFID);
+		Set_mEES_PortSubStatus(IN_nPortIndex).Set_szBarcode(IN_szBarcode);
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL);
-
 	}
 #endif
 	if (IN_nPortIndex < m_nPortStatus.size())
@@ -830,8 +828,6 @@ void CEquipment::Set_ClientConnection(__in uint8_t IN_nConStatus)
 	WM_Event_Equipment(WM_EVENT_EQUIPMENT_CONNECTION, (LPARAM)m_nConnection);
 #if defined(EES_XML) //20231003
 	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL); 
-	if (!m_nConnection) {
-	}
 #endif
 }
 
@@ -884,7 +880,7 @@ void CEquipment::Set_OperatingMode(__in uint8_t IN_nOperMode)
 
 #if defined(EES_XML)//20231003
 	for (int i = 0; i < Get_mEES_PortSubStatusCount(); i++) {
-		Get_mEES_PortSubStatus(i).Set_nOperMode(IN_nOperMode);
+		Set_mEES_PortSubStatus(i).Set_nOperMode(IN_nOperMode);
 	}
 	WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL); // alarm on
 #endif 
@@ -934,10 +930,21 @@ void CEquipment::Set_ProcessStatus(__in uint8_t IN_nStatus, __in uint32_t IN_nAl
 
 #if defined(EES_XML)//20231003
 		CAlarmStatus stEESAlarm;
-		stEESAlarm.Set_nAlarmCode(IN_nAlarmCode);
-		stEESAlarm.Set_szAlarmInfo(IN_szAlarmInfo);
-		stEESAlarm.Set_nAlarmSet(ALARMSET_SET);
-		Set_mAlarmStatus(stEESAlarm);
+		bool bUse = false;
+		for (int i = 0; i < Get_mAlarmStatusCount(); i++) {
+			if (Get_mAlarmStatus(i).Get_nAlarmCode() == IN_nAlarmCode) {
+				bUse = true;
+				if (Get_mAlarmStatus(i).Get_nAlarmSet() == ALARMSET_RESET) {
+					Set_mAlarmStatus(i).Set_nAlarmSet(ALARMSET_NULL);
+				}
+			}
+		}
+		if (!bUse) {
+			stEESAlarm.Set_nAlarmCode(IN_nAlarmCode);
+			stEESAlarm.Set_szAlarmInfo(IN_szAlarmInfo);
+			Set_mAlarmStatus(stEESAlarm);
+		}
+
 #endif
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_ALARM, (LPARAM)m_nProcessStatus); // alarm on
 	}
@@ -948,7 +955,7 @@ void CEquipment::Set_ProcessStatus(__in uint8_t IN_nStatus, __in uint32_t IN_nAl
 	}
 #if defined(EES_XML)//20231003
 	for (int i = 0; i < Get_mEES_PortSubStatusCount() ; i++) {
-		Get_mEES_PortSubStatus(i).Set_nProcessStatus(IN_nStatus);		
+		Set_mEES_PortSubStatus(i).Set_nProcessStatus(IN_nStatus);		
 	}	
 	if (0 < Get_mEES_PortSubStatusCount()) {
 		WM_Event_Equipment(WM_EVENT_EQUIPMENT_REPORT_EQUIPMENT_STATE, (LPARAM)NULL);

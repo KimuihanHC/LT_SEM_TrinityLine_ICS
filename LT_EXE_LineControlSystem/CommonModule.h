@@ -16,17 +16,15 @@
 #include "Event/IcsCommEventEes.h"
 #include "Def_ConstantServer.h"
 
-//#include "Equipment.h"
-//#include "Server.h"
 #include "Xml/xmlArgs.h"
 
 
 #pragma once
 using CDEFINEDATA = lt::CDEFINEDATA;
+
 class ST_EquipmentID
 {
 protected:
-	//Add EES Port Data
 	CString		EQUIPMENTID;
 	CString		IPADDRESS;
 	CString		USERID;
@@ -34,6 +32,16 @@ protected:
 	CString		EESMODE;
 	CString		PORTID;
 public:
+	ST_EquipmentID() {
+		EQUIPMENTID = "";
+		IPADDRESS	= "";
+		USERID		= "";
+		SUBEQPID	= "";
+		EESMODE		= "";
+		PORTID	= "";
+	}
+	~ST_EquipmentID() {
+	}
 	ST_EquipmentID& operator= (const ST_EquipmentID& ref)
 	{
 		//Add EES Port Data
@@ -83,6 +91,7 @@ public:
 
 
 };
+
 class CEES_PortSubStatus
 {
 protected:
@@ -91,23 +100,55 @@ protected:
 	CString		szRfid;
 	CString		szBarcode;
 	CString		szLotID;
+
 	//Add EES Port State
-	int8_t		nOperMode = 0;		// ?댁쁺紐⑤뱶
-	int8_t		nOldOperMode = 0;
+	int8_t		nOperMode = 0;		
+	int8_t		nOldOperMode = -1;
 
-	int8_t		nPortStatus = 0;		// ?ㅻ퉬 媛???곹깭
-	int8_t		nOldPortStatus = 0;
+	int8_t		nPortStatus = 0;
+	int8_t		nOldPortStatus = -1;
 
-	int8_t		nProcessStatus = 0;		// ?ㅻ퉬 媛???곹깭
-	int8_t		nOldProcessStatus = 0;
+	int8_t		nProcessStatus = 0;		
+	int8_t		nOldProcessStatus = -1;
 
 	int8_t		nEquipmentStatus = 0;
-	int8_t		nOldEquipmentStatus = 0;
+	int8_t		nOldEquipmentStatus = -1;
 
 	int8_t		nConnection = 0;
 	int8_t		nOldConnection = 0;
+
 public:
 
+	CEES_PortSubStatus() 
+	{
+		//Base Port State
+
+		nStatus   = 0;
+		szRfid	  = "";
+		szBarcode = "";
+		szLotID   = "";
+
+		//Add EES Port State
+		nOperMode = 0;
+		nOldOperMode = -1;
+
+		nPortStatus = 0;
+		nOldPortStatus = -1;
+
+		nProcessStatus = 0;
+		nOldProcessStatus = -1;
+
+		nEquipmentStatus = 0;
+		nOldEquipmentStatus = -1;
+
+		nConnection = 0;
+		nOldConnection = 0;
+	}
+
+	~CEES_PortSubStatus() 
+	{
+
+	}
 	CEES_PortSubStatus& operator= (const CEES_PortSubStatus& ref)
 	{		
 		//Base Port State
@@ -132,96 +173,156 @@ public:
 		nOldConnection = ref.nOldConnection;
 		return *this;
 	};
+
 	void Reset() {
+
 		nStatus = 0;
 		szRfid = "";
 		szBarcode = "";
 		szLotID = "";
 
-		nOperMode = -1;
+		nOperMode = 0;
 		nOldOperMode = -1;
 
-		nPortStatus = -1;		// ?ㅻ퉬 媛???곹깭
+		nPortStatus = 0;		
 		nOldPortStatus = -1;
 
-		nProcessStatus = -1;		// ?ㅻ퉬 媛???곹깭
+		nProcessStatus = 0;
 		nOldProcessStatus = -1;
-		nEquipmentStatus = -1;
+
+		nEquipmentStatus = 0;
 		nOldEquipmentStatus = -1;
-		nConnection = -1;
-		nOldConnection = -1;
+
+		nConnection = 0;
+		nOldConnection = 0;
 	};
-	int8_t		Get_nStatus() const {
-		return nStatus;	};
-	CString		Get_szRfid() const {
-		return szRfid;	};
-	CString		Get_szBarcode() const {
-		return szBarcode;	};
-	CString		Get_szLotID() const {
-		return szLotID;	};
+	int8_t		Get_nStatus() const 
+	{
+		return nStatus;	
+	};
+	CString		Get_szRfid() const 
+	{
+		return szRfid;	
+	};
+	CString		Get_szBarcode() const 
+	{
+		return szBarcode;	
+	};
+	CString		Get_szLotID() const 
+	{
+		return szLotID;	
+	};
 
-	int8_t		Get_nOperMode() const {
-		return nOperMode;	};
-	int8_t		Get_nOldOperMode() const {
-		return nOldOperMode;};
-	int8_t		Get_nPortStatus() const {
-		return nPortStatus;	};
-	int8_t		Get_nOldPortStatus() const {
-		return nOldPortStatus;	};
-	int8_t		Get_nProcessStatus() const {
-		return nProcessStatus;};
-	int8_t		Get_nOldProcessStatus() const {
-		return nOldProcessStatus;};
-	int8_t		Get_nEquipmentStatus() const {
-		return nEquipmentStatus;	};
-	int8_t		Get_nOldEquipmentStatus() const {
-		return nOldEquipmentStatus;	};
-	int8_t		Get_nConnection() const {
-		return nConnection;};
-	int8_t		Get_nOldConnection() const {
-		return nOldConnection;	};
+	int8_t		Get_nOperMode() const 
+	{
+		return nOperMode;	
+	};
+	int8_t		Get_nOldOperMode() const 
+	{
+		return nOldOperMode;
+	};
+	int8_t		Get_nPortStatus() const
+	{
+		return nPortStatus;	
+	};
+	int8_t		Get_nOldPortStatus() const
+	{
+		return nOldPortStatus;	
+	};
+	int8_t		Get_nProcessStatus() const 
+	{
+		return nProcessStatus;
+	};
+	int8_t		Get_nOldProcessStatus() const 
+	{
+		return nOldProcessStatus;
+	};
+	int8_t		Get_nEquipmentStatus() const 
+	{
+		return nEquipmentStatus;
+	};
+	int8_t		Get_nOldEquipmentStatus() const 
+	{
+		return nOldEquipmentStatus;
+	};
+	int8_t		Get_nConnection() const 
+	{
+		return nConnection;
+	};
+	int8_t		Get_nOldConnection() const 
+	{
+		return nOldConnection;
+	};
 
-	void		Set_nStatus(int8_t	IN_Data) {
-		nStatus = IN_Data;	};
-	void		Set_szRfid(CString	IN_Data) {
-		szRfid = IN_Data;	};
-	void		Set_szBarcode(CString	IN_Data) {
-		szBarcode = IN_Data;	};
-	void		Set_szLotID(CString	IN_Data) {
-		szLotID = IN_Data;	};
+	void		Set_nStatus(int8_t	IN_Data) 
+	{
+		nStatus = IN_Data;
+	};
+	void		Set_szRfid(CString	IN_Data) 
+	{
+		szRfid = IN_Data;
+	};
+	void		Set_szBarcode(CString	IN_Data) 
+	{
+		szBarcode = IN_Data;
+	};
+	void		Set_szLotID(CString	IN_Data) 
+	{
+		szLotID = IN_Data;
+	};
 
-	void		Set_nOperMode(int8_t	IN_Data) {
-		if (IN_Data < 0) {
-			IN_Data = 0;
-		}
-		nOperMode = IN_Data;	};
-	void		Set_nOldOperMode(int8_t	IN_Data) {
-		nOldOperMode = IN_Data;	};
-	void		Set_nPortStatus(int8_t	IN_Data) {
-		if (IN_Data < 0) {
-			IN_Data = 0;
-		}
-		nPortStatus = IN_Data;	};
-	void		Set_nOldPortStatus(int8_t	IN_Data) {
-		nOldPortStatus = IN_Data;	};
-	void		Set_nProcessStatus(int8_t	IN_Data) {
-		if (IN_Data < 0) {
-			IN_Data = 0;
-		}
-		nProcessStatus = IN_Data;	};
-	void		Set_nOldProcessStatus(int8_t	IN_Data) {
-		nOldProcessStatus = IN_Data;	};
-	void		Set_nEquipmentStatus(int8_t	IN_Data) {
-		if (IN_Data < 0) {
-			IN_Data = 0;
-		}
-		nEquipmentStatus = IN_Data;	};
-	void		Set_nOldEquipmentStatus(int8_t	IN_Data) {
-		nOldEquipmentStatus = IN_Data;	};
-	void		Set_nConnection(int8_t	IN_Data) {
-		nConnection = IN_Data;};
-	void		Set_nOldConnection(int8_t	IN_Data) {
-		nOldConnection = IN_Data;};
+	void		Set_nOperMode(int8_t	IN_Data) 
+	{
+		//if (IN_Data < 0) {
+		//	IN_Data = 0;
+		//}
+		nOperMode = IN_Data;
+	};
+	void		Set_nOldOperMode(int8_t	IN_Data) 
+	{
+		nOldOperMode = IN_Data;
+	};
+	void		Set_nPortStatus(int8_t	IN_Data)
+	{
+		//if (IN_Data < 0) {
+		//	IN_Data = 0;
+		//}
+		nPortStatus = IN_Data;
+	};
+	void		Set_nOldPortStatus(int8_t	IN_Data) 
+	{
+		nOldPortStatus = IN_Data;
+	};
+	void		Set_nProcessStatus(int8_t	IN_Data) 
+	{
+		//if (IN_Data < 0) {
+		//	IN_Data = 0;
+		//}
+		nProcessStatus = IN_Data;
+	};
+	void		Set_nOldProcessStatus(int8_t	IN_Data) 
+	{
+		nOldProcessStatus = IN_Data;
+	};
+	void		Set_nEquipmentStatus(int8_t	IN_Data) 
+	{
+		//if (IN_Data < 0) {
+		//	IN_Data = 0;
+		//}
+		nEquipmentStatus = IN_Data;
+	};
+	void		Set_nOldEquipmentStatus(int8_t	IN_Data) 
+	{
+		nOldEquipmentStatus = IN_Data;
+	};
+	void		Set_nConnection(int8_t	IN_Data) 
+	{
+		nConnection = IN_Data;
+	};
+	void		Set_nOldConnection(int8_t	IN_Data) 
+	{
+		nOldConnection = IN_Data;
+	};
 };
 
 class CLossWindow
@@ -230,6 +331,14 @@ protected:
 	uint32_t	LossState;
 	CString		LossCount;
 public:
+	CLossWindow()
+	{
+		LossState = 0;
+		LossCount = "";
+	};
+	~CLossWindow()
+	{
+	};
 	CLossWindow& operator= (const CLossWindow& ref)
 	{
 		LossState = ref.LossState;
@@ -254,34 +363,35 @@ public:
 class CTerminalLog
 {
 protected:
-	uint32_t	m_nAlarmCode = 0;
-	uint32_t	m_nAlarmSet = ALARMSET_NULL;
-	CString		m_szAlarmInfo;
+
 public:
+	CTerminalLog()
+	{
+
+	};
+	~CTerminalLog()
+	{
+	};
 	CTerminalLog& operator= (const CTerminalLog& ref)
 	{
-		m_nAlarmCode = ref.m_nAlarmCode;
-		m_szAlarmInfo = ref.m_szAlarmInfo;
-		m_nAlarmSet = ref.m_nAlarmSet;
+
 		return *this;
 	};
 	void Reset() {
-		m_nAlarmCode = 0;
-		m_nAlarmSet = ALARMSET_NULL;
-		m_szAlarmInfo = "";
+
 	};
 };
 class CAlarmStatus
 {
 protected:
 	uint32_t	nAlarmCode = 0;
-	uint32_t	nAlarmSet = ALARMSET_NULL;
+	uint8_t		nAlarmSet = ALARMSET_NULL;
 	CString		szAlarmInfo ;
 public:
-	CAlarmStatus::CAlarmStatus(){
+	CAlarmStatus(){
 
 	};
-	CAlarmStatus::~CAlarmStatus(){
+	~CAlarmStatus(){
 
 	};
 	CAlarmStatus& operator= (const CAlarmStatus& ref)	{
@@ -295,19 +405,31 @@ public:
 		nAlarmSet = ALARMSET_NULL;
 		szAlarmInfo = "";
 	};
-	uint8_t		Get_nAlarmCode() const {
-		return nAlarmCode;	};
-	uint8_t		Get_nAlarmSet() const {
-		return nAlarmSet;	};
-	CString		Get_szAlarmInfo() const {
-		return szAlarmInfo;	};
+	uint32_t		Get_nAlarmCode() const
+	{
+		return nAlarmCode;	
+	};
+	uint8_t		Get_nAlarmSet() const 
+	{
+		return nAlarmSet;	
+	};
+	CString		Get_szAlarmInfo() const 
+	{
+		return szAlarmInfo;	
+	};
 
-	void		Set_nAlarmCode(uint8_t	IN_Data) {
-		nAlarmCode = IN_Data;	};
-	void		Set_nAlarmSet(uint8_t	IN_Data) {
-		nAlarmSet = IN_Data;	};
-	void		Set_szAlarmInfo(CString	IN_Data) {
-		szAlarmInfo = IN_Data;	};
+	void		Set_nAlarmCode(uint32_t	IN_Data)
+	{
+		nAlarmCode = IN_Data;	
+	};
+	void		Set_nAlarmSet(uint8_t	IN_Data) 
+	{
+		nAlarmSet = IN_Data;	
+	};
+	void		Set_szAlarmInfo(CString	IN_Data) 
+	{
+		szAlarmInfo = IN_Data;	
+	};
 };
 
 class CCommonModule 
@@ -315,6 +437,8 @@ class CCommonModule
 protected:
 	CConfig_EES			EES;
 	CDEFINEDATA			DEFINEDATA;
+//public:
+	CString				Test	=	_T("");
 
 	std::vector<ST_EquipmentID>		m_nEquipmentID;
 	std::vector<CEES_PortSubStatus>	m_ptEES_PortSubStatus;
@@ -325,14 +449,16 @@ protected:
 	
 	ST_EquipmentID		m_EqEES_Cfg;
 	CEES_PortSubStatus	m_EqEES_PortSubStatus;
-	CLossWindow			m_EqLossWindow;
-	CTerminalLog		m_EqTerminalLog;
-	CAlarmStatus		m_EqAlarmStatus;
+	//CLossWindow		m_EqLossWindow;
+	//CTerminalLog		m_EqTerminalLog;
+	//CAlarmStatus		m_EqAlarmStatus;
 
 public:	
 	CCommonModule();
 	~CCommonModule();
+
 	CCommonModule& operator= (const CCommonModule	&		ref);
+#if TEST
 	CCommonModule& operator= (const CConfig_EES	&		ref);
 	CCommonModule& operator= (const CDEFINEDATA	&		ref);
 
@@ -347,7 +473,7 @@ public:
 	CCommonModule& operator= (CLossWindow	&		ref);
 	CCommonModule& operator= (CTerminalLog	&	ref);
 	CCommonModule& operator= (CAlarmStatus	& ref);
-
+#endif
 	void Reset();
 public:
 	
@@ -363,11 +489,18 @@ public:
 	virtual void	Set_PortStatusEquipmentIDEvent(__in uint8_t IN_nPortIndex, __in ST_EquipmentID * IN_nData);
 	void assign_EquipmentIDStatus(__in uint8_t IN_nPortIndex, __in ST_EquipmentID In_DATA);
 
-	CEES_PortSubStatus Get_mEES_PortSubStatus(__in uint8_t IN_nStatus) const;
-	void	Set_mEES_PortSubStatus(__in uint8_t IN_nStatus, __in CEES_PortSubStatus In_DATA);
-	size_t Get_mEES_PortSubStatusCount()const;
+	CEES_PortSubStatus  Get_mEES_PortSubStatus(__in uint8_t IN_nStatus) const;
 	std::vector<CEES_PortSubStatus> Get_mEES_PortSubStatus() const;
+
+	CEES_PortSubStatus & Set_mEES_PortSubStatus(__in uint8_t IN_nStatus);
+	void	Set_mEES_PorSubStatus(__in uint8_t IN_nStatus, __in CEES_PortSubStatus In_DATA);
+	size_t Get_mEES_PortSubStatusCount()const;
+	
 	void assign_mEES_PortSubStatus(__in uint8_t IN_nStatus, __in  CEES_PortSubStatus In_DATA);
+
+
+	CEES_PortSubStatus  Get_sEES_PortSubStatus() const;
+	CEES_PortSubStatus & Set_sEES_PortSubStatus() ;
 
 	CLossWindow Get_mLossWindow(__in uint8_t IN_nStatus) const;
 	void	Set_mLossWindow(__in uint8_t IN_nStatus, __in CLossWindow In_DATA);
@@ -378,22 +511,21 @@ public:
 	size_t Get_mTerminalLogCount()const;
 
 	CAlarmStatus Get_mAlarmStatus(__in uint8_t IN_nStatus) const;
+	std::vector<CAlarmStatus> CCommonModule::Get_mAlarmStatus() const;
+	std::vector<CAlarmStatus> & CCommonModule::Set_mAlarmStatus();
 	void	Set_mAlarmStatus(__in uint8_t IN_nStatus, __in CAlarmStatus In_DATA);
 	void	Set_mAlarmStatus(__in CAlarmStatus  In_DATA);
-	size_t Get_mAlarmStatusCount()const;
+	size_t	Get_mAlarmStatusCount()	const;
+	CAlarmStatus & Set_mAlarmStatus(__in uint8_t IN_nStatus);
 
+	//CLossWindow Get_sLossWindow() const;
+	//void	Set_sLossWindow(__in CLossWindow In_DATA);
 
-	CEES_PortSubStatus Get_sEES_PortSubStatus() const;
-	void	Set_sEES_PortSubStatus(__in CEES_PortSubStatus In_DATA);
+	//CTerminalLog Get_sTerminalLog() const;
+	//void	Set_sTerminalLog(__in CTerminalLog In_DATA);
 
-	CLossWindow Get_sLossWindow() const;
-	void	Set_sLossWindow(__in CLossWindow In_DATA);
-
-	CTerminalLog Get_sTerminalLog() const;
-	void	Set_sTerminalLog(__in CTerminalLog In_DATA);
-
-	CAlarmStatus Get_sAlarmStatus() const;
-	void	Set_sAlarmStatus(__in CAlarmStatus In_DATA);
+	//CAlarmStatus Get_sAlarmStatus() const;
+	//void	Set_sAlarmStatus(__in CAlarmStatus In_DATA);
 	//XML Server CFG
 protected:
 	CString m_nSubEqpID;

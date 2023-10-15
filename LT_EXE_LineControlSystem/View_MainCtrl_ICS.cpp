@@ -806,6 +806,7 @@ bool CView_MainCtrl_ICS::OnLoad_LineInfo(__in bool IN_bNotifySettingWnd /*= true
 			pRegEqp->Check_RegistryPath(Get_Equipment(nIdx).Get_EquipmentId());
 #if defined(EES_XML)//20231003
 			pRegEqp->Load_Equipment_ID(Get_EquipmentID(nIdx), Get_Equipment(nIdx));
+			Get_Equipment(nIdx).Set_DEFINEDATA(Get_Equipment(nIdx));
 #endif			
 		}
 		delete pRegEqp;
@@ -2637,12 +2638,16 @@ bool CView_MainCtrl_ICS::OnLoad_ServerInfo(__in bool IN_bNotifySettingWnd /*= tr
 		}
 		// 레시피의 라인 구성을 메인 데이터에 세팅
 		Get_ServerInfo().Set_Config_Line(&Get_SettingInfo().ServerInfo);
+
 		// 레지스트리 체크
 		CRegServer*	pRegEqp = new CRegServer();
 		for (auto nIdx = 0; nIdx < Get_ServerInfo().GetCount(); ++nIdx)
 		{
 			pRegEqp->Check_RegistryPath(Get_Server(nIdx).Get_ServerId());
 			pRegEqp->Load_Equipment_ID(Get_Server(nIdx).Get_ServerId(),	Get_Server(nIdx));
+			Get_Server(nIdx).Set_DEFINEDATA(Get_Server(nIdx));
+			
+			
 		}
 		delete pRegEqp;
 		Get_ServerInfo().Set_Path(m_stInspInfo.Path.szLog, m_stInspInfo.Path.szReport);
@@ -2968,6 +2973,7 @@ void CView_MainCtrl_ICS::OnSet_EESMode(__in enEES_Mode nAcessMode)
 						cntr.REPORT.Body.Set_SUBEQPID(Get_Server(IN_From).Get_DEFINEDATA().Get_SUBEQPID());
 						m_pIcsServer->SendReportOnlineStateMassage(Get_ServerID(IN_From), cntr.REPORT);
 						svr->GetRemoteEes().RemoveOnlineStateProcedure(ID);
+
 						mPane_CommStatus->m_st_RMS.SetText(g_sEES_Mode_UI[nAcessMode]);
 					}
 				}

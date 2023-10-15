@@ -237,6 +237,8 @@ protected:
 	virtual void	OnSet_EESMode(__in enEES_Mode nAcessMode);
 protected:
 	bool Get_EquipmentTypeEvent(__in uint8_t  IN_From, __in uint8_t  IN_nPortStatus);
+
+	void SetSystemTimePrivilege();
 #endif
 };
 

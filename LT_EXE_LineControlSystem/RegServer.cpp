@@ -1176,7 +1176,7 @@ bool CRegServer::Load_Yield(LPCTSTR IN_szEqpID, CServer & OUT_Equipment)
 	delete m_pReg;
 	return true;
 }
-
+#endif//SOCKET
 //=============================================================================
 // Method		: Save_Equipment_ID
 // Access		: public  
@@ -1390,4 +1390,3 @@ CString CRegServer::Load_Equipment_ID(__in LPCTSTR IN_szEqpID, __in uint8_t IN_n
 	delete m_pReg;
 	return szValue.GetBuffer();
 }
-#endif//SOCKET

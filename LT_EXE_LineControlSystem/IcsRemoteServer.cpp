@@ -241,105 +241,8 @@ lt::uint32 CIcsRemoteServer::SendReplyOpCallMassage(__in lt::Reply_Opcall_Args::
 		{ std::forward<lt::Reply_Opcall_Args::Args &>(pInData) }	);
 	return result;
 }
-#if TEST
-lt::uint32 CIcsRemoteServer::SendUnitReadMassage(__in ST_xml_UNITID_READ * pInData)
-{
-	pInData->Hd.transactionId = MainFrame->CreateTransactionID();
-	MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg = GetServer().GetXmlEes().MakeXML_UNITID_READ(pInData);
 
-	lt::ST_xml_Base state = {
-		MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg,
-	};
-	auto result = GetRemoteEes().CommandUnitIdRead(
-		{ static_cast<lt::ST_xml_Base>(state) }
-	);
-	return result;
-}
-lt::uint32 CIcsRemoteServer::SendReplyUnitReadMassage(__in ST_xml_REPLY_UNITID_READ * pInData)
-{
-	if (MainFrame->bGetTransactionID(pInData->Hd.transactionId)) {
-		MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReplyMsg = GetServer().GetXmlEes().MakeXML_REPLY_UNITID_READ(pInData);
-
-		lt::ST_xml_Base state = {
-			MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReplyMsg,
-		};
-		auto result = GetRemoteEes().CommandReplyUnitIdRead(
-			{ static_cast<lt::ST_xml_Base>(state) }
-		);
-		MainFrame->ClearTransactionID(pInData->Hd.transactionId);
-		return result;
-	}
-	else {
-		CString transactionId(pInData->Hd.transactionId);
-		GetLogger()
-			.SetLogLevel(lt::LogLevel::Notice)
-			.AddLog(_T("SendReplyOpCallMassage (transactionId Fail = %s)"),
-				transactionId);
-	}
-	return 0;
-}
-lt::uint32 CIcsRemoteServer::SendReportStartLotMassage(__in ST_xml_REPORT_START_LOT * pInData)
-{	
-	pInData->Hd.transactionId = MainFrame->CreateTransactionID();
-	MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg = GetServer().GetXmlEes().MakeXML_REPORT_START_LOT(pInData);
-
-	lt::ST_xml_Base state = {
-		MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg,
-	};
-	auto result = GetRemoteEes().CommandReportStartLot(
-		{ static_cast<lt::ST_xml_Base>(state) }
-	);
-	MainFrame->ClearTransactionID(pInData->Hd.transactionId);
-	return result;
-}
-lt::uint32 CIcsRemoteServer::SendReportEndEventMassage(__in ST_xml_REPORT_END_EVENT * pInData)
-{
-	pInData->Hd.transactionId = MainFrame->CreateTransactionID();
-	MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg = GetServer().GetXmlEes().MakeXML_REPORT_END_EVENT(pInData);
-
-	lt::ST_xml_Base state = {
-		MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg,
-	};
-	auto result = GetRemoteEes().CommandReportEndEvent(
-		{ static_cast<lt::ST_xml_Base>(state) }
-	);
-	MainFrame->ClearTransactionID(pInData->Hd.transactionId);
-	return result;
-}
-lt::uint32 CIcsRemoteServer::SendReportStartProcessMassage(__in ST_xml_REPORT_START_PROCESS * pInData)
-{
-	pInData->Hd.transactionId = MainFrame->CreateTransactionID();
-	MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg = GetServer().GetXmlEes().MakeXML_REPORT_START_PROCESS(pInData);
-
-	lt::ST_xml_Base state = {
-		MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg,
-	};
-	auto result = GetRemoteEes().CommandReportStartProcess(
-		{ static_cast<lt::ST_xml_Base>(state) }
-	);
-	MainFrame->ClearTransactionID(pInData->Hd.transactionId);
-	return result;
-}
-lt::uint32 CIcsRemoteServer::SendReportEndProcessMassage(__in ST_xml_REPORT_END_PROCESS * pInData)
-{
-	pInData->Hd.transactionId = MainFrame->CreateTransactionID();
-	MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg = GetServer().GetXmlEes().MakeXML_REPORT_END_PROCESS(pInData);
-
-	lt::ST_xml_Base state = {
-		MainFrame->GetTransactionID(pInData->Hd.transactionId)->ReportMsg,
-	};
-
-	auto result = GetRemoteEes().CommandReportEndProcess(
-		{ static_cast<lt::ST_xml_Base>(state) }
-	);
-	MainFrame->ClearTransactionID(pInData->Hd.transactionId);
-	return result;
-}
-#endif
-
-
-#if defined(EES_XML)//20231003
-void CIcsRemoteServer::OnRequestLinkTestEvent(Request_Link_Test_EventArgs & eventArgs){
+void CIcsRemoteServer::OnRequestLinkTestEvent(Request_Link_Test_EventArgs & eventArgs) {
 	auto & args = eventArgs.GetArgs();
 	auto & reqArgs = args.GetTypedArgs();
 
@@ -347,35 +250,46 @@ void CIcsRemoteServer::OnRequestLinkTestEvent(Request_Link_Test_EventArgs & even
 	GetRemoteEes().AddLinkTestProcedure(reqArgs.Hd.Get_transactionId(), reqArgs);
 	GetServer().Set_REQUEST_LINK_TEST(nullptr);
 }
-void CIcsRemoteServer::OnRequestUserCommandEvent(Request_User_Command_EventArgs & eventArgs){
+void CIcsRemoteServer::OnRequestUserCommandEvent(Request_User_Command_EventArgs & eventArgs) {
 	auto & args = eventArgs.GetArgs();
 	auto & reqArgs = args.GetTypedArgs();
 	GetRemoteEes().AddeUserCommandProcedure(reqArgs.Hd.Get_transactionId(), reqArgs);
 	GetServer().Set_REQUEST_USER_COMMAND(nullptr);
 
 }
-void CIcsRemoteServer::OnRequestEquipmentStateEvent(Request_Equipment_State_Display_EventArgs & eventArgs){
+void CIcsRemoteServer::OnRequestEquipmentStateEvent(Request_Equipment_State_Display_EventArgs & eventArgs) {
 	auto & args = eventArgs.GetArgs();
 	auto & reqArgs = args.GetTypedArgs();
 
-	//GetServer().Set_REQUEST_EQUIPMENT_STATE_DISPLAY(Request);
+	GetRemoteEes().AddEquipmentStateProcedure(reqArgs.Hd.Get_transactionId(), reqArgs);
+
+	DoEvents();
+	GetServer().Set_REQUEST_EQUIPMENT_STATE_DISPLAY(nullptr);
 }
-void CIcsRemoteServer::OnRequestLossWindowEvent(Request_Loss_Window_EventArgs & eventArgs){
+void CIcsRemoteServer::OnRequestLossWindowEvent(Request_Loss_Window_EventArgs & eventArgs) {
 	auto & args = eventArgs.GetArgs();
 	auto & reqArgs = args.GetTypedArgs();
 
 	//GetServer().Set_REQUEST_LOSS_WINDOW(Request);
 }
-void CIcsRemoteServer::OnRequestAlarmListEvent(Request_Alarm_List_EventArgs & eventArgs){
+void CIcsRemoteServer::OnRequestAlarmListEvent(Request_Alarm_List_EventArgs & eventArgs) {
 	auto & args = eventArgs.GetArgs();
 	auto & reqArgs = args.GetTypedArgs();
-	//GetServer().Set_REQUEST_ALARM_LIST(Request);
+
+	GetRemoteEes().CreateAlarmListProcedure(reqArgs.Hd.Get_transactionId());
+	GetRemoteEes().AddAlarmListProcedure(reqArgs.Hd.Get_transactionId(), reqArgs);
+
+	GetServer().Set_REQUEST_ALARM_LIST(nullptr);
 }
 void CIcsRemoteServer::OnRequestSetDateTimeEvent(Request_Set_DateTime_EventArgs & eventArgs)
 {
 	auto & args = eventArgs.GetArgs();
 	auto & reqArgs = args.GetTypedArgs();
-	//GetServer().Set_REQUEST_SET_DATETIME(Request);
+
+	GetRemoteEes().CreateSetDateTimeProcedure(reqArgs.Hd.Get_transactionId());
+	GetRemoteEes().AddSetDateTimeProcedure(reqArgs.Hd.Get_transactionId(), reqArgs);
+
+	GetServer().Set_REQUEST_SET_DATETIME(nullptr);
 }
 void CIcsRemoteServer::OnRequestTerminalMessageEvent(Request_Terminal_Message_EventArgs & eventArgs)
 {
@@ -391,29 +305,36 @@ void CIcsRemoteServer::OnRequestOpCallEvent(Request_Opcall_EventArgs & eventArgs
 }
 #endif
 
+#if defined(EES_XML)//20231003
 #if TEST
+lt::uint32 CIcsRemoteServer::SendUnitReadMassage(__in ST_xml_UNITID_READ * pInData)
+{
+	return result;
+}
+lt::uint32 CIcsRemoteServer::SendReplyUnitReadMassage(__in ST_xml_REPLY_UNITID_READ * pInData)
+{
+	return 0;
+}
+lt::uint32 CIcsRemoteServer::SendReportStartLotMassage(__in ST_xml_REPORT_START_LOT * pInData)
+{	
+	return result;
+}
+lt::uint32 CIcsRemoteServer::SendReportEndEventMassage(__in ST_xml_REPORT_END_EVENT * pInData)
+{
+	return result;
+}
+lt::uint32 CIcsRemoteServer::SendReportStartProcessMassage(__in ST_xml_REPORT_START_PROCESS * pInData)
+{
+	return result;
+}
+lt::uint32 CIcsRemoteServer::SendReportEndProcessMassage(__in ST_xml_REPORT_END_PROCESS * pInData)
+{
+	return result;
+}
+
 void CIcsRemoteServer::OnRequestUnitIdReadEvent(XmlEventArgs & eventArgs)
 {
-	auto & args = eventArgs.GetArgs();
-	auto & reqArgs = args.GetTypedArgs();
 
-	//Create.
-	ST_xml_REQUEST_UNITID_READ * Request = new ST_xml_REQUEST_UNITID_READ();
-	LPARAM para = (LPARAM)Request;
-	MainFrame->AddLPARAM(para);
-	Request = GetXmlEes().ClearXML_REQUEST_UNITID_READ(Request);
-	GetXmlEes().ParseXML_REQUEST_UNITID_READ((reqArgs.ReportMsg),
-		Request);
-
-	if (MainFrame->bGetTransactionID(Request->Hd.transactionId)) {
-		MainFrame->GetTransactionID(Request->Hd.transactionId)->RequestMsg = reqArgs.ReportMsg;
-		GetServer().Set_REQUEST_UNITID_READ(Request);
-	}
-	else {
-		delete Request;
-		Request = nullptr;
-		MainFrame->RemoveLPARAM(para);
-	}
 }
 #endif
 #endif

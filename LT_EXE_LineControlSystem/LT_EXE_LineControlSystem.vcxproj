@@ -319,7 +319,7 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binar
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>4819;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/DLT_EQP#0 /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/DLT_EQP#0 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -433,7 +433,7 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_commd.dll $(SolutionDir)\_Binar
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>4819;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/DLT_EQP#0 /D "USE_DEBUG_MODE" /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/DLT_EQP#0 /D "USE_DEBUG_MODE" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -553,7 +553,7 @@ xcopy ..\Lib_ICS\lib\$(PlatformTarget)\bin\ltics_comm.dll $(SolutionDir)\_Binary
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <AdditionalOptions>/DLT_EQP#0 /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/DLT_EQP#0 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

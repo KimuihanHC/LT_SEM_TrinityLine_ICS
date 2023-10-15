@@ -116,12 +116,7 @@ protected:
 #if TESTOPCALL
 	virtual void Popup_OPCALL(ST_xml_REQUEST_OPCALL * IN_DATA);
 #endif
-#if SOCKET
-	void SetUI_PortStatus		(__in CVGStatic* IN_pwndPort, __in uint8_t IN_nStatus);
-	void SetUI_PortStatus		(__in CVGStatic* IN_pwndPort, __in const ST_PortStatus* IN_nStatus);
-	void SetUI_ConveyorStatus	(__in CVGStatic* IN_pwndConveyor, __in uint8_t IN_nStatus, __in uint8_t IN_nExistSocket);
-	void SetUI_ConveyorStatus	(__in CVGStatic* IN_pwndConveyor, __in const ST_ConveyorStatus* IN_nStatus);
-#endif	//SOCKET
+
 	//2023.04.28a uhkim
 	void	SetUI_EQUIPMENTSTATE(__in CVGStatic* IN_nPort, LPCTSTR IN_DATA);
 public:
@@ -169,13 +164,6 @@ public:
 
 	// 설비내 소켓 정보
 	// buffer, test 1, tese 2, 컨베이어, 리턴 컨베이어
-#if SOCKET
-	virtual void Set_PortClear		(__in uint8_t IN_nPortIndex);
-	virtual void Set_PortStatus		(__in uint8_t IN_nPortIndex, __in uint8_t IN_nStatus);
-	virtual void Set_PortStatus		(__in uint8_t IN_nPortIndex, __in const ST_PortStatus* IN_nStatus);
-	virtual void Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in uint8_t IN_nStatus, __in uint8_t IN_nExistSocket);
-	virtual void Set_ConveyorStatus	(__in uint8_t IN_nConveyorIndex, __in const ST_ConveyorStatus* IN_nStatus);
-#endif//SOCKET
 
 	//====================================================
 	// Add

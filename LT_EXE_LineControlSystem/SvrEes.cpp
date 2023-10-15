@@ -16,12 +16,6 @@ CSvrEes::CSvrEes()
 	assign_mEES_PortSubStatus(PtI_T_MaxCount, {});
 	assign_EquipmentIDStatus(PtI_T_MaxCount, {});
 #endif
-#if SOCKET
-	m_nPortStatus.assign(PtI_EES_MaxCount, { 0, _T("") });
-	m_nConveyorStatus.assign(PtI_EES_MaxCount, { 0, 0, _T("") });
-	m_nOldPortStatus.assign(PtI_EES_MaxCount, { 0, _T("") });
-	m_nEquipmentID.assign(PtI_EES_MaxCount, { _T("") , _T("") });
-#endif
 }
 CSvrEes::~CSvrEes()
 {

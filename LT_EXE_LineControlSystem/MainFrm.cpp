@@ -298,7 +298,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
  	OnSet_PermissionMode(Permission_Operator, true);
 //#endif
 #if defined(EES_XML)//20231003
-	SetSystemTimePrivilege();
+	//SetSystemTimePrivilege();
 #endif
 	return 0;
 }
@@ -1454,12 +1454,13 @@ void CMainFrame::SetSystemTimePrivilege()
 	LUID luid;
 	TOKEN_PRIVILEGES tp;
 	HANDLE hToken;
-	OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-
-	LookupPrivilegeValue(NULL, SE_SYSTEMTIME_NAME, &luid);
-	tp.PrivilegeCount = 1;
-	tp.Privileges[0].Luid = luid;
-	tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-	AdjustTokenPrivileges(hToken, FALSE, &tp, 0, NULL, NULL);
+	if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+		LookupPrivilegeValue(NULL, SE_SYSTEMTIME_NAME, &luid);
+		tp.PrivilegeCount = 1;
+		tp.Privileges[0].Luid = luid;
+		tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+		AdjustTokenPrivileges(hToken, FALSE, &tp, 0, NULL, NULL);
+		CloseHandle(hToken);
+	}
 }
 #endif

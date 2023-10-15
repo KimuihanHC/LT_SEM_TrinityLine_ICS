@@ -12,14 +12,12 @@
 
 #pragma once
 
-//#include "Def_Constant.h"
 #include "Def_ConstantServer.h"
 #include "SocketMonitoring.h"
 #include "FailInfo_Eqp.h"
 #include "Def_ConfigServer.h"
 
 #include <vector>
-
 
 #include "Xml/xmlArgs.h"
 #include "IcsRemoteServerEes.h"
@@ -35,7 +33,8 @@
 
 class CRegServer;
 
-class CServer : public CConfig_Svr, public CCommonModule
+//20231011 Testing.
+class CServer : public CCommonModule,	public CConfig_Svr
 {
 public:
 	CServer();
@@ -48,6 +47,7 @@ protected:
 	CRegServer*	m_pRegSvr = nullptr;
 //socket State
 	CSocketMonitoring*				m_pSocketInfo = nullptr;
+
 //Svr State
 	uint8_t		m_nConnection = 0;
 	bool		m_bEnable = false;	// ?¤ë¹„ ?¬ìš© ??ë¬?(ê²€?¬í•­ëª?ì§„í–‰ ?¬ë?)
@@ -257,6 +257,7 @@ public:
 
 public:
 	void Set_DEFINEDATA(CServer & Data);
+
 #endif
 #if TEST
 	void							Set_UINTID_READ(__in ST_xml_UNITID_READ * IN_Data);

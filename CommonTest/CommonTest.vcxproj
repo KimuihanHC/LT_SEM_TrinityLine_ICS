@@ -387,7 +387,6 @@
       <DisableSpecificWarnings>4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);EES_XML;</PreprocessorDefinitions>
-      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

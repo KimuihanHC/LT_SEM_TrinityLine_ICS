@@ -12,7 +12,7 @@
 #include "Def_Test.h"
 #include "Def_Language_Message.h"
 
-#if defined(EES_XML)//20231003
+#if defined(EES_XML)
 #include "Xml/xmlArgs.h"
 #include "Util/StringUtil.hpp"
 #include <sysinfoapi.h>
@@ -2353,17 +2353,13 @@ void CTestManager_EQP_ICS::OnEvent_ServerConnection(__in uint8_t IN_From, __in L
 	if (Get_Server(IN_From).Get_ClientConnection()) {
 		for (int n_Eqp = 0; n_Eqp < Get_EquipmentCount(); n_Eqp++) {
 			if (Get_Equipment(n_Eqp).Get_ClientConnection()) {
-				auto EquipArgs = Get_Server(IN_From).Create_Report_Equipment_StateArgs(nullptr);
-				auto Equipcntr = Add_Equipment_StateArgs(Get_ServerID(IN_From), *EquipArgs);
-				for (int n_Eqp = 0; n_Eqp < Get_Equipment(n_Eqp).Get_mEES_PortSubStatusCount(); n_Eqp++) {
-					Equipcntr.REPORT.Body.Set_EQUIPMENTSTATE(lt::ToMultiByte(g_szPortStatus[Get_Equipment(n_Eqp).Get_mEES_PortSubStatus(n_Eqp).Get_nProcessStatus()]));
-					OnSend_REPORT_EQUIPMENT_STATE(IN_From, Equipcntr.REPORT);
-				}
+				OnEvent_EquipmentREPORT_EQUIPMENT_STATE(IN_From, (LPARAM) nullptr);
 			}
 			else {
 				for (int n_Eqp = 0; n_Eqp < Get_Equipment(n_Eqp).Get_mEES_PortSubStatusCount(); n_Eqp++) {
 					Get_Equipment(n_Eqp).Get_mEES_PortSubStatus(n_Eqp).Set_nProcessStatus(PtS_Empty);
 				}
+				OnEvent_EquipmentREPORT_EQUIPMENT_STATE(IN_From, (LPARAM) nullptr);
 			}
 		}
 	}
@@ -2392,7 +2388,6 @@ void CTestManager_EQP_ICS::OnEvent_ServerREPORT_USER_CHANGE(__in uint8_t IN_From
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_USER_CHANGE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-	lt::XUUID ID;
 	lt::Request_User_Cpmmand_Args::Args * Args = (lt::Request_User_Cpmmand_Args::Args *) IN_Data;
 	auto cntr = Add_User_CommandArgs(Get_ServerID(IN_From), *Args);
 	cntr.RequestToReply();
@@ -2407,649 +2402,95 @@ void CTestManager_EQP_ICS::OnEvent_ServerREPLY_USER_COMMAND(__in uint8_t IN_From
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPORT_EQUIPMENT_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-	//lt::Report_Equipment_State_Args::Args * Args = (lt::Report_Equipment_State_Args::Args *) IN_Data;
 	auto Args = Get_Server(IN_From).Create_Report_Equipment_StateArgs((lt::Report_Equipment_State_Args::Args *) IN_Data);
 	auto cntr = Add_Equipment_StateArgs(Get_ServerID(IN_From), *Args);
 	OnSend_REPORT_EQUIPMENT_STATE(IN_From, cntr.REPORT);
-#if TEST
-	ST_xml_REPORT_EQUIPMENT_STATE* IN_PARA = (ST_xml_REPORT_EQUIPMENT_STATE*)IN_Data;
-	/*
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString EQUIPMENTSTATE(IN_PARA->Body.EQUIPMENTSTATE);
-	CString PORTID(IN_PARA->Body.PORTID);
-	CString LOTID(IN_PARA->Body.LOTID);
-	*/
-	auto bConnectionEvent = bGetClientConnectionEvent(IN_From);
-	if (IN_From < Get_ServerCount()) {
-		//if (bConnectionEvent && Get_Server(IN_From).Get_ClientConnection()) {
-		//	for (int n_SvrPort = 0; n_SvrPort < Get_Server(IN_From).Get_EquipmentIDCount(); n_SvrPort++) {
-		//		
-		//	}
-		//}
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			for (int n_SvrPort = 0; n_SvrPort < Get_Server(IN_From).Get_EquipmentIDCount(); n_SvrPort++) {
-				int State = ES_IDLE;
-				bool bSet = false;
-				for (int n_Eqp = 0; n_Eqp < Get_EquipmentCount(); n_Eqp++) {
-					if (Get_Equipment(n_Eqp).Get_ClientConnection()) {
-						if (bSet) {
-							continue;
-						}
-						for (int n_EqpPort = 0; n_EqpPort < Get_Equipment(n_Eqp).Get_PortCount(); n_EqpPort++) {
-							if (!Get_EquipmentTypeEvent(n_Eqp, n_EqpPort)) {
-								continue;
-							}
-							if (bSet) {
-								continue;
-							}
-							if (Get_Equipment(n_Eqp).Get_PortStatus(n_EqpPort).nEquipmentState == ES_SUDDENSTOP) {
-								State = ES_SUDDENSTOP;
-								bSet = true;
-							}
-							else if (bSet == false) {
-								if (Get_Equipment(n_Eqp).Get_PortStatus(n_EqpPort).nEquipmentState == ES_STOP) {
-									State = ES_STOP;
-									bSet = true;
-								}
-								else if (bSet == false) {
-									if (Get_Equipment(n_Eqp).Get_PortStatus(n_EqpPort).nEquipmentState == ES_RUN) {
-										State = ES_RUN;
-										bSet = true;
-									}
-									else {
-										State = ES_IDLE;
-										//bSet = true;
-									}
-								}
-							}
-						}
-					}
-				}
-				Get_Server(IN_From).Set_PortStatusEquipmentStateEvent(n_SvrPort, State);
-				if (bGetSvrEquipmentStateEvent(IN_From, n_SvrPort)) {
-					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_SvrPort).szEquipID);
-					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
-					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_SvrPort).szPortID);
-					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_PortStatus(n_SvrPort).nEquipmentState]);
-					CString LOTID;
-					auto m_p = Get_Server(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
-						EQUIPMENTID,
-						SUBEQPID,
-						PORTID,
-						EQUIPMENTSTATE,
-						LOTID);
-					Get_Server(IN_From).Set_Notify_EquipmentState(m_p);
-					OnSend_REPORT_EQUIPMENT_STATE(
-						IN_From,
-						m_p);
-					Get_Server(IN_From).Set_OldPortStatusEquipmentStateEvent(n_SvrPort, State);
-				}
-			}
-		}
-	}
-	/*
-	if (IN_From < Get_ServerCount()) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
-					OnSend_REPORT_EQUIPMENT_STATE(
-						IN_From,
-						IN_PARA);
-					//Get_Server(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
-					//	SUBEQPID,
-					//	PORTID,
-					//	EQUIPMENTSTATE,
-					//	LOTID));
-					Get_Server(IN_From).Set_Notify_EquipmentState(EQUIPMENTSTATE);
-				}
-			}
-		}
-	}*/
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
+
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_EQUIPMENT_STATE_DISPLAY(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-	lt::XUUID ID;
-	lt::Reply_Equipment_State_Display_Args::Args * Args = (lt::Reply_Equipment_State_Display_Args::Args *) IN_Data;
+	lt::Request_Equipment_State_Display_Args::Args * Args = (lt::Request_Equipment_State_Display_Args::Args *) IN_Data;
+	auto cntr = Add_Equipment_StateArgs(Get_ServerID(IN_From), * Args);
 	auto svr = m_pIcsServer->GetRemote(Get_ServerID(IN_From));
-	if (Args != nullptr) {
-		ID = Args->Hd.Get_transactionId();
-		svr->GetRemoteEes().AddEquipmentStateProcedure(ID, *Args);
-		delete Args;
-	}
-	else {
-		ID = svr->GetRemoteEes().EquipmentStateCtrl();
-	}
-	auto cntr = svr->GetRemoteEes().EquipmentStateCtrl(ID);
+
 	cntr.RequestToReply();
-	CString EQUIPMENTID = lt::ToWideChar(cntr.REQUEST.Body.Get_EQUIPMENTID()).c_str();
 
 	if (IN_From < Get_ServerCount()) {
 		if (Get_Server(IN_From).Get_ClientConnection()) {
-			/*
-			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID() == EQUIPMENTID) {
-				CString EQUIPMENTID = lt::ToWideChar(cntr.REQUEST.Body.Get_EQUIPMENTID()).c_str();
-					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID());
-					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
-					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).Get_PORTID());
-					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_mEES_PortSubStatus(n_Port).Get_nEquipmentStatus()]);
-					//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
-					OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
-						IN_From,
-						cntr.REPLY);
-
-					for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
-					{
-						if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
-							dsp.Dsp = IN_PARA;
-							dsp.EES = &Get_EES(nIdx);
-							Get_Server(IN_From).Set_Notify_EquipmentStateDisplay(&dsp);
-						}
-					}
-				}
-			}*/
 			for (int i = 0; i < Get_EquipmentCount(); i++) {
-				if (Get_Equipment(i).Get_ClientConnection()) {
-					for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
-						if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID() == EQUIPMENTID) {
+				if (!Get_Equipment(i).Get_ClientConnection()) {
+					continue;
+				}
+				
+				for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
+					if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID().GetLength() <= 0) {
+						continue;
+					}
+					CString EQUIPMENTID = lt::ToTypeChar(cntr.REQUEST.Body.Get_EQUIPMENTID()).c_str();
+					CString EQUIPMENTSTATEDISPLAY = lt::ToTypeChar(cntr.REQUEST.Body.Get_EQUIPMENTSTATEDISPLAY()).c_str();
+					if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID() == EQUIPMENTID) {
+						OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
+							IN_From,
+							cntr.REPLY);
 
-							//CString EQUIPMENTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_EQUIPMENTID);
-							//2023.06.28a uhkim
-							//CString SUBEQPID(Get_Equipment(i).Get_SubEqpID());
-							CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
-							CString PORTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).Get_PORTID());
-							CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(i).Get_mEES_PortSubStatus(n_Port).Get_nProcessStatus()]);
-							//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
-							OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
-								IN_From,
-								cntr.REPLY);
-							/*
-							for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
-							{
-								if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
-									dsp.Dsp = IN_PARA;
-									dsp.EES = &Get_EES(nIdx);
-									Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
-								}
-							}*/
-						}
+						//for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++) {
+						//	if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
+						//		dsp.Dsp = IN_PARA;
+						//		dsp.EES = &Get_EES(nIdx);
+						//		Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);							
+						//	}
+						//}
 					}
 				}
-
 			}
 		}
 	}
-#if TEST
-	CString temp;
-	ST_EquipmentStateDisplay dsp;
-	ST_xml_REQUEST_EQUIPMENT_STATE_DISPLAY* IN_PARA = (ST_xml_REQUEST_EQUIPMENT_STATE_DISPLAY*)IN_Data;
-
-	CString transactionId(IN_PARA->Hd.transactionId);
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	//CString PORTID(IN_PARA->Body.PORTID);
-	//int nPORTID = _ttoi(PORTID);
-	CString EQUIPMENTSTATEDISPLAY(IN_PARA->Body.EQUIPMENTSTATEDISPLAY);
-	CString RGBDISPLAY(IN_PARA->Body.RGBDISPLAY);
-
-
-	if (IN_From < Get_ServerCount()) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
-					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID);
-					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
-					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szPortID);
-					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_PortStatus(n_Port).nEquipmentState]);
-					//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
-					OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
-						IN_From,
-						Get_Server(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
-							transactionId,
-							EQUIPMENTID,
-							SUBEQPID,
-							PORTID,
-							EQUIPMENTSTATEDISPLAY,//EQUIPMENTSTATE,
-							RGBDISPLAY));
-
-					for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
-					{
-						if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
-							dsp.Dsp = IN_PARA;
-							dsp.EES = &Get_EES(nIdx);
-							Get_Server(IN_From).Set_Notify_EquipmentStateDisplay(&dsp);
-						}
-					}
-				}
-			}
-			for (int i = 0; i < Get_EquipmentCount(); i++) {
-				if (Get_Equipment(i).Get_ClientConnection()) {
-					for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
-						if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
-
-							CString EQUIPMENTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID);
-							//2023.06.28a uhkim
-							//CString SUBEQPID(Get_Equipment(i).Get_SubEqpID());
-							CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
-							CString PORTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szPortID);
-							CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(i).Get_PortStatus(n_Port).nEquipmentState]);
-							CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
-							OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
-								IN_From,
-								Get_Equipment(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
-									transactionId,
-									EQUIPMENTID,
-									SUBEQPID,
-									PORTID,
-									EQUIPMENTSTATEDISPLAY,//EQUIPMENTSTATE,
-									RGBDISPLAY));
-
-							for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
-							{
-								if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
-									dsp.Dsp = IN_PARA;
-									dsp.EES = &Get_EES(nIdx);
-									Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
-								}
-							}
-						}
-					}
-				}
-
-			}
-		}
-	}
-
-	/*
-	if (Get_ServerID(IN_From).GetBuffer() == EQUIPMENTID) {
-		if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				if (IN_From < Get_ServerCount())
-				{
-
-				}
-			}
-		}
-		//
-		for (int i = 0; i < Get_EquipmentCount(); i++) {
-			if (Get_Equipment(i).Get_Alias() == SUBEQPID) {
-				if (Get_Equipment(i).Get_ClientConnection()) {
-					OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
-						IN_From,
-						Get_Server(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
-							transactionId,
-							SUBEQPID,
-							PORTID,
-							EQUIPMENTSTATEDISPLAY,
-							RGBDISPLAY));
-
-					for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
-					{
-						if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
-							dsp.Dsp = IN_PARA;
-							dsp.EES = &Get_EES(nIdx);
-							Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
-						}
-					}
-				}
-			}
-		}
-	}*/
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPLY_EQUIPMENT_STATE_DISPLAY(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REPLY_EQUIPMENT_STATE_DISPLAY* IN_PARA = (ST_xml_REPLY_EQUIPMENT_STATE_DISPLAY*)IN_Data;
-	//서버 이벤트 처리.	
-	//CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	//CString EQUIPMENTSTATEDISPLAY(IN_PARA->Body.EQUIPMENTSTATE);
-	//CString RGBDISPLAY(IN_PARA->Body.LOTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			if (IN_From < Get_ServerCount())
-			{
-				/*
-				OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
-					IN_From,
-					Svr.Set_ReplyEquipMentStateDisplayParameter(
-						SUBEQPID,
-						EQUIPMENTSTATEDISPLAY,
-						RGBDISPLAY));
-				*/
-			}
-		}
-	}
-	//설비 이벤트 처리
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
 
-			}
-		}
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPORT_LOSS_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REPORT_LOSS_STATE* IN_PARA = (ST_xml_REPORT_LOSS_STATE*)IN_Data;
-	//서버 이벤트 처리.	
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString EQUIPMENTSTATE(IN_PARA->Body.EQUIPMENTSTATE);
-	CString LOTID(IN_PARA->Body.LOTID);
-	CString LOSSSTATE(IN_PARA->Body.LOSSSTATE);
-	CString LOSSCOUNT(IN_PARA->Body.LOSSCOUNT);
 
-	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			if (IN_From < Get_ServerCount())
-			{
-				OnSend_REPORT_LOSS_STATE(
-					IN_From,
-					IN_PARA);
-			}
-		}
-	}
-	//설비 이벤트 처리
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
-
-			}
-		}
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_LOSS_WINDOW(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REQUEST_LOSS_WINDOW* IN_PARA = (ST_xml_REQUEST_LOSS_WINDOW*)IN_Data;
 
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString LOSSWINDOW(IN_PARA->Body.LOSSWINDOW);
-
-	//서버 이벤트 처리.	
-	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			if (IN_From < Get_ServerCount())
-			{
-				//서버 보고 이벤트
-				OnSend_REPLY_LOSS_WINDOW(
-					IN_From,
-					Get_Server(IN_From).GetXmlEes().Set_ReplyLossWindowParameter(
-						SUBEQPID,
-						LOSSWINDOW));
-				//Data 및 이벤트 처리.
-				Get_Server(IN_From).Set_Notify_LOSSWINDOW(LOSSWINDOW);
-			}
-		}
-	}
-	//설비 이벤트 처리
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
-
-			}
-		}
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPLY_LOSS_WINDOW(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	CServer Svr;
-	ST_xml_REPLY_LOSS_WINDOW* IN_PARA = (ST_xml_REPLY_LOSS_WINDOW*)IN_Data;
 
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString LOSSWINDOW(IN_PARA->Body.LOSSWINDOW);
-
-	//서버 이벤트 처리.	
-	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			if (IN_From < Get_ServerCount())
-			{
-
-			}
-		}
-	}
-	//설비 이벤트 처리
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
-
-			}
-		}
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPORT_ALARM_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	CServer Svr;
-	ST_xml_REPORT_ALARM_STATE* IN_PARA = (ST_xml_REPORT_ALARM_STATE*)IN_Data;
-	//서버 이벤트 처리.	
-	CString LOTID(IN_PARA->Body.LOTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString ALARMCODE(IN_PARA->Body.ALARMCODE);
-	CString ALARMID(IN_PARA->Body.ALARMID);
-	CString ALARMMESSAGE(IN_PARA->Body.ALARMMESSAGE);
 
-	/*
-	if (IN_From < Get_ServerCount()) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
-
-				}
-			}
-			for (int i = 0; i < Get_EquipmentCount(); i++) {
-				if (Get_Equipment(i).Get_ClientConnection()) {
-					for (int n_Port = 0; n_Port < Get_Equipment(i).Get_EquipmentIDCount(); n_Port++) {
-						if (Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
-
-							CString EQUIPMENTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szEquipID);
-							CString SUBEQPID(Get_Equipment(i).Get_SubEqpID());
-							CString PORTID(Get_Equipment(i).Get_EquipmentIDStatus(n_Port).szPortID);
-							CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(i).Get_PortStatus(n_Port).nEquipmentState]);
-							CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
-							OnSend_REPLY_EQUIPMENT_STATE_DISPLAY(
-								IN_From,
-								Get_Server(IN_From).GetXmlEes().Set_ReplyEquipMentStateDisplayParameter(
-									transactionId,
-									EQUIPMENTID,
-									SUBEQPID,
-									PORTID,
-									EQUIPMENTSTATE,
-									RGBDISPLAY));
-
-							for (UINT nIdx = 0; nIdx < Get_EESCount(); nIdx++)
-							{
-								if (0 == Get_EESEqpCode(nIdx).Compare(EQUIPMENTSTATEDISPLAY)) {
-									dsp.Dsp = IN_PARA;
-									dsp.EES = &Get_EES(nIdx);
-									Get_Equipment(i).Set_Notify_EquipmentStateDisplay(&dsp);
-								}
-							}
-						}
-					}
-				}
-
-			}
-		}
-	}
-
-	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			if (IN_From < Get_ServerCount())
-			{
-				OnSend_REPORT_ALARM_STATE(
-					IN_From,
-					IN_PARA);
-			}
-		}
-	}
-	//설비 이벤트 처리
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
-
-			}
-		}
-	}*/
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_ALARM_LIST(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REQUEST_ALARM_LIST* IN_PARA = (ST_xml_REQUEST_ALARM_LIST*)IN_Data;
-
-	CString transactionId(IN_PARA->Hd.transactionId);
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
-	CString returnCode;
-	CString returnMessage;
-
-	if (IN_From < Get_ServerCount()) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-				if (Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID == EQUIPMENTID) {
-					CString EQUIPMENTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szEquipID);
-					CString SUBEQPID(Get_Server(IN_From).Get_SubEqpID());
-					CString PORTID(Get_Server(IN_From).Get_EquipmentIDStatus(n_Port).szPortID);
-					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Server(IN_From).Get_PortStatus(n_Port).nEquipmentState]);
-					//CString LOTID(Get_Equipment(i).Get_FromPortToLOTID(n_Port));
-					OnSend_REPLY_ALARM_LIST(
-						IN_From,
-						Get_Server(IN_From).GetXmlEes().Set_ReplyAlarmListParameter(
-							transactionId,
-							EQUIPMENTID,
-							SUBEQPID,
-							IPADDRESS,
-							returnCode,//EQUIPMENTSTATE,
-							returnMessage));
-				}
-			}
-		}
-	}
-
-	//서버 이벤트 처리.	
-	/*
-	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			if (IN_From < Get_ServerCount())
-			{
-				//서버 보고 이벤트
-				OnSend_REPLY_ALARM_LIST(
-					IN_From,
-					Svr.Set_ReplyAlarmListParameter(
-						SUBEQPID));
-			}
-		}
-	}
-	//설비 이벤트 처리
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
-
-			}
-		}
-	}*/
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
+	lt::Request_Alarm_List_Args::Args * Args = (lt::Request_Alarm_List_Args::Args *) IN_Data;
+	auto cntr = Add_Alarm_ListArgs(Get_ServerID(IN_From), *Args);
+	cntr.RequestToReply();
+	auto AlarmList = Get_AL_Info();
+	lt::CALARM_DataListCntr	LIST;
+	for (int nID= 0; nID < AlarmList.Get_AL_Count(); nID ++) {
+		CString szTemp;
+		lt::CALARM_DATA Data;
+		szTemp.Format(_T("%03d"), AlarmList.GetAt(nID).Get_ALID());
+		Data.Set_ID(lt::ToMultiByte(szTemp));
+		szTemp.Format(_T("%d"), AlarmList.GetAt(nID).Get_ALCD());
+		Data.Set_GRADE(lt::ToMultiByte(szTemp));
+		AlarmList.GetAt(nID).Get_ALTX();
+		Data.Set_MESSAGE(lt::ToMultiByte(AlarmList.GetAt(nID).Get_ALTX()));
+		LIST.Add(Data);
+	}	
+	cntr.REPLY.Body.Set_ALARMLIST(LIST);
+	OnSend_REPLY_ALARM_LIST(IN_From, cntr.REPLY);
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPLY_ALARM_LIST(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REPLY_ALARM_LIST* IN_PARA = (ST_xml_REPLY_ALARM_LIST*)IN_Data;
 
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-
-	//서버 이벤트 처리.	
-	if (Get_ServerID(IN_From).GetBuffer() == SUBEQPID) {
-		if (Get_Server(IN_From).Get_ClientConnection()) {
-			if (IN_From < Get_ServerCount())
-			{
-
-			}
-		}
-	}
-	//설비 이벤트 처리
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_EquipmentID(i).GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
-
-			}
-		}
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
-
-
 
 //void CTestManager_EQP_ICS::OnSend_EESMode( __in enEES_Mode IN_nLevel)
 //{
@@ -3058,66 +2499,28 @@ void CTestManager_EQP_ICS::OnEvent_ServerREPLY_ALARM_LIST(__in uint8_t IN_From, 
 
 void CTestManager_EQP_ICS::OnEvent_ServerREPORT_RMS_MODE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REPORT_RMS_MODE* IN_PARA = (ST_xml_REPORT_RMS_MODE*)IN_Data;
 
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString LOTID(IN_PARA->Body.LOTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString EESMODE(IN_PARA->Body.EESMODE);
-
-	if (0 < Get_ServerCount()) {
-		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-					OnSend_REPORT_RMS_MODE(
-						IN_From,
-						IN_PARA);
-					Get_Server(IN_From).Set_Notify_RMS(EESMODE);
-					Get_Server(IN_From).GetXmlEes().SetBaseDataPARA(SV_EES_MODE, EESMODE);
-				}
-			}
-		}
-	}
-	for (int IN_From = 0; IN_From < Get_EquipmentCount(); IN_From++) {
-		Get_Equipment(IN_From).GetXmlEes().SetBaseDataPARA(SV_EES_MODE, EESMODE);
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 
 
 void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_SET_DATETIME(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REQUEST_SET_DATETIME* IN_PARA = (ST_xml_REQUEST_SET_DATETIME*)IN_Data;
-
-
-	CString transactionId(IN_PARA->Hd.transactionId);
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
-	CString DATETIME(IN_PARA->Body.DATETIME);
-
-	CString szTemp;
-	SYSTEMTIME time;
-	SYSTEMTIME tmLocal;
-	GetLocalTime(&tmLocal);
+	lt::Request_Set_DateTime_Args::Args * Args = (lt::Request_Set_DateTime_Args::Args *) IN_Data;
+	auto cntr = Add_Set_DateTimeArgs(Get_ServerID(IN_From), *Args);
+	cntr.RequestToReply();
 
 	if (0 < Get_ServerCount()) {
 		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
 			if (Get_Server(IN_From).Get_ClientConnection()) {
-				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-					if (GetNtPrivilege()) {
-
+				SetSystemTimePrivilege();
+					//if (GetNtPrivilege()) {
+						SYSTEMTIME time;
+						auto Req_Datatime = cntr.REQUEST.Body.Get_DATETIME();
+						CString DATETIME = lt::ToTypeChar(Req_Datatime).c_str();
 						time.wYear = _ttoi(DATETIME.Mid(0, 4));
 						time.wMonth = _ttoi(DATETIME.Mid(4, 2));
 
-						time.wDayOfWeek = tmLocal.wDayOfWeek;
+						//time.wDayOfWeek = tmLocal.wDayOfWeek;
 
 						time.wDay = _ttoi(DATETIME.Mid(6, 2));
 						time.wHour = _ttoi(DATETIME.Mid(8, 2));
@@ -3127,265 +2530,37 @@ void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_SET_DATETIME(__in uint8_t IN_Fr
 						time.wMilliseconds = 0;
 
 						SetLocalTime(&time);
-						//Get_Server(IN_From).Set_TimeSync(true);
-						OnSend_REPLY_SET_DATETIME(
-							IN_From,
-							Get_Server(IN_From).GetXmlEes().Set_ReplySetDateTimeParameter(
-								transactionId,
-								DATETIME));
-					}
-				}
+						//GetLocalTime(&time);
+						m_pIcsComm->SendTimeSync();
+						OnSend_REPLY_SET_DATETIME(IN_From, cntr.REPLY);
+					//}
 			}
 		}
 	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPLY_SET_DATETIME(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REPLY_SET_DATETIME* IN_PARA = (ST_xml_REPLY_SET_DATETIME*)IN_Data;
-	CString transactionId(IN_PARA->Hd.transactionId);
 
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
-	CString DATETIME(IN_PARA->Body.DATETIME);
-
-	CString szTemp;
-	SYSTEMTIME time;
-	SYSTEMTIME tmLocal;
-	GetLocalTime(&tmLocal);
-
-	if (0 < Get_ServerCount()) {
-		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-					if (GetNtPrivilege()) {
-
-						time.wYear = _ttoi(DATETIME.Mid(0, 4));
-						time.wMonth = _ttoi(DATETIME.Mid(4, 2));
-
-						time.wDayOfWeek = tmLocal.wDayOfWeek;
-
-						time.wDay = _ttoi(DATETIME.Mid(6, 2));
-						time.wHour = _ttoi(DATETIME.Mid(8, 2));
-						time.wMinute = _ttoi(DATETIME.Mid(10, 2));
-						time.wSecond = _ttoi(DATETIME.Mid(12, 2));
-						//time.wMilliseconds = _ttoi(DATETIME.Mid(14, 3));
-						time.wMilliseconds = 0;
-
-						SetLocalTime(&time);
-						//Get_Server(IN_From).Set_TimeSync(true);
-						OnSend_REPLY_SET_DATETIME(
-							IN_From,
-							IN_PARA);
-						//Get_Server(IN_From).GetXmlEes().Set_ReplySetDateTimeParameter(
-						//	transactionId,
-						//	DATETIME));
-					}
-				}
-			}
-		}
-	}
-	/*
-	for (int i = 0; i < Get_EquipmentCount(); i++)
-	{
-		if (Get_Equipment(i).Get_Alias().GetBuffer() == SUBEQPID) {
-			if (Get_Equipment(i).Get_ClientConnection()) {
-			}
-		}
-	}*/
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 
 void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_TERMINAL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REQUEST_TERMINAL_MESSAGE* IN_PARA = (ST_xml_REQUEST_TERMINAL_MESSAGE*)IN_Data;
-	CString transactionId(IN_PARA->Hd.transactionId);
 
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString IPADDRESS(IN_PARA->Body.IPADDRESS);
-	CString TERMINALMESSAGE(IN_PARA->Body.TERMINALMESSAGE);
-
-	if (0 < Get_ServerCount()) {
-		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-					OnReport_TerminalMessage(IN_PARA);
-					OnSend_REPLY_TERMINAL_MESSAGE(
-						IN_From,
-						Get_Server(IN_From).GetXmlEes().Set_ReplyTerminalMessageParameter(
-							transactionId,
-							SUBEQPID,
-							TERMINALMESSAGE));
-					Get_Server(IN_From).Set_Notify_TERMINAL_MESSAGE(IN_PARA);
-				}
-			}
-		}
-	}
-	/*
-	if (Get_ServerID(IN_From).GetBuffer() == EQUIPMENTID) {
-		if (Get_ServerAlias(IN_From).GetBuffer() == SUBEQPID) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				if (IN_From < Get_ServerCount())
-				{
-					OnReport_TerminalMessage(IN_PARA);
-					OnSend_REPLY_TERMINAL_MESSAGE(
-						IN_From,
-						Get_Server(IN_From).GetXmlEes().Set_ReplyTerminalMessageParameter(
-							transactionId,
-							SUBEQPID,
-							TERMINALMESSAGE));
-					Get_Server(IN_From).Set_Notify_TERMINAL_MESSAGE(IN_PARA);
-				}
-			}
-		}
-		for (int i = 0; i < Get_EquipmentCount(); i++)
-		{
-			if (Get_Equipment(i).Get_Alias().GetBuffer() == SUBEQPID) {
-				if (Get_Equipment(i).Get_ClientConnection()) {
-				}
-			}
-		}
-	}*/
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 void CTestManager_EQP_ICS::OnEvent_ServerREPLY_TERMINAL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REPLY_TERMINAL_MESSAGE* IN_PARA = (ST_xml_REPLY_TERMINAL_MESSAGE*)IN_Data;
 
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-
-	if (0 < Get_ServerCount()) {
-		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-					OnSend_REPLY_TERMINAL_MESSAGE(
-						IN_From,
-						IN_PARA);
-				}
-			}
-		}
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 
 void CTestManager_EQP_ICS::OnEvent_ServerREQUEST_OPCALL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REQUEST_OPCALL* IN_PARA = (ST_xml_REQUEST_OPCALL*)IN_Data;
 
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString TERMINALMESSAGE(IN_PARA->Body.MESSAGE);
-	CString BUZZER(IN_PARA->Body.BUZZER);
-	CString TOWERLAMP(IN_PARA->Body.TOWERLAMP);
-
-	if (0 < Get_ServerCount()) {
-		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-					OnReport_OpCall(IN_PARA);
-					Get_Server(IN_From).Set_Notify_OPCALL(IN_PARA);
-				}
-			}
-		}
-	}
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
 
 void CTestManager_EQP_ICS::OnEvent_ServerREPLY_OPCALL_MESSAGE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
-#if TEST
-	ST_xml_REPLY_OPCALL* IN_PARA = (ST_xml_REPLY_OPCALL*)IN_Data;
-	CString transactionId(IN_PARA->Hd.transactionId);
 
-	CString EQUIPMENTID(IN_PARA->Body.EQUIPMENTID);
-	CString SUBEQPID(IN_PARA->Body.SUBEQPID);
-	CString TERMINALMESSAGE(IN_PARA->Body.MESSAGE);
-	CString BUZZER(IN_PARA->Body.BUZZER);
-	CString TOWERLAMP(IN_PARA->Body.TOWERLAMP);
-
-	if (0 < Get_ServerCount()) {
-		for (int IN_From = 0; IN_From < Get_ServerCount(); IN_From++) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				for (int n_Port = 0; n_Port < Get_Server(IN_From).Get_EquipmentIDCount(); n_Port++) {
-					OnSend_REPLY_OPCALL(
-						IN_From,
-						IN_PARA);
-				}
-			}
-		}
-	}
-	/*
-	if (Get_ServerID(IN_From).GetBuffer() == EQUIPMENTID) {
-		if (Get_ServerAlias(IN_From).GetBuffer() == SUBEQPID) {
-			if (Get_Server(IN_From).Get_ClientConnection()) {
-				if (IN_From < Get_ServerCount())
-				{
-					OnSend_REPLY_OPCALL(
-						IN_From,
-						Get_Server(IN_From).GetXmlEes().Set_ReplyOpCallParameter(
-							transactionId,
-							SUBEQPID,
-							TERMINALMESSAGE,
-							BUZZER,
-							TOWERLAMP));
-				}
-			}
-		}
-
-		for (int i = 0; i < Get_EquipmentCount(); i++)
-		{
-			if (Get_Equipment(i).Get_Alias().GetBuffer() == SUBEQPID) {
-				if (Get_Equipment(i).Get_ClientConnection()) {
-
-				}
-			}
-		}
-	}*/
-	//2023.06.28a
-	if (MainFrame->FindLPARAM(IN_Data)) {
-		delete IN_PARA;
-		IN_PARA = nullptr;
-		MainFrame->RemoveLPARAM(IN_Data);
-	}
-#endif
 }
-
 
 //=============================================================================
 // Method		: OnEvent_Equipment
@@ -3405,452 +2580,122 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_USER_CHANGE(__in uint8_t IN_F
 void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_USER_COMMAND(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
 }
-//PtS_Empty = 0,	// 0 : 비어 있음
-//PtS_Exist_Socket,			// 1 : 제품 있음	
-//PtS_Wait_Out,				// 2 : 배출대기
-//PtS_Disable,				// 3 : 비활성
-//PtS_Alarm,					// 4 : Alarm
 void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_EQUIPMENT_STATE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
 	//UI 처리
-	if (!Get_Equipment(IN_From).Get_ClientConnection())
+	if (!Get_Equipment(IN_From).Get_ClientConnection()) {
 		return;
+	} 		
 	for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
-
-
-		for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_mEES_PortSubStatusCount(); nPort++) {
-			/*
-			auto a = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldOperMode();
-			auto b = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldProcessStatus();
-			auto c = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldPortStatus();
-			auto d = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOperMode();
-			auto e = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus();
-			auto f = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus();
+		for (uint8_t nPort = 0; nPort < Get_Equipment(IN_From).Get_mEES_PortSubStatusCount(); nPort++) {
 			if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldOperMode() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOperMode() &&	//작업 동작.
 				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldProcessStatus() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus() &&
 				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldPortStatus() == Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus()) {
 				continue;
-			}*/
-			auto nPortStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus();
-			auto nProcessStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus();
+			}
+			if (Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).Get_EQUIPMENTID().GetLength() <= 0) {
+				continue;
+			}
+			uint8_t nOperMode = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOperMode();
+			uint8_t nPortStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nPortStatus();
+			uint8_t nProcessStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus();			
 			switch (nProcessStatus)
 			{
 			case enEqpProcessStatus::EPC_None:
-				if (nPortStatus == PtS_Exist_Socket) {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
+				if ((nPortStatus == PtS_Exist_Socket) ||
+					(nPortStatus == PtS_RUN))
+				{
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
 				}
 				else {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
 				}
 				break;
 			case enEqpProcessStatus::EPC_Init:
-				if (nPortStatus == PtS_Exist_Socket) {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
+				if ((nPortStatus == PtS_Exist_Socket) ||
+					(nPortStatus == PtS_RUN))
+				{
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
 				}
 				else {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
 				}
 				break;
 			case enEqpProcessStatus::EPC_Idle:
-				if (nPortStatus == PtS_Exist_Socket) {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
+				if ((nPortStatus == PtS_Exist_Socket) ||
+					(nPortStatus == PtS_RUN))
+				{
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
 				}
 				else {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
 				}
 				break;
 			case enEqpProcessStatus::EPC_Run:
-				if (nPortStatus == PtS_RUN) {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_RUN);
+				if ((nPortStatus == PtS_Exist_Socket) ||
+					(nPortStatus == PtS_RUN))
+				{
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_RUN);
 				}
-				else {
-					Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_IDLE);
+				else  {
+					Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_STOP);
 				}
 				break;
 			case enEqpProcessStatus::EPC_Alarm:
-				Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_SUDDENSTOP);
+				Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nEquipmentStatus(ES_SUDDENSTOP);
 				break;
 			}
-			//if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldEquipmentStatus() != Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus()) 
-			{
-				auto Args = Get_Server(nSvr).Create_Report_Equipment_StateArgs(nullptr);
-				auto cntr = Add_Equipment_StateArgs(Get_ServerID(nSvr), *Args);
-				cntr.REPORT.Body.Set_EQUIPMENTID(lt::ToMultiByte(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).Get_EQUIPMENTID()));
-				cntr.REPORT.Body.Set_EQUIPMENTSTATE(lt::ToMultiByte(g_szEquipment_State[Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOldEquipmentStatus()]));
-				Get_Equipment(IN_From).Set_Notify_EquipmentState(&cntr.REPORT);
-
-				if (!Get_Server(nSvr).Get_ClientConnection()) {
-					RemoveEquipmentStateProcedure(Get_ServerID(nSvr).GetBuffer(), cntr.REPORT.Hd.Get_transactionId());
-					continue;
-				}
-				OnSend_REPORT_EQUIPMENT_STATE(nSvr, cntr.REPORT);
+			auto Args = Get_Server(nSvr).Create_Report_Equipment_StateArgs(nullptr);
+			auto cntr = Add_Equipment_StateArgs(Get_ServerID(nSvr), *Args);
+			Sleep(30);
+			cntr.REPORT.Body.Set_EQUIPMENTID(lt::ToMultiByte(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).Get_EQUIPMENTID()));
+			int8_t OldEquipmentStatus = Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus();
+			if (OldEquipmentStatus < 0) {
+				OldEquipmentStatus = 0;
 			}
-			Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Set_nOldEquipmentStatus(Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus());
+			cntr.REPORT.Body.Set_EQUIPMENTSTATE(lt::ToMultiByte(g_szEquipment_State[OldEquipmentStatus]));
+
+			Get_Equipment(IN_From).Set_Notify_EquipmentState(&cntr.REPORT);
+
+			if (!Get_Server(nSvr).Get_ClientConnection()) {
+				RemoveEquipmentStateProcedure(Get_ServerID(nSvr).GetBuffer(), cntr.REPORT.Hd.Get_transactionId());
+				continue;
+			}
+			OnSend_REPORT_EQUIPMENT_STATE(nSvr, cntr.REPORT);
+
+			Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nOldOperMode(Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nOperMode());
+			Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nOldProcessStatus(Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nProcessStatus());
+			Get_Equipment(IN_From).Set_mEES_PortSubStatus(nPort).Set_nOldEquipmentStatus(Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus());
 		}
-		if (IN_Data == enEqpProcessStatus::EPC_Alarm) {
-			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_SET);
-		}
-		else {
-			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_RESET);
+
+		//
+		for (uint8_t nPort = 0; nPort < Get_Equipment(IN_From).Get_mEES_PortSubStatusCount(); nPort++) {
+			if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus() == ES_SUDDENSTOP) 
+			{
+				Get_Equipment(IN_From).Set_sEES_PortSubStatus().Set_nEquipmentStatus(ES_SUDDENSTOP);
+				break;
+			}
+			else if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus() == ES_IDLE)
+			{
+				Get_Equipment(IN_From).Set_sEES_PortSubStatus().Set_nEquipmentStatus(ES_IDLE);
+				break;
+			}
+			else if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus() == ES_STOP) {
+				Get_Equipment(IN_From).Set_sEES_PortSubStatus().Set_nEquipmentStatus(ES_STOP);
+				break;
+			}
+			else if (Get_Equipment(IN_From).Get_mEES_PortSubStatus(nPort).Get_nEquipmentStatus() == ES_RUN) {
+				Get_Equipment(IN_From).Set_sEES_PortSubStatus().Set_nEquipmentStatus(ES_RUN);
+				break;
+			}
 		}
 	}
-
-#if TEST
-	bool bOut = false;
-
-	if (!Get_Equipment(IN_From).Get_ClientConnection())
-		return;
-
-	//설비 상태.
-	for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
-		if (!Get_Server(nSvr).Get_ClientConnection()) {
-			continue;
-		}
-
-		//설비 LOT ID가져오기.
-		auto nProcessStatus = Get_Equipment(IN_From).Get_ProcessStatus();
-		auto nOperatingMode = Get_Equipment(IN_From).Get_OperatingMode();
-
-		auto bProcessEvent = bGetProcessStatusEvent(IN_From);
-		auto bOperModeEvent = bGetOperatingModeEvent(IN_From);
-		auto bConnectionEvent = bGetClientConnectionEvent(IN_From);
-
-		if (bConnectionEvent) {
-			for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++)
-			{
-				auto bPortEvent = bGetPortStatusEvent(IN_From, nPort);
-				if (!bPortEvent) {
-					continue;
-				}
-				if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
-					continue;
-				}
-				auto bPortStatus = Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus;
-				//if (bGetPortLOTIDUseEvent(IN_From, nPort)) 
-				{
-					if (nProcessStatus == enEqpProcessStatus::EPC_None) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Init) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Idle) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Run) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Alarm)
-					{
-						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
-					}
-				}
-				/*
-				else {
-					if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
-						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Run)
-					{
-						if (bPortStatus == PtS_Exist_Socket)
-						{
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
-						}
-						else
-						{
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-					}
-					else {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-				}*/
-				if (bGetPortEquipmentStateEvent(IN_From, nPort)) {
-					CString EQUIPMENTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szEquipID);
-					//2023.06.28a uhkim
-					//CString SUBEQPID(Get_Equipment(IN_From).Get_SubEqpID());
-					CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
-					CString PORTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szPortID);
-					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState]);
-					CString LOTID(Get_Equipment(IN_From).Get_FromPortToLOTID(nPort));
-					auto m_p = Get_Equipment(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
-						EQUIPMENTID,
-						SUBEQPID,
-						PORTID,
-						EQUIPMENTSTATE,
-						LOTID);
-					//if (0 < LOTID.GetLength())
-					{
-						m_pIcsServer->SendReportEquipmentStateMassage(
-							Get_ServerID(nSvr),
-							m_p);
-					}
-					Get_Equipment(IN_From).Set_Notify_EquipmentState(
-						m_p);
-
-					Get_Equipment(IN_From).Set_OldPortStatusEquipmentStateEvent(nPort, Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState);
-					Get_Equipment(IN_From).Set_OldPortStatus(nPort,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).szRfid,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).szBarcode);
-				}
-			}
-			Get_Equipment(IN_From).Set_OldClientConnection(Get_Equipment(IN_From).Get_ClientConnection());
-		}
-
-		if (!bProcessEvent && !bOperModeEvent) {
-			//Equipment는 그대로고 Port상태만 바뀐 경우
-			for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++)
-			{
-				auto bPortEvent = bGetPortStatusEvent(IN_From, nPort);
-				if (!bPortEvent) {
-					continue;
-				}
-				if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
-					continue;
-				}
-				auto bPortStatus = Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus;
-				//if (bGetPortLOTIDUseEvent(IN_From, nPort)) 
-				{
-					if (nProcessStatus == enEqpProcessStatus::EPC_None) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Init) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Idle) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Run) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Alarm)
-					{
-						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
-					}
-				}
-				/*
-				else {
-					if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
-						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Run)
-					{
-						if (bPortStatus == PtS_Exist_Socket)
-						{
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
-						}
-						else
-						{
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-					}
-					else {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-				}*/
-				if (bGetPortEquipmentStateEvent(IN_From, nPort)) {
-					CString EQUIPMENTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szEquipID);
-					//2023.06.28a uhkim
-					//CString SUBEQPID(Get_Equipment(IN_From).Get_SubEqpID());
-					CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
-					CString PORTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szPortID);
-					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState]);
-					CString LOTID(Get_Equipment(IN_From).Get_FromPortToLOTID(nPort));
-					auto m_p = Get_Equipment(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
-						EQUIPMENTID,
-						SUBEQPID,
-						PORTID,
-						EQUIPMENTSTATE,
-						LOTID);
-					//if (0 < LOTID.GetLength())
-					{
-						m_pIcsServer->SendReportEquipmentStateMassage(
-							Get_ServerID(nSvr),
-							m_p);
-					}
-					Get_Equipment(IN_From).Set_Notify_EquipmentState(
-						m_p);
-					Get_Equipment(IN_From).Set_OldPortStatusEquipmentStateEvent(nPort, Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState);
-					Get_Equipment(IN_From).Set_OldPortStatus(nPort,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).szRfid,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).szBarcode);
-				}
-			}
-			//바뀔 PorcessState가 없을 경우
-			//continue;
-		}
-		//EquipmentState가 변경시.
-		else {
-			//Alarm 이벤트
-			//
-			for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++)
-			{
-				if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
-					continue;
-				}
-				auto bPortStatus = Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus;
-				//if (bGetPortLOTIDUseEvent(IN_From, nPort)) 
-				{
-					if (nProcessStatus == enEqpProcessStatus::EPC_None) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Init) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Idle) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_STOP);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Run) {
-						if (bPortStatus == PtS_Exist_Socket) {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
-						}
-						else {
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
-						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
-					}
-				}				/*
-				else {
-					if (nProcessStatus == enEqpProcessStatus::EPC_Alarm)
-					{
-						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_SUDDENSTOP);
-					}
-					else if (nProcessStatus == enEqpProcessStatus::EPC_Run)
-					{
-						if (bPortStatus == PtS_Exist_Socket)
-						{
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_RUN);
-						}
-						else
-						{
-							Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-						}
-					}
-					else
-					{
-						Get_Equipment(IN_From).Set_PortStatusEquipmentStateEvent(nPort, ES_IDLE);
-					}
-				}*/
-				if (bGetPortEquipmentStateEvent(IN_From, nPort)) {
-					CString EQUIPMENTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szEquipID);
-					//2023.06.28a uhkim
-					//CString SUBEQPID(Get_Equipment(IN_From).Get_SubEqpID());
-					CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
-					CString PORTID(Get_Equipment(IN_From).Get_EquipmentIDStatus(nPort).szPortID);
-					CString EQUIPMENTSTATE(g_szEquipment_State[Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState]);
-					CString LOTID(Get_Equipment(IN_From).Get_FromPortToLOTID(nPort));
-					auto m_p = Get_Equipment(IN_From).GetXmlEes().Set_ReportEquipmentStateParameter(
-						EQUIPMENTID,
-						SUBEQPID,
-						PORTID,
-						EQUIPMENTSTATE,
-						LOTID);
-					//if (0 < LOTID.GetLength())
-					{
-						m_pIcsServer->SendReportEquipmentStateMassage(
-							Get_ServerID(nSvr),
-							m_p);
-					}
-					Get_Equipment(IN_From).Set_Notify_EquipmentState(
-						m_p);
-					Get_Equipment(IN_From).Set_OldPortStatusEquipmentStateEvent(nPort, Get_Equipment(IN_From).Get_PortStatus(nPort).nEquipmentState);
-					Get_Equipment(IN_From).Set_OldPortStatus(nPort,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).nStatus,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).szRfid,
-						Get_Equipment(IN_From).Get_PortStatus(nPort).szBarcode);
-				}
-			}
-
-		}
-
-		if (bProcessEvent)
-		{
-			m_stInspInfo.LineInfo.GetAt(IN_From).Set_OldProcessStatus(nProcessStatus);
-		}
-		if (bOperModeEvent)
-		{
-			m_stInspInfo.LineInfo.GetAt(IN_From).Set_OldOperatingMode(nOperatingMode);
-		}
-
-		OnEvent_ServerREPORT_EQUIPMENT_STATE(nSvr, NULL);
-
-		if (nProcessStatus == enEqpProcessStatus::EPC_Alarm) {
-			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_SET);
-		}
-		else {
-			OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_RESET);
-		}
+	if (Get_Equipment(IN_From).Get_sEES_PortSubStatus().Get_nEquipmentStatus() == ES_SUDDENSTOP) {
+		OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_SET);
 	}
-#endif
+	else {
+		OnEvent_EquipmentREPORT_ALARM_STATE(IN_From, ALARMSET_RESET);
+	}
 }
 
 void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_EQUIPMENT_STATE_DISPLAY(__in uint8_t IN_From, __in LPARAM IN_Data)
@@ -3868,97 +2713,69 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_ALARM_STATE(__in uint8_t IN_F
 	CString temp;
 	if (enALARMSET::ALARMSET_SET == IN_PARA)
 	{
-		for (int i = 0; i < Get_EqpAlarmCount(IN_From); i++) {
-			if (Get_ptAlarmStatus(IN_From, i).Get_nAlarmSet() == ALARMSET_NULL) {
-				Get_ptAlarmStatus(IN_From, i).Set_nAlarmSet(ALARMSET_SET);
+		for (int i = 0; i < Get_Equipment(IN_From).Get_mAlarmStatusCount(); i++) {
+			if (Get_Equipment(IN_From).Get_mAlarmStatus(i).Get_nAlarmSet() == ALARMSET_NULL) {
+				Get_Equipment(IN_From).Set_mAlarmStatus(i).Set_nAlarmSet(ALARMSET_SET);
 				for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++) {
 					if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
 						continue;
 					}
 
 					for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
-						for (int n = 0; n < Get_Server(nSvr).Get_mAlarmStatusCount(); n++)
-						{
 
-
-							lt::XUUID ID;
-							lt::Report_Alarm_State_Args::Args * Args = (lt::Report_Alarm_State_Args::Args *) IN_Data;
-							auto svr = m_pIcsServer->GetRemote(Get_ServerID(IN_From));
-							if (Args != nullptr) {
-								ID = Args->Hd.Get_transactionId();
-								svr->GetRemoteEes().AddAlarmStateProcedure(ID, *Args);
-								delete Args;
-								//CString EQUIPMENTSTATE = lt::ToWideChar(Get_Server(nSvr).Get_mEES_PortSubStatus(n).Get_nEquipmentStatus()).c_str();
-								CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
-								CString IPADDRESS = lt::ToWideChar(Get_Server(nSvr).Get_DEFINEDATA().Get_IPADDRESS()).c_str();
-								CString EESMODE = lt::ToWideChar(Get_Server(nSvr).Get_DEFINEDATA().Get_EESMODE()).c_str();
-								CString ALARMCODE(g_sALARMSET[ALARMSET_SET]);
-								temp.Format(_T("%03d%s%02d"), Get_ptAlarmStatus(IN_From, i).Get_nAlarmCode(), SUBEQPID, nPort);
-								CString ALARMID(temp);
-								CString ALARMMESSAGE(Get_ptAlarmStatus(IN_From, i).Get_szAlarmInfo());
-
-								auto cntr = svr->GetRemoteEes().AlarmStateCtrl(ID);
-								//cntr.REPORT.Hd.Set_timeStamp(cntr.REPORT.Hd.Get_timeStamp());
-								//cntr.REPORT.Body.Set_EESMODE(EESMODE);
-								//cntr.REPORT.Body.Set_ALARMCODE(ALARMCODE);
-								//cntr.REPORT.Body.Set_ALARMID(ALARMID);
-								//cntr.REPORT.Body.Set_ALARMMESSAGE(ALARMMESSAGE);
-								m_pIcsServer->SendReportAlarmStateMassage(
-									Get_ServerID(nSvr),
-									cntr.REPORT);
-								svr->GetRemoteEes().RemoveOnlineStateProcedure(ID);
-							}
-						}
+						auto Args = Get_Server(nSvr).Create_Report_Alarm_StateArgs(nullptr);
+						auto cntr = Add_Alarm_StateArgs(Get_ServerID(nSvr), *Args);
+						cntr.REPORT.Body.Set_EESMODE(Get_Server(nSvr).Get_DEFINEDATA().Get_EESMODE());
+						cntr.REPORT.Body.Set_EQUIPMENTID(Get_Equipment(IN_From).Get_DEFINEDATA().Get_EQUIPMENTID());
+						cntr.REPORT.Body.Set_IPADDRESS(Get_Equipment(IN_From).Get_DEFINEDATA().Get_IPADDRESS());
+						cntr.REPORT.Body.Set_SUBEQPID(Get_Equipment(IN_From).Get_DEFINEDATA().Get_SUBEQPID());
+						cntr.REPORT.Body.Set_USERID(Get_Server(nSvr).Get_DEFINEDATA().Get_USERID());
+						cntr.REPORT.Body.Set_ALARMCODE(lt::ToMultiByte(g_sALARMSET[ALARMSET_SET]));
+						temp.Format(_T("%03d%s%02d"), Get_Equipment(IN_From).Get_mAlarmStatus(i).Get_nAlarmCode(),
+							lt::ToTypeChar(Get_Equipment(IN_From).Get_DEFINEDATA().Get_SUBEQPID()).c_str(),
+							nPort);
+						cntr.REPORT.Body.Set_ALARMID(lt::ToMultiByte(temp));
+						cntr.REPORT.Body.Set_ALARMMESSAGE(lt::ToMultiByte(Get_Equipment(IN_From).Get_mAlarmStatus(i).Get_szAlarmInfo()));
+						OnSend_REPORT_ALARM_STATE(nSvr, cntr.REPORT);
 					}
 				}
 			}
 		}
 	}
 	else if (enALARMSET::ALARMSET_RESET == IN_PARA) {
-		for (int i = 0; i < Get_EqpAlarmCount(IN_From); i++) {
-			if (Get_ptAlarmStatus(IN_From, i).Get_nAlarmSet() == ALARMSET_SET) {
-				Get_ptAlarmStatus(IN_From, i).Set_nAlarmSet(ALARMSET_RESET);
+		for (int i = 0; i < Get_Equipment(IN_From).Get_mAlarmStatusCount(); i++) {
+			if (Get_Equipment(IN_From).Get_mAlarmStatus(i).Get_nAlarmSet() == ALARMSET_SET) {
+				Get_Equipment(IN_From).Set_mAlarmStatus(i).Set_nAlarmSet(ALARMSET_RESET);
 				for (int nPort = 0; nPort < Get_Equipment(IN_From).Get_PortCount(); nPort++) {
 					if (!Get_EquipmentTypeEvent(IN_From, nPort)) {
 						continue;
 					}
 					for (int nSvr = 0; nSvr < Get_ServerCount(); nSvr++) {
-						for (int n = 0; n < Get_Server(nSvr).Get_mAlarmStatusCount(); n++)
-						{
-							lt::XUUID ID;
-							lt::Report_Alarm_State_Args::Args * Args = (lt::Report_Alarm_State_Args::Args *) IN_Data;
-							auto svr = m_pIcsServer->GetRemote(Get_ServerID(IN_From));
-							if (Args != nullptr) {
-								ID = Args->Hd.Get_transactionId();
-								svr->GetRemoteEes().AddAlarmStateProcedure(ID, *Args);
-								delete Args;
-
-								CString SUBEQPID(Get_Server(nSvr).Get_SubEqpID());
-								CString IPADDRESS = lt::ToWideChar(Get_Server(nSvr).Get_DEFINEDATA().Get_IPADDRESS()).c_str();
-								CString EESMODE = lt::ToWideChar(Get_Server(nSvr).Get_DEFINEDATA().Get_EESMODE()).c_str();
-								CString ALARMCODE(g_sALARMSET[ALARMSET_RESET]);
-								temp.Format(_T("%03d%s%02d"), Get_ptAlarmStatus(IN_From, i).Get_nAlarmCode(), SUBEQPID, nPort);
-								CString ALARMID(temp);
-								CString ALARMMESSAGE(Get_ptAlarmStatus(IN_From, i).Get_szAlarmInfo());
-
-								auto cntr = svr->GetRemoteEes().AlarmStateCtrl(ID);
-								cntr.REPORT.Hd.Set_timeStamp(cntr.REPORT.Hd.Get_timeStamp());
-								//cntr.REPORT.Body.Set_EESMODE(EESMODE);
-								//cntr.REPORT.Body.Set_ALARMCODE(ALARMCODE);
-								//cntr.REPORT.Body.Set_ALARMID(ALARMID);
-								//cntr.REPORT.Body.Set_ALARMMESSAGE(ALARMMESSAGE);
-								m_pIcsServer->SendReportAlarmStateMassage(
-									Get_ServerID(nSvr),
-									cntr.REPORT);
-								svr->GetRemoteEes().RemoveOnlineStateProcedure(ID);
-							}
-						}
+							
+						auto Args = Get_Server(nSvr).Create_Report_Alarm_StateArgs(nullptr);
+						auto cntr = Add_Alarm_StateArgs(Get_ServerID(nSvr), *Args);
+						cntr.REPORT.Body.Set_EESMODE(Get_Server(nSvr).Get_DEFINEDATA().Get_EESMODE());
+						cntr.REPORT.Body.Set_EQUIPMENTID(Get_Equipment(IN_From).Get_DEFINEDATA().Get_EQUIPMENTID());
+						cntr.REPORT.Body.Set_IPADDRESS(Get_Equipment(IN_From).Get_DEFINEDATA().Get_IPADDRESS());
+						cntr.REPORT.Body.Set_SUBEQPID(Get_Equipment(IN_From).Get_DEFINEDATA().Get_SUBEQPID());
+						cntr.REPORT.Body.Set_USERID(Get_Server(nSvr).Get_DEFINEDATA().Get_USERID());
+						cntr.REPORT.Body.Set_ALARMCODE(lt::ToMultiByte(g_sALARMSET[ALARMSET_RESET]));
+						temp.Format(_T("%03d%s%02d"), Get_Equipment(IN_From).Get_mAlarmStatus(i).Get_nAlarmCode(),
+							lt::ToTypeChar(Get_Equipment(IN_From).Get_DEFINEDATA().Get_SUBEQPID()).c_str(),
+							nPort);
+						cntr.REPORT.Body.Set_ALARMID(lt::ToMultiByte(temp));
+						cntr.REPORT.Body.Set_ALARMMESSAGE(lt::ToMultiByte(Get_Equipment(IN_From).Get_mAlarmStatus(i).Get_szAlarmInfo()));
+						OnSend_REPORT_ALARM_STATE(nSvr, cntr.REPORT);
+						
 					}
 				}
 			}
 		}
 	}
-
+	//for (int i = 0; i < Get_Equipment(IN_From).Get_mAlarmStatusCount(); i++) {
+	//	if (Get_Equipment(IN_From).Get_mAlarmStatus(i).Get_nAlarmSet() == ALARMSET_RESET) {
+		//}
+	//}
 }
 void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_RMS_MODE(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
@@ -3966,7 +2783,6 @@ void CTestManager_EQP_ICS::OnEvent_EquipmentREPORT_RMS_MODE(__in uint8_t IN_From
 void CTestManager_EQP_ICS::OnEvent_EquipmentREPLY_OPCALL(__in uint8_t IN_From, __in LPARAM IN_Data)
 {
 }
-
 void CTestManager_EQP_ICS::OnSend_REPLY_LINK_TEST(__in uint8_t IN_nSvrOrder, __in lt::Reply_Link_Test_Args::Args & IN_LPARAM)
 {
 	OnLog(_T("[Svr %03d] OnSend_REPLY_LINK_TEST(transactionId %s)"),
@@ -4213,7 +3029,6 @@ void CTestManager_EQP_ICS::OnSend_UserLevel(__in _ICS_SERVER_Type In_Type,__in e
 			}
 			break;
 		case ICS_SERVER_EES:	
-
 			for (int i = 0; i < Get_ServerCount(); i++) 
 			{				
 				if (Get_Server(i).Get_ClientConnection()) {
@@ -4221,19 +3036,41 @@ void CTestManager_EQP_ICS::OnSend_UserLevel(__in _ICS_SERVER_Type In_Type,__in e
 						Get_Equipment(IN_From).Get_DEFINEDATA().Set_USERID(lt::ToMultiByte(USERID));
 					}
 					Get_Server(i).Get_DEFINEDATA().Set_USERID(lt::ToMultiByte(USERID));
-					
-					auto svr = m_pIcsServer->GetRemote(Get_ServerID(i).GetBuffer());
-					lt::Report_User_Change_Args::Args * Args = Get_Server(i).Create_Report_User_ChangeArgs(nullptr);
-					lt::XUUID ID = Args->Hd.Get_transactionId();					
-					svr->GetRemoteEes().CreateUserCommandProcedure(ID);
-					svr->GetRemoteEes().AddeUserCommandProcedure(ID, *Args);
-					delete Args;
-					auto cntr = svr->GetRemoteEes().UserCommandCtrl(ID);
-					OnSend_REPORT_USER_CHANGE(i, cntr.REPORT);
+					for (int j = 0; j < 3; j++) {
+						lt::Report_User_Change_Args::Args * Args = Get_Server(i).Create_Report_User_ChangeArgs(nullptr);
+						auto cntr = Add_User_CommandArgs(Get_ServerID(i), *Args);
+						OnSend_REPORT_USER_CHANGE(i, cntr.REPORT);
+					}
+
 				}
 			}		
 			break;
 	}
+}
+void CTestManager_EQP_ICS::SetSystemTimePrivilege()
+{
+	LUID luid;
+	TOKEN_PRIVILEGES tp;
+	HANDLE hToken;
+	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
+		return;
+	}
+	if (!LookupPrivilegeValue(
+		NULL,
+		SE_SYSTEMTIME_NAME,
+		&luid))
+	{
+		return;
+	}
+	tp.PrivilegeCount = 1;
+	tp.Privileges[0].Luid = luid;
+	tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+	if (!AdjustTokenPrivileges(hToken, FALSE, &tp, 
+		sizeof(TOKEN_PRIVILEGES),	(PTOKEN_PRIVILEGES)NULL,(PDWORD)NULL)){
+		//0, NULL, NULL)) {
+		return;
+	}	
+	CloseHandle(hToken);
 }
 #endif
 

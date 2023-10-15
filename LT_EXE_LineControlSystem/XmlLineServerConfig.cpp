@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "XmlLineServerConfig.h"
 #include "CommonFunction.h"
+
 CXmlLineServerConfig::CXmlLineServerConfig()
 {
 

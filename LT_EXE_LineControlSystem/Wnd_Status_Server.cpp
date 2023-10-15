@@ -512,8 +512,10 @@ void CWnd_Status_Server::Set_ClientConnection(__in uint8_t IN_nConStatus)
 #if defined(EES_XML)//20231003
 		m_pServerStatus->Get_DEFINEDATA().Set_ONLINESTATE(lt::ToMultiByte(g_szOnLine_State[ONLINESTATE_OFFLINE]));
 		m_pServerStatus->Get_DEFINEDATA().Set_EESMODE(lt::ToMultiByte(g_sEES_Mode[EES_OFFLINE]));
+
 		mPane_CommStatus->m_st_RMS.SetText(g_sEES_Mode_UI[EES_OFFLINE]);
 		mPane_CommStatus->m_st_EES.SetColorStyle(CVGStatic::ColorStyle_Red);				
+
 		//m_pServerStatus->Set_REPORT_ONLINE_STATE(m_pServerStatus->Create_Report_Online_StateArgs(nullptr));		
 		m_pServerStatus->Set_SERVER_CONNECTION(NULL);
 		//OnSend_REPORT_ONLINE_STATE();
@@ -526,11 +528,12 @@ void CWnd_Status_Server::Set_ClientConnection(__in uint8_t IN_nConStatus)
 		szText.Format(_T("Svr. %s"), szClientConnectionText);
 		SetText_Title(szText.GetBuffer());
 		szText.Format(_T("%d"), (IN_nConStatus + 1));
-#if defined(EES_XML)//20231003			
-		mPane_CommStatus->m_st_EES.SetColorStyle(CVGStatic::ColorStyle_Green);		
-		m_pServerStatus->Get_DEFINEDATA().Set_ONLINESTATE(lt::ToMultiByte(g_szOnLine_State[ONLINESTATE_ONLINE]));
+#if defined(EES_XML)//20231003	
 
+		mPane_CommStatus->m_st_EES.SetColorStyle(CVGStatic::ColorStyle_Green);	
 		mPane_CommStatus->m_st_RMS.SetText(g_sEES_Mode_UI[EES_TRACKIN]);
+
+		m_pServerStatus->Get_DEFINEDATA().Set_ONLINESTATE(lt::ToMultiByte(g_szOnLine_State[ONLINESTATE_ONLINE]));
 		m_pServerStatus->Get_DEFINEDATA().Set_EESMODE(lt::ToMultiByte(g_sEES_Mode[EES_TRACKIN]));
 		
 		//m_pServerStatus->Set_REPORT_ONLINE_STATE(m_pServerStatus->Create_Report_Online_StateArgs(nullptr));		
@@ -725,14 +728,6 @@ void CWnd_Status_Server::SetPtr_EquipmentInfo(__in uint8_t IN_nEqpNo, CServer* I
 	
 	// 설비 순서
 	m_nEqpOrder = IN_nEqpNo;
-#if SOCKET
-	// 사용하는 Port 갯수
-	m_nPortCount	 = static_cast<uint8_t>(m_pEquipmentStatus->Get_PortCount());
-	m_nConveyorCount = static_cast<uint8_t>(m_pEquipmentStatus->Get_ConveyorCount());
-
-	// 검사 파라 개수 설정
-	//m_wnd_Yield.Set_TestParaCount(m_pEquipmentStatus->Get_TestPortCount());
-#endif//SOCKET
 	if (GetSafeHwnd())
 	{
 		// 설비 순서
@@ -745,10 +740,6 @@ void CWnd_Status_Server::SetPtr_EquipmentInfo(__in uint8_t IN_nEqpNo, CServer* I
 		else {
 			szClientConnectionText = "DISCONNECTED";
 		}
-#if TEST
-		szText.Format(_T("Svr. %s. %s" ), IN_pEquipment->GetXmlEes().GetBaseData().SUBEQPID , szClientConnectionText);
-		SetText_Title(szText.GetBuffer());
-#endif
 		// 설비 명칭
 		m_st_EqpName.SetText(g_szServerUIName[IN_pEquipment->Get_ServerType()]);
 
